@@ -9,6 +9,7 @@ export type episodeType = {
   uuid: string;
   url: string;
   image?: string;
+  description?: string;
 };
 
 type seasonType = {
