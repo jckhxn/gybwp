@@ -10,7 +10,7 @@ const Layout: React.FunctionComponent<LayoutProps> & {
   return (
     <>
       {/* <Navigation className="relative z-10" /> */}
-      <div className="z-0">{children}</div>
+      <div className="z-0 bg-white">{children}</div>
       {/* <Footer /> */}
     </>
   );

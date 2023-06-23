@@ -1,0 +1,70 @@
+import React from "react";
+
+// components
+import Image from "next/image";
+import Link from "next/link";
+import { Section, SectionHeading } from "components/shared";
+
+// copy
+import { SPONSORS, PARTNERS, SPONSORS_INFO } from "./static-data";
+
+//
+//
+//
+//
+// DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
+
+const SponsorsPageComponent = () => {
+  return (
+    <div className="bg-light my-4 mx-6 md:mx-12 py-16">
+      {/* SPONSORS */}
+      {SPONSORS.length && (
+        <Section flex className="mx-6 lg:mx-24">
+          <SectionHeading>{SPONSORS_INFO.sponsorsHeader}</SectionHeading>
+
+          <div className="flex flex-wrap justify-center mt-12">
+            {SPONSORS.map(({ name, uuid, imgUrl, imgAlt }) => (
+              <Link
+                key={`sponsor-${name}`}
+                href={`/sponsors/${uuid}`}
+                className="m-3 lg:m-6"
+              >
+                <Image
+                  src={imgUrl}
+                  alt={imgAlt}
+                  className=""
+                  width={250}
+                  height={150}
+                />
+              </Link>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {SPONSORS.length && PARTNERS.length && <div className="mt-20"></div>}
+
+      {/* PARTNERS */}
+      {PARTNERS.length && (
+        <Section flex className="mx-1 lg:mx-12">
+          <SectionHeading>{SPONSORS_INFO.partnerHeader}</SectionHeading>
+
+          <div className="flex flex-wrap justify-center mt-12">
+            {PARTNERS.map(({ imgAlt, imgUrl }, idx) => (
+              <Image
+                key={`partner-${idx}`}
+                src={imgUrl}
+                alt={imgAlt}
+                className="m-2 lg:m-4"
+                width={175}
+                height={90}
+              />
+            ))}
+          </div>
+        </Section>
+      )}
+    </div>
+  );
+};
+
+export default SponsorsPageComponent;

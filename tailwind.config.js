@@ -8,6 +8,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        main: "#293243",
+        primary: "#A48256",
+        secondary: "#575658",
+        dark: "#181818",
+        light: "#F4EDE8",
+
         // ALERT COLORS
         alerts: {
           success: "#ACD161",

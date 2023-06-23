@@ -4,10 +4,16 @@ import React from "react";
 import Layout, { LayoutProps } from "components/Layout";
 import PrivacyPageComponent from "components/Pages/PrivacyPage";
 
-const Privacy: React.FC & { Layout: React.FC<LayoutProps> } = () => {
+//
+//
+//
+//
+// DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
+
+const PrivacyPage: React.FC & { Layout: React.FC<LayoutProps> } = () => {
   return <PrivacyPageComponent />;
 };
 
-Privacy.Layout = Layout;
+PrivacyPage.Layout = Layout;
 
-export default Privacy;
+export default PrivacyPage;

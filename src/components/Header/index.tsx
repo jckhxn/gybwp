@@ -1,104 +1,132 @@
 import React, { useState } from "react";
 import routes from "routes";
-import useBreakpoints from "styles/useBreakpoints";
 
 // components
+import Link from "next/link";
 import Image from "next/image";
 import logo from "images/logo.png";
 
+// static data
+import { PAGES, COPY } from "./static-data";
+
 const Navigation = () => {
   const [mobileNavOpen, setMobileNavOpen] = useState<boolean>(false);
-  const { isMobile } = useBreakpoints();
 
   const handleMobileHamburgerClick = () => {
     setMobileNavOpen(!mobileNavOpen);
   };
 
-  const isMobileMenuExpanded = () => {
-    if (isMobile && mobileNavOpen) {
-      return "";
-    }
-
-    return "hidden";
-  };
-
   return (
-    <nav className="border-header-border bg-header-bg text-header-text">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 max-h-[72px]">
-        <a href={routes.internal.home} className="flex items-center">
-          <Image
-            src={logo}
-            className="h-8 w-auto mr-3"
-            alt="Next.js Web Template Logo"
-          />
-          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-            Next.js Web Template
-          </span>
-        </a>
-        <button
-          data-collapse-toggle="navbar-solid-bg"
-          type="button"
-          className="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-          aria-controls="navbar-solid-bg"
-          aria-expanded="false"
-          onClick={handleMobileHamburgerClick}
-        >
-          <span className="sr-only">Open main navigation menu</span>
-          <svg
-            className="w-6 h-6"
-            aria-hidden="true"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-              clipRule="evenodd"
-            ></path>
-          </svg>
-        </button>
-        <div
-          className={`${isMobileMenuExpanded()} w-full md:block md:w-auto z-50`}
-        >
-          <ul className="flex flex-col font-medium mt-[14px] rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
-            <li>
-              <a
-                href={routes.internal.home}
-                className="block py-2 pl-3 pr-4 text-white bg-blue-600 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500 md:dark:bg-transparent"
-                aria-current="page"
-              >
-                Home
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              >
-                Services
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              >
-                Pricing
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              >
-                Contact
-              </a>
-            </li>
-          </ul>
+    <header aria-label="Site Header" className="bg-white pt-2">
+      <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <div className="flex-1 md:flex md:items-center md:gap-12">
+            <Link className="flex" href={routes.internal.home}>
+              <span className="sr-only">Home</span>
+              <Image
+                priority
+                loading="eager"
+                className="h-16 w-auto"
+                alt="Growing Your Business with People Logo"
+                src={logo}
+              />
+              <p className="self-center hidden ml-0 text-sm lg:text-xl md:block lg:ml-3">
+                Growing Your Business With People
+              </p>
+            </Link>
+          </div>
+
+          <div className="md:flex md:items-center md:gap-12">
+            {/* NAVIGATION LINKS */}
+            <nav aria-label="Site Nav" className="hidden md:block">
+              <ul className="flex items-center gap-6 text-sm">
+                {PAGES.map(({ name, url }) => (
+                  <li key={name}>
+                    <Link
+                      className="text-secondary transition hover:text-gray-500/75"
+                      href={url}
+                    >
+                      {name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <div className="flex items-center gap-4">
+              {/* SUBSCRIBE BUTTON */}
+              <div className="sm:flex sm:gap-4">
+                <Link
+                  className="rounded-md bg-main px-5 py-2.5 text-sm font-medium text-white shadow"
+                  href={routes.external.listen}
+                  target="_blank"
+                >
+                  {COPY.buttonText}
+                </Link>
+              </div>
+
+              {/* MOBILE NAVIGATION BUTTON */}
+              <div className="block md:hidden relative">
+                <button
+                  onClick={handleMobileHamburgerClick}
+                  className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75"
+                >
+                  <span className="sr-only">Open Navigation Menu</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                </button>
+
+                {/* MOBILE NAVIGATION DROPDOWN MENU */}
+                {mobileNavOpen && (
+                  <div
+                    className="absolute end-0 z-10 mt-2 w-56 rounded-md border border-gray-100 bg-white shadow-lg"
+                    role="menu"
+                  >
+                    <div className="p-2">
+                      <div className="flow-root">
+                        <nav
+                          aria-label="Millie Navigation"
+                          className="-my-2 flex flex-col divide-y divide-gray-100"
+                        >
+                          <ul className="space-y-1 py-2">
+                            {PAGES.map(({ name, url }) => (
+                              <li
+                                key={name}
+                                onClick={handleMobileHamburgerClick}
+                              >
+                                <Link
+                                  key={name}
+                                  href={url}
+                                  className="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-main"
+                                >
+                                  {name}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </nav>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </nav>
+    </header>
   );
 };
 
