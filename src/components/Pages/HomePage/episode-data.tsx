@@ -1,0 +1,1124 @@
+// types
+import {
+  socialsType,
+  sponsorUUIDs,
+} from "components/Pages/SponsorsPage/static-data";
+import * as icons from "components/Socials/logos";
+
+type guestsType = {
+  name: string;
+  about: string;
+  title: string;
+  url: string;
+  imageUrl: string;
+};
+
+type linksType = {
+  text: string;
+  secondaryText?: string;
+  linkText?: string;
+  linkUrl: string;
+};
+
+export type episodeType = {
+  episodeNumber: number;
+  episodeName: string;
+  episodeLinks?: socialsType[];
+  sponsors: sponsorUUIDs[];
+  uuid: string;
+  url: string;
+  image?: string;
+  blurb: string;
+  details?: {
+    featuredGuests: guestsType[];
+    description: string[];
+    hashtags: string[];
+    links?: linksType[];
+  };
+};
+
+export type seasonType = {
+  seasonNumber: number;
+  seasonName: string;
+  episodes: episodeType[];
+};
+
+//
+//
+//
+//
+//
+// ONLY TOUCH THINGS BELOW THIS LINE
+
+export const SEASON_ONE: seasonType = {
+  seasonNumber: 1,
+  seasonName: "Season One",
+  episodes: [
+    // TRAILER
+    {
+      uuid: "100",
+      episodeNumber: 0,
+      episodeName: "Trailer",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/trailer-season-1/id1659743511?i=1000590093654",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/6yGhUsHHh2Y/sddefault.jpg",
+      url: "https://youtu.be/6yGhUsHHh2Y",
+      blurb:
+        "Season 1 of the Growing Your Business with People podcast is coming soon!",
+    },
+
+    // EPISODE ONE
+    {
+      uuid: "101",
+      episodeNumber: 1,
+      episodeName:
+        "Mastering DE&I: Foster Inclusivity At Work With David Casey",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ep-1-better-de-i-practices-with-david-casey/id1659743511?i=1000590093229",
+          icon: icons.apple.src,
+        },
+        {
+          name: "spotify",
+          link: "https://open.spotify.com/episode/4f1J7hxbQIjYNnCtk08rcz?si=LUJwOy9uTiyiCdsxpbSBHQ",
+          icon: icons.spotify.src,
+        },
+        {
+          name: "google",
+          link: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8yMDU3NDkzLnJzcw/episode/QnV6enNwcm91dC0xMTg2MjEwNQ?sa=X&ved=0CAUQkfYCahcKEwjQoM7anoeAAxUAAAAAHQAAAAAQAQ",
+          icon: icons.google.src,
+        },
+        {
+          name: "amazon music",
+          link: "https://music.amazon.com/podcasts/dbf81855-67a9-4500-bdec-c45ace015170/episodes/0a8290f5-d773-416f-8045-6aab8eae3cc0/growing-your-business-with-people-ep-1-better-de-i-practices-with-david-casey",
+          icon: icons.amazon.src,
+        },
+        {
+          name: "more",
+          link: "https://www.buzzsprout.com/2057493/share",
+          icon: icons.more.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/a9PbdlshJdc/sddefault.jpg",
+      url: "https://youtu.be/a9PbdlshJdc",
+      blurb:
+        "In this episode, the host and CEO of JKL Advisors, Jeff Lackey, sits down with David Casey. David is a Chief Inclusion and Social Impact Officer with a career that spans over three decades, along with being invited to the White House on more than one occasion.",
+      details: {
+        featuredGuests: [
+          {
+            name: "David Casey",
+            about:
+              "David is a Chief Inclusion and Social Impact Officer with a career that spans over three decades, along with being invited to the White House on more than one occasion.",
+            title: "Chief Inclusion and Social Impact Officer at Tapestry",
+            url: "https://www.linkedin.com/in/caseydavid/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/D4E03AQHhl85_HQk4TA/profile-displayphoto-shrink_400_400/0/1683470693299?e=1694649600&v=beta&t=oYA-tLTfc8lXGdpPW40KymTJKspOWtI-3XdZzsSOaCE",
+          },
+        ],
+        description: [
+          "Welcome to the first episode of Growing Your Business with People, a podcast dedicated to CEOs and other business leaders looking to win the war for talent. In this episode, the host and CEO of JKL Advisors, Jeff Lackey, sits down with David Casey.",
+          "David is a Chief Inclusion and Social Impact Officer with a career that spans over three decades, along with being invited to the White House on more than one occasion. Tune in for David's tangible tactics to help you grow your business with people.",
+          "This video is about Mastering DE&I, but it also covers Foster Inclusivity At Work, Diversity And Inclusion In The Workplace, and How To Create Inclusive Work Environments.",
+        ],
+        hashtags: ["inclusivity", "impact", "diversity"],
+        links: [],
+      },
+    },
+
+    // EPISODE TWO
+    {
+      uuid: "102",
+      episodeNumber: 2,
+      episodeName:
+        "Revolutionise Recruitment: The Power Of Tech-Enabled Hiring Ft. Joshua Secrest",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ep-2-leveraging-technology-to-drive-hiring-volumes/id1659743511?i=1000590726350",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/vFFSYSGQh-0/sddefault.jpg",
+      url: "https://youtu.be/vFFSYSGQh-0",
+      blurb: "",
+      details: {
+        featuredGuests: [
+          {
+            name: "Joshua Secrest",
+            about:
+              "Joshua is the former Head of Global Talent Acquisition at McDonald's. Joshua, now at Paradox, describes how to leverage technology to drive hiring volumes while enhancing the candidate experience.",
+            title: "Vice President at Paradox",
+            url: "https://www.linkedin.com/in/joshua-secrest-44b0042/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/D5603AQHFkuHvp3TcFA/profile-displayphoto-shrink_400_400/0/1675019070527?e=1694649600&v=beta&t=jmTvCLVr7w2weI8ny5A0Vh6x5BYpBEzXWtx0giHlxvg",
+          },
+        ],
+        description: [],
+        hashtags: ["recruiting", "hiring"],
+      },
+    },
+
+    // EPISODE THREE
+    {
+      uuid: "103",
+      episodeNumber: 3,
+      episodeName: "CEO of ATI Physical Therapy: Sharon Vitti's Success Story",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ep-3-ceo-of-ati-physical-therapy-sharon-vitti/id1659743511?i=1000591376373",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/6eiLXbAaxrI/sddefault.jpg",
+      url: "https://youtu.be/6eiLXbAaxrI",
+      blurb: "",
+    },
+
+    // EPISODE FOUR
+    {
+      uuid: "104",
+      episodeNumber: 4,
+      episodeName:
+        "Leveraging Recruitment To Grow Business Ft. Dan Valavanis & Oliver Comstock",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ep-4-elevating-the-high-volume-hiring-experience-feat/id1659743511?i=1000592095878",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/h34hsQfmzYg/sddefault.jpg",
+      url: "https://youtu.be/h34hsQfmzYg",
+      blurb: "",
+    },
+
+    // EPISODE FIVE
+    {
+      uuid: "105",
+      episodeNumber: 5,
+      episodeName:
+        "Preventing Employee Burnout: Expert Tips From Dr. Michael Halasy",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ep-5-burnout-how-to-recognize-and-avoid-it-with-dr/id1659743511?i=1000593417417",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/062Asb9Rsrc/sddefault.jpg",
+      url: "https://youtu.be/062Asb9Rsrc",
+      blurb: "",
+    },
+
+    // EPISODE SIX
+    {
+      uuid: "106",
+      episodeNumber: 6,
+      episodeName:
+        "Successful Talent Attraction: Recruitment Secrets Revealed Ft. Craig Fisher",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ep-6-attract-retain-talent-with-unmatched-recruitment/id1659743511?i=1000594868752",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/QKd9_UY80CE/sddefault.jpg",
+      url: "https://youtu.be/QKd9_UY80CE",
+      blurb: "",
+    },
+
+    // EPISODE SEVEN
+    {
+      uuid: "107",
+      episodeNumber: 7,
+      episodeName: "Revive Workplace Morale: Expert Tips By Paul Neveu",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ep-7-bringing-fun-back-into-your-company-with-paul-neveu/id1659743511?i=1000596320209",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/CseLZJoQzlQ/sddefault.jpg",
+      url: "https://youtu.be/CseLZJoQzlQ",
+      blurb: "",
+    },
+
+    // EPISODE EIGHT
+    {
+      uuid: "108",
+      episodeNumber: 8,
+      episodeName:
+        "How Social Media Can Transform Your Recruiting Strategies ft. CEO Amit Parmar",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ep-8-uncovering-the-benefits-of-social-media/id1659743511?i=1000597381970",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/3Uf6IgdFnOk/sddefault.jpg",
+      url: "https://youtu.be/3Uf6IgdFnOk",
+      blurb: "",
+    },
+
+    // EPISODE NINE
+    {
+      uuid: "109",
+      episodeNumber: 9,
+      episodeName:
+        "The Importance Of Balancing People And Profit In Business Ft. Susan LaMotte",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ep-9-intersection-of-people-and-profit-they-must/id1659743511?i=1000598431322",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/ZYgaUJ00q6Y/sddefault.jpg",
+      url: "https://youtu.be/ZYgaUJ00q6Y",
+      blurb: "",
+    },
+
+    // EPISODE TEN
+    {
+      uuid: "110",
+      episodeNumber: 10,
+      episodeName:
+        "Maximizing Your Hiring Success: Power Of Performance Metrics Ft. Jason Moreau",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ep-10-ceo-jason-moreau-on-measuring-performance-to/id1659743511?i=1000599494239",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/CWcEm-23rtg/sddefault.jpg",
+      url: "https://youtu.be/CWcEm-23rtg",
+      blurb: "",
+    },
+
+    // EPISODE ELEVEN part 1
+    {
+      uuid: "111-1",
+      episodeNumber: 11,
+      episodeName:
+        "Art of Listening: Hairdresser in the Boardroom: Insights from Kim-Adele Randall | Part 1",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ep-11-part-1-kim-adele-randall-tedx-speaker-and-author/id1659743511?i=1000602181940",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/IEXa_qTyugo/sddefault.jpg",
+      url: "https://youtu.be/IEXa_qTyugo",
+      blurb: "",
+    },
+
+    // EPISODE ELEVEN part 2
+    {
+      uuid: "111-2",
+      episodeNumber: 11,
+      episodeName:
+        "Positive Self-Talk: Kim-Adele Randall Shares Her Story | Part 2",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ep-11-part-2-kim-adeles-story-about-improving-productivity/id1659743511?i=1000602017698",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/OPSBEPqhNow/sddefault.jpg",
+      url: "https://youtu.be/OPSBEPqhNow",
+      blurb: "",
+    },
+
+    // EPISODE ELEVEN part 3
+    {
+      uuid: "111-3",
+      episodeNumber: 11,
+      episodeName:
+        "Empowering Your Team's Strengths: Hairdresser in the Boardroom | Part 3",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ep-11-part-3-kim-adele-randalls-advice-for-leaders/id1659743511?i=1000602017728",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/l0mvpA062hY/sddefault.jpg",
+      url: "https://youtu.be/l0mvpA062hY",
+      blurb: "",
+    },
+
+    // EPISODE TWELVE
+    {
+      uuid: "112",
+      episodeNumber: 12,
+      episodeName:
+        "Transform Your Customer Service: Expert Leadership Training with Harry Travis",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/leadership-expert-harry-travis-delivering-better-customer/id1659743511?i=1000603446339",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/JpnRadfibWQ/sddefault.jpg",
+      url: "https://youtu.be/JpnRadfibWQ",
+      blurb: "",
+    },
+
+    // EPISODE TWELVE | Short
+    {
+      uuid: "112_1",
+      episodeNumber: 12,
+      episodeName: "Harry Travis on the Cost of Layoffs",
+      sponsors: [],
+      image: "https://img.youtube.com/vi/HJNCjktSgsc/sddefault.jpg",
+      url: "https://youtu.be/HJNCjktSgsc",
+      blurb: "",
+    },
+  ],
+};
+
+export const SEASON_TWO = {
+  seasonNumber: 2,
+  seasonName: "Season Two",
+  episodes: [
+    // EPISODE ONE
+    {
+      uuid: "201",
+      episodeNumber: 1,
+      episodeName:
+        "Investing in Chicago's Future: Connecting Talent from Underserved Communities",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/s2-e1-connecting-talent-from-underserved-communities/id1659743511?i=1000605127805",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/ogLHwOJ2D3A/sddefault.jpg",
+      url: "https://youtu.be/ogLHwOJ2D3A",
+      blurb:
+        "Jeff Lackey welcomes; Mark Hoplamazian, CEO of Hyatt and chair of Skills for Chicagoland's Future, Pam Tully, the chief program officer for Skills for Chicagoland's Future, and Daniel Cervantes, Senior Vice President, National Expansion and strategic Initiatives for Skills for Chicagoland's Future and the National Expansion Committee.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Mark Hoplamazian",
+            about:
+              "Hyatt President & CEO since 2006, with a daily focus on realizing Hyatt’s purpose – to care for people so they can be their best. Steadfast champion of diversity, equity and inclusion, and passionate about connecting unemployed youth with careers in hospitality. Wellbeing advocate and keen believer in the power of mindfulness and empathy. Current board chair of the American Hotel & Lodging Association and Skills for Chicagoland's Future.",
+            title: "CEO of Hyatt and chair of Skills for Chicagoland's Future",
+            url: "https://www.linkedin.com/in/mark-hoplamazian-96446b43/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/C4D03AQFVu9gZ4Kn_Qg/profile-displayphoto-shrink_400_400/0/1617899868864?e=1694649600&v=beta&t=WkauhnXOmZZ1yAzQNaDiPBKExHMdMLa6vrIPboclyfo",
+          },
+          {
+            name: "Pam Tully",
+            about:
+              "Experienced Chief Operating Officer with a demonstrated history of working in the civic & social organization industry. Strong operations professional skilled in Budgeting, Operations Management, Team Building, Six Sigma, and Manufacturing.",
+            title: "Cheif Program Officer of Skills for Chicagoland's Future",
+            url: "https://www.linkedin.com/in/pam-tully-5765b49/",
+            imageUrl:
+              "https://www.skillsforchicagolandsfuture.com/hs-fs/hubfs/SFC%20MJTW%20Assets/images/board-of-directors/pamela-tully-headshot.jpg?width=624&height=800&name=pamela-tully-headshot.jpg",
+          },
+          {
+            name: "Daniel Cervantes",
+            about:
+              "Ron has had an unconventional career path, starting off as a Catholic priest before transitioning to a drug abuse counselor and eventually an intelligence officer for the government. He also served as the former CHRO of Tendergrass, a small successful company where he was able to recruit and grow his own team.",
+            title:
+              "Senior Vice President, National Expansion and Strategic Initiatives of Skills for Chicagoland's Future",
+            url: "https://www.linkedin.com/in/daniel-cervantes-766b057",
+            imageUrl:
+              "https://www.skillsforchicagolandsfuture.com/hs-fs/hubfs/SFC%20MJTW%20Assets/images/board-of-directors/daniel-cervantes-headshot.jpg?width=624&height=800&name=daniel-cervantes-headshot.jpg",
+          },
+        ],
+        description: [
+          "Jeff Lackey welcomes; Mark Hoplamazian, CEO of Hyatt and chair of Skills for Chicagoland's Future, Pam Tully, the chief program officer for Skills for Chicagoland's Future, and Daniel Cervantes, Senior Vice President, National Expansion and strategic Initiatives for Skills for Chicagoland's Future and the National Expansion Committee.",
+          "The conversation focused on how CEOs and business leaders can access talent from low opportunity neighborhoods, how to access talent outside of the Chicago, Rhode Island and Phoenix markets, and how to get involved more broadly.",
+          "Mark H., Pam T., and Daniel C. are all involved with Skills for Chicago Future, an organization dedicated to closing the opportunity gap and connecting those who are unemployed or underemployed to job opportunities. Through their efforts, they were able to impact over 20,000 people in 2021 and connect them to jobs. Their ultimate goal is to expand to 25 cities over the next 10 years and provide everyone with equitable access to a quality job. The podcast is a platform for them to share their mission and to spread awareness of their efforts.",
+        ],
+        hashtags: ["talent", "growth", "hiring"],
+        links: [
+          {
+            text: "For more information, visit:",
+            linkUrl: "https://www.skillsforchicagolandsfuture.com/",
+          },
+        ],
+      },
+    },
+
+    // EPISODE ONE | SHORT 1
+    {
+      uuid: "201_1",
+      episodeNumber: 1,
+      episodeName: "CEO of Hyatt, Powerful Community Impact of Skills",
+      sponsors: [],
+      image: "https://img.youtube.com/vi/6q9bBrkEHRc/sddefault.jpg",
+      url: "https://youtu.be/6q9bBrkEHRc",
+      blurb:
+        "Jeff Lackey welcomes; Mark Hoplamazian, CEO of Hyatt and chair of Skills for Chicagoland's Future, Pam Tully, the chief program officer for Skills for Chicagoland's Future, and Daniel Cervantes, Senior Vice President, National Expansion and strategic Initiatives for Skills for Chicagoland's Future and the National Expansion Committee.",
+    },
+
+    // EPISODE ONE | SHORT 2
+    {
+      uuid: "201_2",
+      episodeNumber: 1,
+      episodeName: "Skills for Chicagoland's Future Services Offerings",
+      sponsors: [],
+      image: "https://img.youtube.com/vi/b087_zHhyy4/sddefault.jpg",
+      url: "https://youtu.be/b087_zHhyy4",
+      blurb:
+        "Jeff Lackey welcomes; Mark Hoplamazian, CEO of Hyatt and chair of Skills for Chicagoland's Future, Pam Tully, the chief program officer for Skills for Chicagoland's Future, and Daniel Cervantes, Senior Vice President, National Expansion and strategic Initiatives for Skills for Chicagoland's Future and the National Expansion Committee.",
+    },
+
+    // EPISODE ONE | SHORT 3
+    {
+      uuid: "201_3",
+      episodeNumber: 1,
+      episodeName: "Impact of the Second Chance Program on Communities",
+      sponsors: [],
+      image: "https://img.youtube.com/vi/UdgceGWASOw/sddefault.jpg",
+      url: "https://youtu.be/UdgceGWASOw",
+      blurb:
+        "Jeff Lackey welcomes; Mark Hoplamazian, CEO of Hyatt and chair of Skills for Chicagoland's Future, Pam Tully, the chief program officer for Skills for Chicagoland's Future, and Daniel Cervantes, Senior Vice President, National Expansion and strategic Initiatives for Skills for Chicagoland's Future and the National Expansion Committee.",
+    },
+
+    // EPISODE TWO
+    {
+      uuid: "202",
+      episodeNumber: 2,
+      episodeName: "Former CIA Head of Recruiting Shares Leadership Insight",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ron-patrick-former-cia-head-of-recruiting-shares/id1659743511?i=1000606227620",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/t6r9BweCLGs/sddefault.jpg",
+      url: "https://youtu.be/t6r9BweCLGs",
+      blurb:
+        "In episode 2 of Season 2, host Jeff Lackey welcomes Ron Patrick, former head of recruitment for the CIA.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Ronald Patrick",
+            about:
+              "Ron has had an unconventional career path, starting off as a Catholic priest before transitioning to a drug abuse counselor and eventually an intelligence officer for the government. He also served as the former CHRO of Tendergrass, a small successful company where he was able to recruit and grow his own team.",
+            title: "Former CHRO at Tendergrass and Head of Recruiting at CIA",
+            url: "https://www.linkedin.com/in/ronald-patrick-2020/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/D4E03AQG6TqZnyLawaQ/profile-displayphoto-shrink_800_800/0/1680520296925?e=1694649600&v=beta&t=FqmVbvifD40zSSbN3ZKkodiV96oPRgHhpDiC5DR8KQQ",
+          },
+        ],
+        description: [
+          "Advice to CEOs: if you have a head of HR or TA who you do not see as a business partner, replace them with someone who you do trust as a business partner.",
+          "In episode 2 of Season 2, host Jeff Lackey welcomes Ron Patrick, former head of recruitment for the CIA.",
+          "Ron Patrick had an unconventional career path, starting off as a Catholic priest before transitioning to a drug abuse counselor and eventually an intelligence officer for the government. He got the job after getting the right answer to a Trivial Pursuit question at a picnic with government employees. After that, the head of HR asked him to join the team.",
+          "Ron Patrick also served as the former CHRO of Tendergrass, a small successful company where he was able to recruit and grow his own team. Once he joined, he quickly realized the strain the current employees were under, working 16-18 hours a day. He began assessing the company, understanding the business, and determining what needed to be done to grow sustainably. In 8 months, he more than doubled the company from 8 employees to 20, creating a mix of skills that was critical for the company's growth.",
+        ],
+        hashtags: ["leadership", "growth", "recruiting"],
+        links: [],
+      },
+    },
+
+    // EPISODE TWO | SHORT 1
+    {
+      uuid: "202_1",
+      episodeNumber: 2,
+      episodeName: "How Versatility Can Help or Hurt Your Leadership",
+      sponsors: [],
+      image: "https://img.youtube.com/vi/GGFUQVPn1d0/sddefault.jpg",
+      url: "https://youtu.be/GGFUQVPn1d0",
+      blurb:
+        "In episode 2 of Season 2, host Jeff Lackey welcomes Ron Patrick, former head of recruitment for the CIA.",
+    },
+
+    // EPISODE THREE
+    {
+      uuid: "203",
+      episodeNumber: 3,
+      episodeName:
+        "Leadership Insights from 50 Four-Star Generals and Admirals",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/dr-tom-collins-insights-from-50-four-star-generals/id1659743511?i=1000606250522",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/vcwAENvxgq8/sddefault.jpg",
+      url: "https://youtu.be/vcwAENvxgq8",
+      blurb:
+        "In this podcast episode of Growing Your Business with People, Jeff Lackey interviews Dr. Tom Collins, a pediatric cardiologist, professor of pediatrics, and author of a book on leadership.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Dr. Tom Collins",
+            about:
+              "Dr. Tom Collins is the Vice Chair of Faculty Affairs, Department of Pediatrics, at the University of Kentucky College of Medicine. He is an international expert on the cardiovascular manifestations of genetically mediated connective tissue disorders with additional expertise in leadership in medicine and physician career development.",
+            title:
+              "Vice Chair of Faculty Affairs, Department of Pediatrics, at the University of Kentucky College of Medicine",
+            url: "https://www.linkedin.com/in/tom-collins-20137614/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/D5603AQH1cOIUUuUbFA/profile-displayphoto-shrink_800_800/0/1687275919672?e=1694649600&v=beta&t=Ly4cQM0VFsahxaWef6Sz-x9V1zHHtxiM5kssRgm6cVs",
+          },
+        ],
+        description: [
+          "In this podcast episode of Growing Your Business with People, Jeff Lackey interviews Dr. Tom Collins, a pediatric cardiologist, professor of pediatrics, and author of a book on leadership.",
+          "The book is based on insights from almost 50 Four-Star Admirals and generals who offer their perspectives on great leadership from a military perspective. Tom Collins is a voracious reader and has read over 130 books on leadership.",
+          "In the conversation, Tom emphasizes the importance of knowing the mission and one's role in it for making effective decisions. The podcast is a must-listen for anyone who wants to grow their business with people.",
+        ],
+        hashtags: ["leadership", "growth", "efficiency"],
+        links: [
+          {
+            text: "Connect with Tom on LinkedIn:",
+            linkUrl: "https://www.linkedin.com/in/tom-collins-20137614/",
+          },
+          {
+            text: "For more information, visit:",
+            linkUrl: "https://www.skillsforchicagolandsfuture.com/",
+          },
+        ],
+      },
+    },
+
+    // EPISODE FOUR
+    {
+      uuid: "204",
+      episodeNumber: 4,
+      episodeName:
+        "HR Innovation and Business Growth With FutureSolve's COO Andy Najja",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ai-in-recruiting-and-engagement-andy-najjar-coo/id1659743511?i=1000607268644",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/QPowbQ0l-OU/sddefault.jpg",
+      url: "https://youtu.be/QPowbQ0l-OU",
+      blurb:
+        "Today on the podcast, Jeff welcomes Andy Najjar, COO of FutureSolve, an HR advisory organization with decades of experience leading innovative HR technology companies. In this episode, we explore HR innovation, business growth, and the challenges faced by organizations in managing people.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Andy Najjar",
+            about:
+              "Andy Najjar is responsible for leading FutureSolve's global operations with more than 15 years' experience in the talent and Human Resources space. Prior to joining FutureSolve, Andy was instrumental in growing companies like HRsmart and TalentGuard from upstart talent management software companies to acquisitions by Deltek and Venture Capital funding.",
+            title: "Chief Operating Officer at FutureSolve",
+            url: "https://www.linkedin.com/in/andynajjar/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/D5603AQHhXlMdZ2AWrg/profile-displayphoto-shrink_800_800/0/1675869531232?e=1694649600&v=beta&t=QKIaGCMAwOi2L6526h-mdqK8tPYrFhLTo1GiNKf3f0A",
+          },
+        ],
+        description: [
+          "Today on the podcast, Jeff welcomes Andy Najjar, COO of FutureSolve.",
+          "Andy and Jeff dive into How FutureSolve Helps Solve HR Problems for Small and Medium-Sized Businesses Impact of AI on Recruiting and Employee Engagement Unlocking Innovation and Inspiring People in the Workplace.",
+        ],
+        hashtags: ["leadership", "growth", "findingPurpose"],
+        links: [
+          {
+            text: "Connect with Andy on LinkedIn:",
+            linkUrl: "https://www.linkedin.com/in/andynajjar/",
+          },
+          {
+            text: "For more information, visit:",
+            linkUrl: "https://www.futuresolve.com/",
+          },
+        ],
+      },
+    },
+
+    // EPISODE FIVE
+    {
+      uuid: "205",
+      episodeNumber: 5,
+      episodeName:
+        "HR Expert Ken Carrig on Building a Strong Succession Plan for Business Leaders",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ken-carrig-on-executive-succession-planning-leadership/id1659743511?i=1000608334069",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/u4Bx4vSj5QQ/sddefault.jpg",
+      url: "https://youtu.be/u4Bx4vSj5QQ",
+      blurb:
+        "In this podcast episode of Growing Your Business with People, Ken Carrig, co-founder of FutureSolve, shares his expert advice on leadership alignment and executive succession planning.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Ken Carrig",
+            about:
+              "Ken Carrig is the Co-Founder of FutureSolve. He advises CEOs and founders to look ahead and prepare people in their organization for what's to come. He also emphasizes the importance of letting go and growing the business with other leaders.",
+            title: "Co-Founder of FutureSolve",
+            url: "https://www.linkedin.com/in/ken-carrig-0bb4251a7",
+            imageUrl:
+              "https://media.licdn.com/dms/image/D5610AQFMifuqUMh9wQ/image-shrink_800/0/1687571217272?e=1689307200&v=beta&t=1jzyXmE6Vj8KjIVs7SOQMFYzO5x-QPKFY9Xvr0c-zBk",
+          },
+        ],
+        description: [
+          "In this podcast episode of Growing Your Business with People, Ken Carrig, co-founder of FutureSolve, shares his expert advice on leadership alignment and executive succession planning.",
+          "The conversation starts with Ken Carrig discussing the importance of bringing clarity and purpose to work in an organization to ensure leadership alignment.",
+          "Carrig advises CEOs and founders to look ahead and prepare people in their organization for what's to come. He also emphasizes the importance of letting go and growing the business with other leaders. Jeff Lackey then asks Ken about his proudest moment in his career, to which Ken responds by encouraging people to take risks and have the courage to do something different.",
+        ],
+        hashtags: ["leadership", "talent", "findingPurpose"],
+        links: [
+          {
+            text: "Connect with Ken on LinkedIn:",
+            linkUrl: "https://www.linkedin.com/in/ken-carrig-0bb4251a7",
+          },
+          {
+            text: "For more information, visit:",
+            linkUrl: "https://www.futuresolve.com/",
+          },
+        ],
+      },
+    },
+
+    // EPISODE SIX
+    {
+      uuid: "206",
+      episodeNumber: 6,
+      episodeName: "Using Data to Improve Health Outcomes with CEO Bob Darin",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/ceo-bob-darin-harnessing-the-power-of-data-to/id1659743511?i=1000609445684",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/MXQwlTf34CE/sddefault.jpg",
+      url: "https://youtu.be/MXQwlTf34CE",
+      blurb:
+        "On this podcast episode, host Jeff Lackey welcomes guest Bob Darin.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Bob Darin",
+            about:
+              "Bob Darin is the CEO of Blue Health Intelligence, and has a background in health care analytics. He has been in the field for close to three decades, working with large datasets and coding.",
+            title: "CEO of Blue Health Intelligence",
+            url: "https://www.linkedin.com/in/bob-darin-2a3ab96/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/D5603AQED1H7EgBR1SQ/profile-displayphoto-shrink_800_800/0/1666652600932?e=1694649600&v=beta&t=ZHbbuMK9AR_5FzZkC5dzbLyiLt1CIZyEpajehYB1hwA",
+          },
+        ],
+        description: [
+          "On this podcast episode, host Jeff Lackey welcomes guest Bob Darin.",
+          "They discussed how to start changing how people think and work together by understanding how people process information. Bob also shared his insights and examples of how he has grown his organization with people. He and Jeff worked together at CVS, solving complex challenges in the hyper-competitive space of data engineering, analytics and science.",
+          "Bob Darin discussed how data and analytics are essential to improving health care outcomes. He believes that with the right expertise, data can help address the foundational challenges that exist in the health care system.",
+        ],
+        hashtags: ["leadership", "talent", "hiring"],
+        links: [
+          {
+            text: "Connect with Bob on LinkedIn:",
+            linkUrl: "https://www.linkedin.com/in/bob-darin-2a3ab96/",
+          },
+          {
+            text: "Company LinkedIn:",
+            linkUrl:
+              "https://www.linkedin.com/company/blue-health-intelligence/",
+          },
+          {
+            text: "For more information, visit:",
+            linkUrl: "https://bluehealthintelligence.com/",
+          },
+        ],
+      },
+    },
+
+    // EPISODE SEVEN
+    {
+      uuid: "207",
+      episodeNumber: 7,
+      episodeName:
+        "Strategic Talent Consulting & HR Value Creation in Business with Tom Corbitt",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/strategic-talent-consulting-hr-value-creation-in-business/id1659743511?i=1000611446037",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/Yj2Aq53mhY0/sddefault.jpg",
+      url: "https://youtu.be/Yj2Aq53mhY0",
+      blurb:
+        "In this podcast episode, host Jeff Lackey welcomes Tom Corbitt, the founder and managing partner of Top Line Growth Partners. The two discuss the importance of identifying discrete problems and understanding the timetable for affecting change in skill level, behavior, and time to fill vacant roles.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Tom Corbitt",
+            about:
+              "Tom is a skilled facilitator, coach, and leader who acts as an extension of his client’s senior staff. In this capacity, he provides the expertise and incremental bandwidth to help them lead their organizations through major transformation. He understands how to align strategy, process, technology, talent and culture to help his clients achieve a sustainable step function increase in organizational capability.",
+            title: "Founder and Managing Partner of Top Line Growth Partners",
+            url: "https://www.linkedin.com/in/tom-corbitt-0b4b546/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/C4D03AQHC-hjLncwNLg/profile-displayphoto-shrink_400_400/0/1632176543961?e=1694649600&v=beta&t=5fXVyf-0K30FfjiNSrUK4i1VKweNp-qrTDBsSEiFoWI",
+          },
+        ],
+        description: [
+          "In this podcast episode, host Jeff Lackey welcomes Tom Corbitt, the founder and managing partner of Top Line Growth Partners. The two discuss the importance of identifying discrete problems and understanding the timetable for affecting change in skill level, behavior, and time to fill vacant roles.",
+          "Tom manages the Sales Consulting Practice, Talent Consulting Practice, and Coaching & Leadership Development Practice as well Top Line's Product Development, Business Development, and Operations functions.",
+          "Jeff Lackey and Tom Corbitt continue their conversation as Tom emphasizes the importance of being strategic about talent optimization. He highlights the need to identify specific problems and understand the timetable for affecting change in skill level, human behavior, time to fill vacant roles, and path to proficiency.",
+        ],
+        hashtags: ["leadership", "talent", "hiring"],
+        links: [
+          {
+            text: "For more information, visit:",
+            linkUrl: "https://www.toplinegp.com/",
+          },
+        ],
+      },
+    },
+
+    // EPISODE EIGHT
+    {
+      uuid: "208",
+      episodeNumber: 8,
+      episodeName:
+        "College Recruiter Founder Steven Rothberg: Early Career Hiring & Talent Attraction Strategies",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/college-recruiter-founder-steven-rothberg-early-career/id1659743511?i=1000612311531",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/G2Jy5y_wXyU/sddefault.jpg",
+      url: "https://youtu.be/G2Jy5y_wXyU",
+      blurb:
+        "In this podcast episode, Jeff Lackey welcomes Steven Rothberg, founder and chief visionary officer of College Recruiter.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Steven Rothberg",
+            about:
+              'Steven Rothberg is a fully recovered lawyer who founded the business that morphed into College Recruiter and now, as its Chief Visionary Officer, helps create and refine the company\'s strategy. He was named named by Mashable as one of the 20 top people for job seekers to follow on Twitter, Fast Company magazine as a "Top 50 online influencer", LinkedIn as having a profile in the top one percent most viewed, and TAtech as one of the top 100 influencers in the talent acquisition industry.',
+            title: "Founder and Chief Visionary Officer of College Recruiter",
+            url: "https://www.linkedin.com/in/stevenrothberg/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/D5603AQHYB0cX4rv7IA/profile-displayphoto-shrink_800_800/0/1669665517361?e=1694649600&v=beta&t=YccZtqa_Fij5kFHkYFGDutL7SBktF0tpEgYDn1bVvjg",
+          },
+        ],
+        description: [
+          "In this podcast episode, Jeff Lackey welcomes Steven Rothberg, founder and chief visionary officer of College Recruiter.",
+          "College Recruiter, a job search site that aims to help students and recent graduates find better career opportunities, was founded by Steven Rothberg in 1991. In a podcast episode, Rothberg discusses the challenges of hiring early career professionals in a competitive market, the importance of leveraging different recruitment capabilities to improve ROI, and the outlook for college recruiting in 2023.",
+          "Rothberg emphasizes that companies looking to hire entry-level employees will face stiff competition from employers like FedEx, who are hiring similar candidates for warehouse work at higher rates. The conversation then shifts to early career hiring and strategies for maximizing return on investment in college recruiting. Rothberg suggests that CEOs should plan for a highly competitive job market and focus on attracting top talent by offering good roles, pay, and organizational culture.",
+          "The job market outlook for 2023 is positive, with twice as many job openings as candidates looking for jobs. However, there are still challenges in certain sectors and metro areas, such as the tech sector in San Francisco. College Recruiter primarily caters to Fortune 1000 companies, government agencies, and other high-growth employers. The company has expanded its services to more than 13 million candidates globally.",
+          "Jeff and Steven's conversation continues with a discussion on the importance of speed in the recruitment process, with the prevailing wage being a crucial factor in attracting talent. They also touched on the issue of the company name, with some advocating for a change to reflect the focus on early career recruitment. The use of innovative technologies like AI and chatbots to create engaging and fast candidate experiences was also mentioned as a trend in the marketplace.",
+        ],
+        hashtags: ["earlyCareer", "college", "hiring"],
+        links: [
+          {
+            text: "For more information, visit:",
+            linkUrl: "https://collegerecruiter.com/",
+          },
+          {
+            text: "Connect with Steven on LinkedIn:",
+            linkUrl: "https://www.linkedin.com/in/stevenrothberg",
+          },
+        ],
+      },
+    },
+
+    // EPISODE NINE
+    {
+      uuid: "209",
+      episodeNumber: 9,
+      episodeName:
+        "Expert HR Insights: Talent Management & Leadership With Mark Griffin",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/hr-chief-mark-griffin-on-talent-management-leadership/id1659743511?i=1000613190539",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/9-Y9H1b5PwA/sddefault.jpg",
+      url: "https://youtu.be/9-Y9H1b5PwA",
+      blurb:
+        "In this podcast episode, host Jeff Lackey interviews Mark Griffin, Executive Vice President, Chief Human Resources Officer at BJ's Wholesale Club and former Senior Vice President of HR at CVS Health.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Mark Griffin",
+            about:
+              "Mark Griffin is a top HR executive with Fortune 10 experience leading large teams of human resources professionals. He has deep knowledge of all areas of HR and proven track record of driving business results through human capital strategies.",
+            title:
+              "Executive Vice President, Chief Human Resources Officer at BJ's Wholesale Club",
+            url: "https://www.linkedin.com/in/mark-griffin-3096381/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/C4D03AQHFQkDl3CHFiA/profile-displayphoto-shrink_800_800/0/1645884105228?e=1694649600&v=beta&t=Lc4OxVT1X6qqEY4icC6szYRYwfCuD3Pf_ItZ_jV_zjs",
+          },
+        ],
+        description: [
+          "In this podcast episode, host Jeff Lackey interviews Mark Griffin, Executive Vice President, Chief Human Resources Officer at BJ's Wholesale Club and former Senior Vice President of HR at CVS Health.",
+          "Mark shares his insights on the best recruiting strategies, which include hiring great leaders who come with a Rolodex and people who want to work for them. Jeff highlights Mark's extensive experience in leading urbanization through mergers, acquisitions, public offerings, and divestitures. Mark's natural likability and strong voice of the customer have helped him grow businesses from a national drug chain with sales of $18 billion to $884 billion. Jeff asks Mark to share how his experiences have prepared him to be the Chief ADR Officer for a 16 plus billion dollar publicly traded company.",
+          "The conversation between Jeff Lackey and Mark Griffin continues as they discuss the importance of HR professionals delivering tough feedback to business leaders. Mark shares a story about a leader who was loyal to their team but blind to their lack of talent, emphasizing the responsibility of HR professionals to have tough discussions. They also discuss their hobbies, including Mark's love for boating and off-road motorcycle riding.",
+        ],
+        hashtags: ["leadership", "recruiting", "growth"],
+        links: [],
+      },
+    },
+
+    // EPISODE TEN
+    {
+      uuid: "210",
+      episodeNumber: 10,
+      episodeName:
+        "Maximizing Business Growth with Data Analysis with Amy Bush",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/amy-bush-maximizing-business-growth-with-data-analysis/id1659743511?i=1000614112515",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/B3BQQmjK3nQ/sddefault.jpg",
+      url: "https://youtu.be/B3BQQmjK3nQ",
+      blurb:
+        "In this episode of the Growing Your Business with People podcast, host Jeff Lackey welcomes the president of Sevenstep, Amy Bush. They discuss the importance of data-driven decision-making and how leaders can use data to guide their talent acquisition process.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Amy Bush",
+            about:
+              "Amy Bush is an innovative leader, committed to empowering and mentoring young professionals as they build their careers and grow into the next generation. She is a dynamic leader of a global team delivering talent-focused client solutions in 75+ countries across the Americas, EMEA and APAC.",
+            title: "President of Sevenstep",
+            url: "https://www.linkedin.com/in/amybbush/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/C4E03AQHi9Vu5u8BRzA/profile-displayphoto-shrink_800_800/0/1516220281240?e=1694649600&v=beta&t=u3hLFFk8t0GqQOPUqugTp5NzRFDuUz6XplH5MasYIYo",
+          },
+        ],
+        description: [
+          "Time to fill is crucial to business growth. But are you or your business leaders aware of the time to fill challenges within your organization?",
+          "In this episode of the Growing Your Business with People podcast, host Jeff Lackey welcomes the president of Sevenstep, Amy Bush. They discuss the importance of data-driven decision-making and how leaders can use data to guide their talent acquisition process.",
+          "Amy emphasizes the need for perspective and multiple perspectives when looking at data, cautioning against relying solely on averages. The conversation also touches on the importance of people strategies in business growth and the challenges of navigating the mountains of data that leaders are given every day.",
+          "Amy shares her approach to passing through the mountains of data and using it to improve businesses. She emphasizes the need for having a framework around data analysis and personal growth in dealing with data. The two discuss major shifts in the market and the use of data in understanding retention rates, engagement scores, and time to fill. They note that averages can hide important outliers or subgroups that require specific attention and solutions.",
+          "The conversation emphasizes the importance of using data to make informed decisions and take appropriate action, while also considering the satisfaction of employees and recruiters.",
+        ],
+        hashtags: ["analytics", "hiring", "leadership"],
+        links: [
+          {
+            text: "For more information about Sevenstep, visit:",
+            linkUrl: "https://www.sevensteptalent.com/",
+          },
+        ],
+      },
+    },
+
+    // EPISODE ELEVEN
+    {
+      uuid: "211",
+      episodeNumber: 11,
+      episodeName:
+        "Revolutionizing Employee Referral Programs w/ Real Links CEO Sam Davies",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/revolutionizing-employee-referral-programs-w-real-links/id1659743511?i=1000614969536",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/qEAOVbQHs5A/sddefault.jpg",
+      url: "https://youtu.be/qEAOVbQHs5A",
+      blurb:
+        "In this podcast episode, host Jeff Lackey and CEO of Real Links, Sam Davies, discuss the benefits of employee referrals in hiring. Jeff and Sam also talk about the importance of networking and employee brand activation as a critical aspect of successful hiring.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Sam Davies",
+            about:
+              "Sam Davies is the CEO & Co-Founder of Real Links. He emphasizes the need for engagement strategies to support referral and advocacy efforts, targeting specific areas for referrals, such as tech hiring, to maximize cost savings and engagement.",
+            title: "CEO & Co-Founder at Real Links",
+            url: "https://www.linkedin.com/in/samgtdavies/",
+            imageUrl:
+              "https://www.inhouserecruitment.co.uk/wp-content/uploads/2019/12/Sam-real-links-e1595231963692.jpeg",
+          },
+        ],
+        description: [
+          "In this podcast episode, host Jeff Lackey and CEO of Real Links, Sam Davies, discuss the benefits of employee referrals in hiring. Jeff and Sam also talk about the importance of networking and employee brand activation as a critical aspect of successful hiring.",
+          "Sam shares examples that highlight the potential cost savings of up to £100,000 in six months and the positive impact on productivity and retention levels compared to other recruitment channels.",
+          "They emphasize the need for engagement strategies to support referral and advocacy efforts, targeting specific areas for referrals, such as tech hiring, to maximize cost savings and engagement.",
+        ],
+        hashtags: ["productivity", "referrals", "engagement"],
+        links: [
+          {
+            text: "For more information, visit:",
+            linkUrl: "https://www.reallinks.io/",
+          },
+        ],
+      },
+    },
+
+    // EPISODE ELEVEN | SHORT 1
+    {
+      uuid: "211_1",
+      episodeNumber: 11,
+      episodeName:
+        "Tech Hiring as an Example to Improve Recruitment Strategies w/ Real Links CEO Sam Davies",
+      sponsors: [],
+      image: "https://img.youtube.com/vi/jg1rFIARKjA/sddefault.jpg",
+      url: "https://youtu.be/jg1rFIARKjA",
+      blurb:
+        "In this podcast episode, host Jeff Lackey and CEO of Real Links, Sam Davies, discuss the benefits of employee referrals in hiring. Jeff and Sam also talk about the importance of networking and employee brand activation as a critical aspect of successful hiring.",
+    },
+
+    // EPISODE TWELVE
+    {
+      uuid: "212",
+      episodeNumber: 12,
+      episodeName:
+        "Thoughtful Leadership, Finding Organizational Purpose w/ Helena Foulkes",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/thoughtful-leadership-finding-organizational-purpose/id1659743511?i=1000615834837",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/JTb67vdrKSA/sddefault.jpg",
+      url: "https://youtu.be/JTb67vdrKSA",
+      blurb:
+        "In this conversation, Jeff and Helena dive into how Helena practices thoughtful leadership, what she's learned from managing multiple teams over the years, and how employees inspired organizational purpose.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Helena Foulkes",
+            about:
+              "Helena Foulkes is Executive Chair of Follett Higher Education Group. A former Democratic candidate for Governor of Rhode Island with decades of experience as a CEO and senior executive, spent 25 years at CVS Health, most recently as President of CVS Pharmacy and EVP of CVS Health, a position she held from January 2014 to January 2018. Known as a creative, purpose-driven leader, she was a critical part of CVS’s decision to exit the tobacco business and to rebrand the company CVS Health. Prior to running for Governor, Foulkes was CEO and a board member of Hudson’s Bay Company where she led a significant transformation of the business, ultimately creating a path to the successful privatization of the company.",
+            title: "Executive Chair of Follett Higher Education Group",
+            url: "https://www.linkedin.com/in/helena-foulkes-54316910/",
+            imageUrl:
+              "https://www.golocalprov.com/cache/images/remote/https_s3.amazonaws.com/media.golocalprov.com/Helena_Headshot_Foulkes_NEW_August_2022.png",
+          },
+        ],
+        description: [
+          "The final episode of the season is here with very special guest, Helena Foulkes.",
+          "Helena Foulkes most recently sought the Democratic nomination for Governor of Rhode Island and is known as a purpose-driven leader who has led significant impact on organizations and industries. An experienced CEO with a track record of delivering results by building high performance teams, Helena now serves on several boards in the for-profit and not-for-profit sectors.",
+          "In this conversation, Jeff and Helena dive into how Helena practices thoughtful leadership, what she's learned from managing multiple teams over the years, and how employees inspired organizational purpose.",
+        ],
+        hashtags: ["leadership", "management", "purpose"],
+        links: [
+          {
+            text: "Helena's Website | ",
+            linkUrl: "https://www.helenafoulkes.com/",
+          },
+          {
+            text: "Helena's LinkedIn | ",
+            linkUrl: "https://www.linkedin.com/in/helena-foulkes-54316910",
+          },
+          {
+            text: "Helena's Twitter | ",
+            linkUrl: "https://twitter.com/HelenaBFoulkes",
+          },
+        ],
+      },
+    },
+
+    // EPISODE TWELVE | SHORT 1
+    {
+      uuid: "212_1",
+      episodeNumber: 12,
+      episodeName:
+        "Helena Foulkes Shares the Story Behind How CVS Quit Smoking",
+      sponsors: [],
+      image: "https://img.youtube.com/vi/p0SpjTzXHFc/sddefault.jpg",
+      url: "https://youtu.be/p0SpjTzXHFc",
+      blurb:
+        "In this conversation, Jeff and Helena dive into how Helena practices thoughtful leadership, what she's learned from managing multiple teams over the years, and how employees inspired organizational purpose.",
+    },
+  ],
+};
+
+export const SEASON_THREE = {
+  seasonNumber: 3,
+  seasonName: "Season Three",
+  episodes: [
+    // EPISODE ONE
+    {
+      uuid: "301",
+      episodeNumber: 1,
+      episodeName:
+        "Prioritizing People & Managing Attrition with Former CVS Executive, Dr. Alan Lotvin",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/prioritizing-people-managing-attrition-with-former-cvs/id1659743511?i=1000619239781",
+          icon: icons.apple.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/xjP--UBAtmk/sddefault.jpg",
+      url: "https://youtu.be/xjP--UBAtmk",
+      blurb:
+        "Dr. Alan Lotvin shares his insights on leadership and growing a business with people. He emphasizes the importance of taking a chance on people and recognizing patterns of success. He discusses the need to prioritize talent and culture as a leader and shares his approach to reducing attrition. Dr. Lotvin also highlights the importance of honest conversations and developing individuals' talents.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Dr. Alan Lotvin",
+            about:
+              "Dr. Alan Lotvin is a renowned cardiologist, author, and executive leader. He has had a diverse and exciting career, including serving as the president of CVS Caremark, where he helped transform the company into a formidable healthcare organization. He is known for his expertise in healthcare management and his ability to lead high-performing teams.",
+            title:
+              "Former Executive Vice President of CVS Health and Former President of CVS Caremark",
+            url: "https://www.linkedin.com/in/alanlotvin/",
+            imageUrl:
+              "https://pbs.twimg.com/profile_images/1583170525928558592/gh35Fzj3_400x400.jpg",
+          },
+        ],
+        description: [
+          "Dr. Alan Lotvin shares his insights on leadership and growing a business with people. He emphasizes the importance of taking a chance on people and recognizing patterns of success. He discusses the need to prioritize talent and culture as a leader and shares his approach to reducing attrition. Dr. Lotvin also highlights the importance of honest conversations and developing individuals' talents.",
+          "Taking a chance on people and recognizing patterns of success are crucial for effective leadership. Prioritizing talent and culture is essential for growing a business with people. Reducing attrition requires creating a culture of transparency, trust, and safety. Honest conversations about performance and career growth are necessary for individual development. Developing individuals' talents involves assessing their potential and providing the necessary support and resources.",
+          '"Sometimes you have to take a chance on people."',
+          '"The higher you get in an organization, the more time you should spend on talent and culture."',
+          '"Treat people with dignity and respect, and make them feel important in their roles."',
+          '"Tough conversations and bad news do not get better with age.""',
+          '"Honest conversations about performance and career growth are crucial for individual development."',
+        ],
+        hashtags: ["success", "leadership", "growth"],
+        links: [],
+      },
+    },
+  ],
+};

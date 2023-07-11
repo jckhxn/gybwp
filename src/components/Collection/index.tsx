@@ -6,7 +6,7 @@ import Image from "next/image";
 import { generateImage } from "components/shared";
 
 // copy
-import { episodeType } from "components/Pages/HomePage/static-data";
+import { episodeType } from "components/Pages/HomePage/episode-data";
 
 const Collection = ({
   header,

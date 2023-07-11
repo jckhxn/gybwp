@@ -66,32 +66,48 @@ const SponsorsDetailPageComponent = () => {
 
           <div className="flex flex-col-reverse xl:flex-row flex-wrap justify-around mx-10 mb-10">
             <div className="flex flex-col mt-12 text-white">
-              <SectionHeading className="text-3xl mb-8">
+              <SectionHeading className="text-3xl mb-3">
                 {sponsor.name}
               </SectionHeading>
 
-              <div className="xl:max-w-lg">{sponsor.description}</div>
+              {sponsor.description.map((paragraph, idx) => (
+                <div
+                  key={`${sponsor.name} description paragraph ${idx}`}
+                  className="xl:max-w-lg"
+                >
+                  <br />
+                  {paragraph}
+                </div>
+              ))}
 
               {sponsor.socials && <Socials socials={sponsor.socials} />}
             </div>
 
             <div className="flex justify-center mt-8 md:mt-0">
-              <Image
-                className="w-[80vw] h-[80vw] max-h-[25rem] max-w-[25rem] md:w-[25rem] md:h-[25rem] flex-shrink-0 object-cover rounded-full"
-                src={sponsor.imgUrl}
-                alt={sponsor.imgAlt}
-                height={400}
-                width={400}
-              />
+              <div
+                className={`${
+                  sponsor.bgColor || ""
+                } w-[80vw] h-[80vw] max-h-[25rem] max-w-[25rem] md:w-[25rem] md:h-[25rem] flex-shrink-0 overflow-hidden rounded-full`}
+              >
+                <Image
+                  className="m-auto px-4 h-[80vw] max-h-[25rem]"
+                  src={sponsor.imgUrl}
+                  alt={sponsor.imgAlt}
+                  height={400}
+                  width={400}
+                />
+              </div>
             </div>
           </div>
         </div>
       </Section>
 
-      <Collection
-        header={SPONSORS_DETAILS_INFO.collectionHeader}
-        items={sponsor.episodes}
-      />
+      {sponsor.episodes.length ? (
+        <Collection
+          header={SPONSORS_DETAILS_INFO.collectionHeader}
+          items={sponsor.episodes}
+        />
+      ) : null}
     </>
   );
 };

@@ -23,19 +23,25 @@ const SponsorsPageComponent = () => {
           <SectionHeading>{SPONSORS_INFO.sponsorsHeader}</SectionHeading>
 
           <div className="flex flex-wrap justify-center mt-12">
-            {SPONSORS.map(({ name, uuid, imgUrl, imgAlt }) => (
+            {SPONSORS.map(({ name, uuid, imgUrl, imgAlt, bgColor }) => (
               <Link
                 key={`sponsor-${name}`}
                 href={`/sponsors/${uuid}`}
                 className="m-3 lg:m-6"
               >
-                <Image
-                  src={imgUrl}
-                  alt={imgAlt}
-                  className=""
-                  width={250}
-                  height={150}
-                />
+                <div
+                  className={`${
+                    bgColor || ""
+                  } w-[250px] max-h-[150px] overflow-hidden`}
+                >
+                  <Image
+                    src={imgUrl}
+                    alt={imgAlt}
+                    className="h-[150px] w-auto m-auto px-4"
+                    width={250}
+                    height={150}
+                  />
+                </div>
               </Link>
             ))}
           </div>

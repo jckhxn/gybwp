@@ -1,6 +1,42 @@
-import { socialsType } from "../SponsorsPage/static-data";
-import facebook from "public/social-logos/facebook.png";
+import routes from "routes";
+
+// data
 import { PODCAST } from "../HomePage/static-data";
+
+//
+//
+//
+//
+// ONLY TOUCH THINGS BELOW THIS LINE
+
+export const DATA = {
+  backButtonText: "Back",
+  nextEpisodeButton: "Next Episode",
+  featuredGuestButtonText: "Check them out",
+  aboutThisEpisodeHeader: "About This Episode",
+  importantLinksHeader: "Important Links",
+};
+
+export const CTA = {
+  header:
+    "Subscribe today and embark on a transformative journey towards driving business success through strategic people management.",
+  buttonText: "Subscribe",
+  buttonURL: routes.external.subscribe,
+};
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+// DO NOT TOUCH ANYTHING BELOW THIS LINE
 
 export const getEpisode = (season: string, episode: string) =>
   PODCAST.filter(
@@ -30,42 +66,3 @@ export const getNextEpisode = (episode: string) => {
 
   return null;
 };
-
-//
-//
-//
-//
-// ONLY TOUCH THINGS BELOW THIS LINE
-
-export const SOCIALS: socialsType[] = [
-  {
-    name: "facebook",
-    link: "http://www.facebook.com/abcd-typed",
-    icon: facebook.src,
-  },
-  {
-    name: "facebook",
-    link: "http://www.facebook.com/abcd-typed",
-    icon: facebook.src,
-  },
-  {
-    name: "facebook",
-    link: "http://www.facebook.com/abcd-typed",
-    icon: facebook.src,
-  },
-  {
-    name: "facebook",
-    link: "http://www.facebook.com/abcd-typed",
-    icon: facebook.src,
-  },
-  {
-    name: "facebook",
-    link: "http://www.facebook.com/abcd-typed",
-    icon: facebook.src,
-  },
-  {
-    name: "facebook",
-    link: "http://www.facebook.com/abcd-typed",
-    icon: facebook.src,
-  },
-];
