@@ -10,10 +10,8 @@ import Image from "next/image";
 // copy
 import { SPONSORS_DETAILS_INFO, getSponsor } from "./static-data";
 import { sponsorType } from "components/Pages/SponsorsPage/static-data";
-import {
-  getEpisodesBySponsor,
-  episodeType,
-} from "components/Pages/HomePage/static-data";
+import { getEpisodesBySponsor } from "components/Pages/HomePage/static-data";
+import { episodeType } from "components/Pages/HomePage/episode-data";
 import Socials from "components/Socials";
 import routes from "routes";
 
