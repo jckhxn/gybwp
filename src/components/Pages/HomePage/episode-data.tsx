@@ -616,7 +616,7 @@ export const SEASON_ONE: seasonType = {
   ],
 };
 
-export const SEASON_TWO = {
+export const SEASON_TWO: seasonType = {
   seasonNumber: 2,
   seasonName: "Season Two",
   episodes: [
@@ -1462,7 +1462,7 @@ export const SEASON_TWO = {
   ],
 };
 
-export const SEASON_THREE = {
+export const SEASON_THREE: seasonType = {
   seasonNumber: 3,
   seasonName: "Season Three",
   episodes: [
@@ -1523,6 +1523,150 @@ export const SEASON_THREE = {
         ],
         hashtags: ["success", "leadership", "growth"],
         links: [],
+      },
+    },
+
+    // EPISODE TWO
+    {
+      uuid: "302",
+      episodeNumber: 2,
+      episodeName:
+        "Creating a Culture of Belonging is Good Business w/ William Arruda & Sondra Dryer",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/the-importance-of-belonging-in-the-workplace/id1659743511?i=1000620676106",
+          icon: icons.apple.src,
+        },
+        {
+          name: "spotify",
+          link: "https://open.spotify.com/episode/3ZP95jLYIMdouyg6tPYTfR",
+          icon: icons.spotify.src,
+        },
+        {
+          name: "google podcasts",
+          link: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8yMDU3NDkzLnJzcw/episode/QnV6enNwcm91dC0xMzE5OTExMA?sa=X&ved=0CAUQkfYCahcKEwiYx4-lg5mAAxUAAAAAHQAAAAAQCg",
+          icon: icons.google.src,
+        },
+        {
+          name: "amazon music",
+          link: "https://music.amazon.com/podcasts/dbf81855-67a9-4500-bdec-c45ace015170/episodes/7af83cb9-85a8-49ec-9e30-b7a4da4cd281/growing-your-business-with-people-the-importance-of-belonging-in-the-workplace-w-william-arruda-sondra-dryer-s3e2",
+          icon: icons.amazon.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/mgHSyeFweis/sddefault.jpg",
+      url: "https://youtu.be/mgHSyeFweis",
+      blurb:
+        "In our recent episode, guest William Arruda highlighted the data that supports the need to emphasize belonging in the workplace.",
+      details: {
+        featuredGuests: [
+          {
+            name: "William Arruda",
+            about:
+              "William Arruda is a personal branding pioneer and the founder of CareerBlast.TV. He has written nearly 700 articles for Forbes and other publications and is an expert in personal branding.",
+            title: "Co-Founder of CareerBlast and Motivational Speaker",
+            url: "https://www.linkedin.com/in/williamarruda/",
+            imageUrl:
+              "https://williamarruda.com/wp-content/uploads/2021/03/PORTRAIT3.jpg",
+          },
+          {
+            name: "Sondra Dryer",
+            about:
+              "Sondra helps companies articulate their unique employee value proposition (EVP) to attract key talent while simultaneously activating their own employees to become their brand ambassadors. Her specialties include: employer brand strategy, recruitment marketing, employee communications and engagement, public relations, cultural integration, public speaking, leadership development and team building.",
+            title:
+              "President and Senior Employer Brand Strategist at Spark Employer Brand Consulting",
+            url: "https://www.linkedin.com/in/sondradryer/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/C4E03AQExI-TztV2Ohw/profile-displayphoto-shrink_800_800/0/1613094682102?e=1695254400&v=beta&t=sNDbyjdoqciXdJgHYHHrLTg5VNMXwLEwntdCs8ASweI",
+          },
+        ],
+        description: [
+          "William Arruda discusses the importance of belonging in the workplace and how it can impact employee engagement and performance. He emphasizes the need for organizations to measure and prioritize belonging and shares insights on how to create a culture of belonging that embraces individuality while still conforming to the organization's values.",
+          "Key Takeaways:",
+          "- Belonging is a shared value that is important for individuals and organizations.",
+          "- Creating a culture of belonging can lead to increased engagement, productivity, and retention.",
+          "- Trust is a key component of belonging and can be built by creating an environment where individuals feel heard and valued.",
+          "- Onboarding is a critical time to establish a sense of belonging and should focus on both the organization's brand and the individual's personal brand.",
+        ],
+        hashtags: ["culture", "success", "retention"],
+        links: [
+          {
+            text: "For more information about William, visit:",
+            linkUrl: "https://williamarruda.com/",
+          },
+        ],
+      },
+    },
+
+    // EPISODE THREE
+    {
+      uuid: "303",
+      episodeNumber: 3,
+      episodeName:
+        "Harnessing Strengths to Drive Employee Engagement & Retention",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/harnessing-strengths-to-drive-employee-engagement-retention/id1659743511?i=1000621488991",
+          icon: icons.apple.src,
+        },
+        {
+          name: "spotify",
+          link: "https://open.spotify.com/episode/7GrAWV5FVWIhzKzlSvEjEY",
+          icon: icons.spotify.src,
+        },
+        {
+          name: "google podcasts",
+          link: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8yMDU3NDkzLnJzcw/episode/QnV6enNwcm91dC0xMzI0MjUyOQ?sa=X&ved=0CAUQkfYCahcKEwjY55vFhpmAAxUAAAAAHQAAAAAQCg",
+          icon: icons.google.src,
+        },
+        {
+          name: "amazon music",
+          link: "https://music.amazon.com/podcasts/dbf81855-67a9-4500-bdec-c45ace015170/episodes/80a1f33e-acda-46f8-86ca-2af9d33ca3d0/growing-your-business-with-people-harnessing-strengths-to-drive-employee-engagement-retention-s3e3",
+          icon: icons.amazon.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/3FhWsREY2WY/sddefault.jpg",
+      url: "https://youtu.be/3FhWsREY2WY",
+      blurb:
+        "This week on the Growing Your Business with People podcast, LeAnne Lagasse discusses the importance of playing to your team's strengths and developing your people managers. She emphasizes the need for leaders to set the tone for owning strengths and weaknesses and creating a culture of continuous improvement.",
+      details: {
+        featuredGuests: [
+          {
+            name: "LeAnne Lagasse",
+            about:
+              "William Arruda is a personal branding pioneer and the founder of CareerBlast.TV. He has written nearly 700 articles for Forbes and other publications and is an expert in personal branding.",
+            title:
+              "HR and People Ops Consulting at LeAnne Lagasse Coaching and Consulting",
+            url: "https://www.linkedin.com/in/leannelagasse/",
+            imageUrl:
+              "https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/themes/2150450831/settings_images/VWKZGgToQt6I2WvK8AnC_file.jpg",
+          },
+        ],
+        description: [
+          "LeAnne highlights the power of the Clifton Strengths assessment in understanding individual talents and leveraging them for better performance. She also explains the correlation between employee engagement and business outcomes, such as productivity, retention, and financial performance.",
+          "Key Takeaways:",
+          "- Leaders should set the tone for owning strengths and weaknesses in their teams.",
+          "- The Clifton Strengths assessment can help identify individual talents and leverage them for better performance.",
+          "- Employee engagement is linked to positive business outcomes, such as productivity, retention, and financial performance.",
+          "- Praise and recognition should be individualized and focused on specific talents and strengths.",
+          "- Equipping people managers with self-awareness, communication skills, and engagement strategies is crucial for improving employee engagement and retention.",
+        ],
+        hashtags: ["strengths", "productivity", "retention"],
+        links: [
+          {
+            text: "For more about LeAnne, visit:",
+            linkUrl: "https://www.leannelagasse.com/",
+          },
+          {
+            text: "External Article:",
+            linkUrl:
+              "https://hbr.org/2023/03/it-takes-versatility-to-lead-in-a-volatile-world",
+            linkText: "It Takes Versatility to Lead in a Volatile World",
+          },
+        ],
       },
     },
   ],

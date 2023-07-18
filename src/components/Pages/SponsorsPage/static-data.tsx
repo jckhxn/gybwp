@@ -1,7 +1,12 @@
 // images
 import * as logos from "components/Socials/logos";
 
-export type sponsorUUIDs = "bayard" | "sevenstep" | "paradox";
+export type sponsorUUIDs =
+  | "bayard"
+  | "sevenstep"
+  | "paradox"
+  | "survale"
+  | "futureSolve";
 
 export type socialsType = {
   name: string;
