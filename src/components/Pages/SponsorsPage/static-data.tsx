@@ -140,6 +140,68 @@ export const SPONSORS: sponsorType[] = [
       },
     ],
   },
+  {
+    name: "Survale",
+    uuid: "survale",
+    imgUrl:
+      "https://sr-marketplace-prod.s3.amazonaws.com/wp-content/uploads/2018/04/survale-logo.png",
+    bgColor: "bg-white",
+    imgAlt: "Survale logo",
+    description: [
+      "Survale’s talent survey and analytics platform is purpose-built for all facets of human resources. From recruiting and candidate experience, to onboarding experience, to employee experience with all talent facing programs and beyond, Survale was designed to measure and improve the full talent experience.",
+      "Survale was founded by three HR software veterans who believe that talent experience drives operational excellence. We launched our solution in 2016 and focused on helping our clients understand candidate experience in order to optimize the entire recruiting process. Survale powers the Talent Board’s annual CandE Awards Candidate Experience Research and Awards program and has expanded into onboarding and employee experience management. Hundreds of organizations and many awards later, Survale is the leading platform for hello to hire to retire talent feedback. ",
+    ],
+    socials: [
+      {
+        name: "home",
+        link: "https://survale.com/",
+        icon: logos.home.src,
+      },
+      {
+        name: "facebook",
+        link: "https://www.facebook.com/SurvalePage",
+        icon: logos.facebook.src,
+      },
+      {
+        name: "linkedin",
+        link: "https://www.linkedin.com/company/survale",
+        icon: logos.linkedin.src,
+      },
+      {
+        name: "instagram",
+        link: "https://www.instagram.com/survaleinc/",
+        icon: logos.instagram.src,
+      },
+    ],
+  },
+  {
+    name: "futureSolve",
+    uuid: "futureSolve",
+    imgUrl:
+      "https://pbs.twimg.com/profile_images/1303386729030782976/nkjWT3mE_400x400.jpg",
+    bgColor: "bg-white",
+    imgAlt: "futureSolve logo",
+    description: [
+      "FutureSolve is a single place of trust for solutions and advisory services. FutureSolve offers trusted HR technology sourcing and advice at no cost. It sponsors a unique community network to support HR and business leader’s needs, and our executive advisory services help to resolve an organization’s difficult issues. Application of its performance index results delivered in a predictive AI analytics engine will lead to improved organization performance",
+    ],
+    socials: [
+      {
+        name: "home",
+        link: "https://www.futuresolve.com/",
+        icon: logos.home.src,
+      },
+      {
+        name: "facebook",
+        link: "https://www.facebook.com/FutureSolveAdvisory/",
+        icon: logos.facebook.src,
+      },
+      {
+        name: "linkedin",
+        link: "https://www.linkedin.com/company/futuresolvecorp",
+        icon: logos.linkedin.src,
+      },
+    ],
+  },
 ];
 
 export const PARTNERS = [
