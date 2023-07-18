@@ -26,6 +26,11 @@ const ConsultingPageComponent = () => {
   const [email, setEmail] = useState("");
   const [phoneNum, setPhoneNum] = useState("");
   const [comments, setComments] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const validateForm = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
   return (
     <>
       {/* INFORMATION */}
@@ -144,6 +149,7 @@ const ConsultingPageComponent = () => {
             method="POST"
             name="contact-jkl"
             action=""
+            onSubmit={(e) => validateForm(e)}
             className="m-auto mb-0 space-y-4 p-4 shadow-lg sm:p-6 lg:p-8 max-w-lg"
             data-netlify="true"
             data-netlify-honeypot="bot-field"
@@ -239,6 +245,7 @@ const ConsultingPageComponent = () => {
               <Button className="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto">
                 {FORM.submitButton}
               </Button>
+              {submitted ? "Submitted!" : ""}
             </div>
           </form>
         </div>
