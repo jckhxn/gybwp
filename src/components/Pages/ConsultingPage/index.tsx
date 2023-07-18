@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // components
 import { Section, SectionHeading } from "components/shared";
@@ -20,6 +20,12 @@ import Button from "components/Button";
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 
 const ConsultingPageComponent = () => {
+  // State
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNum, setPhoneNum] = useState("");
+  const [comments, setComments] = useState("");
   return (
     <>
       {/* INFORMATION */}
@@ -132,13 +138,22 @@ const ConsultingPageComponent = () => {
 
             <p className="mt-4 text-gray-500 text-lg">{FORM.description}</p>
           </div>
-          {/* Specify name of field thst shows up in Netlify dashboard */}
+          {/* Specify name of field thst shows up in Netlify dashboard
+           */}
           <form
+            method="POST"
             name="contact-jkl"
             action=""
             className="m-auto mb-0 space-y-4 p-4 shadow-lg sm:p-6 lg:p-8 max-w-lg"
             data-netlify="true"
+            data-netlify-honeypot="bot-field"
           >
+            {/* Sets the subject field of the email notification  */}
+            <input
+              type="hidden"
+              name="subject"
+              value={`You've got mail from ${firstName},${lastName}`}
+            />
             <input type="hidden" name="form-name" value="contact-jkl" />
             <div className="mt-4">
               <p className="font-bold">{FORM.formHeader}</p>
@@ -153,6 +168,8 @@ const ConsultingPageComponent = () => {
                   placeholder="First Name"
                   type="text"
                   id="firstName"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                   required
                 />
               </div>
@@ -166,6 +183,8 @@ const ConsultingPageComponent = () => {
                   placeholder="Last Name"
                   type="text"
                   id="lastName"
+                  onChange={(e) => setLastName(e.target.value)}
+                  value={lastName}
                   required
                 />
               </div>
@@ -179,6 +198,8 @@ const ConsultingPageComponent = () => {
                 placeholder="Email Address"
                 type="email"
                 id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                 required
               />
@@ -192,6 +213,8 @@ const ConsultingPageComponent = () => {
                 placeholder="Phone Number"
                 type="tel"
                 id="phone"
+                value={phoneNum}
+                onChange={(e) => setPhoneNum(e.target.value)}
                 pattern="[0-9]{3,4}-?[0-9]{3}-?[0-9]{4}"
                 minLength={7}
                 maxLength={11}
@@ -208,6 +231,8 @@ const ConsultingPageComponent = () => {
                 placeholder="Comments"
                 rows={8}
                 id="comments"
+                onChange={(e) => setComments(e.target.value)}
+                value={comments}
               ></textarea>
             </div>
             <div className="mt-4">
