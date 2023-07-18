@@ -132,11 +132,14 @@ const ConsultingPageComponent = () => {
 
             <p className="mt-4 text-gray-500 text-lg">{FORM.description}</p>
           </div>
-
+          {/* Specify name of field thst shows up in Netlify dashboard */}
           <form
+            name="contact-jkl"
             action=""
             className="m-auto mb-0 space-y-4 p-4 shadow-lg sm:p-6 lg:p-8 max-w-lg"
+            data-netlify="true"
           >
+            <input type="hidden" name="form-name" value="contact-jkl" />
             <div className="mt-4">
               <p className="font-bold">{FORM.formHeader}</p>
             </div>
@@ -150,6 +153,7 @@ const ConsultingPageComponent = () => {
                   placeholder="First Name"
                   type="text"
                   id="firstName"
+                  required
                 />
               </div>
 
@@ -162,10 +166,10 @@ const ConsultingPageComponent = () => {
                   placeholder="Last Name"
                   type="text"
                   id="lastName"
+                  required
                 />
               </div>
             </div>
-
             <div>
               <label className="sr-only" htmlFor="email">
                 Email
@@ -175,9 +179,10 @@ const ConsultingPageComponent = () => {
                 placeholder="Email Address"
                 type="email"
                 id="email"
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                required
               />
             </div>
-
             <div>
               <label className="sr-only" htmlFor="phone">
                 Phone Number
@@ -187,9 +192,12 @@ const ConsultingPageComponent = () => {
                 placeholder="Phone Number"
                 type="tel"
                 id="phone"
+                pattern="[0-9]{3,4}-?[0-9]{3}-?[0-9]{4}"
+                minLength={7}
+                maxLength={11}
+                required
               />
             </div>
-
             <div>
               <label className="sr-only" htmlFor="comments">
                 Comments
@@ -202,7 +210,6 @@ const ConsultingPageComponent = () => {
                 id="comments"
               ></textarea>
             </div>
-
             <div className="mt-4">
               <Button className="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto">
                 {FORM.submitButton}
