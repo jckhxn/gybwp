@@ -38,6 +38,8 @@ const FeaturedNews = ({ color = "light" }: FeaturedNewsProps) => {
                     className="block rounded-md p-4 text-center group"
                   >
                     <Image
+                      height={224}
+                      width={450}
                       alt={`featured article by ${company}`}
                       src={imgSrc || defaultImageSrc}
                       className="h-56 w-full rounded-sm object-cover"
