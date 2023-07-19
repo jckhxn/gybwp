@@ -27,7 +27,7 @@ const ConsultingPageComponent = () => {
   const [phoneNum, setPhoneNum] = useState("");
   const [comments, setComments] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const validateForm = (e) => {
+  const validateForm = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitted(true);
   };
