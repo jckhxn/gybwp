@@ -21,15 +21,21 @@ import Button from "components/Button";
 
 const ConsultingPageComponent = () => {
   // State
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNum, setPhoneNum] = useState("");
-  const [comments, setComments] = useState("");
+  const initialFormState = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNum: "",
+    comments: "",
+  };
+  const [formState, setFormState] = useState(initialFormState);
   const [submitted, setSubmitted] = useState(false);
-  const validateForm = (e:React.FormEvent<HTMLFormElement>) => {
+  const validateForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     setSubmitted(true);
+
+    setFormState(initialFormState);
   };
   return (
     <>
@@ -145,6 +151,7 @@ const ConsultingPageComponent = () => {
           </div>
           {/* Specify name of field thst shows up in Netlify dashboard
            */}
+
           <form
             method="POST"
             name="contact-jkl"
@@ -158,7 +165,7 @@ const ConsultingPageComponent = () => {
             <input
               type="hidden"
               name="subject"
-              value={`You've got mail from ${firstName},${lastName}`}
+              value={`You've got mail from ${formState.firstName},${formState.lastName}`}
             />
             <input type="hidden" name="form-name" value="contact-jkl" />
             <div className="mt-4">
@@ -174,8 +181,10 @@ const ConsultingPageComponent = () => {
                   placeholder="First Name"
                   type="text"
                   id="firstName"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  value={formState.firstName}
+                  onChange={(e) =>
+                    setFormState({ ...formState, firstName: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -189,8 +198,10 @@ const ConsultingPageComponent = () => {
                   placeholder="Last Name"
                   type="text"
                   id="lastName"
-                  onChange={(e) => setLastName(e.target.value)}
-                  value={lastName}
+                  onChange={(e) =>
+                    setFormState({ ...formState, lastName: e.target.value })
+                  }
+                  value={formState.lastName}
                   required
                 />
               </div>
@@ -204,8 +215,10 @@ const ConsultingPageComponent = () => {
                 placeholder="Email Address"
                 type="email"
                 id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formState.email}
+                onChange={(e) =>
+                  setFormState({ ...formState, email: e.target.value })
+                }
                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                 required
               />
@@ -219,8 +232,10 @@ const ConsultingPageComponent = () => {
                 placeholder="Phone Number"
                 type="tel"
                 id="phone"
-                value={phoneNum}
-                onChange={(e) => setPhoneNum(e.target.value)}
+                value={formState.phoneNum}
+                onChange={(e) =>
+                  setFormState({ ...formState, phoneNum: e.target.value })
+                }
                 pattern="[0-9]{3,4}-?[0-9]{3}-?[0-9]{4}"
                 minLength={7}
                 maxLength={11}
@@ -237,15 +252,18 @@ const ConsultingPageComponent = () => {
                 placeholder="Comments"
                 rows={8}
                 id="comments"
-                onChange={(e) => setComments(e.target.value)}
-                value={comments}
+                onChange={(e) =>
+                  setFormState({ ...formState, comments: e.target.value })
+                }
+                value={formState.comments}
               ></textarea>
             </div>
+            <div className="">{submitted ? "Submitted!" : ""}</div>
+
             <div className="mt-4">
               <Button className="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto">
                 {FORM.submitButton}
               </Button>
-              {submitted ? "Submitted!" : ""}
             </div>
           </form>
         </div>
