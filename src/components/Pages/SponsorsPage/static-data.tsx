@@ -205,66 +205,11 @@ export const SPONSORS: sponsorType[] = [
 ];
 
 export const PARTNERS = [
-  {
-    imgUrl:
-      "https://www.logodesign.net/logo-new/building-on-crescent-4303ld.png",
-    imgAlt: "",
-  },
-  {
-    imgUrl:
-      "https://www.logodesign.net/logo-new/building-on-crescent-4303ld.png",
-    imgAlt: "",
-  },
-  {
-    imgUrl:
-      "https://www.logodesign.net/logo-new/building-on-crescent-4303ld.png",
-    imgAlt: "",
-  },
-  {
-    imgUrl:
-      "https://www.logodesign.net/logo-new/building-on-crescent-4303ld.png",
-    imgAlt: "",
-  },
-  {
-    imgUrl:
-      "https://www.logodesign.net/logo-new/building-on-crescent-4303ld.png",
-    imgAlt: "",
-  },
-  {
-    imgUrl:
-      "https://www.logodesign.net/logo-new/building-on-crescent-4303ld.png",
-    imgAlt: "",
-  },
-  {
-    imgUrl:
-      "https://www.logodesign.net/logo-new/building-on-crescent-4303ld.png",
-    imgAlt: "",
-  },
-  {
-    imgUrl:
-      "https://www.logodesign.net/logo-new/building-on-crescent-4303ld.png",
-    imgAlt: "",
-  },
-  {
-    imgUrl:
-      "https://www.logodesign.net/logo-new/building-on-crescent-4303ld.png",
-    imgAlt: "",
-  },
-  {
-    imgUrl:
-      "https://www.logodesign.net/logo-new/building-on-crescent-4303ld.png",
-    imgAlt: "",
-  },
-  {
-    imgUrl:
-      "https://www.logodesign.net/logo-new/building-on-crescent-4303ld.png",
-    imgAlt: "",
-  },
-  {
-    imgUrl:
-      "https://www.logodesign.net/logo-new/building-on-crescent-4303ld.png",
-    imgAlt: "",
-  },
+  // {
+  //   imgUrl:
+  //     "https://www.logodesign.net/logo-new/building-on-crescent-4303ld.png",
+  //   imgAlt: "",
+  // },
 ];
 
 export const SPONSORS_INFO = {

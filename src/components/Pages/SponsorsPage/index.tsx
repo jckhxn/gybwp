@@ -48,10 +48,12 @@ const SponsorsPageComponent = () => {
         </Section>
       )}
 
-      {SPONSORS.length && PARTNERS.length && <div className="mt-20"></div>}
+      {SPONSORS.length && PARTNERS.length ? (
+        <div className="mt-20"></div>
+      ) : null}
 
       {/* PARTNERS */}
-      {PARTNERS.length && (
+      {PARTNERS.length ? (
         <Section flex className="mx-1 lg:mx-12">
           <SectionHeading>{SPONSORS_INFO.partnerHeader}</SectionHeading>
 
@@ -68,7 +70,7 @@ const SponsorsPageComponent = () => {
             ))}
           </div>
         </Section>
-      )}
+      ) : null}
     </div>
   );
 };
