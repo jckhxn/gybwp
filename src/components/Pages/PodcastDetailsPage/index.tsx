@@ -7,6 +7,7 @@ import { Section, SectionHeading } from "components/shared";
 import Image from "next/image";
 import Button from "components/Button";
 import Socials from "components/Socials";
+import Collection from "components/Collection";
 
 // copy
 import { episodeType } from "components/Pages/HomePage/episode-data";
@@ -152,9 +153,7 @@ const PodcastDetailsPageComponent = () => {
                     <h2 className="text-xl font-bold text-gray-900 md:text-2xl mb-6">
                       {guest.name}
                     </h2>
-                    <p className="hidden text-gray-500 md:mt-4 md:block">
-                      {guest.about}
-                    </p>
+                    <p className="text-gray-500 md:mt-4">{guest.about}</p>
                     <div className="border-b-[.5px] border-black my-4" />
                     <p className="italic font-thin">{guest.title}</p>
 
@@ -185,7 +184,7 @@ const PodcastDetailsPageComponent = () => {
         : null}
 
       {!isClip && episode.details?.description.length ? (
-        <Section className="mx-20 mt-8">
+        <Section className="mx-6 md:mx-20 mt-8">
           <SectionHeading className="text-right">
             {DATA.aboutThisEpisodeHeader}
           </SectionHeading>
@@ -209,7 +208,7 @@ const PodcastDetailsPageComponent = () => {
       ) : null}
 
       {!isClip && episode.details?.links?.length ? (
-        <Section className="mx-20 mt-8">
+        <Section className="mx-6 md:mx-20 mt-8">
           <SectionHeading className="text-right">
             {DATA.importantLinksHeader}
           </SectionHeading>
@@ -241,7 +240,9 @@ const PodcastDetailsPageComponent = () => {
       ) : null}
 
       {episode.sponsors.length ? (
-        <Section>
+        <Section
+          className={`flex flex-row items-center justify-center mt-20 mx-6 md:mx-20`}
+        >
           {episode.sponsors.map((sponsorUUID, idx) => {
             const sponsor = SPONSORS.filter((s) => s.uuid === sponsorUUID)[0];
             if (!sponsor) {
@@ -249,11 +250,14 @@ const PodcastDetailsPageComponent = () => {
             }
 
             return (
-              <Image
-                key={idx}
-                src={sponsor.imgUrl}
-                alt={`sponsor ${sponsor.name} image`}
-              />
+              <div key={idx} className={"mx-8"}>
+                <Image
+                  src={sponsor.imgUrl}
+                  alt={`sponsor ${sponsor.name} image`}
+                  height={150}
+                  width={150}
+                />
+              </div>
             );
           })}
         </Section>
