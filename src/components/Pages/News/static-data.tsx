@@ -41,7 +41,7 @@ export const ARTICLES = [
     imgSrc: "",
     linkUrl:
       "https://www.forbes.com/sites/williamarruda/2023/06/13/what-is-an-internship-and-how-do-you-land-one/?sh=13c221bb7a80",
-    date: "Jun 13, 2023",
+    date: "Jun 13rd, 2023",
   },
   {
     company: "Recruiting Future",
@@ -50,7 +50,7 @@ export const ARTICLES = [
     imgSrc: "",
     linkUrl:
       "https://recruitingfuture.com/2023/06/ep-526-building-the-business-case-for-ta-technology/",
-    date: "Jun 2, 2023",
+    date: "Jun 2nd, 2023",
   },
   {
     company: "CEO Weekly",
@@ -79,7 +79,7 @@ export const ARTICLES = [
     description: "",
     imgSrc: "",
     linkUrl: "https://www.chadcheese.com/post/the-people-mba",
-    date: "Mar 6, 2023",
+    date: "Mar 6th, 2023",
   },
   {
     company: "The Wall Street Journal",
@@ -97,7 +97,7 @@ export const ARTICLES = [
     imgSrc: "",
     linkUrl:
       "https://www.lhh.com/us/en/insights/how-the-pandemic-is-changing-the-rules-of-talent-management/",
-    date: "Aug 9, 2020",
+    date: "Aug 9th, 2020",
   },
   {
     company: "HR Dive",
@@ -107,7 +107,7 @@ export const ARTICLES = [
     imgSrc: "",
     linkUrl:
       "https://www.hrdive.com/news/we-went-virtual-almost-overnight-how-cvs-hired-nearly-50k-amid-covid-19/577659/",
-    date: "May 11, 2020",
+    date: "May 11th, 2020",
   },
   {
     company: "The Wall Street Journal",
@@ -117,7 +117,7 @@ export const ARTICLES = [
     imgSrc: "",
     linkUrl:
       "https://www.wsj.com/articles/inside-the-push-to-redeploy-workers-quickly-11586943000",
-    date: "April 15, 2020",
+    date: "April 15th, 2020",
   },
   {
     company: "The Wall Street Journal",
@@ -126,6 +126,6 @@ export const ARTICLES = [
     imgSrc: "",
     linkUrl:
       "https://www.wsj.com/articles/youre-hired-no-we-dont-need-to-meet-you-first-1542298757",
-    date: "Nov 15, 2018",
+    date: "Nov 15th, 2018",
   },
 ];

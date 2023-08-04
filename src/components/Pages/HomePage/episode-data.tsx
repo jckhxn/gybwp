@@ -1669,5 +1669,69 @@ export const SEASON_THREE: seasonType = {
         ],
       },
     },
+
+    // EPISODE FOUR
+    {
+      uuid: "304",
+      episodeNumber: 4,
+      episodeName:
+        "Matt Alder, Future of Talent Acquisition: AI & Recruiter-less Hiring",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/harnessing-strengths-to-drive-employee-engagement-retention/id1659743511?i=1000621488991",
+          icon: icons.apple.src,
+        },
+        {
+          name: "spotify",
+          link: "https://open.spotify.com/episode/7GrAWV5FVWIhzKzlSvEjEY",
+          icon: icons.spotify.src,
+        },
+        {
+          name: "google podcasts",
+          link: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8yMDU3NDkzLnJzcw/episode/QnV6enNwcm91dC0xMzI0MjUyOQ?sa=X&ved=0CAUQkfYCahcKEwjY55vFhpmAAxUAAAAAHQAAAAAQCg",
+          icon: icons.google.src,
+        },
+        {
+          name: "amazon music",
+          link: "https://music.amazon.com/podcasts/dbf81855-67a9-4500-bdec-c45ace015170/episodes/80a1f33e-acda-46f8-86ca-2af9d33ca3d0/growing-your-business-with-people-harnessing-strengths-to-drive-employee-engagement-retention-s3e3",
+          icon: icons.amazon.src,
+        },
+      ],
+      sponsors: [],
+      image: "https://img.youtube.com/vi/XvtCAgwZBPQ/sddefault.jpg",
+      url: "https://youtu.be/XvtCAgwZBPQ",
+      blurb:
+        "In this episode of the Growing Your Business with People Podcast, host Jeff Lackey sits down with Matt Alder.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Matt Alder",
+            about:
+              "Matt Alder, host of The Recruiting Future Podcast, discusses the future of talent acquisition and the role of AI in recruiting. He explores the concept of 'recruiter-less recruiting' and how AI can make the process more efficient. Alder emphasizes the importance of differentiation and human creativity in a world where everyone is using AI.",
+            title: "Producer & Host",
+            url: "https://www.linkedin.com/in/mattalder",
+            imageUrl:
+              "https://media.licdn.com/dms/image/C4D03AQHj62BirzhWlA/profile-displayphoto-shrink_800_800/0/1634123057580?e=1696464000&v=beta&t=quoN5W5KoS-Jr7V1JiGQM5v7wCdTq45Ohh0adYEUwyY",
+          },
+        ],
+        description: [
+          "In this episode of the Growing Your Business with People Podcast, host Jeff Lackey sits down with Matt Alder.",
+          "Matt Alder, host of The Recruiting Future Podcast, discusses the future of talent acquisition and the role of AI in recruiting. He explores the concept of 'recruiter-less recruiting' and how AI can make the process more efficient. Alder emphasizes the importance of differentiation and human creativity in a world where everyone is using AI.",
+          "He also highlights the potential of AI in analyzing HR data and its implications for talent management. Overall, Alder believes that AI will create new job opportunities and change the way organizations think about talent.",
+        ],
+        hashtags: ["ai", "recruiting", "hr", "talentAcquisition", "business"],
+        links: [
+          {
+            text: "For more about Matt, visit:",
+            linkUrl: "https://www.linkedin.com/in/mattalder",
+          },
+          {
+            text: "For more information on Matt and his podcast, go to:",
+            linkUrl: "https://recruitingfuture.com/",
+          },
+        ],
+      },
+    },
   ],
 };
