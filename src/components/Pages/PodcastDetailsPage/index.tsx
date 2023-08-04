@@ -7,7 +7,7 @@ import { Section, SectionHeading } from "components/shared";
 import Image from "next/image";
 import Button from "components/Button";
 import Socials from "components/Socials";
-import Collection from "components/Collection";
+import Link from "next/link";
 
 // copy
 import { episodeType } from "components/Pages/HomePage/episode-data";
@@ -249,15 +249,28 @@ const PodcastDetailsPageComponent = () => {
               return null;
             }
 
+            const { name, uuid, imgUrl, imgAlt, bgColor } = sponsor;
+
             return (
-              <div key={idx} className={"mx-8"}>
-                <Image
-                  src={sponsor.imgUrl}
-                  alt={`sponsor ${sponsor.name} image`}
-                  height={150}
-                  width={150}
-                />
-              </div>
+              <Link
+                key={`sponsor-${name}`}
+                href={`/sponsors/${uuid}`}
+                className="m-3 lg:m-6"
+              >
+                <div
+                  className={`${
+                    bgColor || ""
+                  } w-[250px] max-h-[150px] overflow-hidden`}
+                >
+                  <Image
+                    src={imgUrl}
+                    alt={imgAlt}
+                    className="h-[150px] w-auto m-auto px-4"
+                    width={250}
+                    height={150}
+                  />
+                </div>
+              </Link>
             );
           })}
         </Section>
