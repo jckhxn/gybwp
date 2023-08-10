@@ -182,7 +182,7 @@ const ConsultingPageComponent = () => {
               type="hidden"
               name="subject"
               data-remove-prefix
-              value={`You've got mail from ${formState.firstName} ${formState.lastName}`}
+              value="You've got mail from %{irstName} %{lastName}"
             />
             <input type="hidden" name="form-name" value="contact-jkl" />
             <div className="mt-4">
