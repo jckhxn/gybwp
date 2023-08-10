@@ -25,7 +25,7 @@ const ConsultingPageComponent = () => {
     firstName: "",
     lastName: "",
     email: "",
-    phoneNum: "",
+    phoneNumber: "",
     subject: "",
     comments: "",
   };
@@ -243,10 +243,10 @@ const ConsultingPageComponent = () => {
                 className="w-full rounded-lg border border-gray-200 p-3 text-sm"
                 placeholder="Phone Number"
                 type="tel"
-                name="phoneNum"
-                value={formState.phoneNum}
+                name="phoneNumber"
+                value={formState.phoneNumber}
                 onChange={(e) =>
-                  setFormState({ ...formState, phoneNum: e.target.value })
+                  setFormState({ ...formState, phoneNumber: e.target.value })
                 }
                 pattern="[0-9]{3,4}-?[0-9]{3}-?[0-9]{4}"
                 minLength={7}
