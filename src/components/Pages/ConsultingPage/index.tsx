@@ -18,7 +18,7 @@ import Button from "components/Button";
 //
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
-const encode = (data: String) => {
+const encode = (data: Object) => {
   return Object.keys(data)
 
     .map(
@@ -39,18 +39,19 @@ const ConsultingPageComponent = () => {
   const [formState, setFormState] = useState(initialFormState);
   const [submitted, setSubmitted] = useState(false);
 
-  const validateForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      // @ts-ignore
-      body: encode({ "form-name": "contact-jkl", ...formState }),
-    });
-    setSubmitted(true);
+  // const validateForm = (e: React.FormEvent<HTMLFormElement>) => {
+  //   console.log(encode({ "form-name": "contact-jkl", ...formState }));
+  //   e.preventDefault();
+  //   fetch("/", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  //     // @ts-ignore
+  //     body: encode({ "form-name": "contact-jkl", ...formState }),
+  //   });
+  //   setSubmitted(true);
 
-    setFormState(initialFormState);
-  };
+  //   setFormState(initialFormState);
+  // };
   return (
     <>
       {/* INFORMATION */}
@@ -170,7 +171,7 @@ const ConsultingPageComponent = () => {
             method="POST"
             name="contact-jkl"
             action=""
-            onSubmit={(e) => validateForm(e)}
+            onSubmit={(e) => e.preventDefault()}
             className="m-auto mb-0 space-y-4 p-4 shadow-lg sm:p-6 lg:p-8 max-w-lg"
             data-netlify="true"
             data-netlify-honeypot="bot-field"
