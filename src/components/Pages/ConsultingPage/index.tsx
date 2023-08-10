@@ -47,7 +47,7 @@ const ConsultingPageComponent = () => {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       // @ts-ignore
-      body: encode({ "form-name": "contact", ...formState }),
+      body: encode({ "form-name": "contact-jkl", ...formState }),
     });
     setSubmitted(true);
 
