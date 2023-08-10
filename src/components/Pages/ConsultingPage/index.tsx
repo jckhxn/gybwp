@@ -19,9 +19,13 @@ import Button from "components/Button";
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 
-const encode = (data) => {
+const encode = (data: String) => {
   return Object.keys(data)
-    .map((key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+
+    .map(
+      // @ts-ignore
+      (key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key])
+    )
     .join("&");
 };
 
