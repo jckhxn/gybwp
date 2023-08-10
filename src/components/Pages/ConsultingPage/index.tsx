@@ -18,7 +18,15 @@ import Button from "components/Button";
 //
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
+const encode = (data: String) => {
+  return Object.keys(data)
 
+    .map(
+      // @ts-ignore
+      (key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key])
+    )
+    .join("&");
+};
 const ConsultingPageComponent = () => {
   // State
   const initialFormState = {
@@ -37,7 +45,7 @@ const ConsultingPageComponent = () => {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       // @ts-ignore
-      body: formState,
+      body: encode({ "form-name": "contact-jkl", ...formState }),
     });
     setSubmitted(true);
 
