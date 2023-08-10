@@ -19,6 +19,12 @@ import Button from "components/Button";
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 
+const encode = (data) => {
+  return Object.keys(data)
+    .map((key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+    .join("&");
+};
+
 const ConsultingPageComponent = () => {
   // State
   const initialFormState = {
@@ -33,6 +39,11 @@ const ConsultingPageComponent = () => {
   const validateForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: encode({ "form-name": "contact", ...formState }),
+    });
     setSubmitted(true);
 
     setFormState(initialFormState);
