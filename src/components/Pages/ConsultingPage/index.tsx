@@ -26,6 +26,7 @@ const ConsultingPageComponent = () => {
     lastName: "",
     email: "",
     phoneNum: "",
+    subject: "",
     comments: "",
   };
   const [formState, setFormState] = useState(initialFormState);
@@ -180,6 +181,7 @@ const ConsultingPageComponent = () => {
             <input
               type="hidden"
               name="subject"
+              data-remove-prefix
               value={`You've got mail from ${formState.firstName} ${formState.lastName}`}
             />
             <input type="hidden" name="form-name" value="contact-jkl" />
@@ -256,6 +258,22 @@ const ConsultingPageComponent = () => {
                 maxLength={11}
                 required
               />
+            </div>
+            <div>
+              <label className="sr-only" htmlFor="Subject">
+                Subject
+              </label>
+
+              <textarea
+                className="w-full rounded-lg border border-gray-200 p-3 text-sm"
+                placeholder="Subject"
+                rows={8}
+                name="subject"
+                onChange={(e) =>
+                  setFormState({ ...formState, subject: e.target.value })
+                }
+                value={formState.subject}
+              ></textarea>
             </div>
             <div>
               <label className="sr-only" htmlFor="comments">
