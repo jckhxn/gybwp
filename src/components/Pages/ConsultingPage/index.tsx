@@ -19,16 +19,6 @@ import Button from "components/Button";
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 
-const encode = (data: String) => {
-  return Object.keys(data)
-
-    .map(
-      // @ts-ignore
-      (key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key])
-    )
-    .join("&");
-};
-
 const ConsultingPageComponent = () => {
   // State
   const initialFormState = {
@@ -40,13 +30,14 @@ const ConsultingPageComponent = () => {
   };
   const [formState, setFormState] = useState(initialFormState);
   const [submitted, setSubmitted] = useState(false);
+
   const validateForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       // @ts-ignore
-      body: { "form-name": "contact-jkl", ...formState },
+      body: formState,
     });
     setSubmitted(true);
 
