@@ -42,12 +42,11 @@ const ConsultingPageComponent = () => {
   const [submitted, setSubmitted] = useState(false);
   const validateForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       // @ts-ignore
-      body: encode({ "form-name": "contact-jkl", ...formState }),
+      body: { "form-name": "contact-jkl", ...formState },
     });
     setSubmitted(true);
 
