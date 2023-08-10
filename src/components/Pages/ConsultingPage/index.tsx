@@ -178,12 +178,7 @@ const ConsultingPageComponent = () => {
             data-netlify-honeypot="bot-field"
           >
             {/* Sets the subject field of the email notification  */}
-            <input
-              type="hidden"
-              name="subject"
-              data-remove-prefix
-              value="You've got mail from %{irstName} %{lastName}"
-            />
+            <input type="hidden" name="subject" data-remove-prefix />
             <input type="hidden" name="form-name" value="contact-jkl" />
             <div className="mt-4">
               <p className="font-bold">{FORM.formHeader}</p>
