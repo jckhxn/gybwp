@@ -39,19 +39,21 @@ const ConsultingPageComponent = () => {
   const [formState, setFormState] = useState(initialFormState);
   const [submitted, setSubmitted] = useState(false);
 
-  // const validateForm = (e: React.FormEvent<HTMLFormElement>) => {
-  //   console.log(encode({ "form-name": "contact-jkl", ...formState }));
-  //   e.preventDefault();
-  //   fetch("/", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  //     // @ts-ignore
-  //     body: encode({ "form-name": "contact-jkl", ...formState }),
-  //   });
-  //   setSubmitted(true);
+  const validateForm = (e: any) => {
+    //@ts-ignore
+    const formData = new FormData(formState);
 
-  //   setFormState(initialFormState);
-  // };
+    e.preventDefault();
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      // @ts-ignore
+      body: new URLSearchParams(formData).toString(),
+    });
+    setSubmitted(true);
+
+    setFormState(initialFormState);
+  };
   return (
     <>
       {/* INFORMATION */}
@@ -171,7 +173,7 @@ const ConsultingPageComponent = () => {
             method="POST"
             name="contact-jkl"
             action=""
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={(e) => validateForm(e)}
             className="m-auto mb-0 space-y-4 p-4 shadow-lg sm:p-6 lg:p-8 max-w-lg"
             data-netlify="true"
             data-netlify-honeypot="bot-field"
