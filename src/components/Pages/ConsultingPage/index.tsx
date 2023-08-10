@@ -18,15 +18,7 @@ import Button from "components/Button";
 //
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
-const encode = (data: Object) => {
-  return Object.keys(data)
 
-    .map(
-      // @ts-ignore
-      (key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key])
-    )
-    .join("&");
-};
 const ConsultingPageComponent = () => {
   // State
   const initialFormState = {
@@ -38,17 +30,23 @@ const ConsultingPageComponent = () => {
   };
   const [formState, setFormState] = useState(initialFormState);
   const [submitted, setSubmitted] = useState(false);
+  //@ts-ignore
+  const encode = (data) => {
+    return Object.keys(data)
+      .map(
+        (key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key])
+      )
+      .join("&");
+  };
 
-  const validateForm = (e: any) => {
-    //@ts-ignore
-    const formData = new FormData(formState);
-
+  const validateForm = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log(encode({ "form-name": "contact-jkl", ...formState }));
     e.preventDefault();
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       // @ts-ignore
-      body: new URLSearchParams(formData).toString(),
+      body: encode({ "form-name": "contact-jkl", ...formState }),
     });
     setSubmitted(true);
 
@@ -182,7 +180,7 @@ const ConsultingPageComponent = () => {
             <input
               type="hidden"
               name="subject"
-              value={`You've got mail from ${formState.firstName},${formState.lastName}`}
+              value={`You've got mail from ${formState.firstName} ${formState.lastName}`}
             />
             <input type="hidden" name="form-name" value="contact-jkl" />
             <div className="mt-4">
@@ -197,7 +195,7 @@ const ConsultingPageComponent = () => {
                   className="w-full rounded-lg border border-gray-200 p-3 text-sm"
                   placeholder="First Name"
                   type="text"
-                  id="firstName"
+                  name="firstName"
                   value={formState.firstName}
                   onChange={(e) =>
                     setFormState({ ...formState, firstName: e.target.value })
@@ -214,7 +212,7 @@ const ConsultingPageComponent = () => {
                   className="w-full rounded-lg border border-gray-200 p-3 text-sm"
                   placeholder="Last Name"
                   type="text"
-                  id="lastName"
+                  name="lastName"
                   onChange={(e) =>
                     setFormState({ ...formState, lastName: e.target.value })
                   }
@@ -231,7 +229,7 @@ const ConsultingPageComponent = () => {
                 className="w-full rounded-lg border border-gray-200 p-3 text-sm"
                 placeholder="Email Address"
                 type="email"
-                id="email"
+                name="email"
                 value={formState.email}
                 onChange={(e) =>
                   setFormState({ ...formState, email: e.target.value })
@@ -248,7 +246,7 @@ const ConsultingPageComponent = () => {
                 className="w-full rounded-lg border border-gray-200 p-3 text-sm"
                 placeholder="Phone Number"
                 type="tel"
-                id="phone"
+                name="phoneNum"
                 value={formState.phoneNum}
                 onChange={(e) =>
                   setFormState({ ...formState, phoneNum: e.target.value })
@@ -268,7 +266,7 @@ const ConsultingPageComponent = () => {
                 className="w-full rounded-lg border border-gray-200 p-3 text-sm"
                 placeholder="Comments"
                 rows={8}
-                id="comments"
+                name="comments"
                 onChange={(e) =>
                   setFormState({ ...formState, comments: e.target.value })
                 }
