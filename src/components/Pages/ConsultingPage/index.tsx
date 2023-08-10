@@ -46,6 +46,7 @@ const ConsultingPageComponent = () => {
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      // @ts-ignore
       body: encode({ "form-name": "contact", ...formState }),
     });
     setSubmitted(true);
