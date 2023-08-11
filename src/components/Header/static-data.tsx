@@ -8,5 +8,5 @@ export const PAGES = [
 ];
 
 export const COPY = {
-  buttonText: "Subscribe",
+  buttonText: "Follow Us",
 };

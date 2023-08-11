@@ -82,7 +82,7 @@ const Footer = () => {
           <li className="md:w-[12vw]">
             <Link
               className="text-gray-700 transition hover:text-gray-700/75"
-              href={routes.external.jkl}
+              href={routes.internal.consulting}
               target="_blank"
             >
               JKL Advisors
