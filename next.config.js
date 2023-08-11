@@ -3,7 +3,7 @@
 const nextConfig = {
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx", "js", "jsx"],
-
+  output: "export",
   images: {
     remotePatterns: [{ protocol: "https", hostname: "*" }],
     unoptimized: true,
