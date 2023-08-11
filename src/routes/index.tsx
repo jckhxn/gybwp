@@ -7,6 +7,7 @@
 const routes = {
   internal: {
     home: "/",
+    about: "/about",
     podcastDetails: (podcastId: string) => `/${podcastId}`,
     sponsors: "/sponsors",
     sponsorsDetails: (sponsorId: string) => `/sponsors/${sponsorId}`,
