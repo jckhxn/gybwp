@@ -54,11 +54,11 @@ const Navigation = () => {
             </nav>
 
             <div className="flex items-center gap-4">
-              {/* SUBSCRIBE BUTTON */}
+              {/* FOLLOW US BUTTON */}
               <div className="sm:flex sm:gap-4">
                 <Link
                   className="rounded-md bg-main px-5 py-2.5 text-sm font-medium text-white shadow"
-                  href={routes.external.listen}
+                  href={routes.external.follow}
                   target="_blank"
                 >
                   {COPY.buttonText}
