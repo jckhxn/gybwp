@@ -23,6 +23,8 @@ const routes = {
     subscribe: "https://www.youtube.com/channel/UC-G0WIwjMApKoHVQ5QxsdZw",
     follow:
       "https://www.linkedin.com/company/growing-your-business-with-people ",
+    newsletter:
+      "https://www.linkedin.com/newsletters/gybwp-newsletter-7049506606413213696/",
   },
 };
 

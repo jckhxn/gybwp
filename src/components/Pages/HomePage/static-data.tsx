@@ -22,8 +22,8 @@ export const HERO = {
 export const CTA = {
   header: "Growing your business with People!",
   body: "Growing your business with your biggest and most important investment - People!",
-  buttonText: "Follow Us",
-  buttonUrl: routes.external.follow,
+  buttonText: "Subscribe to our Newsletter!",
+  buttonUrl: routes.external.newsletter,
 };
 
 export const PODCAST: seasonType[] = [
