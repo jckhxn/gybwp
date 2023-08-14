@@ -12,7 +12,9 @@ import Link from "next/link";
 //
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
-
+  // Design Ideas
+  //  Section One About The Podcast, width of page
+  //  Section Two CEO Msg, Article on the right 
 const AboutPageComponent = () => {
   return (
     <>

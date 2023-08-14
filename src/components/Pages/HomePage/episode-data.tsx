@@ -1555,8 +1555,9 @@ export const SEASON_THREE: seasonType = {
         },
       ],
       sponsors: ["sevenstep", "paradox", "survale", "futureSolve"],
-      image: "https://img.youtube.com/vi/mgHSyeFweis/sddefault.jpg",
-      url: "https://youtu.be/mgHSyeFweis",
+      image: "https://img.youtube.com/vi/Q2Mh9bX-5ng/sddefault.jpg",
+      url: "https://youtu.be/Q2Mh9bX-5ng",
+
       blurb:
         "In our recent episode, guest William Arruda highlighted the data that supports the need to emphasize belonging in the workplace.",
       details: {

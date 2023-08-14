@@ -3,7 +3,7 @@ import React, { useState } from "react";
 // components
 import { Section, SectionHeading } from "components/shared";
 import Image from "next/image";
-
+import Link from "next/link";
 // copy
 import {
   CONSULTING_INFO,
@@ -41,7 +41,6 @@ const ConsultingPageComponent = () => {
   };
 
   const validateForm = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log(encode({ "form-name": "contact-jkl", ...formState }));
     e.preventDefault();
     fetch("/", {
       method: "POST",
@@ -57,6 +56,15 @@ const ConsultingPageComponent = () => {
     <>
       {/* INFORMATION */}
       <Section className="px-6 md:px-20">
+        <div className="flex justify-center items-center ">
+          <Image
+            alt="Consulting Graphic"
+            src={CONSULTING_INFO.headerImg}
+            className="sm:h-full"
+            height={1200}
+            width={800}
+          />
+        </div>
         <div className="max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
           <div className="max-w-xl">
             <h2 className="text-3xl font-light sm:text-4xl">
@@ -108,22 +116,32 @@ const ConsultingPageComponent = () => {
           width={224}
         />
 
-        <div className="p-8 md:p-12 lg:px-16 lg:py-24 h-[500px]">
+        <div className="p-8 md:p-12 lg:px-16 lg:py-24 ">
           <div className="mx-auto max-w-xl text-center sm:text-left">
             <h2 className="text-xl font-bold text-gray-900 md:text-2xl mb-6">
               {LEFT_IMAGE_CTA.header}
             </h2>
+            {LEFT_IMAGE_CTA.article ? (
+              <>
+                <Link href={LEFT_IMAGE_CTA.article}>
+                  <Image
+                    className="w-full h-64 object-cover sm:h-full"
+                    src={LEFT_IMAGE_CTA.articleImg}
+                    alt={LEFT_IMAGE_CTA.articleTitle}
+                    height={224}
+                    width={450}
+                  />
+                </Link>
+
+                <h1 className="flex items-center justify-center">
+                  {LEFT_IMAGE_CTA.articleTitle}
+                </h1>
+              </>
+            ) : null}
             <p className="hidden text-gray-500 md:mt-4 md:block">
               {LEFT_IMAGE_CTA.body}
             </p>
-
-            <div className="text-gray-500 mt-6">
-              {LEFT_IMAGE_CTA.bullets.map(({ icon, text }, idx) => (
-                <div key={`left-cta-bullet-${idx}`} className="mt-4">
-                  {icon} {text}
-                </div>
-              ))}
-            </div>
+            <Link href="#contact">{LEFT_IMAGE_CTA.cta}</Link>
           </div>
         </div>
       </Section>
@@ -147,9 +165,9 @@ const ConsultingPageComponent = () => {
         </div>
 
         <Image
-          alt="Student"
+          alt="Jeff Lackey"
           src={RIGHT_IMAGE_CTA.img}
-          className="w-full h-64 object-cover sm:h-full"
+          className="w-full h-52 object-cover sm:h-full"
           height={224}
           width={224}
         />
@@ -176,6 +194,7 @@ const ConsultingPageComponent = () => {
             className="m-auto mb-0 space-y-4 p-4 shadow-lg sm:p-6 lg:p-8 max-w-lg"
             data-netlify="true"
             data-netlify-honeypot="bot-field"
+            id="contact"
           >
             {/* Sets the subject field of the email notification  */}
             <input type="hidden" name="subject" data-remove-prefix />
