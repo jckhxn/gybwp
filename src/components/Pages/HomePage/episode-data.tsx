@@ -29,6 +29,7 @@ export type episodeType = {
   url: string;
   image: string;
   blurb: string;
+  season?: number;
   details?: {
     featuredGuests: guestsType[];
     description: string[];
@@ -91,6 +92,7 @@ export const SEASON_ONE: seasonType = {
     // EPISODE ONE
     {
       uuid: "101",
+      season: 1,
       episodeNumber: 1,
       episodeName:
         "Mastering DE&I: Foster Inclusivity At Work With David Casey",
@@ -152,6 +154,7 @@ export const SEASON_ONE: seasonType = {
     {
       uuid: "102",
       episodeNumber: 2,
+      season: 1,
       episodeName:
         "Revolutionise Recruitment: The Power Of Tech-Enabled Hiring Ft. Joshua Secrest",
       episodeLinks: [
@@ -234,6 +237,7 @@ export const SEASON_ONE: seasonType = {
     {
       uuid: "104",
       episodeNumber: 4,
+      season: 1,
       episodeName:
         "Leveraging Recruitment To Grow Business Ft. Dan Valavanis & Oliver Comstock",
       episodeLinks: [
@@ -268,6 +272,7 @@ export const SEASON_ONE: seasonType = {
     {
       uuid: "105",
       episodeNumber: 5,
+      season: 1,
       episodeName:
         "Preventing Employee Burnout: Expert Tips From Dr. Michael Halasy",
       episodeLinks: [
@@ -302,6 +307,7 @@ export const SEASON_ONE: seasonType = {
     {
       uuid: "106",
       episodeNumber: 6,
+      season: 1,
       episodeName:
         "Successful Talent Attraction: Recruitment Secrets Revealed Ft. Craig Fisher",
       episodeLinks: [
@@ -336,6 +342,7 @@ export const SEASON_ONE: seasonType = {
     {
       uuid: "107",
       episodeNumber: 7,
+      season: 1,
       episodeName: "Revive Workplace Morale: Expert Tips By Paul Neveu",
       episodeLinks: [
         {
@@ -369,6 +376,7 @@ export const SEASON_ONE: seasonType = {
     {
       uuid: "108",
       episodeNumber: 8,
+      season: 1,
       episodeName:
         "How Social Media Can Transform Your Recruiting Strategies ft. CEO Amit Parmar",
       episodeLinks: [
@@ -403,6 +411,7 @@ export const SEASON_ONE: seasonType = {
     {
       uuid: "109",
       episodeNumber: 9,
+      season: 1,
       episodeName:
         "The Importance Of Balancing People And Profit In Business Ft. Susan LaMotte",
       episodeLinks: [
@@ -437,6 +446,7 @@ export const SEASON_ONE: seasonType = {
     {
       uuid: "110",
       episodeNumber: 10,
+      season: 1,
       episodeName:
         "Maximizing Your Hiring Success: Power Of Performance Metrics Ft. Jason Moreau",
       episodeLinks: [
@@ -471,6 +481,7 @@ export const SEASON_ONE: seasonType = {
     {
       uuid: "111-1",
       episodeNumber: 11,
+      season: 1,
       episodeName:
         "Art of Listening: Hairdresser in the Boardroom: Insights from Kim-Adele Randall | Part 1",
       episodeLinks: [
@@ -505,6 +516,7 @@ export const SEASON_ONE: seasonType = {
     {
       uuid: "111-2",
       episodeNumber: 11,
+      season: 1,
       episodeName:
         "Positive Self-Talk: Kim-Adele Randall Shares Her Story | Part 2",
       episodeLinks: [
@@ -539,6 +551,7 @@ export const SEASON_ONE: seasonType = {
     {
       uuid: "111-3",
       episodeNumber: 11,
+      season: 1,
       episodeName:
         "Empowering Your Team's Strengths: Hairdresser in the Boardroom | Part 3",
       episodeLinks: [
@@ -573,6 +586,7 @@ export const SEASON_ONE: seasonType = {
     {
       uuid: "112",
       episodeNumber: 12,
+      season: 1,
       episodeName:
         "Transform Your Customer Service: Expert Leadership Training with Harry Travis",
       episodeLinks: [
@@ -624,6 +638,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "201",
       episodeNumber: 1,
+      season: 2,
       episodeName:
         "Investing in Chicago's Future: Connecting Talent from Underserved Communities",
       episodeLinks: [
@@ -703,6 +718,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "201_1",
       episodeNumber: 1,
+      season: 2,
       episodeName: "CEO of Hyatt, Powerful Community Impact of Skills",
       sponsors: ["sevenstep", "bayard", "paradox", "futureSolve"],
       image: "https://img.youtube.com/vi/6q9bBrkEHRc/sddefault.jpg",
@@ -715,6 +731,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "201_2",
       episodeNumber: 1,
+      season: 2,
       episodeName: "Skills for Chicagoland's Future Services Offerings",
       sponsors: ["sevenstep", "bayard", "paradox", "futureSolve"],
       image: "https://img.youtube.com/vi/b087_zHhyy4/sddefault.jpg",
@@ -727,6 +744,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "201_3",
       episodeNumber: 1,
+      season: 2,
       episodeName: "Impact of the Second Chance Program on Communities",
       sponsors: ["sevenstep", "bayard", "paradox", "futureSolve"],
       image: "https://img.youtube.com/vi/UdgceGWASOw/sddefault.jpg",
@@ -739,6 +757,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "202",
       episodeNumber: 2,
+      season: 2,
       episodeName: "Former CIA Head of Recruiting Shares Leadership Insight",
       episodeLinks: [
         {
@@ -794,6 +813,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "202_1",
       episodeNumber: 2,
+      season: 2,
       episodeName: "How Versatility Can Help or Hurt Your Leadership",
       sponsors: ["sevenstep", "bayard", "paradox", "futureSolve"],
       image: "https://img.youtube.com/vi/GGFUQVPn1d0/sddefault.jpg",
@@ -806,6 +826,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "203",
       episodeNumber: 3,
+      season: 2,
       episodeName:
         "Leadership Insights from 50 Four-Star Generals and Admirals",
       episodeLinks: [
@@ -871,6 +892,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "204",
       episodeNumber: 4,
+      season: 2,
       episodeName:
         "HR Innovation and Business Growth With FutureSolve's COO Andy Najja",
       episodeLinks: [
@@ -934,6 +956,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "205",
       episodeNumber: 5,
+      season: 2,
       episodeName:
         "HR Expert Ken Carrig on Building a Strong Succession Plan for Business Leaders",
       episodeLinks: [
@@ -998,6 +1021,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "206",
       episodeNumber: 6,
+      season: 2,
       episodeName: "Using Data to Improve Health Outcomes with CEO Bob Darin",
       episodeLinks: [
         {
@@ -1066,6 +1090,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "207",
       episodeNumber: 7,
+      season: 2,
       episodeName:
         "Strategic Talent Consulting & HR Value Creation in Business with Tom Corbitt",
       episodeLinks: [
@@ -1126,6 +1151,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "208",
       episodeNumber: 8,
+      season: 2,
       episodeName:
         "College Recruiter Founder Steven Rothberg: Early Career Hiring & Talent Attraction Strategies",
       episodeLinks: [
@@ -1192,6 +1218,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "209",
       episodeNumber: 9,
+      season: 2,
       episodeName:
         "Expert HR Insights: Talent Management & Leadership With Mark Griffin",
       episodeLinks: [
@@ -1248,6 +1275,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "210",
       episodeNumber: 10,
+      season: 2,
       episodeName:
         "Maximizing Business Growth with Data Analysis with Amy Bush",
       episodeLinks: [
@@ -1310,6 +1338,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "211",
       episodeNumber: 11,
+      season: 2,
       episodeName:
         "Revolutionizing Employee Referral Programs w/ Real Links CEO Sam Davies",
       episodeLinks: [
@@ -1370,6 +1399,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "211_1",
       episodeNumber: 11,
+      season: 2,
       episodeName:
         "Tech Hiring as an Example to Improve Recruitment Strategies w/ Real Links CEO Sam Davies",
       sponsors: ["sevenstep", "bayard", "paradox", "futureSolve"],
@@ -1383,6 +1413,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "212",
       episodeNumber: 12,
+      season: 2,
       episodeName:
         "Thoughtful Leadership, Finding Organizational Purpose w/ Helena Foulkes",
       episodeLinks: [
@@ -1451,6 +1482,7 @@ export const SEASON_TWO: seasonType = {
     {
       uuid: "212_1",
       episodeNumber: 12,
+      season: 2,
       episodeName:
         "Helena Foulkes Shares the Story Behind How CVS Quit Smoking",
       sponsors: ["sevenstep", "bayard", "paradox", "futureSolve"],
@@ -1470,6 +1502,7 @@ export const SEASON_THREE: seasonType = {
     {
       uuid: "301",
       episodeNumber: 1,
+      season: 3,
       episodeName:
         "Prioritizing People & Managing Attrition with Former CVS Executive, Dr. Alan Lotvin",
       episodeLinks: [
@@ -1530,6 +1563,7 @@ export const SEASON_THREE: seasonType = {
     {
       uuid: "302",
       episodeNumber: 2,
+      season: 3,
       episodeName:
         "Creating a Culture of Belonging is Good Business w/ William Arruda & Sondra Dryer",
       episodeLinks: [
@@ -1604,6 +1638,7 @@ export const SEASON_THREE: seasonType = {
     {
       uuid: "303",
       episodeNumber: 3,
+      season: 3,
       episodeName:
         "Harnessing Strengths to Drive Employee Engagement & Retention",
       episodeLinks: [
@@ -1675,6 +1710,7 @@ export const SEASON_THREE: seasonType = {
     {
       uuid: "304",
       episodeNumber: 4,
+      season: 3,
       episodeName:
         "Matt Alder, Future of Talent Acquisition: AI & Recruiter-less Hiring",
       episodeLinks: [

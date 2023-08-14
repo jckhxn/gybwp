@@ -16,6 +16,7 @@ export type socialsType = {
 
 export type sponsorType = {
   name: string;
+
   uuid: sponsorUUIDs;
   imgUrl: string;
   bgColor?: string;
