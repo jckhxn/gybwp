@@ -20,6 +20,19 @@ import Button from "components/Button";
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 
 const ConsultingPageComponent = () => {
+  // Scroll magic
+  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    // first prevent the default behavior
+    e.preventDefault();
+    // get the href and remove everything before the hash (#)
+    const href = e.currentTarget.href;
+    const targetId = href.replace(/.*\#/, "");
+    // get the element by id and use scrollIntoView
+    const elem = document.getElementById(targetId);
+    elem?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
   // State
   const initialFormState = {
     firstName: "",
@@ -141,7 +154,9 @@ const ConsultingPageComponent = () => {
             <p className="hidden text-gray-500 md:mt-4 md:block">
               {LEFT_IMAGE_CTA.body}
             </p>
-            <Link href="#contact">{LEFT_IMAGE_CTA.cta}</Link>
+            <Link href="#contact" onClick={handleScroll}>
+              {LEFT_IMAGE_CTA.cta}
+            </Link>
           </div>
         </div>
       </Section>
