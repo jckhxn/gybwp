@@ -107,7 +107,7 @@ const ConsultingPageComponent = () => {
 
       {/* HERO */}
       <Section className="mt-12">
-        <section className="relative h-[500px] bg-[url(https://images.unsplash.com/photo-1604014237800-1c9102c219da?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80)] bg-cover bg-center bg-no-repeat">
+        <section className="relative h-[500px] bg-cover bg-center bg-no-repeat">
           <div className="absolute inset-0 bg-white/75 sm:bg-transparent sm:from-white/95 sm:to-white/25 sm:bg-gradient-to-r" />
           <div className="relative h-[500px] justify-center mx-auto max-w-screen-xl px-4 py-32 sm:px-6 lg:flex lg:items-center">
             <div className="max-w-[50vw] m-auto sm:text-left">
@@ -151,7 +151,7 @@ const ConsultingPageComponent = () => {
                 </h1>
               </>
             ) : null}
-            <p className="hidden text-gray-500 md:mt-4 md:block">
+            <p className=" text-gray-500 md:mt-4 md:block">
               {LEFT_IMAGE_CTA.body}
             </p>
             <Link href="#contact" onClick={handleScroll}>
@@ -163,7 +163,7 @@ const ConsultingPageComponent = () => {
 
       {/* RIGHT-IMAGE CTA */}
       <Section className="overflow-hidden bg-gray-50 sm:grid sm:grid-cols-2">
-        <div className="p-8 self-center md:p-12 lg:px-16 lg:py-24 h-[500px]">
+        <div className="p-8 self-center md:p-12 lg:px-16 lg:py-24 ">
           <div className="mx-auto max-w-xl text-left sm:text-left">
             <h2 className="text-xl font-bold text-gray-900 md:text-2xl mt-4 md:mt-0 mb-6">
               {RIGHT_IMAGE_CTA.header}
@@ -182,7 +182,7 @@ const ConsultingPageComponent = () => {
         <Image
           alt="Jeff Lackey"
           src={RIGHT_IMAGE_CTA.img}
-          className="w-full h-52 object-cover sm:h-full"
+          className="w-full h-full object-cover sm:h-full"
           height={224}
           width={224}
         />
