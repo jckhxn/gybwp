@@ -1,4 +1,8 @@
+import consultingmain from "../../../../public/images/consultingmain.jpeg";
+import consulting1 from "../../../../public/images/consulting1.jpg";
+import consulting2 from "../../../../public/images/consulting2.jpg";
 export const CONSULTING_INFO = {
+  headerImg: consultingmain,
   header: "SOME OF OUR SERVICES",
   features: [
     {
@@ -9,41 +13,62 @@ export const CONSULTING_INFO = {
         "Vendor assessment and selection (e.g. Technology, RPO, MSP, Relocation)",
         "Executive Search",
         "Executive Coaching",
-        "Attraction, Development, and Retention Strategies",
+      ],
+    },
+    {
+      title: "Industry Experience",
+      description: [
+        "We bring extensive experience from industries such as",
+        "Healthcare (Retail, Service Providers and Health Systems)",
+        "Insurance",
+        "Pharmaceuticals",
+        "Retail",
+        "Aerospace",
+        "Defense",
+        "Energy",
+        "Communications",
       ],
     },
     {
       title: "Functional Experience",
       description: [
-        "Executive Search",
-        "High Volume (>200,000 hires per annum)",
-        "Diversity, Equity and Inclusion (DEI)",
-        "Executive and Strategic Search",
+        "Global (>70 countries",
         "Talent Attraction and Engagement Technology",
-        "Global (>70 countries)",
+        "Diversity, Equity and Inclusion (DEI)",
+        "High Volume (>200,000 hires per annum)",
         "Employee Engagement and Performance Management",
-      ],
-    },
-    {
-      title: "Market Experience",
-      description: [
-        "Retail, Healthcare, Insurance / Financial Services, Defense, High Tech, Communications, Commercial Aerospace, Marine, Energy",
+        "Executive and Strategic Search",
+        "Talent Acquisition, Marketing, Process Optimization",
+        "Talent Management, AI/ML, Predictive Analytics",
+        "28+ Years of Proven Excellence",
       ],
     },
     {
       title: "Business Support & Planning",
       description: [
-        'Interim "Head Of" roles, Performance Management, Strategic and Operational Assessment, Recruitment Marketing Support, Facilitator, Reporting',
+        "Assessment and Audit",
+        "Performance Management",
+        "Strategic and Operational Assessment",
+        "Recruitment Marketing Support",
+        "Facilitation",
+        "Interim 'Head of' roles",
       ],
     },
   ],
-  featuredImageText: "Uncover the Blueprint for Exceptional Business Success",
+  featuredImageText:
+    "Growing your business with your biggest and most important investment - People!",
 };
 
 export const LEFT_IMAGE_CTA = {
-  img: "https://images.unsplash.com/photo-1464582883107-8adf2dca8a9f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-  header: "Lorem, ipsum dolor sit amet consectetur adipisicing elit",
-  body: "Our podcast is dedicated to exploring plans that help you maximize the potential of your most valuable investment - your people. Through engaging interviews with industry experts, accomplished entrepreneurs, and seasoned professionals, we delve into a wide range of topics, including:",
+  img: consulting1,
+  articleTitle: "How Financial Accounting Screws Up HR",
+  article: "https://hbr.org/2023/01/how-financial-accounting-screws-up-hr",
+  articleImg:
+    "https://hbr.org/resources/images/article_assets/2022/11/S23011_NEGLEY-1900x1069.jpg",
+  header:
+    "Within the Consulting practice of JKL Advisors, we help you (CEO’s and business leaders) grow your business with the biggest and most important investment - People!",
+  body: "I personally believe that people are not only the company’s most important asset (and certainly not an expense), but they are a special asset type that anticipates growth… an investment!  Whereas you can amortize a $1,500 computer which depreciates, as mentioned in the HBR article above, you must classify people as an expense.  Even if accounting rules dictate this, business reality does not!  We need to treat our people like an investment to lead our companies to exponential and sustainable growth. My firm specializes in helping small, medium, and large corporations achieve their growth potential through talent strategies, from attraction to succession planning. Our services cater to private equity firms, portfolio companies, and public/private entities alike.",
+  cta: "Get in touch with us to learn more.",
   bullets: [
     {
       icon: (
@@ -157,18 +182,17 @@ export const LEFT_IMAGE_CTA = {
 };
 
 export const RIGHT_IMAGE_CTA = {
-  img: "https://images.unsplash.com/photo-1464582883107-8adf2dca8a9f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-  header: "Sed ut perspiciatis unde omnis",
+  img: consulting2,
+  header: "About Jeff Lackey + Our Approach",
   bodyOne:
-    "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem.",
+    "As a global strategic talent leader, I continually seek to remain ahead of technology and innovation trends. I immerse myself in interactions with thought leaders and experts to explore new applications beyond the TA realm. This practice ensures our clients receive fresh, unique perspectives that set them apart.",
   bodyTwo:
-    "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem.",
+    "As a global strategic talent leader, I continually seek to remain ahead of technology and innovation trends. I immerse myself in interactions with thought leaders and experts to explore new applications beyond the TA realm. This practice ensures our clients receive fresh, unique perspectives that set them apart.",
 };
 
 export const FORM = {
   sectionHeader: "Contact Us",
-  description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-  formHeader: "Drop us a line!",
+  description: "",
+  formHeader: "",
   submitButton: "Submit",
 };
