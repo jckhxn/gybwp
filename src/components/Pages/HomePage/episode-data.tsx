@@ -29,7 +29,7 @@ export type episodeType = {
   url: string;
   image: string;
   blurb: string;
-  season?: number;
+  season?: string | number;
   details?: {
     featuredGuests: guestsType[];
     description: string[];
