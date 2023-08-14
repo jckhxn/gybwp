@@ -27,7 +27,7 @@ export type episodeType = {
   sponsors: sponsorUUIDs[];
   uuid: string;
   url: string;
-  image?: string;
+  image: string;
   blurb: string;
   details?: {
     featuredGuests: guestsType[];

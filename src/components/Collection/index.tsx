@@ -37,17 +37,11 @@ const Collection = ({
         )}
 
         <ul className="flex justify-center gap-8 mt-12 flex-wrap">
-          {items.map(({ episodeName, episodeNumber, uuid }) => (
+          {items.map(({ episodeName, episodeNumber, uuid, image }) => (
             <li key={`collection-item-${uuid}`}>
               <Image
                 id={`${uuid}-img`}
-                src={
-                  generateImage({
-                    text: `Season ${
-                      uuid.split("")[0]
-                    }: Episode ${episodeNumber}`,
-                  }) || ""
-                }
+                src={image}
                 alt={`${episodeName} image`}
                 className="w-[300px] h-[170px] object-cover transition duration-500 group-hover:scale-105"
                 width={300}

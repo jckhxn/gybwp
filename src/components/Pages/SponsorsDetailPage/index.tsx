@@ -99,7 +99,7 @@ const SponsorsDetailPageComponent = () => {
           </div>
         </div>
       </Section>
-
+     
       {sponsor.episodes.length ? (
         <Collection
           header={SPONSORS_DETAILS_INFO.collectionHeader}
