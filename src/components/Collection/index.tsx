@@ -3,7 +3,7 @@ import React from "react";
 // components
 import { Section } from "components/shared";
 import Image from "next/image";
-import { generateImage } from "components/shared";
+import Link from "next/link";
 
 // copy
 import { episodeType } from "components/Pages/HomePage/episode-data";
@@ -37,18 +37,27 @@ const Collection = ({
         )}
 
         <ul className="flex justify-center gap-8 mt-12 flex-wrap">
-          {items.map(({ episodeName, episodeNumber, uuid, image }) => (
-            <li key={`collection-item-${uuid}`}>
-              <Image
-                id={`${uuid}-img`}
-                src={image}
-                alt={`${episodeName} image`}
-                className="w-[300px] h-[170px] object-cover transition duration-500 group-hover:scale-105"
-                width={300}
-                height={170}
-              />
-            </li>
-          ))}
+          {items.map(
+            ({ episodeNumber, episodeName, uuid, image, url, season }) => (
+              <li key={`collection-item-${uuid}`}>
+                <Link href={url}>
+                  <Image
+                    id={`${uuid}-img`}
+                    src={image}
+                    alt={`${episodeName} image`}
+                    className="w-[300px] h-[170px] object-cover transition duration-500 group-hover:scale-105"
+                    width={300}
+                    height={170}
+                  />
+
+                  <div className="flex justify-center items-center ">
+                    {" "}
+                    Season {season} | Episode {episodeNumber}
+                  </div>
+                </Link>
+              </li>
+            )
+          )}
         </ul>
       </div>
     </Section>
