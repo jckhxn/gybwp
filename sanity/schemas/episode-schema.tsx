@@ -12,7 +12,7 @@ const episode = {
     {
       // Number of the Episode
       name: "number",
-      title: "Number",
+      title: "Episode Number",
       type: "number",
     },
     {
@@ -21,54 +21,87 @@ const episode = {
       title: "UUID",
       type: "string",
     },
+
     {
-      // Episode Links of the Episode
-      name: "episodeLinks",
-      title: "Episode Links",
-      type: "object",
-      fields: [
-        { name: "name", type: "string", title: "Name" },
-        { name: "link", type: "string", title: "Link" },
+      // Audio/Podcast Links of the Episode
+      name: "podcastLinks",
+      title: "Podcast Links",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "platform",
+              type: "string",
+              title: "Podcast Platform",
+            },
+            { name: "link", type: "string", title: "Link" },
+          ],
+        },
       ],
     },
     {
       // Sponsors of the Episode
       name: "sponsors",
-      title: "Sponsors",
+      title: "List of Sponsors",
       type: "array",
+      of: [{ type: "string" }],
     },
     {
       // URL (YouTube Link) of the Episode
       name: "url",
-      title: "URL",
+      title: "Video Podcast URL",
       type: "string",
     },
     {
       // Image (YouTube Link) of the Episode
       name: "image",
-      title: "Image",
+      title: "Thumbnail Image of Podcast (Grabbed from YouTube URL)",
       type: "string",
     },
     {
       // Blurb about the Episode
       name: "blurb",
-      title: "Blurb",
+      title: "Episode Blurb",
       type: "string",
     },
+
     {
-      // Blurb about the Episode
-      name: "blurb",
-      title: "Blurb",
-      type: "string",
+      // Details about the Guest in the Episode
+      name: "guestDetails",
+      title: "Guest Details",
+      type: "object",
+      fields: [
+        { name: "guestName", title: "Guest Name", type: "string" },
+        { name: "aboutGuest", title: "About Guest", type: "string" },
+        { name: "guestTitle", title: "Guest Title", type: "string" },
+        { name: "guestURL", title: "Guest URL", type: "url" },
+        { name: "guestImageURL", title: "Guest Image URL", type: "url" },
+      ],
     },
     {
-        // Blurb about the Episode
-        name: "details",
-        title: "Details",
-        type: "object",
-        fields:{
-        
-        }
-      },
+      // Details about the Episode
+      name: "episodeDetails",
+      title: "Episode Details",
+      type: "object",
+      fields: [
+        { name: "description", title: "Episode Description", type: "text" },
+        {
+          name: "hashtags",
+          title: "Episode Hashtags",
+          type: "array",
+          of: [{ type: "string" }],
+        },
+
+        {
+          name: "links",
+          title: "Episode Links",
+          type: "array",
+          of: [{ type: "string" }],
+        },
+      ],
+    },
   ],
 };
+export default episode;
