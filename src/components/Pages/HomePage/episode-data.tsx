@@ -1872,9 +1872,9 @@ export const SEASON_THREE: seasonType = {
             about:
               "Experienced talent acquisition and recruitment professional. Toby has worked in various roles in talent acquisition and resourcing for companies such as Rolls-Royce, TFL Transport for London, Google, and Travis Perkins.",
             title: "Producer & Host",
-            url: "https://www.linkedin.com/in/mattalder",
+            url: "https://www.linkedin.com/in/tobyjbarnes/",
             imageUrl:
-              "https://media.licdn.com/dms/image/C4D03AQHj62BirzhWlA/profile-displayphoto-shrink_800_800/0/1634123057580?e=1696464000&v=beta&t=quoN5W5KoS-Jr7V1JiGQM5v7wCdTq45Ohh0adYEUwyY",
+              "https://media.licdn.com/dms/image/D4E03AQEWw4-CRYtm9A/profile-displayphoto-shrink_800_800/0/1690304320810?e=1698278400&v=beta&t=1sHj3dX098oJHTOkHGCsLDbwQVw8OU1hy5eOAasVeJQ",
           },
         ],
         description: [
@@ -1936,9 +1936,9 @@ export const SEASON_THREE: seasonType = {
             about:
               "Mark Judd is an experienced business leader with a background in human resources. He has worked for companies such as Toyota, P.W. See, Rolls-Royce, and Workday. He is currently a visiting researcher at Lancaster University, where he focuses on artificial intelligence, human capital management, and the ethics surrounding these areas.",
             title: "Producer & Host",
-            url: "https://www.linkedin.com/in/mattalder",
+            url: "https://www.linkedin.com/in/mark-judd-74a6b89/",
             imageUrl:
-              "https://media.licdn.com/dms/image/C4D03AQHj62BirzhWlA/profile-displayphoto-shrink_800_800/0/1634123057580?e=1696464000&v=beta&t=quoN5W5KoS-Jr7V1JiGQM5v7wCdTq45Ohh0adYEUwyY",
+              "https://media.licdn.com/dms/image/C4E03AQHyc2bdYuXPvg/profile-displayphoto-shrink_800_800/0/1643327289946?e=1698278400&v=beta&t=VquiN1JVCyZLzGMCQ_hpY34Z0NIT1VjYD_Dul2xqesQ",
           },
         ],
         description: [

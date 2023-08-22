@@ -55,5 +55,20 @@ const episode = {
       title: "Blurb",
       type: "string",
     },
+    {
+      // Blurb about the Episode
+      name: "blurb",
+      title: "Blurb",
+      type: "string",
+    },
+    {
+        // Blurb about the Episode
+        name: "details",
+        title: "Details",
+        type: "object",
+        fields:{
+        
+        }
+      },
   ],
 };
