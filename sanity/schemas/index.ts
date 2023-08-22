@@ -1,4 +1,5 @@
-import episode from "./episode-schema";
+import episode from "./episodeSchema";
+import sponsor from "./sponsorSchema";
 
-const schemas = [episode];
+const schemas = [episode, sponsor];
 export default schemas;
