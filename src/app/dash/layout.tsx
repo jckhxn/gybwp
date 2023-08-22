@@ -1,15 +1,15 @@
 import React from "react";
-
-export default function RootLayout({
-  // Layouts must accept a children prop.
-  // This will be populated with nested layouts or pages
+import "../../app/globals.css";
+export default function DashLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <>
+      <html lang="en">
+        <body>{children}</body>
+      </html>
+    </>
   );
 }
