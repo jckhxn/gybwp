@@ -1673,7 +1673,7 @@ export const SEASON_THREE: seasonType = {
           {
             name: "LeAnne Lagasse",
             about:
-              "William Arruda is a personal branding pioneer and the founder of CareerBlast.TV. He has written nearly 700 articles for Forbes and other publications and is an expert in personal branding.",
+              "CEO of LeAnne Lagasse Coaching and Consulting LLC. She is an HR consultant and keynote speaker who helps leaders and organizations improve employee engagement and retention.",
             title:
               "HR and People Ops Consulting at LeAnne Lagasse Coaching and Consulting",
             url: "https://www.linkedin.com/in/leannelagasse/",
@@ -1766,6 +1766,194 @@ export const SEASON_THREE: seasonType = {
           {
             text: "For more information on Matt and his podcast, go to:",
             linkUrl: "https://recruitingfuture.com/",
+          },
+        ],
+      },
+    },
+    {
+      // Episode 5
+      uuid: "305",
+      episodeNumber: 5,
+      season: 3,
+      episodeName: "Driving Performance Through Purpose w/ COO, Chris Cox",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/driving-performance-through-purpose-w-coo-chris-cox-s3e5/id1659743511?i=1000623781892",
+          icon: icons.apple.src,
+        },
+        {
+          name: "spotify",
+          link: "https://open.spotify.com/episode/39x8WAzNbC95rXrFK60j6L?si=YdduKBBjSnKPlklbAZSlGg",
+          icon: icons.spotify.src,
+        },
+        {
+          name: "google podcasts",
+          link: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8yMDU3NDkzLnJzcw/episode/QnV6enNwcm91dC0xMzM2NzI3MQ?sa=X&ved=0CAUQkfYCahcKEwiAyqjU7PCAAxUAAAAAHQAAAAAQAQ",
+          icon: icons.google.src,
+        },
+        {
+          name: "amazon music",
+          link: "https://music.amazon.com/podcasts/dbf81855-67a9-4500-bdec-c45ace015170/episodes/3cada892-399e-4f46-8711-031aabf095ff/growing-your-business-with-people-driving-performance-through-purpose-w-coo-chris-cox-s3e5",
+          icon: icons.amazon.src,
+        },
+      ],
+      sponsors: ["sevenstep", "paradox", "survale", "futureSolve"],
+      image: "https://img.youtube.com/vi/XvtCAgwZBPQ/sddefault.jpg",
+      url: "https://youtu.be/XvtCAgwZBPQ",
+      blurb:
+        "In this episode of the Growing Your Business with People podcast, Chris Cox, the COO of ATI Physical Therapy, discusses the importance of tying work back to a purpose and how it can drive performance. He emphasizes the need for leaders to inspire and engage their teams by communicating the why behind their work.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Chris Cox",
+            about:
+              "Chris Cox is the Chief Operating Officer (COO) at ATI Physical Therapy, a leading national physical therapy organization. He has over 15 years of experience in the healthcare industry, including various roles at CVS Health, where he served as the Senior Vice President of Pharmacy. Chris holds an MBA and is passionate about the intersection of healthcare and business.  ",
+            title: "Producer & Host",
+            url: "https://www.linkedin.com/in/chris-cox-808a569/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/C5603AQFJJJqp3RV9Dg/profile-displayphoto-shrink_400_400/0/1517673692032?e=1698278400&v=beta&t=ptr4qTx-X6w5XzLPYmrPjU-LbM9mQ9_TH2QcfAp1lCs",
+          },
+        ],
+        description: [
+          "Chris Cox, COO of ATI Physical Therapy, highlights the significance of connecting work to a purpose to enhance performance.",
+          "He stresses leaders' role in motivating teams by explaining the rationale behind tasks. Drawing from his CVS Health and ATI Physical Therapy experiences, he illustrates how purpose-driven leadership boosts employee engagement and business results.",
+        ],
+        hashtags: [],
+        links: [
+          {
+            text: "",
+            linkUrl: "",
+          },
+          {
+            text: "",
+            linkUrl: ".com/",
+          },
+        ],
+      },
+    },
+    {
+      // Episode 6
+      uuid: "306",
+      episodeNumber: 6,
+      season: 3,
+      episodeName: "Why HR Business Partners Are Crucial For Company Growth",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/toby-barnes-talent-acquisition-expert-on-the/id1659743511?i=1000624498347",
+          icon: icons.apple.src,
+        },
+        {
+          name: "spotify",
+          link: "https://open.spotify.com/episode/28R9NxvTTUitWvmJZlIrcm?si=Md0DbppgRRCsYUrOrOiRSQ",
+          icon: icons.spotify.src,
+        },
+        {
+          name: "google podcasts",
+          link: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8yMDU3NDkzLnJzcw/episode/QnV6enNwcm91dC0xMzQwNzYzMg?sa=X&ved=0CAUQkfYCahcKEwiAyqjU7PCAAxUAAAAAHQAAAAAQAQ",
+          icon: icons.google.src,
+        },
+        {
+          name: "amazon music",
+          link: "https://music.amazon.com/podcasts/dbf81855-67a9-4500-bdec-c45ace015170/episodes/799a6388-e5b9-45a3-ab51-f05290214b67/growing-your-business-with-people-toby-barnes-talent-acquisition-expert-on-the-importance-of-hr-business-partners-s3e6",
+          icon: icons.amazon.src,
+        },
+      ],
+      sponsors: ["sevenstep", "paradox", "survale", "futureSolve"],
+      image: "https://img.youtube.com/vi/XvtCAgwZBPQ/sddefault.jpg",
+      url: "https://youtu.be/XvtCAgwZBPQ",
+      blurb:
+        "Dive into the transformative world of HR with Toby Barnes as he sheds light on the pivotal role of HR Business Partners. A must-watch for CEOs, HR leaders, and anyone passionate about organizational success.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Toby Barnes",
+            about:
+              "Experienced talent acquisition and recruitment professional. Toby has worked in various roles in talent acquisition and resourcing for companies such as Rolls-Royce, TFL Transport for London, Google, and Travis Perkins.",
+            title: "Producer & Host",
+            url: "https://www.linkedin.com/in/mattalder",
+            imageUrl:
+              "https://media.licdn.com/dms/image/C4D03AQHj62BirzhWlA/profile-displayphoto-shrink_800_800/0/1634123057580?e=1696464000&v=beta&t=quoN5W5KoS-Jr7V1JiGQM5v7wCdTq45Ohh0adYEUwyY",
+          },
+        ],
+        description: [
+          "Toby Barnes emphasizes the importance of bringing talent acquisition and HR partners to the table when making major business decisions. ",
+          " He discusses the need for CEOs to understand the value of their employees and how to grow their business with people.",
+          "Toby also highlights the role of automation, specifically robotic process automation (RPA), in enhancing efficiency and driving profits and revenue growth.",
+        ],
+        hashtags: [],
+        links: [
+          {
+            text: "",
+            linkUrl: "",
+          },
+          {
+            text: "",
+            linkUrl: "",
+          },
+        ],
+      },
+    },
+    {
+      // Episode 7
+      uuid: "307",
+      episodeNumber: 7,
+      season: 3,
+      episodeName:
+        "The Future of Work: Embracing AI and the Gig Economy w/ Mark Judd",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/the-future-of-work-embracing-ai-and-the-gig-economy/id1659743511?i=1000625240530",
+          icon: icons.apple.src,
+        },
+        {
+          name: "spotify",
+          link: "https://open.spotify.com/episode/3N6kWrVZWQrGI9U7P7hPKL?si=eL6AF_KvQt-oOKKotQgsLA",
+          icon: icons.spotify.src,
+        },
+        {
+          name: "google podcasts",
+          link: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8yMDU3NDkzLnJzcw/episode/QnV6enNwcm91dC0xMzQ0ODAxOA?sa=X&ved=0CAUQkfYCahcKEwiAyqjU7PCAAxUAAAAAHQAAAAAQAQ",
+          icon: icons.google.src,
+        },
+        {
+          name: "amazon music",
+          link: "https://music.amazon.com/podcasts/dbf81855-67a9-4500-bdec-c45ace015170/episodes/6df87bbf-20e7-4bf7-a501-2d493960aa9d/growing-your-business-with-people-the-future-of-work-embracing-ai-and-the-gig-economy-w-mark-judd-s3e7",
+          icon: icons.amazon.src,
+        },
+      ],
+      sponsors: ["sevenstep", "paradox", "survale", "futureSolve"],
+      image: "https://img.youtube.com/vi/XvtCAgwZBPQ/sddefault.jpg",
+      url: "https://youtu.be/XvtCAgwZBPQ",
+      blurb:
+        "Jeff Lackey has a conversation with Mark Judd about impact of advanced technology, such as artificial intelligence (AI), on human capital management (HCM) and the future of work.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Mark Judd",
+            about:
+              "Mark Judd is an experienced business leader with a background in human resources. He has worked for companies such as Toyota, P.W. See, Rolls-Royce, and Workday. He is currently a visiting researcher at Lancaster University, where he focuses on artificial intelligence, human capital management, and the ethics surrounding these areas.",
+            title: "Producer & Host",
+            url: "https://www.linkedin.com/in/mattalder",
+            imageUrl:
+              "https://media.licdn.com/dms/image/C4D03AQHj62BirzhWlA/profile-displayphoto-shrink_800_800/0/1634123057580?e=1696464000&v=beta&t=quoN5W5KoS-Jr7V1JiGQM5v7wCdTq45Ohh0adYEUwyY",
+          },
+        ],
+        description: [
+          "In this episode of the Growing Your Business with People, Mark Judd emphasizes the need for organizations to adapt to a global workforce and the benefits of integrating technology to create a more holistic approach to managing employees",
+          "He also highlights the ethical considerations of AI and the challenges of finding the right balance between its positive and negative implications.",
+        ],
+        hashtags: [],
+        links: [
+          {
+            text: "",
+            linkUrl: "",
+          },
+          {
+            text: "",
+            linkUrl: "",
           },
         ],
       },
