@@ -34,6 +34,13 @@ const sponsor = {
       type: "array",
       of: [{ type: "string" }],
     },
+    {
+      // Seasons of Podcast Sponsored
+      name: "seasonsSponsored",
+      title: "Seasons Sponsored",
+      type: "array",
+      of: [{ type: "string" }],
+    },
   ],
 };
 export default sponsor;

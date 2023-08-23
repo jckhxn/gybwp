@@ -17,3 +17,4 @@ const HomePage: React.FC & { Layout: React.FC<LayoutProps> } = () => {
 HomePage.Layout = Layout;
 
 export default HomePage;
+//
