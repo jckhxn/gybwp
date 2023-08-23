@@ -1799,8 +1799,8 @@ export const SEASON_THREE: seasonType = {
         },
       ],
       sponsors: ["sevenstep", "paradox", "survale", "futureSolve"],
-      image: "https://img.youtube.com/vi/XvtCAgwZBPQ/sddefault.jpg",
-      url: "https://youtu.be/XvtCAgwZBPQ",
+      image: "https://img.youtube.com/vi/AxkLlADB-3w/sddefault.jpg",
+      url: "https://youtu.be/AxkLlADB-3w",
       blurb:
         "In this episode of the Growing Your Business with People podcast, Chris Cox, the COO of ATI Physical Therapy, discusses the importance of tying work back to a purpose and how it can drive performance. He emphasizes the need for leaders to inspire and engage their teams by communicating the why behind their work.",
       details: {
@@ -1861,8 +1861,8 @@ export const SEASON_THREE: seasonType = {
         },
       ],
       sponsors: ["sevenstep", "paradox", "survale", "futureSolve"],
-      image: "https://img.youtube.com/vi/XvtCAgwZBPQ/sddefault.jpg",
-      url: "https://youtu.be/XvtCAgwZBPQ",
+      image: "https://img.youtube.com/vi/0wK02Eh03Ek/sddefault.jpg",
+      url: "https://youtu.be/0wK02Eh03Ek",
       blurb:
         "Dive into the transformative world of HR with Toby Barnes as he sheds light on the pivotal role of HR Business Partners. A must-watch for CEOs, HR leaders, and anyone passionate about organizational success.",
       details: {
@@ -1925,8 +1925,8 @@ export const SEASON_THREE: seasonType = {
         },
       ],
       sponsors: ["sevenstep", "paradox", "survale", "futureSolve"],
-      image: "https://img.youtube.com/vi/XvtCAgwZBPQ/sddefault.jpg",
-      url: "https://youtu.be/XvtCAgwZBPQ",
+      image: "https://img.youtube.com/vi/A1fXfiKG46A/sddefault.jpg",
+      url: "https://youtu.be/A1fXfiKG46A",
       blurb:
         "Jeff Lackey has a conversation with Mark Judd about impact of advanced technology, such as artificial intelligence (AI), on human capital management (HCM) and the future of work.",
       details: {
