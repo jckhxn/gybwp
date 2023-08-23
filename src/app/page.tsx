@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 // components
 import Image from "next/image";
 import { Section, SectionHeading } from "components/shared";
-import heroImage from "../../../../public/images/main-page-hero.jpg";
+import heroImage from "../../public/images/main-page-hero.jpg";
 import Button from "components/Button";
 import FeaturedNews from "components/FeaturedNews";
 import Dropdown from "components/Dropdown";
