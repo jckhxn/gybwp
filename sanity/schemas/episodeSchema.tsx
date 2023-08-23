@@ -58,7 +58,8 @@ const episode = {
       // Image (YouTube Link) of the Episode
       name: "image",
       title: "Thumbnail Image of Podcast (Grabbed from YouTube URL)",
-      type: "string",
+      type: "image",
+      options: { hotspot: true },
     },
     {
       // Blurb about the Episode
@@ -77,7 +78,12 @@ const episode = {
         { name: "aboutGuest", title: "About Guest", type: "string" },
         { name: "guestTitle", title: "Guest Title", type: "string" },
         { name: "guestURL", title: "Guest URL", type: "url" },
-        { name: "guestImageURL", title: "Guest Image URL", type: "url" },
+        {
+          name: "guestImage",
+          title: "Guest Image",
+          type: "image",
+          options: { hotspot: true },
+        },
       ],
     },
     {

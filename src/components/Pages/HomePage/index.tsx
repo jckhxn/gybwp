@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // components
 import Image from "next/image";
@@ -11,6 +11,7 @@ import Dropdown from "components/Dropdown";
 // copy
 import { HERO, PODCAST, CTA, getEpisodesBySeason } from "./static-data";
 import Slider from "components/Slider";
+import { getEpisodes } from "../../../../sanity/sanity-utils";
 
 //
 //
@@ -20,8 +21,11 @@ import Slider from "components/Slider";
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 
 const HomePageComponent = () => {
+  useEffect(() => {
+    const episodes = getEpisodes();
+    if (episodes) console.log(episodes);
+  }, []);
   const [activeSeason, setActiveSeason] = useState(PODCAST.length);
-
   return (
     <>
       {/* MAIN SECTION */}
