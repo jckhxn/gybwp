@@ -28,7 +28,7 @@ const sponsor = {
       type: "text",
     },
     {
-      // Social Media Links  of the Sponsor
+      // Social Media Links of the Sponsor
       name: "socials",
       title: "Social Media Links",
       type: "array",
