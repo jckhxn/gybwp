@@ -6,9 +6,7 @@ export default function DashLayout({
 }) {
   return (
     <>
-      <html lang="en">
-        <body>{children}</body>
-      </html>
+      <section>{children}</section>
     </>
   );
 }
