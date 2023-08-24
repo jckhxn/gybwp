@@ -4,6 +4,18 @@ const episode = {
   type: "document",
   fields: [
     {
+      // Season Name
+      name: "seasonName",
+      title: " Season Name",
+      type: "string",
+    },
+    {
+      // Season Number
+      name: "seasonNumber",
+      title: "Season Number",
+      type: "number",
+    },
+    {
       // Name of the Episode
       name: "name",
       title: "Name",
@@ -52,10 +64,10 @@ const episode = {
       // URL (YouTube Link) of the Episode
       name: "url",
       title: "Video Podcast URL",
-      type: "string",
+      type: "url",
     },
     {
-      // Image (YouTube Link) of the Episode
+      // Image  of the Episode
       name: "image",
       title: "Thumbnail Image of Podcast (Grabbed from YouTube URL)",
       type: "image",

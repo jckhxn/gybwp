@@ -12,22 +12,11 @@ import Dropdown from "components/Dropdown";
 // copy
 import { HERO, PODCAST, CTA, getEpisodesBySeason } from "./static-data";
 import Slider from "components/Slider";
-import { getEpisodes } from "../../../../sanity/sanity-utils";
+import { getSeasonByNumber } from "../../../app/sanity/sanity-utils";
 
-//
-//
-//
-//
-//
-// DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
-// import { Metadata } from "next";
-
-// export const metadata: Metadata = {
-//   title: "Growing Your Business With People",
-//   description: "",
-// };
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState(PODCAST.length);
+
   return (
     <>
       {/* MAIN SECTION */}
