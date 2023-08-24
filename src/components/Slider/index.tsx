@@ -18,7 +18,6 @@ const Slider: React.FC<{ items?: any[]; activeSeason: number }> = ({
   items,
   activeSeason,
 }) => {
-  console.log(items);
   const [sliderIndex, setSliderIndex] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);

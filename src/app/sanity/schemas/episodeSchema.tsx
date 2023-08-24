@@ -4,6 +4,18 @@ const episode = {
   type: "document",
   fields: [
     {
+      // Name of the Episode
+      name: "episodeName",
+      title: "Episode Name",
+      type: "string",
+    },
+    {
+      // Number of the Episode
+      name: "episodeNumber",
+      title: "Episode Number",
+      type: "number",
+    },
+    {
       // Season Name
       name: "seasonName",
       title: " Season Name",
@@ -15,23 +27,12 @@ const episode = {
       title: "Season Number",
       type: "number",
     },
-    {
-      // Name of the Episode
-      name: "episodeName",
-      title: "Name",
-      type: "string",
-    },
-    {
-      // Number of the Episode
-      name: "episodeNumber",
-      title: "Episode Number",
-      type: "number",
-    },
+
     {
       // UUID of the Episode
       name: "uuid",
       title: "UUID",
-      type: "string",
+      type: "number",
     },
 
     {
