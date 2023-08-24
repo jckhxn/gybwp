@@ -17,13 +17,13 @@ const episode = {
     },
     {
       // Name of the Episode
-      name: "name",
+      name: "episodeName",
       title: "Name",
       type: "string",
     },
     {
       // Number of the Episode
-      name: "number",
+      name: "episodeNumber",
       title: "Episode Number",
       type: "number",
     },
@@ -69,9 +69,8 @@ const episode = {
     {
       // Image  of the Episode
       name: "image",
-      title: "Thumbnail Image of Podcast (Grabbed from YouTube URL)",
-      type: "image",
-      options: { hotspot: true },
+      title: "YouTube URL Image",
+      type: "url",
     },
     {
       // Blurb about the Episode
@@ -93,8 +92,7 @@ const episode = {
         {
           name: "guestImage",
           title: "Guest Image",
-          type: "image",
-          options: { hotspot: true },
+          type: "string",
         },
       ],
     },

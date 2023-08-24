@@ -12,7 +12,6 @@ import Dropdown from "components/Dropdown";
 // copy
 import { HERO, PODCAST, CTA, getEpisodesBySeason } from "./static-data";
 import Slider from "components/Slider";
-import { getSeasonByNumber } from "../../../app/sanity/sanity-utils";
 
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState(PODCAST.length);

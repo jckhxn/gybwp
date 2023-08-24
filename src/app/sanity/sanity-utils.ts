@@ -5,7 +5,7 @@ export async function getAllEpisodes() {
     dataset: "production",
     apiVersion: "2023-08-22",
   });
-  return client.fetch(groq`*[_type == "episode"]{
+  return await client.fetch(groq`*[_type == "episode"]{
     _id,
     _createdAt,
     seasonName,
@@ -30,7 +30,7 @@ export async function getSeasonByNumber(seasonNumber: number) {
     dataset: "production",
     apiVersion: "2023-08-22",
   });
-  return client.fetch(groq`*[_type == "episode" && seasonNumber == 1]{
+  return await client.fetch(groq`*[_type == "episode" && seasonNumber == ${seasonNumber}]{
     _id,
     _createdAt,
     seasonName,
