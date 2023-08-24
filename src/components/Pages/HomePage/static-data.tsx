@@ -3,6 +3,8 @@ import * as podcast from "./episode-data";
 
 // types
 import { seasonType, episodeType } from "./episode-data";
+// Sanity Util Funcs
+import { getSeasonByNumber } from "../../../app/sanity/sanity-utils";
 
 //
 //
@@ -46,12 +48,12 @@ export const PODCAST: seasonType[] = [
 //
 // DO NOT TOUCH ANYTHING BELOW THIS LINE
 
-export const getEpisodesBySeason = (seasonToFind: number) => {
+export const getEpisodesBySeason = async (seasonToFind: number) => {
   const foundSeason = PODCAST.filter(
     (season) => season.seasonNumber === seasonToFind
   )[0];
-
-  return [...foundSeason.episodes].reverse();
+  return await getSeasonByNumber(seasonToFind);
+  // return [...foundSeason.episodes].reverse();
 };
 
 export const getEpisodesBySponsor = (uuid: string) => {
