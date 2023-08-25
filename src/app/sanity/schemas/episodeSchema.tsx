@@ -18,7 +18,7 @@ const episode = {
     {
       // Season Name
       name: "seasonName",
-      title: " Season Name",
+      title: "Season Name",
       type: "string",
     },
     {
