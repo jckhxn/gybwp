@@ -10,5 +10,7 @@ const config = defineConfig({
   basePath: "/dash",
   plugins: [deskTool(), visionTool()],
   schema: { types: schemas },
+  useCdn: false,
+
 });
 export default config;
