@@ -16,6 +16,7 @@ const openSans = Open_Sans({ subsets: ["latin"], weight: "variable" });
 // types
 import { NextComponentType } from "next";
 import type { AppProps } from "next/app";
+import { ReduxProvider } from "../redux/provider";
 
 //
 //
@@ -43,14 +44,15 @@ export default function RootLayout({
     <>
       <html lang="en">
         <body>
-          
-          <Layout>
-            <main className={openSans.className}>
-              <Header />
-              {children}
-              <Footer />
-            </main>
-          </Layout>
+          <ReduxProvider>
+            <Layout>
+              <main className={openSans.className}>
+                <Header />
+                {children}
+                <Footer />
+              </main>
+            </Layout>
+          </ReduxProvider>
         </body>
       </html>
     </>

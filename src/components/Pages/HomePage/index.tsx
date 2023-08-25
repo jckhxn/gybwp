@@ -9,13 +9,21 @@ import Button from "components/Button";
 import FeaturedNews from "components/FeaturedNews";
 import Dropdown from "components/Dropdown";
 
+// State
+import { login, logOut } from "../../../redux/reducers/episodesSlice";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../../redux/store";
 // copy
 import { HERO, PODCAST, CTA, getEpisodesBySeason } from "./static-data";
 import Slider from "components/Slider";
+import { AppDispatch } from "../../../redux/store";
 
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState(PODCAST.length);
-  
+  const dispatch = useDispatch<AppDispatch>();
+  dispatch(login("jack"));
+  const episodes = useAppSelector((state) => state.authReducer);
+  console.log(episodes);
 
   return (
     <>
