@@ -1827,7 +1827,7 @@ export const SEASON_THREE: seasonType = {
           },
           {
             text: "",
-            linkUrl: ".com/",
+            linkUrl: "",
           },
         ],
       },
@@ -1885,12 +1885,12 @@ export const SEASON_THREE: seasonType = {
         hashtags: [],
         links: [
           {
-            text: "",
-            linkUrl: "",
+            text: "LEGO® Rolls-Royce Trent 1000 Jet Engine - Bright Bricks Timelapse",
+            linkUrl: "https://www.youtube.com/watch?v=UgP1PLc4wTo",
           },
           {
-            text: "",
-            linkUrl: "",
+            text: "WIRED Article - Rolls-Royce Unveils New Jet Engine ... Made of Legos",
+            linkUrl: "https://www.wired.com/2012/07/rolls-royce-engine-legos/",
           },
         ],
       },
@@ -1948,12 +1948,19 @@ export const SEASON_THREE: seasonType = {
         hashtags: [],
         links: [
           {
-            text: "",
-            linkUrl: "",
+            text: "Change At The Speed Of AI: The Latest Human Capital Disrupter.",
+            linkUrl:
+              "https://www.forbes.com/sites/forbeshumanresourcescouncil/2023/05/04/change-at-the-speed-of-ai-the-latest-human-capital-disrupter/?sh=5449f7e22fb2",
           },
           {
-            text: "",
-            linkUrl: "",
+            text: "AI in the workplace.",
+            linkUrl:
+              "https://www.kornferry.com/insights/featured-topics/gen-ai-in-the-workplace?utm_source=google&utm_medium=ppc&utm_campaign=23-08-gbl-misc&utm_term=ai_in_the_workplace&utm_content=capability-page&gad=1",
+          },
+          {
+            text: "Artifical Intelligence in Human Capital Management",
+            linkUrl:
+              "https://www.oracle.com/a/ocom/docs/dc/lpd100770849-capstoneinsightsaiinhcm.pdf",
           },
         ],
       },

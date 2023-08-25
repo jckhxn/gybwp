@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 // components
 import Image from "next/image";
@@ -15,6 +15,7 @@ import Slider from "components/Slider";
 
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState(PODCAST.length);
+  
 
   return (
     <>
