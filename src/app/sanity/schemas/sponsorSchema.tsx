@@ -28,11 +28,23 @@ const sponsor = {
       type: "text",
     },
     {
-      // Social Media Links of the Sponsor
-      name: "socials",
+      // Audio/Podcast Links of the Episode
+      name: "social",
       title: "Social Media Links",
       type: "array",
-      of: [{ type: "string" }],
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "name",
+              type: "string",
+              title: "Name of Link",
+            },
+            { name: "link", type: "string", title: "Link" },
+          ],
+        },
+      ],
     },
     {
       // Seasons of Podcast Sponsored
