@@ -1,6 +1,5 @@
 "use client";
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 // components
 import Image from "next/image";
 import { Section, SectionHeading } from "components/shared";
@@ -10,21 +9,19 @@ import FeaturedNews from "components/FeaturedNews";
 import Dropdown from "components/Dropdown";
 
 // State
-import { login, logOut } from "../../../redux/reducers/episodesSlice";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../../redux/store";
+
+import { useGetEpisodesQuery } from "../../../redux/services/userAPI";
+import { addEpisodes } from "../../../redux/reducers/episodeSlice";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 // copy
 import { HERO, PODCAST, CTA, getEpisodesBySeason } from "./static-data";
 import Slider from "components/Slider";
-import { AppDispatch } from "../../../redux/store";
 
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState(PODCAST.length);
-  const dispatch = useDispatch<AppDispatch>();
-  dispatch(login("jack"));
-  const episodes = useAppSelector((state) => state.authReducer);
-  console.log(episodes);
-
+  const dispatch = useAppDispatch();
+  const contents = useAppSelector((state) => state.episodeReducer);
+  console.log(contents);
   return (
     <>
       {/* MAIN SECTION */}

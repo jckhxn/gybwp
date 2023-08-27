@@ -1,4 +1,5 @@
 import { createClient, groq } from "next-sanity";
+
 const client = createClient({
   projectId: "hxymd1na",
   dataset: "production",
@@ -6,24 +7,30 @@ const client = createClient({
   useCdn: false,
 });
 export async function getAllEpisodes() {
-  return await client.fetch(
-    groq`*[_type == "episode"]{
-    _id,
-    _createdAt,
-    seasonName,
-    seasonNumber,
-    episodeMame,
-    episodeNumber,
-    uuid,
-    podcastLinks,
-    sponsors,
-    url,
-   image,
-    blurb,
-    guestDetails,
-    episodeDetails,
-  }`
-  );
+  try {
+    const allEpisodes = await client.fetch(
+      groq`*[_type == "episode"]{
+      _id,
+      _createdAt,
+      seasonName,
+      seasonNumber,
+      episodeMame,
+      episodeNumber,
+      uuid,
+      podcastLinks,
+      sponsors,
+      url,
+     image,
+      blurb,
+      guestDetails,
+      episodeDetails,
+    }`
+    );
+    if (!allEpisodes) throw Error("No episodes");
+    return allEpisodes.results;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 // Fetches info for Slider by Season number

@@ -5,26 +5,38 @@ const article = {
   fields: [
     {
       // Name of the Article
-      name: "name",
-      title: "Name",
+      name: "company",
+      title: "Company",
       type: "string",
     },
     {
-      // Image of the Article
-      name: "image",
-      title: "Image from Article ",
-      type: "url",
+      // Title of the Article
+      name: "title",
+      title: "Title from Article ",
+      type: "string",
     },
     {
       // Short Description of the Article
-      name: "blurb",
+      name: "description",
       title: "Short Description from Article ",
       type: "text",
     },
     {
-      // Source of the Article
-      name: "source",
-      title: "Source of Article ",
+      // Image of the Article
+      name: "image",
+      title: "Image of Article ",
+      type: "string",
+    },
+    {
+      // Link to the Article
+      name: "link",
+      title: "Link to Article ",
+      type: "string",
+    },
+    {
+      // Date of the Article
+      name: "date",
+      title: "Date of Article ",
       type: "string",
     },
   ],
