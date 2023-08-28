@@ -1,13 +1,16 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-const initialState = [];
+const initialState = { episodes: [] };
 
 export const episodeSlice = createSlice({
   name: "episodes",
   initialState,
   reducers: {
     addEpisodes: (state, action: PayloadAction) => {
-      state = state.concat(action.payload);
+      return {
+        ...state,
+        episodes: action.payload,
+      };
     },
   },
 });

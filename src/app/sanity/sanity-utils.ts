@@ -1,4 +1,6 @@
 import { createClient, groq } from "next-sanity";
+import { addEpisodes } from "../../redux/reducers/episodeSlice";
+import { store } from "../../redux/store";
 
 const client = createClient({
   projectId: "hxymd1na",
@@ -8,8 +10,9 @@ const client = createClient({
 });
 export async function getAllEpisodes() {
   try {
-    const allEpisodes = await client.fetch(
-      groq`*[_type == "episode"]{
+    const allEpisodes = await client
+      .fetch(
+        groq`*[_type == "episode"]{
       _id,
       _createdAt,
       seasonName,
@@ -25,9 +28,11 @@ export async function getAllEpisodes() {
       guestDetails,
       episodeDetails,
     }`
-    );
-    if (!allEpisodes) throw Error("No episodes");
-    return allEpisodes.results;
+      )
+      .then((episodes) => {
+        console.log(episodes);
+        store.dispatch(addEpisodes({ payload: episodes }));
+      });
   } catch (error) {
     console.log(error);
   }

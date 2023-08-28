@@ -9,17 +9,17 @@ import FeaturedNews from "components/FeaturedNews";
 import Dropdown from "components/Dropdown";
 
 // State
-
-import { useGetEpisodesQuery } from "../../../redux/services/userAPI";
-import { addEpisodes } from "../../../redux/reducers/episodeSlice";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { getAllEpisodes } from "../../../app/sanity/sanity-utils";
 // copy
 import { HERO, PODCAST, CTA, getEpisodesBySeason } from "./static-data";
 import Slider from "components/Slider";
 
 const HomePageComponent = () => {
+  useEffect(() => {
+    getAllEpisodes();
+  }, []);
   const [activeSeason, setActiveSeason] = useState(PODCAST.length);
-  const dispatch = useAppDispatch();
   const contents = useAppSelector((state) => state.episodeReducer);
   console.log(contents);
   return (
