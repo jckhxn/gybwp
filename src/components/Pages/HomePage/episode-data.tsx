@@ -1965,5 +1965,74 @@ export const SEASON_THREE: seasonType = {
         ],
       },
     },
+    {
+      // Episode 8
+      uuid: "308",
+      episodeNumber: 8,
+      season: 3,
+      episodeName: "Using Talent Acquisition Data to Drive Business Growth",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/the-future-of-work-embracing-ai-and-the-gig-economy/id1659743511?i=1000625240530",
+          icon: icons.apple.src,
+        },
+        {
+          name: "spotify",
+          link: "https://open.spotify.com/episode/3N6kWrVZWQrGI9U7P7hPKL?si=eL6AF_KvQt-oOKKotQgsLA",
+          icon: icons.spotify.src,
+        },
+        {
+          name: "google podcasts",
+          link: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8yMDU3NDkzLnJzcw/episode/QnV6enNwcm91dC0xMzQ0ODAxOA?sa=X&ved=0CAUQkfYCahcKEwiAyqjU7PCAAxUAAAAAHQAAAAAQAQ",
+          icon: icons.google.src,
+        },
+        {
+          name: "amazon music",
+          link: "https://music.amazon.com/podcasts/dbf81855-67a9-4500-bdec-c45ace015170/episodes/6df87bbf-20e7-4bf7-a501-2d493960aa9d/growing-your-business-with-people-the-future-of-work-embracing-ai-and-the-gig-economy-w-mark-judd-s3e7",
+          icon: icons.amazon.src,
+        },
+      ],
+      sponsors: ["sevenstep", "paradox", "survale", "futureSolve"],
+      image: "https://img.youtube.com/vi/6gfth-xsztM/sddefault.jpg",
+      url: "https://youtu.be/6gfth-xsztM",
+      blurb:
+        "In this episode of the Growing Your Business with People podcast, Rob McIntosh shares his passion for talent acquisition data and how it can drive business growth.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Rob Mcintosh",
+            about:
+              "Rob McIntosh is an industry analyst and former talent acquisition leader for companies such as Microsoft, Deloitte, and McKesson. He is the co-founder of SourceCon, the industry's preeminent sourcing community, and is currently the VP of Recruiting Solutions at PSG Global Solutions.",
+            title: "Industry Analyst",
+            url: "https://www.linkedin.com/in/robmcintosh/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/C4E03AQGiDvnhneg1eA/profile-displayphoto-shrink_800_800/0/1558385926308?e=1698883200&v=beta&t=IQ9dUQEvvMytnTs1ur_v_1Djp2B6KfS-15fEhvVsQTU",
+          },
+        ],
+        description: [
+          "Rob recounts a story from his time at Deloitte, where he used data to challenge assumptions and gain credibility with the executive leadership team.",
+          "He emphasizes the importance of understanding how talent acquisition can contribute to the company's bottom line and suggests using simple, actionable metrics to track progress and engage executives.",
+        ],
+        hashtags: [],
+        links: [
+          {
+            text: "Change At The Speed Of AI: The Latest Human Capital Disrupter.",
+            linkUrl:
+              "https://www.forbes.com/sites/forbeshumanresourcescouncil/2023/05/04/change-at-the-speed-of-ai-the-latest-human-capital-disrupter/?sh=5449f7e22fb2",
+          },
+          {
+            text: "AI in the workplace.",
+            linkUrl:
+              "https://www.kornferry.com/insights/featured-topics/gen-ai-in-the-workplace?utm_source=google&utm_medium=ppc&utm_campaign=23-08-gbl-misc&utm_term=ai_in_the_workplace&utm_content=capability-page&gad=1",
+          },
+          {
+            text: "Artifical Intelligence in Human Capital Management",
+            linkUrl:
+              "https://www.oracle.com/a/ocom/docs/dc/lpd100770849-capstoneinsightsaiinhcm.pdf",
+          },
+        ],
+      },
+    },
   ],
 };
