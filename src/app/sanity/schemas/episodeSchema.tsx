@@ -32,7 +32,7 @@ const episode = {
       // UUID of the Episode
       name: "uuid",
       title: "UUID",
-      type: "number",
+      type: "string",
     },
 
     {

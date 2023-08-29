@@ -4,6 +4,10 @@ import * as podcast from "./episode-data";
 // types
 import { seasonType, episodeType } from "./episode-data";
 
+// State fetch
+import { store } from "../../../redux/store";
+const episodes = store.getState().episodeReducer;
+
 //
 //
 //
@@ -47,19 +51,16 @@ export const PODCAST: seasonType[] = [
 // DO NOT TOUCH ANYTHING BELOW THIS LINE
 
 export const getEpisodesBySeason = (seasonToFind: number) => {
-  const foundSeason = PODCAST.filter(
-    (season) => season.seasonNumber === seasonToFind
-  )[0];
-  return [...foundSeason.episodes].reverse();
+  // const foundSeason = PODCAST.filter(
+  //   (season) => season.seasonNumber === seasonToFind
+  // )[0];
+  // return [...foundSeason.episodes].reverse();
 
-  // try {
-  //   const episodes = await getSeasonByNumber(seasonToFind);
-  //   if (!episodes) throw Error("No epsiodes");
-  //   return episodes;
-  //   // @ts-ignore
-  // } catch ({ message }) {
-  //   console.log(message);
-  // }
+  const foundSeason = episodes.filter(
+    (season) => season.seasonNumber === seasonToFind
+  );
+  console.log(foundSeason);
+  return [...foundSeason].reverse();
 };
 
 export const getEpisodesBySponsor = (uuid: string) => {

@@ -17,7 +17,7 @@ export async function getAllEpisodes() {
       _createdAt,
       seasonName,
       seasonNumber,
-      episodeMame,
+      episodeName,
       episodeNumber,
       uuid,
       podcastLinks,
@@ -30,8 +30,7 @@ export async function getAllEpisodes() {
     }`
       )
       .then((episodes) => {
-        console.log(episodes);
-        store.dispatch(addEpisodes({ payload: episodes }));
+        store.dispatch(addEpisodes(episodes));
       });
   } catch (error) {
     console.log(error);
