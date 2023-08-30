@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState = Array;
 
-export const episodeSlice = createSlice({
+export const sponsorSlice = createSlice({
   name: "sponsors",
   initialState,
   reducers: {
@@ -11,5 +11,5 @@ export const episodeSlice = createSlice({
     },
   },
 });
-export const { addSponsors } = episodeSlice.actions;
-export default episodeSlice.reducer;
+export const { addSponsors } = sponsorSlice.actions;
+export default sponsorSlice.reducer;
