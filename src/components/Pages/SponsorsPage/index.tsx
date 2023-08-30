@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // components
 import Image from "next/image";
@@ -7,7 +7,9 @@ import { Section, SectionHeading } from "components/shared";
 
 // copy
 import { SPONSORS, PARTNERS, SPONSORS_INFO } from "./static-data";
-
+// State
+import { getAllSponsors } from "../../../app/sanity/sanity-utils";
+import { store } from "../../../redux/store";
 //
 //
 //
@@ -15,6 +17,11 @@ import { SPONSORS, PARTNERS, SPONSORS_INFO } from "./static-data";
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 
 const SponsorsPageComponent = () => {
+  useEffect(() => {
+    getAllSponsors();
+  }, []);
+  const sponsors = store.getState();
+  if (sponsors) console.log(sponsors);
   return (
     <div className="bg-light my-4 mx-6 md:mx-12 py-16">
       {/* SPONSORS */}
