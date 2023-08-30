@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+"use client";
+import React from "react";
 
 // components
 import Image from "next/image";
@@ -16,21 +17,20 @@ import { store } from "../../../redux/store";
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 
-const SponsorsPageComponent = () => {
-  useEffect(() => {
-    getAllSponsors();
-  }, []);
-  const sponsors = store.getState();
-  if (sponsors) console.log(sponsors);
+const SponsorsPageComponent = async () => {
+  // Did the freaking thing.
+  await getAllSponsors();
+  const sponsors = store.getState().sponsorReducer;
+
   return (
     <div className="bg-light my-4 mx-6 md:mx-12 py-16">
       {/* SPONSORS */}
-      {SPONSORS.length && (
+      {
         <Section flex className="mx-6 lg:mx-24">
           <SectionHeading>{SPONSORS_INFO.sponsorsHeader}</SectionHeading>
 
           <div className="flex flex-wrap justify-center mt-12">
-            {SPONSORS.map(({ name, uuid, imgUrl, imgAlt, bgColor }) => (
+            {sponsors.map(({ name, uuid, image, bgColor }) => (
               <Link
                 key={`sponsor-${name}`}
                 href={`/sponsors/${uuid}`}
@@ -42,8 +42,8 @@ const SponsorsPageComponent = () => {
                   } w-[250px] max-h-[150px] overflow-hidden`}
                 >
                   <Image
-                    src={imgUrl}
-                    alt={imgAlt}
+                    src={image}
+                    alt="imgAlt"
                     className="h-[150px] w-auto m-auto px-4"
                     width={250}
                     height={150}
@@ -53,7 +53,7 @@ const SponsorsPageComponent = () => {
             ))}
           </div>
         </Section>
-      )}
+      }
 
       {SPONSORS.length && PARTNERS.length ? (
         <div className="mt-20"></div>
