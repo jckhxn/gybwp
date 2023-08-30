@@ -6,7 +6,6 @@ import { seasonType, episodeType } from "./episode-data";
 
 // State fetch
 import { store } from "../../../redux/store";
-const episodes = store.getState().episodeReducer;
 
 //
 //
@@ -55,11 +54,10 @@ export const getEpisodesBySeason = (seasonToFind: number) => {
   //   (season) => season.seasonNumber === seasonToFind
   // )[0];
   // return [...foundSeason.episodes].reverse();
-
+  const episodes = store.getState().episodeReducer;
   const foundSeason = episodes.filter(
     (season) => season.seasonNumber === seasonToFind
   );
-  console.log(foundSeason);
   return [...foundSeason].reverse();
 };
 
