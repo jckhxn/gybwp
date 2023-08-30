@@ -22,6 +22,11 @@ const sponsor = {
       type: "url",
     },
     {
+      name: "bgColor",
+      title: "Background Color for Image",
+      type: "string",
+    },
+    {
       // Description of the Sponsor
       name: "description",
       title: "Description",
