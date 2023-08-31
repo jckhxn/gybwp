@@ -18,9 +18,9 @@ import { store } from "../../../redux/store";
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 
-const SponsorsPageComponent = async () => {
+const SponsorsPageComponent = () => {
   // Did the freaking thing.
-  await getAllSponsors();
+  getAllSponsors();
   const sponsors = store.getState().sponsorReducer;
 
   return (
@@ -31,7 +31,7 @@ const SponsorsPageComponent = async () => {
           <SectionHeading>{SPONSORS_INFO.sponsorsHeader}</SectionHeading>
 
           <div className="flex flex-wrap justify-center mt-12">
-            {sponsors.map(({ name, uuid, image, bgColor }) => (
+            {SPONSORS.map(({ name, uuid, imgUrl, bgColor }) => (
               <Link
                 key={`sponsor-${name}`}
                 href={`/sponsors/${uuid}`}
@@ -43,7 +43,7 @@ const SponsorsPageComponent = async () => {
                   } w-[250px] max-h-[150px] overflow-hidden`}
                 >
                   <Image
-                    src={image}
+                    src={imgUrl}
                     alt="imgAlt"
                     className="h-[150px] w-auto m-auto px-4"
                     width={250}
