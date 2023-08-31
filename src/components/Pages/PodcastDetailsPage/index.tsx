@@ -35,6 +35,7 @@ const PodcastDetailsPageComponent = () => {
 
   useEffect(() => {
     const episodeUuid = window.location.pathname.split("/")[2];
+
     const season = episodeUuid[0];
 
     const foundEpisode = getEpisode(season, episodeUuid);
