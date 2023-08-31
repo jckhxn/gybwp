@@ -9,9 +9,9 @@ import FeaturedNews from "components/FeaturedNews";
 import Dropdown from "components/Dropdown";
 
 // State
-import { useAppSelector } from "../../../redux/hooks";
+
 import { getAllEpisodes } from "../../../app/sanity/sanity-utils";
-import { store } from "../../../redux/store";
+
 // copy
 import { HERO, PODCAST, CTA, getEpisodesBySeason } from "./static-data";
 import Slider from "components/Slider";
