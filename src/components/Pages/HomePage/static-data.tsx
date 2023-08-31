@@ -50,15 +50,15 @@ export const PODCAST: seasonType[] = [
 // DO NOT TOUCH ANYTHING BELOW THIS LINE
 
 export const getEpisodesBySeason = (seasonToFind: number) => {
-  // const foundSeason = PODCAST.filter(
-  //   (season) => season.seasonNumber === seasonToFind
-  // )[0];
-  // return [...foundSeason.episodes].reverse();
-  const episodes = store.getState().episodeReducer;
-  const foundSeason = episodes.filter(
+  const foundSeason = PODCAST.filter(
     (season) => season.seasonNumber === seasonToFind
-  );
-  return [...foundSeason].reverse();
+  )[0];
+  return [...foundSeason.episodes].reverse();
+  // const episodes = store.getState().episodeReducer;
+  // const foundSeason = episodes.filter(
+  //   (season) => season.seasonNumber === seasonToFind
+  // );
+  // return [...foundSeason].reverse();
 };
 
 export const getEpisodesBySponsor = (uuid: string) => {
