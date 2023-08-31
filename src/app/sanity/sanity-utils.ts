@@ -1,6 +1,7 @@
 import { createClient, groq } from "next-sanity";
 import { addEpisodes } from "../../redux/reducers/episodeSlice";
 import { store } from "../../redux/store";
+import { addSponsors } from "../../redux/reducers/sponsorsSlice";
 
 const client = createClient({
   projectId: "hxymd1na",
@@ -31,6 +32,17 @@ export async function getAllEpisodes() {
       )
       .then((episodes) => {
         store.dispatch(addEpisodes(episodes));
+      });
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function getAllSponsors() {
+  try {
+    const allSponsors = await client
+      .fetch(groq`*[_type == "sponsor"]`)
+      .then((sponsors) => {
+        store.dispatch(addSponsors(sponsors));
       });
   } catch (error) {
     console.log(error);

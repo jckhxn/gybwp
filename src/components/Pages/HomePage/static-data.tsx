@@ -56,6 +56,7 @@ export const getEpisodesBySeason = (seasonToFind: number) => {
   // return [...foundSeason.episodes].reverse();
   const episodes = store.getState().episodeReducer;
   const foundSeason = episodes.filter(
+    // @ts-ignore
     (season) => season.seasonNumber === seasonToFind
   );
   return [...foundSeason].reverse();
