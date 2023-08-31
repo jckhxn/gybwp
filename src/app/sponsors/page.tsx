@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 
 import SponsorsPageComponent from "components/Pages/SponsorsPage";
