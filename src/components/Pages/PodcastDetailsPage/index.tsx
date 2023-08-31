@@ -19,7 +19,7 @@ import { SPONSORS } from "components/Pages/SponsorsPage/static-data";
 //
 //
 //
-// DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
+// DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV.
 
 export interface compiledEpisodeType extends episodeType {
   season: string;
