@@ -65,8 +65,8 @@ const PodcastDetailsPageComponent = () => {
 
   return (
     <>
-      <Section flex className="bg-light">
-        <div className="md:px-20 py-6 w-full">
+      <Section flex className="bg-light  ">
+        <div className="md:px-20  py-6 w-full ">
           <div
             className={`${
               nextEpisode ? "text-center" : "text-left ml-6"
@@ -132,7 +132,6 @@ const PodcastDetailsPageComponent = () => {
           </div>
         </div>
       </Section>
-
       {episode.details?.featuredGuests
         ? episode.details.featuredGuests.map((guest, idx) => {
             const isOdd = idx % 2;
@@ -184,7 +183,6 @@ const PodcastDetailsPageComponent = () => {
             );
           })
         : null}
-
       {!isClip && episode.details?.description.length ? (
         <Section className="mx-6 md:mx-20 mt-8">
           <SectionHeading className="text-right">
@@ -208,14 +206,13 @@ const PodcastDetailsPageComponent = () => {
           ) : null}
         </Section>
       ) : null}
-
       {!isClip && episode.details?.links?.length ? (
         <Section className="mx-6 md:mx-20 mt-8">
           <SectionHeading className="text-right">
             {DATA.importantLinksHeader}
           </SectionHeading>
 
-          <div className="mt-8">
+          <div className=" mt-8  break-words">
             {episode.details.links.map(
               ({ text, linkText, linkUrl, secondaryText = "" }, idx) => {
                 if (!text || !linkUrl) {
@@ -223,16 +220,20 @@ const PodcastDetailsPageComponent = () => {
                 }
 
                 return (
-                  <div key={`episode-link-${idx}`} className="mb-4">
+                  <div
+                    key={`episode-link-${idx}`}
+                    className="underline mb-4 md:flex-wrap md:w-max"
+                  >
+                    <Link href={linkUrl}>{text}</Link>
                     {text}{" "}
-                    <a
+                    {/* <a
                       className="hover:text-primary"
                       target="_blank"
                       href={linkUrl}
                     >
                       {linkText || linkUrl}
                     </a>{" "}
-                    {secondaryText}
+                    {secondaryText} */}
                   </div>
                 );
               }
@@ -240,10 +241,9 @@ const PodcastDetailsPageComponent = () => {
           </div>
         </Section>
       ) : null}
-
       {episode.sponsors.length ? (
         <Section
-          className={`flex flex-row items-center justify-center mt-20 mx-6 md:mx-20`}
+          className={`flex flex-row flex-wrap items-center justify-center mt-20 mx-6 md:mx-20 `}
         >
           {episode.sponsors.map((sponsorUUID, idx) => {
             const sponsor = SPONSORS.filter((s) => s.uuid === sponsorUUID)[0];
@@ -277,7 +277,6 @@ const PodcastDetailsPageComponent = () => {
           })}
         </Section>
       ) : null}
-
       <Section className={`bg-main ${isClip ? "mt-0" : "mt-20"}`}>
         <div className="p-8 md:p-12 lg:px-16 lg:py-24">
           <div className="flex lg:mx-20 text-center md:text-left flex-col md:flex-row items-center">
