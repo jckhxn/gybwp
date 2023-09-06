@@ -125,8 +125,9 @@ const ConsultingPageComponent = () => {
           alt=""
           src={LEFT_IMAGE_CTA.img}
           className="h-56 w-full object-cover sm:h-full"
-          height={224}
-          width={224}
+          height={1000}
+          width={1000}
+          quality={100}
         />
 
         <div className="p-8 md:p-12 lg:px-16 lg:py-24 ">
@@ -183,8 +184,8 @@ const ConsultingPageComponent = () => {
           alt="Jeff Lackey"
           src={RIGHT_IMAGE_CTA.img}
           className="w-full h-full object-cover sm:h-full"
-          height={224}
-          width={224}
+          height={1000}
+          width={1000}
         />
       </Section>
 
