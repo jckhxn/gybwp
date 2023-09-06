@@ -16,6 +16,27 @@ import { Section } from "components/shared";
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 
+const getLogo = (socialName: string) => {
+  // This also handles podcast links, ignore param name lol
+  switch (socialName) {
+    case "apple":
+      return icons.apple.src;
+    case "spotify":
+      return icons.spotify.src;
+    case "google":
+      return icons.google.src;
+    case "amazon":
+      return icons.amazon.src;
+    case "facebook":
+      return icons.facebook.src;
+    case "linkedin":
+      return icons.linkedin.src;
+    case "instagram":
+      return icons.instagram.src;
+    case "more":
+      return icons.more.src;
+  }
+};
 const Socials = ({
   socials,
   className: passedClasses,
@@ -35,7 +56,7 @@ const Socials = ({
     >
       <Image
         className="rounded-full h-fit"
-        src={icon}
+        src={getLogo(name) || icons.home.src}
         alt={`social-${name}`}
         height={30}
         width={30}
