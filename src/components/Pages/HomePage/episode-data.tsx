@@ -2064,8 +2064,8 @@ export const SEASON_THREE: seasonType = {
         },
       ],
       sponsors: ["sevenstep", "paradox", "survale", "futureSolve"],
-      image: "https://img.youtube.com/vi/6gfth-xsztM/sddefault.jpg",
-      url: "https://youtu.be/6gfth-xsztM",
+      image: "https://img.youtube.com/vi/Iw-axsct-y0/sddefault.jpg",
+      url: "https://youtu.be/Iw-axsct-y0",
       blurb:
         "Jon Brickner, the leader of the Employee Experience Design Practice at Steelcase, joins host Jeff Lackey to discuss the importance of employee experience and how it can help businesses grow.",
       details: {

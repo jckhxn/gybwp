@@ -65,8 +65,8 @@ const PodcastDetailsPageComponent = () => {
 
   return (
     <>
-      <Section flex className="bg-light  ">
-        <div className="md:px-20  py-6 w-full ">
+      <Section flex className="bg-light ">
+        <div className="md:px-20 py-6 w-full">
           <div
             className={`${
               nextEpisode ? "text-center" : "text-left ml-6"
@@ -225,7 +225,7 @@ const PodcastDetailsPageComponent = () => {
                     className="underline mb-4 md:flex-wrap md:w-max"
                   >
                     <Link href={linkUrl}>{text}</Link>
-                    {text}{" "}
+
                     {/* <a
                       className="hover:text-primary"
                       target="_blank"
