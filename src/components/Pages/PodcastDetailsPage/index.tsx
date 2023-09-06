@@ -145,8 +145,9 @@ const PodcastDetailsPageComponent = () => {
                     alt={`guest ${guest.name} picture`}
                     src={guest.imageUrl}
                     className="h-56 w-full object-cover sm:h-full"
-                    height={224}
-                    width={224}
+                    height={1000}
+                    width={1000}
+                    quality={100}
                   />
                 ) : null}
                 <div className="p-8 md:p-12 lg:px-16 lg:py-24 h-[500px]">
