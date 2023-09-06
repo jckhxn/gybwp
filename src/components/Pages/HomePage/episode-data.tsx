@@ -2034,5 +2034,66 @@ export const SEASON_THREE: seasonType = {
         ],
       },
     },
+    {
+      // Episode 9
+      uuid: "309",
+      episodeNumber: 9,
+      season: 3,
+      episodeName:
+        "Design Thinking and Employee Experience: Creating a Competitive Advantage",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/design-thinking-and-employee-experience-w-jon/id1659743511?i=1000626785787",
+          icon: icons.apple.src,
+        },
+        {
+          name: "spotify",
+          link: "https://open.spotify.com/episode/0sqwcCiIxnmXOWsZX9xY5f?si=oiOPalAmTmquzsWyBjt30g",
+          icon: icons.spotify.src,
+        },
+        {
+          name: "google podcasts",
+          link: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8yMDU3NDkzLnJzcw/episode/QnV6enNwcm91dC0xMzUxNjc1OA?sa=X&ved=0CAUQkfYCahcKEwjg_5zYjpaBAxUAAAAAHQAAAAAQAQ",
+          icon: icons.google.src,
+        },
+        {
+          name: "amazon music",
+          link: "https://music.amazon.com/podcasts/dbf81855-67a9-4500-bdec-c45ace015170/episodes/24fed62e-13e2-4848-b490-f2c84727dd83/growing-your-business-with-people-design-thinking-and-employee-experience-w-jon-brickner-steelcase-s3e9",
+          icon: icons.amazon.src,
+        },
+      ],
+      sponsors: ["sevenstep", "paradox", "survale", "futureSolve"],
+      image: "https://img.youtube.com/vi/6gfth-xsztM/sddefault.jpg",
+      url: "https://youtu.be/6gfth-xsztM",
+      blurb:
+        "Jon Brickner, the leader of the Employee Experience Design Practice at Steelcase, joins host Jeff Lackey to discuss the importance of employee experience and how it can help businesses grow.",
+      details: {
+        featuredGuests: [
+          {
+            name: "Jon Brickner",
+            about:
+              "Jon Brickner is the leader of the Employee Experience Design Practice at Steelcase. With over 17 years of experience in strategic HR and design thinking, Jon brings a unique perspective to workplace challenges. He is passionate about creating engaging experiences for employees and helping businesses grow.",
+            title: "Employee Experience Design Practice at Steelcase",
+            url: "https://www.linkedin.com/in/jonbrickner/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/D5603AQHSNPMiRKm0uA/profile-displayphoto-shrink_800_800/0/1681744770204?e=1699488000&v=beta&t=5rtvKXYAO-e4cP5j2yXFX7194M0C3JZ6CFnup3cZEFY",
+          },
+        ],
+        description: [
+          "Jon explores the concept of design thinking and its application in HR, as well as the impact of employee experience on engagement and retention.",
+          "Jon shares examples of companies that have successfully curated their environments to get the most out of their teams.",
+          "He emphasizes the need for leaders to invest in their people and create a culture of prototyping, testing, and scaling.",
+        ],
+        hashtags: [],
+        links: [
+          {
+            text: "Jon Brickner - LinkedIn.",
+            linkUrl:
+              "He emphasizes the need for leaders to invest in their people and create a culture of prototyping, testing, and scaling.",
+          },
+        ],
+      },
+    },
   ],
 };
