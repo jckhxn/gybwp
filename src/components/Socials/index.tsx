@@ -23,9 +23,9 @@ const getLogo = (socialName: string) => {
       return icons.apple.src;
     case "spotify":
       return icons.spotify.src;
-    case "google":
+    case "google podcasts":
       return icons.google.src;
-    case "amazon":
+    case "amazon music":
       return icons.amazon.src;
     case "facebook":
       return icons.facebook.src;
