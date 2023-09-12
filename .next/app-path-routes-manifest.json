@@ -1,0 +1,8 @@
+{
+  "/page": "/",
+  "/news/page": "/news",
+  "/sponsors/page": "/sponsors",
+  "/dash/page": "/dash",
+  "/episode/[...uuid]/page": "/episode/[...uuid]",
+  "/sponsors/[...sponsorId]/page": "/sponsors/[...sponsorId]"
+}
