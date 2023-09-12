@@ -1,1 +1,1 @@
-self.__NEXT_FONT_MANIFEST='{"pages":{"/_app":["static/media/cdbcea0e589a6ff7-s.p.woff2"]},"app":{"/Users/jack/Documents/Projects/js/jkl-gybwp/jkl-gybwp/src/app/layout":["static/media/cdbcea0e589a6ff7-s.p.woff2"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":true}';
+self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/jack/Documents/Projects/js/jkl-gybwp/jkl-gybwp/src/app/layout\":[\"static/media/cdbcea0e589a6ff7-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"

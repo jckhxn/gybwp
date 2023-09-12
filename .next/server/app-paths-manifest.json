@@ -1,8 +1,5 @@
 {
   "/page": "app/page.js",
-  "/news/page": "app/news/page.js",
   "/sponsors/page": "app/sponsors/page.js",
-  "/dash/page": "app/dash/page.js",
-  "/episode/[...uuid]/page": "app/episode/[...uuid]/page.js",
   "/sponsors/[...sponsorId]/page": "app/sponsors/[...sponsorId]/page.js"
 }
