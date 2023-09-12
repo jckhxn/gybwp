@@ -1,6 +1,6 @@
 // @ts-nocheck
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 // components
 import Image from "next/image";
 import { Section, SectionHeading } from "components/shared";

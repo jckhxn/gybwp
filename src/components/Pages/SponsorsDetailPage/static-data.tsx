@@ -1,9 +1,17 @@
+// @ts-nocheck
 import routes from "routes";
 
 import { SPONSORS } from "../SponsorsPage/static-data";
+import { store } from "../../../redux/store";
 
-export const getSponsor = (id: string) =>
-  SPONSORS.filter(({ uuid }) => uuid === id)[0];
+export const getSponsor = (id: string, data: object) => {
+  console.log(data.sponsors);
+  const sponsorsArray = Object.keys(data.sponsors).map(function (property) {
+    return data.sponsors[property];
+  });
+
+  return sponsorsArray.filter(({ uuid }) => uuid === id)[0];
+};
 
 //
 //

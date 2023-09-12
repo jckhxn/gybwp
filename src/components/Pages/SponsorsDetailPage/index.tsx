@@ -1,6 +1,7 @@
+// @ts-nocheck
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 // components
 import Button from "components/Button";
@@ -16,6 +17,18 @@ import { episodeType } from "components/Pages/HomePage/episode-data";
 import Socials from "components/Socials";
 import routes from "routes";
 
+// SWR
+import useSWR from "swr";
+import { groq, createClient } from "next-sanity";
+
+const client = createClient({
+  projectId: "hxymd1na",
+  dataset: "production",
+  apiVersion: "2023-08-22",
+
+  useCdn: false,
+});
+
 //
 //
 //
@@ -28,28 +41,56 @@ export interface compiledSponsorType extends sponsorType {
 
 const SponsorsDetailPageComponent = () => {
   const [sponsor, setSponsor] = useState<compiledSponsorType>();
-  const router = useRouter();
+
+  const pathname = usePathname();
+  const id = pathname.split("/sponsors/")[1];
+
+  // Return sponsor details and episodes for sponsor ID
+  // sponsors array has sponsor details
+  //  episodes where sponsors[] = id
+  // setSponsor is an object with {...foundSponsor (details),episodes:(sponsored episodes)}
+
+  const { data, error, isLoading } = useSWR(
+    groq`{"sponsors":*[_type == "sponsor" && uuid == "${id}"] ,"episodes":*[_type == "episode" &&  "${id}" in sponsors]| order(uuid asc)}`,
+    (query) => client.fetch(query)
+  );
 
   useEffect(() => {
-    const id = window.location.pathname.split("/sponsors/")[1];
-    const foundSponsor = getSponsor(id);
-    const queriedSponsor = {
-      ...foundSponsor,
-      episodes: getEpisodesBySponsor(id),
-    };
+    if (!isLoading) {
+      const { sponsors, episodes } = data;
+      console.log(episodes);
 
-    if (foundSponsor) {
-      setSponsor(queriedSponsor);
-    } else {
-      router.push(routes.internal.error);
+      setSponsor({
+        ...sponsors,
+        episodes,
+      });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [data, id, isLoading]);
+
+  const router = useRouter();
+
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     const foundSponsor = getSponsor(id, data);
+
+  //     const queriedSponsor = {
+  //       ...foundSponsor,
+  //       episodes: getEpisodesBySponsor(id, data),
+  //     };
+
+  //     if (foundSponsor) {
+  //       setSponsor(queriedSponsor);
+  //     } else {
+  //       // router.push(routes.internal.error);
+  //     }
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   if (!sponsor) {
     return null;
   }
-
+  console.log(sponsor);
   return (
     <>
       <Section flex className="bg-main">
@@ -66,10 +107,11 @@ const SponsorsDetailPageComponent = () => {
           <div className="flex flex-col-reverse xl:flex-row flex-wrap justify-around mx-10 mb-10">
             <div className="flex flex-col mt-12 text-white">
               <SectionHeading className="text-3xl mb-3">
-                {sponsor.name}
+                {sponsor[0].name}
               </SectionHeading>
+              <div className="xl:max-w-lg">{sponsor[0].description}</div>
 
-              {sponsor.description.map((paragraph, idx) => (
+              {/* {sponsor.description.map((paragraph, idx) => (
                 <div
                   key={`${sponsor.name} description paragraph ${idx}`}
                   className="xl:max-w-lg"
@@ -77,21 +119,21 @@ const SponsorsDetailPageComponent = () => {
                   <br />
                   {paragraph}
                 </div>
-              ))}
+              ))} */}
 
-              {sponsor.socials && <Socials socials={sponsor.socials} />}
+              {sponsor[0].social && <Socials socials={sponsor[0].social} />}
             </div>
 
             <div className="flex justify-center mt-8 md:mt-0">
               <div
                 className={`${
-                  sponsor.bgColor || ""
+                  sponsor[0].bgColor || ""
                 } w-[80vw] h-[80vw] max-h-[25rem] max-w-[25rem] md:w-[25rem] md:h-[25rem] flex-shrink-0 overflow-hidden rounded-full`}
               >
                 <Image
                   className="m-auto px-4 h-[80vw] max-h-[25rem]"
-                  src={sponsor.imgUrl}
-                  alt={sponsor.imgAlt}
+                  src={sponsor[0].image}
+                  alt=""
                   height={400}
                   width={400}
                 />

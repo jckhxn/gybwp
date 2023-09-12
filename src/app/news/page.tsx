@@ -1,9 +1,11 @@
 // @ts-nocheck
+"use client";
 import React from "react";
-
 // components
 import Articles from "components/Articles";
-import FeaturedNews from "../../FeaturedNews";
+import FeaturedNews from "../../components/FeaturedNews";
+
+import { ReduxProvider } from "../../redux/provider";
 
 //
 //
