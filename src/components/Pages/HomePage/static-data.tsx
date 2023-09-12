@@ -14,7 +14,7 @@ const client = createClient({
   dataset: "production",
   apiVersion: "2023-08-22",
 
-  useCdn: false,
+  useCdn: true,
 });
 
 //

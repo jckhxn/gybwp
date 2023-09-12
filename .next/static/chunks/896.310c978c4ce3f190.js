@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[896],{12896:function(n,e,u){u.r(e),u.d(e,{DocumentPaneProvider:function(){return r.oK},default:function(){return t.DocumentPane}});var t=u(4766),r=u(12195)}}]);
