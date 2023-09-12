@@ -1,6 +1,6 @@
-const article = {
-  name: "article",
-  title: "Articles",
+const featuredArticle = {
+  name: "featuredArticle",
+  title: "Featured Articles",
   type: "document",
   fields: [
     {
@@ -15,8 +15,12 @@ const article = {
       title: "Title from Article ",
       type: "string",
     },
-    
-  
+    {
+      // Short Description of the Article
+      name: "description",
+      title: "Short Description from Article ",
+      type: "text",
+    },
     {
       // Link to the Article
       name: "link",
@@ -31,4 +35,4 @@ const article = {
     },
   ],
 };
-export default article;
+export default featuredArticle;

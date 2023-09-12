@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+// @ts-nocheck
+"use client";
+import React, { useEffect, useState } from "react";
 
 // components
 import { Section, SectionHeading } from "components/shared";
@@ -8,8 +10,45 @@ import { usePagination, DOTS } from "./usePagination";
 import { ARTICLES } from "components/Pages/News/static-data";
 import { ARTICLES_INFO } from "./static-data";
 import Link from "next/link";
+// State
+import { getArticles } from "../../app/sanity/sanity-utils";
+import { store } from "../../redux/store";
+
+// // SWR
+import useSWR from "swr";
+import { groq, createClient } from "next-sanity";
+
+const client = createClient({
+  projectId: "hxymd1na",
+  dataset: "production",
+  apiVersion: "2023-08-22",
+
+  useCdn: false,
+});
 
 const Articles = () => {
+  const [articles, setArticles] = useState();
+  const { data, error, isLoading } = useSWR(
+    groq`*[_type == "article"]`,
+    (query) => client.fetch(query)
+  );
+  useEffect(() => {
+    if (!isLoading) {
+      console.log(data);
+
+      setArticles(data);
+    }
+  }, [data, isLoading]);
+
+  // Goes from object into an array of objects.
+  // const articles = store.getState().articles;
+
+  // const articlesArray = (
+  //   Object.keys(articles) as Array<keyof typeof articles>
+  // ).map(function (property) {
+  //   return articles[property];
+  // });
+
   const [currentPage, setCurrentPage] = useState(1);
   const totalCount: number = ARTICLES.length;
   const pageSize: number = 5;
@@ -46,11 +85,12 @@ const Articles = () => {
           {ARTICLES_INFO.header}
         </SectionHeading>
       </div>
-
       {/* ARTICLES */}
-      {ARTICLES.slice(pageSlice - 5, pageSlice).map(
-        ({ company, date, title, linkUrl }, idx) => (
-          <Link key={`article-${idx}`} href={linkUrl} target="_blank">
+
+      {articles
+        ?.slice(pageSlice - 5, pageSlice)
+        .map(({ company, date, title, link }, idx) => (
+          <Link key={`article-${idx}`} href={link} target="_blank">
             <div className="mb-5 px-8 py-4 bg-light text-black">
               <div className="mt-2">
                 <span className="text-xl font-medium">{title}</span>
@@ -63,9 +103,7 @@ const Articles = () => {
               </div>
             </div>
           </Link>
-        )
-      )}
-
+        ))}
       {/* PAGINATION */}
       {totalPageCount > 1 && (
         <div className="flex justify-end mr-6 mt-4">

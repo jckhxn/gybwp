@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 
 // components
@@ -17,6 +18,7 @@ const Collection = ({
   description?: string;
   items: Array<episodeType>;
 }) => {
+  console.log(items);
   return (
     <Section>
       <div className="mt-8 max-w-screen-xl px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:px-8">
@@ -38,7 +40,14 @@ const Collection = ({
 
         <ul className="flex justify-center gap-8 mt-12 flex-wrap">
           {items.map(
-            ({ episodeNumber, episodeName, uuid, image, url, season }) => (
+            ({
+              episodeNumber,
+              episodeName,
+              uuid,
+              image,
+              url,
+              seasonNumber,
+            }) => (
               <li key={`collection-item-${uuid}`}>
                 <Link href={url}>
                   <Image
@@ -52,7 +61,7 @@ const Collection = ({
 
                   <div className="flex justify-center items-center ">
                     {" "}
-                    Season {season} | Episode {episodeNumber}
+                    Season {seasonNumber} | Episode {episodeNumber}
                   </div>
                 </Link>
               </li>

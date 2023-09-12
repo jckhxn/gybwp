@@ -2,7 +2,6 @@ import routes from "routes";
 
 // data
 import { PODCAST } from "../HomePage/static-data";
-import { getEpisodeDetails } from "../../../app/sanity/sanity-utils";
 
 //
 //

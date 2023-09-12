@@ -18,6 +18,7 @@ import { Section } from "components/shared";
 
 const getLogo = (socialName: string) => {
   // This also handles podcast links, ignore param name lol
+
   switch (socialName) {
     case "apple":
       return icons.apple.src;

@@ -1,4 +1,6 @@
-import React from "react";
+// @ts-nocheck
+"use client";
+import React, { useEffect, useState } from "react";
 
 // components
 import Image from "next/image";
@@ -8,12 +10,47 @@ import defaultImageSrc from "public/images/logo.png";
 // copy
 import { NEWS_INFO } from "./static-data";
 import { FEATURED_ARTICLES } from "components/Pages/News/static-data";
+// State
+import { getFeaturedArticles } from "../../app/sanity/sanity-utils";
+import { store } from "../../redux/store";
+// SWR
+import useSWR from "swr";
+import { groq, createClient } from "next-sanity";
 
+const client = createClient({
+  projectId: "hxymd1na",
+  dataset: "production",
+  apiVersion: "2023-08-22",
+
+  useCdn: false,
+});
 interface FeaturedNewsProps {
   color: "light" | "secondary";
 }
 
 const FeaturedNews = ({ color = "light" }: FeaturedNewsProps) => {
+  const [featuredArticles, setFeaturedArticles] = useState();
+  const { data, error, isLoading } = useSWR(
+    groq`*[_type == "featuredArticle"]`,
+    (query) => client.fetch(query)
+  );
+  useEffect(() => {
+    if (!isLoading) {
+      const featuredArticles = (
+        Object.keys(data) as Array<keyof typeof featuredArticles>
+      ).map(function (property) {
+        return data[property];
+      });
+      setFeaturedArticles(featuredArticles);
+    }
+  }, [data, isLoading]);
+  // const featuredArticles = store.getState().featuredArticles;
+  // const featuredArticlesArray = (
+  //   Object.keys(featuredArticles) as Array<keyof typeof featuredArticles>
+  // ).map(function (property) {
+  //   return featuredArticles[property];
+  // });
+
   if (FEATURED_ARTICLES.length) {
     const fontColor = color === "light" ? "black" : "white";
 
@@ -29,11 +66,11 @@ const FeaturedNews = ({ color = "light" }: FeaturedNewsProps) => {
           </div>
 
           <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {FEATURED_ARTICLES.map(
-              ({ company, title, description, linkUrl, imgSrc }, idx) => (
+            {featuredArticles?.map(
+              ({ company, title, description, link, image }, idx) => (
                 <div key={`article-${idx}`}>
                   <a
-                    href={linkUrl}
+                    href={link}
                     target="_blank"
                     className="block rounded-md p-4 text-center group"
                   >
@@ -41,7 +78,7 @@ const FeaturedNews = ({ color = "light" }: FeaturedNewsProps) => {
                       height={224}
                       width={450}
                       alt={`featured article by ${company}`}
-                      src={imgSrc || defaultImageSrc}
+                      src={image || defaultImageSrc}
                       className="h-56 w-full rounded-sm object-cover"
                     />
 
@@ -81,8 +118,6 @@ const FeaturedNews = ({ color = "light" }: FeaturedNewsProps) => {
       </Section>
     );
   }
-
-  return null;
 };
 
 export default FeaturedNews;
