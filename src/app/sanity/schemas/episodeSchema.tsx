@@ -1,5 +1,5 @@
 const episode = {
-  name: "episode",
+  name: "episode",  
   title: "Episodes",
   type: "document",
   fields: [
@@ -45,7 +45,7 @@ const episode = {
           type: "object",
           fields: [
             {
-              name: "platform",
+              name: "name",
               type: "string",
               title: "Podcast Platform",
             },
@@ -80,30 +80,73 @@ const episode = {
       type: "string",
     },
 
+    // {
+    //   // Additional Content
+    //  I haven't implented this yet lol
+    //   name: "content",
+    //   title: "Episode Content",
+    //   type: "object",
+    //   fields: [
+    //     {
+    //       name: "files",
+    //       title: "Files",
+    //       type: "array",
+    //       of: [
+    //         {
+    //           type: "object",
+    //           fields: [
+    //             { name: "name", title: "File Name", type: "string" },
+    //             { name: "file", title: "Upload File", type: "file" },
+    //             {
+    //               name: "type",
+    //               title: "Type of File",
+    //               type: "string",
+    //               options: {
+    //                 list: [
+    //                   { title: "pdf", value: "pdf" },
+    //                   { title: "image", value: "image" },
+    //                 ],
+    //               },
+    //             },
+    //           ],
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // },
     {
-      // Details about the Guest in the Episode
-      name: "guestDetails",
-      title: "Guest Details",
-      type: "object",
-      fields: [
-        { name: "guestName", title: "Guest Name", type: "string" },
-        { name: "aboutGuest", title: "About Guest", type: "string" },
-        { name: "guestTitle", title: "Guest Title", type: "string" },
-        { name: "guestURL", title: "Guest URL", type: "url" },
-        {
-          name: "guestImage",
-          title: "Guest Image",
-          type: "string",
-        },
-      ],
-    },
-    {
-      // Details about the Episode
-      name: "episodeDetails",
+      // Details
+      name: "details",
       title: "Episode Details",
       type: "object",
       fields: [
-        { name: "description", title: "Episode Description", type: "text" },
+        {
+          name: "featuredGuests",
+          title: "Guest Names",
+          type: "array",
+          of: [
+            {
+              type: "object",
+              fields: [
+                { name: "name", title: "Guest Name", type: "string" },
+                { name: "about", title: "About Guest", type: "string" },
+                { name: "title", title: "Guest Title", type: "string" },
+                { name: "url", title: "Guest URL", type: "url" },
+                {
+                  name: "image",
+                  title: "Guest Image",
+                  type: "image",
+                  options: { hotspot: true },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "description",
+          title: "Description of Episode",
+          type: "text",
+        },
         {
           name: "hashtags",
           title: "Episode Hashtags",
@@ -112,10 +155,19 @@ const episode = {
         },
 
         {
+          // Array of objects with text and linkUrl
           name: "links",
           title: "Episode Links",
           type: "array",
-          of: [{ type: "string" }],
+          of: [
+            {
+              type: "object",
+              fields: [
+                { name: "text", title: "Description of Link", type: "string" },
+                { name: "linkUrl", title: "Link", type: "url" },
+              ],
+            },
+          ],
         },
       ],
     },

@@ -21,6 +21,7 @@ type linksType = {
 };
 
 export type episodeType = {
+  seasonNumber?: number;
   episodeNumber: number;
   episodeName: string;
   episodeLinks?: socialsType[];
@@ -1472,7 +1473,7 @@ export const SEASON_TWO: seasonType = {
           },
           {
             text: "Helena's Twitter | ",
-            linkUrl: "https://twitter.com/HelenaBFoulkes",
+            linkUrl: "  ",
           },
         ],
       },
@@ -2093,6 +2094,68 @@ export const SEASON_THREE: seasonType = {
               "He emphasizes the need for leaders to invest in their people and create a culture of prototyping, testing, and scaling.",
           },
         ],
+      },
+    },
+    {
+      // Episode 10
+      uuid: "310",
+      season: 3,
+      episodeNumber: 10,
+      episodeName: "Lessons in Frontline Leadership",
+      episodeLinks: [
+        {
+          name: "apple",
+          link: "https://podcasts.apple.com/us/podcast/prioritizing-people-the-key-to-frontline-leadership/id1659743511?i=1000627574431",
+          icon: icons.apple.src,
+        },
+        {
+          name: "spotify",
+          link: "https://open.spotify.com/episode/6WvDoUN0exqEvdr4ZNJ6Wx?si=bmnOZI5CSx223Mshxl-d0Q",
+          icon: icons.spotify.src,
+        },
+        {
+          name: "google podcasts",
+          link: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8yMDU3NDkzLnJzcw==",
+          icon: icons.google.src,
+        },
+        {
+          name: "amazon music",
+          link: "https://music.amazon.com/podcasts/dbf81855-67a9-4500-bdec-c45ace015170/episodes/24fed62e-13e2-4848-b490-f2c84727dd83/growing-your-business-with-people-design-thinking-and-employee-experience-w-jon-brickner-steelcase-s3e9",
+          icon: icons.amazon.src,
+        },
+        {
+          name: "more",
+          link: "https://www.buzzsprout.com/2057493/share",
+          icon: icons.more.src,
+        },
+      ],
+      sponsors: ["sevenstep", "bayard", "paradox"],
+      image: "https://img.youtube.com/vi/fCGYrHhlG_w/sddefault.jpg",
+      url: "https://youtu.be/fCGYrHhlG_w?si=c760uEAHcoEEvGmN",
+      blurb: "",
+      details: {
+        featuredGuests: [
+          {
+            name: "Dennis Berger",
+            about:
+              "Dennis Berger is an experienced HR executive who has held leadership positions at companies such as Pepsi, CDW, AutoNation, and Suffolk. With over 34 years of experience in HR, Dennis has a deep understanding of the importance of frontline leadership and the impact it can have on an organization's success.",
+            title: "Experienced CHRO | CDW, AutoNation, Suffolk",
+            url: "https://www.linkedin.com/in/dennis-g-berger/",
+            imageUrl:
+              "https://media.licdn.com/dms/image/C4D03AQG8GwQcNOrvnQ/profile-displayphoto-shrink_400_400/0/1591893899126?e=1700092800&v=beta&t=0bj5B7L7bkQ8TwsIhOOmFBuw9WCuFfaCARZK8VtJmkM",
+          },
+        ],
+        description: [
+          "Discover the key to frontline leadership and how it can make a difference in your organization.",
+          "Dennis Berger shares his expertise with us",
+          "New Podcast Highlights",
+          "🔸Frontline leaders should not defer their pick when it comes to building their teams.",
+          "🔸Values match is more important than cultural fit when selecting team members.",
+          "🔸Recognition and appreciation, such as saying hello in the morning and thank you in the evening, go a long way in motivating employees.",
+          "🔸Happy coworkers lead to happy customers.",
+        ],
+        hashtags: ["leadership", "FrontlineLeadership", ""],
+        links: [],
       },
     },
   ],
