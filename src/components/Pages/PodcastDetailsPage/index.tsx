@@ -1,6 +1,7 @@
+// @ts-nocheck
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, usePathname } from "next/navigation";
 import routes from "routes";
 
 // components
@@ -14,6 +15,18 @@ import Link from "next/link";
 import { episodeType } from "components/Pages/HomePage/episode-data";
 import { DATA, CTA, getEpisode, getNextEpisode } from "./static-data";
 import { SPONSORS } from "components/Pages/SponsorsPage/static-data";
+import { getEpisodeDetails } from "../../../app/sanity/sanity-utils";
+
+// SWR
+import useSWR from "swr";
+import { groq, createClient } from "next-sanity";
+const client = createClient({
+  projectId: "hxymd1na",
+  dataset: "production",
+  apiVersion: "2023-08-22",
+
+  useCdn: false,
+});
 
 //
 //
@@ -28,40 +41,64 @@ export interface compiledEpisodeType extends episodeType {
 const PodcastDetailsPageComponent = () => {
   const [episode, setEpisode] = useState<compiledEpisodeType>();
   const [nextEpisode, setNextEpisode] = useState<string>();
+
   const router = useRouter();
 
   const thisWindow =
     typeof window !== "undefined" ? window.location.pathname : null;
 
+  const uuid = thisWindow?.split("/")[2];
+
+  const { data, error, isLoading } = useSWR(
+    groq`{ "episodes":*[_type == "episode"],"episodeDetails":*[_type == "episode"  && uuid == "${uuid}"]}{
+      episodeDetails[]
+{
+blurb,
+episodeName,
+episodeNumber,
+image,
+podcastLinks,
+seasonName,
+seasonNumber,
+sponsors,
+url,
+uuid,
+details{
+description,
+links,
+featuredGuests[]
+{
+name,
+about,
+title,
+url,
+"image":image.asset->url
+}
+}
+
+}
+}`,
+    (query) => client.fetch(query)
+  );
   useEffect(() => {
-    const episodeUuid = window.location.pathname.split("/")[2];
-
-    const season = episodeUuid[0];
-
-    const foundEpisode = getEpisode(season, episodeUuid);
-    const queriedEpisode = {
-      ...foundEpisode,
-      season,
-    };
-
-    if (foundEpisode) {
-      setEpisode(queriedEpisode);
-
-      const nextEpisode = getNextEpisode(queriedEpisode.uuid);
-      if (nextEpisode) {
-        setNextEpisode(nextEpisode);
+    if (!isLoading) {
+      // console.log(data.episodeDetails[0]);
+      setEpisode(data.episodeDetails[0]);
+      if (episode) {
+        const nextEpisode = getNextEpisode(episode.uuid, episode);
+        if (nextEpisode) {
+          setNextEpisode(nextEpisode);
+        }
       }
-    } else {
-      router.push(routes.internal.error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [thisWindow]);
+  }, [isLoading, data, episode]);
 
   if (!episode) {
     return null;
   }
 
-  const isClip = episode.uuid.includes("_");
+  const isClip = episode.uuid?.includes("_");
 
   return (
     <>
@@ -89,19 +126,18 @@ const PodcastDetailsPageComponent = () => {
               </Button>
             ) : null}
           </div>
-
           <div className="flex flex-col-reverse xl:flex-row flex-wrap justify-around mx-10 mb-10 mt-4 xl:mt-0">
             <div className="flex flex-col mt-12 lg:max-w-[40vw]">
               <h2 className="text-2xl font-bold">{episode.episodeName}</h2>
               <div className="mb-8 font-light">
-                Season {episode.season} | Episode {episode.episodeNumber}{" "}
+                Season {episode.seasonNumber} | Episode {episode.episodeNumber}{" "}
                 {isClip ? `| Clip ${episode.uuid.split("_")[1]}` : null}
               </div>
 
               <div className="xl:max-w-lg">{episode.blurb}</div>
 
-              {episode.episodeLinks?.length ? (
-                <Socials socials={episode.episodeLinks.slice(0, 4)} />
+              {episode.podcastLinks?.length ? (
+                <Socials socials={episode.podcastLinks} />
               ) : null}
             </div>
 
@@ -132,8 +168,9 @@ const PodcastDetailsPageComponent = () => {
           </div>
         </div>
       </Section>
-      {episode.details?.featuredGuests
-        ? episode.details.featuredGuests.map((guest, idx) => {
+      {/* If you check length it doesn't display, otherwise it renders too many of same. */}
+      {episode.details
+        ? episode.details.featuredGuests?.map((guest, idx) => {
             const isOdd = idx % 2;
             return (
               <Section
@@ -143,7 +180,7 @@ const PodcastDetailsPageComponent = () => {
                 {!isOdd ? (
                   <Image
                     alt={`guest ${guest.name} picture`}
-                    src={guest.imageUrl}
+                    src={guest.image}
                     className="h-56 w-full object-cover sm:h-full"
                     height={1000}
                     width={1000}
@@ -174,47 +211,46 @@ const PodcastDetailsPageComponent = () => {
                 {isOdd ? (
                   <Image
                     alt={`guest ${guest.name} picture`}
-                    src={guest.imageUrl}
+                    src={guest.image}
                     className="h-56 w-full object-cover sm:h-full"
-                    height={224}
-                    width={224}
+                    height={1000}
+                    width={1000}
+                    quality={100}
                   />
                 ) : null}
               </Section>
             );
           })
         : null}
-      {!isClip && episode.details?.description.length ? (
+      {!isClip && episode.details ? (
         <Section className="mx-6 md:mx-20 mt-8">
           <SectionHeading className="text-right">
             {DATA.aboutThisEpisodeHeader}
           </SectionHeading>
 
-          {episode.details?.description.length ? (
+          {episode.details?.links ? (
             <div className="mt-8">
-              {episode.details.description.map((paragraph, idx) => (
-                <div key={`episode description ${idx}`} className="mt-4">
-                  {paragraph}
-                </div>
-              ))}
+              <div key={`episode description `} className="mt-4">
+                {episode.details.description}
+              </div>
             </div>
           ) : null}
 
-          {episode.details?.hashtags.length ? (
+          {episode.details?.hashtags?.length ? (
             <div className="mt-8 italic font-thin">
-              {episode.details?.hashtags.map((ht) => `#${ht} `)}
+              {data.episodeDetails[0]?.hashtags.map((ht) => `#${ht} `)}
             </div>
           ) : null}
         </Section>
       ) : null}
-      {!isClip && episode.details?.links?.length ? (
+      {!isClip && episode.details ? (
         <Section className="mx-6 md:mx-20 mt-8">
           <SectionHeading className="text-right">
             {DATA.importantLinksHeader}
           </SectionHeading>
 
           <div className=" mt-8  break-words">
-            {episode.details.links.map(
+            {episode.details.links?.map(
               ({ text, linkText, linkUrl, secondaryText = "" }, idx) => {
                 if (!text || !linkUrl) {
                   return null;
@@ -271,6 +307,7 @@ const PodcastDetailsPageComponent = () => {
                     className="h-[150px] w-auto m-auto px-4"
                     width={250}
                     height={150}
+                    quality={100}
                   />
                 </div>
               </Link>
@@ -299,5 +336,4 @@ const PodcastDetailsPageComponent = () => {
     </>
   );
 };
-
 export default PodcastDetailsPageComponent;

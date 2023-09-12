@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import React, { useEffect, useState } from "react";
 // components
@@ -5,23 +6,16 @@ import Image from "next/image";
 import { Section, SectionHeading } from "components/shared";
 import heroImage from "../../../../public/images/main-page-hero.jpg";
 import Button from "components/Button";
-import FeaturedNews from "components/FeaturedNews";
+import FeaturedNews from "../../FeaturedNews/";
 import Dropdown from "components/Dropdown";
 
-// State
-
-import { getAllEpisodes } from "../../../app/sanity/sanity-utils";
-
 // copy
-import { HERO, PODCAST, CTA, getEpisodesBySeason } from "./static-data";
+import { HERO, PODCAST, CTA, useGetEpisodesBySeason } from "./static-data";
 import Slider from "components/Slider";
 
 const HomePageComponent = () => {
-  useEffect(() => {
-    // Fetch all the data for state
-    getAllEpisodes();
-  }, []);
   const [activeSeason, setActiveSeason] = useState(PODCAST.length);
+
   return (
     <>
       {/* MAIN SECTION */}
@@ -78,7 +72,7 @@ const HomePageComponent = () => {
 
         <Slider
           activeSeason={activeSeason}
-          items={getEpisodesBySeason(activeSeason)}
+          items={useGetEpisodesBySeason(activeSeason)}
         />
       </Section>
 

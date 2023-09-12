@@ -1,3 +1,4 @@
+// @ts-nocheck
 import routes from "routes";
 import * as podcast from "./episode-data";
 
@@ -6,6 +7,17 @@ import { seasonType, episodeType } from "./episode-data";
 
 // State fetch
 import { store } from "../../../redux/store";
+// SWR
+import useSWR from "swr";
+import { groq, createClient } from "next-sanity";
+
+const client = createClient({
+  projectId: "hxymd1na",
+  dataset: "production",
+  apiVersion: "2023-08-22",
+
+  useCdn: false,
+});
 
 //
 //
@@ -49,30 +61,53 @@ export const PODCAST: seasonType[] = [
 //
 // DO NOT TOUCH ANYTHING BELOW THIS LINE
 
-export const getEpisodesBySeason = (seasonToFind: number) => {
-  const foundSeason = PODCAST.filter(
+export const useGetEpisodesBySeason = (seasonToFind: number) => {
+  const { data, error, isLoading } = useSWR(
+    groq`*[_type == "episode"] | order(uuid asc)`,
+    (query) => client.fetch(query)
+  );
+  if (error) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
+
+  const episodesArray = Object.keys(data)
+    .filter((key) => key !== "_persist")
+    .map(function (property) {
+      return data[property];
+    });
+
+  const foundSeason = episodesArray.filter(
+    // @ts-ignore
     (season) => season.seasonNumber === seasonToFind
-  )[0];
-  return [...foundSeason.episodes].reverse();
-  // const episodes = store.getState().episodeReducer;
-  // const foundSeason = episodes.filter(
-  //   // @ts-ignore
-  //   (season) => season.seasonNumber === seasonToFind
-  // );
-  // return [...foundSeason].reverse();
+  );
+
+  return [...foundSeason].reverse();
 };
 
-export const getEpisodesBySponsor = (uuid: string) => {
+export const getEpisodesBySponsor = (uuid: string, episodesData: object) => {
+  console.log(episodesData);
   const sponsoredEpisodes: episodeType[] = [];
+  const episodes = store.getState().episodes;
 
-  PODCAST.forEach((season) => {
-    season.episodes.forEach((episode) => {
-      episode.sponsors.forEach((id) => {
-        if (id === uuid) {
-          sponsoredEpisodes.push(episode);
-        }
-      });
+  const episodesArray = Object.keys(episodes)
+    .filter((key) => key !== "_persist")
+    .map(function (property) {
+      return episodes[property];
     });
+
+  const getValueForKey = (obj, key) => {
+    const keys = Object.keys(obj);
+    const value = keys.find((k) => k === key);
+    return obj[value];
+  };
+
+  episodesArray.map((episode) => {
+    // Map over every episode, if episode sponsors == uuid,
+    // push to sponsored Episodes
+    const value = getValueForKey(episode, "sponsors");
+    if (value?.includes(uuid)) {
+      sponsoredEpisodes.push(episode);
+    }
+    Object.keys(episode).map((episodeDetails) => {});
   });
 
   return sponsoredEpisodes;
