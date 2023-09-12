@@ -2132,7 +2132,8 @@ export const SEASON_THREE: seasonType = {
       sponsors: ["sevenstep", "bayard", "paradox"],
       image: "https://img.youtube.com/vi/fCGYrHhlG_w/sddefault.jpg",
       url: "https://youtu.be/fCGYrHhlG_w?si=c760uEAHcoEEvGmN",
-      blurb: "",
+      blurb:
+        "Dennis Berger emphasizes the importance of frontline leadership and the role it plays in driving business growth. He shares his insights on how to pick winning teams and the need for leaders to prioritize this crucial task.",
       details: {
         featuredGuests: [
           {
@@ -2147,8 +2148,8 @@ export const SEASON_THREE: seasonType = {
         ],
         description: [
           "Discover the key to frontline leadership and how it can make a difference in your organization.",
-          "Dennis Berger shares his expertise with us",
-          "New Podcast Highlights",
+          "Dennis Berger shares his expertise with us.",
+          "New Podcast Highlights:",
           "🔸Frontline leaders should not defer their pick when it comes to building their teams.",
           "🔸Values match is more important than cultural fit when selecting team members.",
           "🔸Recognition and appreciation, such as saying hello in the morning and thank you in the evening, go a long way in motivating employees.",
