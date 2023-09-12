@@ -2,6 +2,7 @@ import routes from "routes";
 
 // data
 import { PODCAST } from "../HomePage/static-data";
+import { getEpisodeDetails } from "../../../app/sanity/sanity-utils";
 
 //
 //
@@ -38,12 +39,19 @@ export const CTA = {
 //
 // DO NOT TOUCH ANYTHING BELOW THIS LINE
 
-export const getEpisode = (season: string, episode: string) =>
-  PODCAST.filter(
-    ({ seasonNumber }) => seasonNumber === parseInt(season)
-  )[0]?.episodes.filter(({ uuid }) => uuid === episode)[0];
+export const getEpisode = (
+  season: string,
+  episode: string,
+  episodes: [Object]
+) => {
+  return episodes;
+  // console.log(episodes);
+  // return PODCAST.filter(
+  //   ({ seasonNumber }) => seasonNumber === parseInt(season)
+  // )[0]?.episodes.filter(({ uuid }) => uuid === episode)[0];
+};
 
-export const getNextEpisode = (episode: string) => {
+export const getNextEpisode = (episode: string, episodes: [Object]) => {
   let episodeFound = false;
   let nextEpisodeUUID;
 

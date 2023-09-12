@@ -18,7 +18,7 @@ import Slider from "components/Slider";
 
 const HomePageComponent = () => {
   useEffect(() => {
-    // Fetch all the data for state.
+    // Fetch all the data for state
     getAllEpisodes();
   }, []);
   const [activeSeason, setActiveSeason] = useState(PODCAST.length);
