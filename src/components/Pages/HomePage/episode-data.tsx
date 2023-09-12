@@ -2155,7 +2155,13 @@ export const SEASON_THREE: seasonType = {
           "🔸Happy coworkers lead to happy customers.",
         ],
         hashtags: ["leadership", "FrontlineLeadership", ""],
-        links: [],
+        links: [
+          {
+            text: "Listen to your employees if you want to take care of them.",
+            linkUrl:
+              "https://www.forbes.com/sites/brucetulgan/2021/03/05/listen-to-your-employees-if-you-want-to-take-care-of-them/?sh=70dabaf140d5",
+          },
+        ],
       },
     },
   ],
