@@ -15,7 +15,6 @@ import Link from "next/link";
 import { episodeType } from "components/Pages/HomePage/episode-data";
 import { DATA, CTA, getEpisode, getNextEpisode } from "./static-data";
 import { SPONSORS } from "components/Pages/SponsorsPage/static-data";
-import { getEpisodeDetails } from "../../../app/sanity/sanity-utils";
 
 // SWR
 import useSWR from "swr";
@@ -100,170 +99,173 @@ url,
 
   const isClip = episode.uuid?.includes("_");
 
-  return (
-    <>
-      <Section flex className="bg-light ">
-        <div className="md:px-20 py-6 w-full">
-          <div
-            className={`${
-              nextEpisode ? "text-center" : "text-left ml-6"
-            } mb-4 md:text-left md:mb-0`}
-          >
-            <Button
-              onClick={router.back}
-              className="px-10 py-2 mt-4"
-              color="main"
+  if (episode)
+    return (
+      <>
+        <Section flex className="bg-light ">
+          <div className="md:px-20 py-6 w-full">
+            <div
+              className={`${
+                nextEpisode ? "text-center" : "text-left ml-6"
+              } mb-4 md:text-left md:mb-0`}
             >
-              {DATA.backButtonText}
-            </Button>
-            {nextEpisode ? (
               <Button
-                onClick={() => router.push(nextEpisode)}
-                className="ml-2 px-6 py-2 mt-4"
-                color="primary"
+                onClick={router.back}
+                className="px-10 py-2 mt-4"
+                color="main"
               >
-                {DATA.nextEpisodeButton}
+                {DATA.backButtonText}
               </Button>
-            ) : null}
-          </div>
-          <div className="flex flex-col-reverse xl:flex-row flex-wrap justify-around mx-10 mb-10 mt-4 xl:mt-0">
-            <div className="flex flex-col mt-12 lg:max-w-[40vw]">
-              <h2 className="text-2xl font-bold">{episode.episodeName}</h2>
-              <div className="mb-8 font-light">
-                Season {episode.seasonNumber} | Episode {episode.episodeNumber}{" "}
-                {isClip ? `| Clip ${episode.uuid.split("_")[1]}` : null}
-              </div>
-
-              <div className="xl:max-w-lg">{episode.blurb}</div>
-
-              {episode.podcastLinks?.length ? (
-                <Socials socials={episode.podcastLinks} />
+              {nextEpisode ? (
+                <Button
+                  onClick={() => router.push(nextEpisode)}
+                  className="ml-2 px-6 py-2 mt-4"
+                  color="primary"
+                >
+                  {DATA.nextEpisodeButton}
+                </Button>
               ) : null}
             </div>
-
-            <div className="video-responsive m-auto">
-              <iframe
-                className="block sm:hidden"
-                width="280"
-                height="157"
-                src={`https://www.youtube.com/embed/${
-                  episode.url.split("/")[3]
-                }`}
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              ></iframe>
-              <iframe
-                className="hidden sm:block"
-                width="560"
-                height="315"
-                src={`https://www.youtube.com/embed/${
-                  episode.url.split("/")[3]
-                }`}
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              ></iframe>
-            </div>
-          </div>
-        </div>
-      </Section>
-      {/* If you check length it doesn't display, otherwise it renders too many of same. */}
-      {episode.details
-        ? episode.details.featuredGuests?.map((guest, idx) => {
-            const isOdd = idx % 2;
-            return (
-              <Section
-                key={`featured-guest-${guest.name}-${idx}`}
-                className="overflow-hidden bg-gray-50 sm:grid sm:grid-cols-2"
-              >
-                {!isOdd ? (
-                  <Image
-                    alt={`guest ${guest.name} picture`}
-                    src={guest.image}
-                    className="h-56 w-full object-cover sm:h-full"
-                    height={1000}
-                    width={1000}
-                    quality={100}
-                  />
-                ) : null}
-                <div className="p-8 md:p-12 lg:px-16 lg:py-24 h-[500px]">
-                  <div className="mx-auto max-w-xl text-center sm:text-left">
-                    <h2 className="text-xl font-bold text-gray-900 md:text-2xl mb-6">
-                      {guest.name}
-                    </h2>
-                    <p className="text-gray-500 md:mt-4">{guest.about}</p>
-                    <div className="border-b-[.5px] border-black my-4" />
-                    <p className="italic font-thin">{guest.title}</p>
-
-                    <div className="mt-6 md:mt-12">
-                      <a
-                        href={guest.url}
-                        target="_blank"
-                        className="inline-block rounded bg-primary px-12 py-3 text-sm font-medium text-white transition hover:bg-primary/70"
-                      >
-                        {DATA.featuredGuestButtonText}
-                      </a>
-                    </div>
-                  </div>
+            <div className="flex flex-col-reverse xl:flex-row flex-wrap justify-around mx-10 mb-10 mt-4 xl:mt-0">
+              <div className="flex flex-col mt-12 lg:max-w-[40vw]">
+                <h2 className="text-2xl font-bold">{episode.episodeName}</h2>
+                <div className="mb-8 font-light">
+                  Season {episode.seasonNumber} | Episode{" "}
+                  {episode.episodeNumber}{" "}
+                  {isClip ? `| Clip ${episode.uuid.split("_")[1]}` : null}
                 </div>
 
-                {isOdd ? (
-                  <Image
-                    alt={`guest ${guest.name} picture`}
-                    src={guest.image}
-                    className="h-56 w-full object-cover sm:h-full"
-                    height={1000}
-                    width={1000}
-                    quality={100}
-                  />
-                ) : null}
-              </Section>
-            );
-          })
-        : null}
-      {!isClip && episode.details ? (
-        <Section className="mx-6 md:mx-20 mt-8">
-          <SectionHeading className="text-right">
-            {DATA.aboutThisEpisodeHeader}
-          </SectionHeading>
+                <div className="xl:max-w-lg">{episode.blurb}</div>
 
-          {episode.details?.links ? (
-            <div className="mt-8">
-              <div key={`episode description `} className="mt-4">
-                {episode.details.description}
+                {episode.podcastLinks?.length ? (
+                  <Socials socials={episode.podcastLinks} />
+                ) : null}
+              </div>
+
+              <div className="video-responsive m-auto">
+                <iframe
+                  className="block sm:hidden"
+                  width="280"
+                  height="157"
+                  src={`https://www.youtube.com/embed/${
+                    episode.url.split("/")[3]
+                  }`}
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                ></iframe>
+                <iframe
+                  className="hidden sm:block"
+                  width="560"
+                  height="315"
+                  src={`https://www.youtube.com/embed/${
+                    episode.url.split("/")[3]
+                  }`}
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                ></iframe>
               </div>
             </div>
-          ) : null}
-
-          {episode.details?.hashtags?.length ? (
-            <div className="mt-8 italic font-thin">
-              {data.episodeDetails[0]?.hashtags.map((ht) => `#${ht} `)}
-            </div>
-          ) : null}
+          </div>
         </Section>
-      ) : null}
-      {!isClip && episode.details ? (
-        <Section className="mx-6 md:mx-20 mt-8">
-          <SectionHeading className="text-right">
-            {DATA.importantLinksHeader}
-          </SectionHeading>
+        {/* If you check length it doesn't display, otherwise it renders too many of same. */}
+        {episode.details
+          ? episode.details.featuredGuests?.map((guest, idx) => {
+              const isOdd = idx % 2;
+              return (
+                <Section
+                  key={`featured-guest-${guest.name}-${idx}`}
+                  className=" justify-items-center overflow-hidden bg-gray-50 sm:grid sm:grid-cols-2"
+                >
+                  {!isOdd ? (
+                    <Image
+                      alt={`guest ${guest.name} picture`}
+                      src={guest.image}
+                      className="  object-cover  sm:h-full"
+                      fit
+                      height={500}
+                      width={500}
+                      quality={100}
+                    />
+                  ) : null}
+                  <div className="p-8 md:p-12 lg:px-16 lg:py-24 h-[500px]">
+                    <div className="mx-auto max-w-xl text-center sm:text-left">
+                      <h2 className="text-xl font-bold text-gray-900 md:text-2xl mb-6">
+                        {guest.name}
+                      </h2>
+                      <p className="text-gray-500 md:mt-4">{guest.about}</p>
+                      <div className="border-b-[.5px] border-black my-4" />
+                      <p className="italic font-thin">{guest.title}</p>
 
-          <div className=" mt-8  break-words">
-            {episode.details.links?.map(
-              ({ text, linkText, linkUrl, secondaryText = "" }, idx) => {
-                if (!text || !linkUrl) {
-                  return null;
-                }
+                      <div className="mt-6 md:mt-12">
+                        <a
+                          href={guest.url}
+                          target="_blank"
+                          className="inline-block rounded bg-primary px-12 py-3 text-sm font-medium text-white transition hover:bg-primary/70"
+                        >
+                          {DATA.featuredGuestButtonText}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
 
-                return (
-                  <div
-                    key={`episode-link-${idx}`}
-                    className="underline mb-4 md:flex-wrap md:w-max"
-                  >
-                    <Link href={linkUrl}>{text}</Link>
+                  {isOdd ? (
+                    <Image
+                      alt={`guest ${guest.name} picture`}
+                      src={guest.image}
+                      className="object-cover  sm:h-full"
+                      height={500}
+                      width={500}
+                      quality={100}
+                    />
+                  ) : null}
+                </Section>
+              );
+            })
+          : null}
+        {!isClip && episode.details ? (
+          <Section className="mx-6 md:mx-20 mt-8">
+            <SectionHeading className="text-right">
+              {DATA.aboutThisEpisodeHeader}
+            </SectionHeading>
 
-                    {/* <a
+            {episode.details?.links ? (
+              <div className="mt-8">
+                <div key={`episode description `} className="mt-4">
+                  {episode.details.description}
+                </div>
+              </div>
+            ) : null}
+
+            {episode.details?.hashtags?.length ? (
+              <div className="mt-8 italic font-thin">
+                {data.episodeDetails[0]?.hashtags.map((ht) => `#${ht} `)}
+              </div>
+            ) : null}
+          </Section>
+        ) : null}
+        {!isClip && episode.details ? (
+          <Section className="mx-6 md:mx-20 mt-8">
+            <SectionHeading className="text-right">
+              {DATA.importantLinksHeader}
+            </SectionHeading>
+
+            <div className=" mt-8  break-words">
+              {episode.details.links?.map(
+                ({ text, linkText, linkUrl, secondaryText = "" }, idx) => {
+                  if (!text || !linkUrl) {
+                    return null;
+                  }
+
+                  return (
+                    <div
+                      key={`episode-link-${idx}`}
+                      className="underline mb-4 md:flex-wrap md:w-max"
+                    >
+                      <Link href={linkUrl}>{text}</Link>
+
+                      {/* <a
                       className="hover:text-primary"
                       target="_blank"
                       href={linkUrl}
@@ -271,69 +273,69 @@ url,
                       {linkText || linkUrl}
                     </a>{" "}
                     {secondaryText} */}
-                  </div>
-                );
+                    </div>
+                  );
+                }
+              )}
+            </div>
+          </Section>
+        ) : null}
+        {episode.sponsors.length ? (
+          <Section
+            className={`flex flex-row flex-wrap items-center justify-center mt-20 mx-6 md:mx-20 `}
+          >
+            {episode.sponsors.map((sponsorUUID, idx) => {
+              const sponsor = SPONSORS.filter((s) => s.uuid === sponsorUUID)[0];
+              if (!sponsor) {
+                return null;
               }
-            )}
-          </div>
-        </Section>
-      ) : null}
-      {episode.sponsors.length ? (
-        <Section
-          className={`flex flex-row flex-wrap items-center justify-center mt-20 mx-6 md:mx-20 `}
-        >
-          {episode.sponsors.map((sponsorUUID, idx) => {
-            const sponsor = SPONSORS.filter((s) => s.uuid === sponsorUUID)[0];
-            if (!sponsor) {
-              return null;
-            }
 
-            const { name, uuid, imgUrl, imgAlt, bgColor } = sponsor;
+              const { name, uuid, imgUrl, imgAlt, bgColor } = sponsor;
 
-            return (
-              <Link
-                key={`sponsor-${name}`}
-                href={`/sponsors/${uuid}`}
-                className="m-3 lg:m-6"
-              >
-                <div
-                  className={`${
-                    bgColor || ""
-                  } w-[250px] max-h-[150px] overflow-hidden`}
+              return (
+                <Link
+                  key={`sponsor-${name}`}
+                  href={`/sponsors/${uuid}`}
+                  className="m-3 lg:m-6"
                 >
-                  <Image
-                    src={imgUrl}
-                    alt={imgAlt}
-                    className="h-[150px] w-auto m-auto px-4"
-                    width={250}
-                    height={150}
-                    quality={100}
-                  />
-                </div>
-              </Link>
-            );
-          })}
-        </Section>
-      ) : null}
-      <Section className={`bg-main ${isClip ? "mt-0" : "mt-20"}`}>
-        <div className="p-8 md:p-12 lg:px-16 lg:py-24">
-          <div className="flex lg:mx-20 text-center md:text-left flex-col md:flex-row items-center">
-            <SectionHeading className="text-white text-2xl md:text-3xl w-full mb-4 sm:mb-0">
-              {CTA.header}
-            </SectionHeading>
+                  <div
+                    className={`${
+                      bgColor || ""
+                    } w-[250px] max-h-[150px] overflow-hidden`}
+                  >
+                    <Image
+                      src={imgUrl}
+                      alt={imgAlt}
+                      className="h-[150px] w-auto m-auto px-4"
+                      width={250}
+                      height={150}
+                      quality={100}
+                    />
+                  </div>
+                </Link>
+              );
+            })}
+          </Section>
+        ) : null}
+        <Section className={`bg-main ${isClip ? "mt-0" : "mt-20"}`}>
+          <div className="p-8 md:p-12 lg:px-16 lg:py-24">
+            <div className="flex lg:mx-20 text-center md:text-left flex-col md:flex-row items-center">
+              <SectionHeading className="text-white text-2xl md:text-3xl w-full mb-4 sm:mb-0">
+                {CTA.header}
+              </SectionHeading>
 
-            <Button
-              as="a"
-              color={"primary"}
-              href={CTA.buttonURL}
-              className="px-12 py-3 mt-4 md:mt-0"
-            >
-              {CTA.buttonText}
-            </Button>
+              <Button
+                as="a"
+                color={"primary"}
+                href={CTA.buttonURL}
+                className="px-12 py-3 mt-4 md:mt-0"
+              >
+                {CTA.buttonText}
+              </Button>
+            </div>
           </div>
-        </div>
-      </Section>
-    </>
-  );
+        </Section>
+      </>
+    );
 };
 export default PodcastDetailsPageComponent;
