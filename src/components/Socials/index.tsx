@@ -18,8 +18,8 @@ import { Section } from "components/shared";
 
 const getLogo = (socialName: string) => {
   // This also handles podcast links, ignore param name lol
-
-  switch (socialName) {
+  // toLowerCase in case they use UPPER on podcast names lol.
+  switch (socialName.toLowerCase()) {
     case "apple":
       return icons.apple.src;
     case "spotify":

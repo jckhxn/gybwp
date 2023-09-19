@@ -178,7 +178,7 @@ url,
                   key={`featured-guest-${guest.name}-${idx}`}
                   className=" justify-items-center overflow-hidden bg-gray-50 sm:grid sm:grid-cols-2"
                 >
-                  {!isOdd ? (
+                  {!isOdd && guest.image ? (
                     <Image
                       alt={`guest ${guest.name} picture`}
                       src={guest.image}
@@ -280,7 +280,7 @@ url,
             </div>
           </Section>
         ) : null}
-        {episode.sponsors.length ? (
+        {episode.sponsors?.length ? (
           <Section
             className={`flex flex-row flex-wrap items-center justify-center mt-20 mx-6 md:mx-20 `}
           >
