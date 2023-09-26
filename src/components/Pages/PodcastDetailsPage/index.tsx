@@ -24,7 +24,7 @@ const client = createClient({
   dataset: "production",
   apiVersion: "2023-08-22",
 
-  useCdn: true,
+  useCdn: false,
 });
 
 //
@@ -81,7 +81,6 @@ url,
   );
   useEffect(() => {
     if (!isLoading) {
-      // console.log(data.episodeDetails[0]);
       setEpisode(data.episodeDetails[0]);
       if (episode) {
         const nextEpisode = getNextEpisode(episode.uuid, episode);
@@ -230,7 +229,7 @@ url,
               {DATA.aboutThisEpisodeHeader}
             </SectionHeading>
 
-            {episode.details?.links ? (
+            {episode.details?.description ? (
               <div className="mt-8">
                 <div key={`episode description `} className="mt-4">
                   {episode.details.description}
@@ -245,7 +244,7 @@ url,
             ) : null}
           </Section>
         ) : null}
-        {!isClip && episode.details ? (
+        {!isClip && episode.links ? (
           <Section className="mx-6 md:mx-20 mt-8">
             <SectionHeading className="text-right">
               {DATA.importantLinksHeader}
