@@ -223,48 +223,52 @@ url,
               );
             })
           : null}
-        {!isClip && episode.details ? (
-          <Section className="mx-6 md:mx-20 mt-8">
-            <SectionHeading className="text-right">
-              {DATA.aboutThisEpisodeHeader}
-            </SectionHeading>
+        <Section className="bg-light ">
+          {!isClip && episode.details ? (
+            <Section className=" mx-6 py-5 md:mx-20 mt-8 ">
+              <SectionHeading className="text-left  ">
+                {DATA.aboutThisEpisodeHeader}
+              </SectionHeading>
 
-            {episode.details?.description ? (
-              <div className="mt-8">
-                <div key={`episode description `} className="mt-4">
-                  {episode.details.description}
+              {episode.details?.description ? (
+                <div className="mt-8 ">
+                  <div
+                    key={`episode description `}
+                    className="text-gray-500 max-w-xl  md:mt-4  "
+                  >
+                    {episode.details.description}
+                  </div>
                 </div>
-              </div>
-            ) : null}
+              ) : null}
 
-            {episode.details?.hashtags?.length ? (
-              <div className="mt-8 italic font-thin">
-                {data.episodeDetails[0]?.hashtags.map((ht) => `#${ht} `)}
-              </div>
-            ) : null}
-          </Section>
-        ) : null}
-        {!isClip && episode.links ? (
-          <Section className="mx-6 md:mx-20 mt-8">
-            <SectionHeading className="text-right">
-              {DATA.importantLinksHeader}
-            </SectionHeading>
+              {episode.details?.hashtags?.length ? (
+                <div className="mt-8 italic font-thin">
+                  {data.episodeDetails[0]?.hashtags.map((ht) => `#${ht} `)}
+                </div>
+              ) : null}
+            </Section>
+          ) : null}
+          {!isClip && episode.links ? (
+            <Section className="mx-6 md:mx-20 mt-8">
+              <SectionHeading className="text-right">
+                {DATA.importantLinksHeader}
+              </SectionHeading>
 
-            <div className=" mt-8  break-words">
-              {episode.details.links?.map(
-                ({ text, linkText, linkUrl, secondaryText = "" }, idx) => {
-                  if (!text || !linkUrl) {
-                    return null;
-                  }
+              <div className=" mt-8  break-words">
+                {episode.details.links?.map(
+                  ({ text, linkText, linkUrl, secondaryText = "" }, idx) => {
+                    if (!text || !linkUrl) {
+                      return null;
+                    }
 
-                  return (
-                    <div
-                      key={`episode-link-${idx}`}
-                      className="underline mb-4 md:flex-wrap md:w-max"
-                    >
-                      <Link href={linkUrl}>{text}</Link>
+                    return (
+                      <div
+                        key={`episode-link-${idx}`}
+                        className="underline mb-4 md:flex-wrap md:w-max"
+                      >
+                        <Link href={linkUrl}>{text}</Link>
 
-                      {/* <a
+                        {/* <a
                       className="hover:text-primary"
                       target="_blank"
                       href={linkUrl}
@@ -272,13 +276,14 @@ url,
                       {linkText || linkUrl}
                     </a>{" "}
                     {secondaryText} */}
-                    </div>
-                  );
-                }
-              )}
-            </div>
-          </Section>
-        ) : null}
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            </Section>
+          ) : null}
+        </Section>
         {episode.sponsors?.length ? (
           <Section
             className={`flex flex-row flex-wrap items-center justify-center mt-20 mx-6 md:mx-20 `}
