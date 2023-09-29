@@ -223,10 +223,10 @@ url,
               );
             })
           : null}
-        <Section className="bg-light  ">
+        <Section className="bg-light flex  justify-center items-center ">
           {!isClip && episode.details ? (
-            <Section className=" mx-6 py-5 md:mx-20 mt-8 ">
-              <SectionHeading className="text-left  ">
+            <Section className=" text-center mx-6 py-5 md:mx-20 mt-8 ">
+              <SectionHeading className="  ">
                 {DATA.aboutThisEpisodeHeader}
               </SectionHeading>
 
