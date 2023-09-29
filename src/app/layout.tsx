@@ -22,6 +22,12 @@ import type { AppProps } from "next/app";
 //
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Growing Your Business With People.",
+  description: "Growing Your Business With People! podcast",
+};
 
 type Component = NextComponentType & {
   Layout?: React.FC & { background?: string };
