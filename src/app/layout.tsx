@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { usePathname } from "next/navigation";
 
@@ -43,7 +42,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const Layout = DefaultLayout;
-  const pathname = usePathname();
 
   return (
     <>
