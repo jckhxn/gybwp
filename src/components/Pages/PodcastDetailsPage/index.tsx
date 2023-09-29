@@ -223,7 +223,7 @@ url,
               );
             })
           : null}
-        <Section className="bg-light ">
+        <Section className="bg-light  ">
           {!isClip && episode.details ? (
             <Section className=" mx-6 py-5 md:mx-20 mt-8 ">
               <SectionHeading className="text-left  ">
@@ -234,7 +234,7 @@ url,
                 <div className="mt-8 ">
                   <div
                     key={`episode description `}
-                    className="text-gray-500 max-w-xl  md:mt-4  "
+                    className="text-gray-500 max-w-xl  text-center md:mt-4  "
                   >
                     {episode.details.description}
                   </div>
