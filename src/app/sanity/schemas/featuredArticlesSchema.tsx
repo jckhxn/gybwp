@@ -29,6 +29,12 @@ const featuredArticle = {
     },
     {
       // Date of the Article
+      name: "image",
+      title: "Image of Article ",
+      type: "string",
+    },
+    {
+      // Date of the Article
       name: "date",
       title: "Date of Article ",
       type: "string",
