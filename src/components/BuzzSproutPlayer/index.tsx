@@ -1,8 +1,8 @@
 import React from "react";
 
-export const BuzzSproutPlayer = (podcast: string, lg: boolean) => {
+export const BuzzSproutPlayer = ({ podcast, lg }) => {
   const podcastSrc = `${podcast}?client_source=small_player&amp;iframe=true&amp;referrer=https%3A%2F%2Fwww.buzzsprout.com%2F2255489.js%3Fcontainer_id%3Dbuzzsprout-small-player%26player%3Dsmall\``;
-
+  console.log(lg);
   return (
     <>
       <div className="episode flex justify-center items-center mt-4">

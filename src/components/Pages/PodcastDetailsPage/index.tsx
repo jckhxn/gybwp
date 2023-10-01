@@ -170,7 +170,9 @@ url,
                 {episode.podcastLinks?.map((links) => {
                   {
                     if (links.name.includes("buzzsprout")) {
-                      return <BuzzSproutPlayer podcast={links.link} />;
+                      return (
+                        <BuzzSproutPlayer lg={false} podcast={links.link} />
+                      );
                     }
                   }
                 })}
