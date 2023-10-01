@@ -2,7 +2,7 @@ export const ABOUT_INFO = {
   header: "ABOUT THE PODCAST",
   features: [
     {
-      title: "",
+      title: "Our Mission",
       description: [
         "The podcast covers a variety of topics that help CEOs and senior leaders grow their business with their biggest and most important investment - People.",
         " I interview Fortune 100 CEOs, Startup and Mid-market business leaders, International Best-selling Authors, TedX Speakers, Technologists, Industry Innovators and Thought Leaders. ",

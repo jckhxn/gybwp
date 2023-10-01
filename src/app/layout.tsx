@@ -24,8 +24,8 @@ import type { AppProps } from "next/app";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Growing Your Business With People.",
-  description: "Growing Your Business With People! podcast",
+  title: "Growing Your Business With People",
+  description: "Growing Your Business With People Podcast",
 };
 
 type Component = NextComponentType & {
@@ -51,6 +51,7 @@ export default function RootLayout({
             <main className={openSans.className}>
               <Header />
               {children}
+
               <Footer />
             </main>
           </Layout>

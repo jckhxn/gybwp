@@ -12,6 +12,7 @@ import Dropdown from "components/Dropdown";
 // copy
 import { HERO, PODCAST, CTA, useGetEpisodesBySeason } from "./static-data";
 import Slider from "components/Slider";
+import { BuzzSproutPlayer } from "components/BuzzSproutPlayer";
 
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState(PODCAST.length);
@@ -56,10 +57,13 @@ const HomePageComponent = () => {
           loading="eager"
           alt="Main Page Hero"
           src={heroImage}
-          className="h-full w-full object-cover sm:h-[calc(100%_-_2rem)] sm:w-auto sm:self-end sm:rounded-ss-[30px] md:h-[calc(100%_-_4rem)] md:w-auto md:rounded-ss-[60px]"
+          className="h-full w-full  object-cover sm:h-[calc(100%_-_2rem)] sm:w-auto sm:self-end sm:rounded-ss-[30px] md:h-[calc(100%_-_4rem)] md:w-auto md:rounded-ss-[60px]"
         />
       </Section>
-
+      {/* Large Podcast Playa */}
+      <Section className="">
+        <BuzzSproutPlayer lg />
+      </Section>
       {/* EPISODES */}
       <Section className="mt-8 mb-12 py-8 px-4 overflow-x-hidden h-[700px]">
         <div className="flex gap-8 justify-between mt-8 mx-8 md:mx-[10vw]">

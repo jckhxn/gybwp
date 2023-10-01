@@ -69,6 +69,7 @@ const Socials = ({
     <Section className={`flex flex-row mt-8 ${passedClasses}`}>
       {[
         ...socials,
+
         {
           name: "more",
           link: "https://www.buzzsprout.com/2057493/share",
