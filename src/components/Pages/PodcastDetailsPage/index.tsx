@@ -11,6 +11,9 @@ import Button from "components/Button";
 import Socials from "components/Socials";
 import Link from "next/link";
 
+// BuzzSprout Player
+import { BuzzSproutPlayer } from "components/BuzzSproutPlayer";
+
 // copy
 import { episodeType } from "components/Pages/HomePage/episode-data";
 import { DATA, CTA, getEpisode, getNextEpisode } from "./static-data";
@@ -164,6 +167,13 @@ url,
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                 ></iframe>
+                {episode.podcastLinks?.map((links) => {
+                  {
+                    if (links.name.includes("buzzsprout")) {
+                      return <BuzzSproutPlayer podcast={links.link} />;
+                    }
+                  }
+                })}
               </div>
             </div>
           </div>
@@ -234,7 +244,7 @@ url,
                 <div className="mt-8 ">
                   <div
                     key={`episode description `}
-                    className="text-gray-500 max-w-xl  text-center md:mt-4  "
+                    className="text-gray-500  text-center  md:mt-4  "
                   >
                     {episode.details.description}
                   </div>

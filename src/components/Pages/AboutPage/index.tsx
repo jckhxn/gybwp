@@ -12,29 +12,31 @@ import Link from "next/link";
 //
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
-  // Design Ideas
-  //  Section One About The Podcast, width of page
-  //  Section Two CEO Msg, Article on the right 
+// Design Ideas
+//  Section One About The Podcast, width of page
+//  Section Two CEO Msg, Article on the right
 const AboutPageComponent = () => {
   return (
     <>
       {/* INFORMATION */}
-      <Section className="px-6 md:px-20">
+      <Section className="bg-light px-6 md:px-20">
         <div className="max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
-          <div className="max-w-xl">
-            <h2 className="text-3xl font-light sm:text-4xl">
+          <div className="flex justify-center items-center">
+            <h2 className=" text-3xl font-light sm:text-4xl">
               {ABOUT_INFO.header}
             </h2>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-8 md:mt-16 md:grid-cols-2 md:gap-12">
+          <div className=" mt-8  md:mt-16 md:grid-cols-2 md:gap-12">
             {ABOUT_INFO.features.map(({ title, description, article }, idx) => (
               <div
                 key={`about-feature-${idx}`}
-                className="flex items-start gap-4"
+                className=" flex items-start gap-4"
               >
                 <div>
-                  <h2 className="text-lg font-bold">{title}</h2>
+                  <h2 className=" flex justify-center items-center text-2xl font-bold">
+                    {title}
+                  </h2>
                   {article ? (
                     <>
                       <Link href={article.link}>
@@ -52,10 +54,12 @@ const AboutPageComponent = () => {
                       </h1>
                     </>
                   ) : null}
-                  <div className="mt-1 text-sm text-gray-700">
-                    {description.map((d, idx) => (
-                      <p key={`description-${idx}`}>{d}</p>
-                    ))}
+                  <div className="flex justify-center items-center  mb-20 ">
+                    <div className=" mt-1 text-md w-4/5  text-gray-800 ">
+                      {description.map((d, idx) => (
+                        <p key={`description-${idx}`}>{d}</p>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>

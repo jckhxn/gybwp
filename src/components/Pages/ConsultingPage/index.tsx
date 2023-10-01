@@ -68,7 +68,7 @@ const ConsultingPageComponent = () => {
   return (
     <>
       {/* INFORMATION */}
-      <Section className="px-6 md:px-20">
+      <Section className="bg-light px-6 md:px-20">
         <div className="flex justify-center items-center ">
           <Image
             alt="Consulting Graphic"
@@ -79,7 +79,7 @@ const ConsultingPageComponent = () => {
           />
         </div>
         <div className="max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
-          <div className="max-w-xl">
+          <div className="flex justify-center items-center ">
             <h2 className="text-3xl font-light sm:text-4xl">
               {CONSULTING_INFO.header}
             </h2>
@@ -93,7 +93,7 @@ const ConsultingPageComponent = () => {
               >
                 <div>
                   <h2 className="text-lg font-bold">{title}</h2>
-                  <div className="mt-1 text-sm text-gray-700">
+                  <div className="mt-1 text-md text-gray-700">
                     {description.map((d, idx) => (
                       <p key={`description-${idx}`}>{d}</p>
                     ))}
@@ -120,7 +120,7 @@ const ConsultingPageComponent = () => {
       </Section>
 
       {/* LEFT-IMAGE CTA */}
-      <Section className="overflow-hidden bg-gray-50 sm:grid sm:grid-cols-2">
+      <Section className="overflow-hidden bg-light sm:grid sm:grid-cols-2">
         <Image
           alt=""
           src={LEFT_IMAGE_CTA.img}
@@ -163,7 +163,7 @@ const ConsultingPageComponent = () => {
       </Section>
 
       {/* RIGHT-IMAGE CTA */}
-      <Section className="overflow-hidden bg-gray-50 sm:grid sm:grid-cols-2">
+      <Section className="overflow-hidden bg-light sm:grid sm:grid-cols-2">
         <div className="p-8 self-center md:p-12 lg:px-16 lg:py-24 ">
           <div className="mx-auto max-w-xl text-left sm:text-left">
             <h2 className="text-xl font-bold text-gray-900 md:text-2xl mt-4 md:mt-0 mb-6">
