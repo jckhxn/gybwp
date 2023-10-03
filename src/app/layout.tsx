@@ -24,6 +24,7 @@ import type { AppProps } from "next/app";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://gybwp.com"),
   title: "Growing Your Business With People",
   description: "Growing Your Business With People Podcast",
 };
