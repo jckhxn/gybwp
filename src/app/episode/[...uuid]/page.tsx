@@ -15,15 +15,15 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 
   return {
     title: episodeDetails.episodeName,
-    description: episodeDetails.description,
+    description: episodeDetails.blurb,
     openGraph: {
       title: episodeDetails.episodeName,
-      description: episodeDetails.description,
+      description: episodeDetails.blurb,
       images: [
         {
           url: episodeDetails.image,
-          width: 800,
-          height: 600,
+          width: 1200,
+          height: 630,
         },
       ],
     },

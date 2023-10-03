@@ -13,7 +13,7 @@ export async function getEpisodeDetails(uuid: Params) {
   return client.fetch(
     groq`*[_type == "episode" && uuid == "${uuid}"]{
       episodeName,
-      description,
+      blurb,
       image
     }`
   );
