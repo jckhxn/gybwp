@@ -11,6 +11,10 @@ interface Params {
 }
 export async function getEpisodeDetails(uuid: Params) {
   return client.fetch(
-    groq`*[_type == "episode" && uuid == "${uuid}"]{episodeName}`
+    groq`*[_type == "episode" && uuid == "${uuid}"]{
+      episodeName,
+      description,
+      image
+    }`
   );
 }
