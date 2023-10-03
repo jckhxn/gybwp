@@ -22,6 +22,7 @@ import { SPONSORS } from "components/Pages/SponsorsPage/static-data";
 // SWR
 import useSWR from "swr";
 import { groq, createClient } from "next-sanity";
+
 const client = createClient({
   projectId: "hxymd1na",
   dataset: "production",
@@ -246,7 +247,7 @@ url,
                 <div className="mt-8 ">
                   <div
                     key={`episode description `}
-                    className="text-gray-500  text-center  md:mt-4  "
+                    className="text-gray-500  whitespace-break-spaces   md:mt-4  "
                   >
                     {episode.details.description}
                   </div>

@@ -121,7 +121,13 @@ const Slider: React.FC<{ items?: any[]; activeSeason: number }> = ({
               key={`carousel-item-${idx}`}
               className="bg-white border border-gray-200 w-[250px] mr-[40px] h-[400px]"
             >
-              <Link href={`/episode/${uuid}`} className="bg-main group">
+              <Link
+                href={{
+                  pathname: `/episode/${uuid}`,
+                  query: { episodeName, uuid },
+                }}
+                className="bg-main group"
+              >
                 <Image
                   src={image || ""}
                   alt={episodeName}
