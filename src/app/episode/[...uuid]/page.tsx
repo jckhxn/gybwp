@@ -12,8 +12,21 @@ type Props = {
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const { params } = props;
   const [episodeDetails] = await getEpisodeDetails(params.uuid);
+
   return {
     title: episodeDetails.episodeName,
+    description: episodeDetails.description,
+    openGraph: {
+      title: episodeDetails.episodeName,
+      description: episodeDetails.description,
+      images: [
+        {
+          url: episodeDetails.image,
+          width: 800,
+          height: 600,
+        },
+      ],
+    },
   };
 };
 export default function page() {
