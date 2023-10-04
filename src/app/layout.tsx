@@ -25,7 +25,10 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gybwp.com"),
-  title: "Growing Your Business With People",
+  title: {
+    default: "Growing Your Business With People",
+    template: `%s | Growing Your Business With People`,
+  },
   description: "Growing Your Business With People Podcast",
   openGraph: {
     title: "Growing Your Business With People",

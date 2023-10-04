@@ -34,6 +34,8 @@ const getLogo = (socialName: string) => {
       return icons.linkedin.src;
     case "instagram":
       return icons.instagram.src;
+    case "buzzsprout":
+      return icons.buzzsprout.src;
     case "more":
       return icons.more.src;
   }

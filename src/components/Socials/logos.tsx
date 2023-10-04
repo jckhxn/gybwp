@@ -1,4 +1,5 @@
 import home from "public/social-logos/home.png";
+import buzzsprout from "public/social-logos/buzzsprout.png";
 import facebook from "public/social-logos/facebook.png";
 import instagram from "public/social-logos/instagram.png";
 import linkedin from "public/social-logos/linkedin.png";
@@ -11,6 +12,7 @@ import more from "public/social-logos/more.png";
 
 export {
   home,
+  buzzsprout,
   facebook,
   instagram,
   linkedin,
