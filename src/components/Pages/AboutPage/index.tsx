@@ -19,7 +19,7 @@ const AboutPageComponent = () => {
   return (
     <>
       {/* INFORMATION */}
-      <Section className="bg-light px-6 md:px-20">
+      <Section className="flex justify-center items-center bg-light px-6 md:px-20">
         <div className="max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8">
           <div className="flex justify-center items-center">
             <h2 className=" text-3xl font-light sm:text-4xl">

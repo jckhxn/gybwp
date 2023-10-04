@@ -68,7 +68,7 @@ const ConsultingPageComponent = () => {
   return (
     <>
       {/* INFORMATION */}
-      <Section className="bg-light px-6 md:px-20">
+      <Section className="flex justify-center items-center bg-light px-6 md:px-20">
         <div className="flex justify-center items-center ">
           <Image
             alt="Consulting Graphic"
@@ -93,9 +93,11 @@ const ConsultingPageComponent = () => {
               >
                 <div>
                   <h2 className="text-lg font-bold">{title}</h2>
-                  <div className="mt-1 text-md text-gray-700">
+                  <div className="mt-1 text-md text-gray-700   ">
                     {description.map((d, idx) => (
-                      <p key={`description-${idx}`}>{d}</p>
+                      <ul className="list-disc" key={`description-${idx}`}>
+                        <li>{d}</li>
+                      </ul>
                     ))}
                   </div>
                 </div>
