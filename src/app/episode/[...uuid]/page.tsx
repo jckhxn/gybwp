@@ -20,6 +20,7 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
       openGraph: {
         title: episodeDetails.episodeName,
         description: episodeDetails.blurb,
+        image: episodeDetails.image,
         images: [
           {
             url: episodeDetails.image,
