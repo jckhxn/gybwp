@@ -21,6 +21,12 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
         title: episodeDetails.episodeName,
         description: episodeDetails.blurb,
         image: episodeDetails.image,
+        videos:[{
+        
+          url: "https://www.youtube.com/watch?v=y9bV8ypChms",
+          secureUrl:"https://www.youtube.com/embed/y9bV8ypChms",
+          type: "other"
+      }],
         images: [
           {
             url: episodeDetails.image,
