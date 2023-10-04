@@ -14,7 +14,8 @@ export async function getEpisodeDetails(uuid: Params) {
     groq`*[_type == "episode" && uuid == "${uuid}"]{
       episodeName,
       blurb,
-      image
+      image,
+      url,
     }`
   );
 }

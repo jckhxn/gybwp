@@ -30,13 +30,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Growing Your Business With People",
     description: "Growing Your Business With People Podcast",
-    // images: [
-    //   {
-    //     url: "https://gybwp.com/_next/image?url=/_next/static/media/main-page-hero.jpg",
-    //     width: 1200,
-    //     height: 630,
-    //   },
-    // ],
+    images: [
+      {
+        url: "",
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
 };
 
