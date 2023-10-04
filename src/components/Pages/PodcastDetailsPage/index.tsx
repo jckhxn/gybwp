@@ -22,7 +22,6 @@ import { SPONSORS } from "components/Pages/SponsorsPage/static-data";
 // SWR
 import useSWR from "swr";
 import { groq, createClient } from "next-sanity";
-import ErrorPage from "../ErrorPage";
 
 const client = createClient({
   projectId: "hxymd1na",
