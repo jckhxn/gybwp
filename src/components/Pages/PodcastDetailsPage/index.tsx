@@ -22,6 +22,7 @@ import { SPONSORS } from "components/Pages/SponsorsPage/static-data";
 // SWR
 import useSWR from "swr";
 import { groq, createClient } from "next-sanity";
+import ErrorPage from "../ErrorPage";
 
 const client = createClient({
   projectId: "hxymd1na",
@@ -83,9 +84,16 @@ url,
 }`,
     (query) => client.fetch(query)
   );
+
   useEffect(() => {
     if (!isLoading) {
       setEpisode(data.episodeDetails[0]);
+
+      if (!data.episodeDetails.length) {
+        // Error Handling if Episode doesn't exist
+        throw new Error("No episode for this link.");
+      }
+
       if (episode) {
         const nextEpisode = getNextEpisode(episode.uuid, episode);
         if (nextEpisode) {
@@ -93,14 +101,11 @@ url,
         }
       }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, data, episode]);
 
-  if (!episode) {
-    return null;
-  }
-
-  const isClip = episode.uuid?.includes("_");
+  const isClip = episode?.uuid?.includes("_");
 
   if (episode)
     return (
@@ -355,4 +360,5 @@ url,
       </>
     );
 };
+
 export default PodcastDetailsPageComponent;

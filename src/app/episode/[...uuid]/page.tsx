@@ -13,22 +13,24 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const { params } = props;
   const [episodeDetails] = await getEpisodeDetails(params.uuid);
 
-  return {
-    title: episodeDetails.episodeName,
-    description: episodeDetails.blurb,
-    openGraph: {
+  if (episodeDetails)
+    return {
       title: episodeDetails.episodeName,
       description: episodeDetails.blurb,
-      images: [
-        {
-          url: episodeDetails.image,
-          width: 1200,
-          height: 630,
-        },
-      ],
-    },
-  };
+      openGraph: {
+        title: episodeDetails.episodeName,
+        description: episodeDetails.blurb,
+        images: [
+          {
+            url: episodeDetails.image,
+            width: 1200,
+            height: 630,
+          },
+        ],
+      },
+    };
 };
+
 export default function page() {
   return (
     <>
