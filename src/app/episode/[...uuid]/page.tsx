@@ -23,8 +23,10 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
         image: episodeDetails.image,
         videos: [
           {
-            url: "https://www.youtube.com/watch?v=y9bV8ypChms",
-            secureUrl: "https://www.youtube.com/embed/y9bV8ypChms",
+            url: episodeDetails.url,
+            secureUrl: `https://www.youtube.com/embed/${
+              episodeDetails.url.split("/")[3]
+            }`,
             type: "video.other",
           },
         ],
