@@ -105,7 +105,6 @@ url,
   }, [isLoading, data, episode]);
 
   const isClip = episode?.uuid?.includes("_");
-
   if (episode)
     return (
       <>
@@ -265,13 +264,15 @@ url,
               ) : null}
             </Section>
           ) : null}
-          {!isClip && episode.links ? (
-            <Section className="mx-6 md:mx-20 mt-8">
-              <SectionHeading className="text-right">
+        </Section>
+        <Section className="bg-light flex  justify-center items-center">
+          {!isClip && episode.details.links ? (
+            <Section className=" mx-6 md:mx-20 ">
+              <SectionHeading className="text-center">
                 {DATA.importantLinksHeader}
               </SectionHeading>
 
-              <div className=" mt-8  break-words">
+              <div className=" flex mt-4 justify-center items-center ">
                 {episode.details.links?.map(
                   ({ text, linkText, linkUrl, secondaryText = "" }, idx) => {
                     if (!text || !linkUrl) {
