@@ -16,7 +16,7 @@ export default function Error({
 
   return (
     <>
-      <ErrorPageComponent />;
+      <ErrorPageComponent />
     </>
   );
 }
