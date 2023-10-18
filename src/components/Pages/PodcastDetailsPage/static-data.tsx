@@ -14,7 +14,7 @@ export const DATA = {
   nextEpisodeButton: "Next Episode",
   featuredGuestButtonText: "Check them out",
   aboutThisEpisodeHeader: "About This Episode",
-  importantLinksHeader: "Important Links",
+  additionalContentHeader: "Additional Content",
 };
 
 export const CTA = {

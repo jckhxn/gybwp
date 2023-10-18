@@ -1,3 +1,5 @@
+import { link } from "fs";
+
 const episode = {
   name: "episode",
   title: "Episodes",
@@ -80,40 +82,67 @@ const episode = {
       type: "string",
     },
 
-    // {
-    //   // Additional Content
-    //  I haven't implented this yet lol
-    //   name: "content",
-    //   title: "Episode Content",
-    //   type: "object",
-    //   fields: [
-    //     {
-    //       name: "files",
-    //       title: "Files",
-    //       type: "array",
-    //       of: [
-    //         {
-    //           type: "object",
-    //           fields: [
-    //             { name: "name", title: "File Name", type: "string" },
-    //             { name: "file", title: "Upload File", type: "file" },
-    //             {
-    //               name: "type",
-    //               title: "Type of File",
-    //               type: "string",
-    //               options: {
-    //                 list: [
-    //                   { title: "pdf", value: "pdf" },
-    //                   { title: "image", value: "image" },
-    //                 ],
-    //               },
-    //             },
-    //           ],
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // },
+    {
+      // Additional Content
+
+      name: "content",
+      title: "Episode Content",
+      type: "object",
+      fields: [
+        {
+          name: "files",
+          title: "File",
+          type: "array",
+          of: [
+            {
+              type: "object",
+              fields: [
+                {
+                  name: "type",
+                  title: "Select the Type of File",
+                  description:
+                    "Please select which type of content you are uploading",
+                  type: "string",
+                  options: {
+                    list: [
+                      { title: "link", value: "link" },
+                      { title: "pdf", value: "pdf" },
+                      { title: "image", value: "image" },
+                    ],
+                    layout: "radio",
+                  },
+                },
+
+                { name: "name", title: "File Name", type: "string" },
+                {
+                  name: "image",
+                  title: "Upload File",
+                  type: "image",
+                  // Only render for image & specifies type
+                  // @ts-ignore
+                  hidden: ({ parent }): boolean => parent?.type !== "image",
+                },
+                {
+                  name: "pdf",
+                  title: "Upload File",
+                  type: "file",
+                  // Only render for PDF & specifies type
+                  // @ts-ignore
+                  hidden: ({ parent }) => parent?.type !== "pdf",
+                },
+                {
+                  name: "link",
+                  title: "Web Link",
+                  type: "string",
+                  // @ts-ignore
+                  hidden: ({ parent }) => parent?.type !== "link",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
     {
       // Details
       name: "details",
@@ -154,21 +183,21 @@ const episode = {
           of: [{ type: "string" }],
         },
 
-        {
-          // Array of objects with text and linkUrl
-          name: "links",
-          title: "Episode Links",
-          type: "array",
-          of: [
-            {
-              type: "object",
-              fields: [
-                { name: "text", title: "Description of Link", type: "string" },
-                { name: "linkUrl", title: "Link", type: "url" },
-              ],
-            },
-          ],
-        },
+        // {
+        //   Old Episode Links Content stuff
+        //   name: "links",
+        //   title: "Episode Links",
+        //   type: "array",
+        //   of: [
+        //     {
+        //       type: "object",
+        //       fields: [
+        //         { name: "text", title: "Description of Link", type: "string" },
+        //         { name: "linkUrl", title: "Link", type: "url" },
+        //       ],
+        //     },
+        //   ],
+        // },
       ],
     },
   ],
