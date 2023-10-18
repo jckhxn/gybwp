@@ -113,7 +113,11 @@ const episode = {
                   },
                 },
 
-                { name: "name", title: "File Name", type: "string" },
+                {
+                  name: "name",
+                  title: "Name of Link/PDF/Image",
+                  type: "string",
+                },
                 {
                   name: "image",
                   title: "Upload File",
