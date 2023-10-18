@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // components
 import { Section } from "components/shared";
@@ -7,12 +7,41 @@ import Button from "components/Button";
 // copy
 import { PODCAST } from "components/Pages/HomePage/static-data";
 
+// SWR
+import useSWR from "swr";
+import { groq, createClient } from "next-sanity";
+import { seasonType } from "components/Pages/HomePage/episode-data";
+const client = createClient({
+  projectId: "hxymd1na",
+  dataset: "production",
+  apiVersion: "2023-08-22",
+
+  useCdn: true,
+});
+
+// Sort through the Sanity Season duplicates
+function getUniqueValuesWithSet(object) {
+  const uniqueValues = new Set();
+
+  for (const [key, value] of Object.entries(object)) {
+    uniqueValues.add(value);
+  }
+
+  return uniqueValues;
+}
+
 const Dropdown = ({
   setActiveSeason,
 }: {
   setActiveSeason: React.Dispatch<React.SetStateAction<number>>;
 }) => {
+  const { data, error, isLoading } = useSWR(
+    groq`{"seasonName":*[_type == "episode"].seasonName,"seasonNumber":array::unique(*[_type == "episode" ].seasonNumber)}`,
+    (query) => client.fetch(query)
+  );
+
   const [isOpen, setIsOpen] = useState(false);
+  const [podcast, setPodcast] = useState();
 
   const handleClick = (seasonNumber?: number) => {
     if (seasonNumber) {
@@ -20,6 +49,32 @@ const Dropdown = ({
     }
     setIsOpen(!isOpen);
   };
+
+  useEffect(() => {
+    if (!isLoading) {
+      // PODCAST is an array of seasons, seasons are objects with seasonName,seasonNumber.
+
+      // Take SeasonNames, make it a Set (to only have unique values)
+      // Transform into an Array.
+      // Take both Season Name & Number and make it an Object
+      // Put Object in podcasts
+      // Iterate in Dropdown Render.
+      const podcasts = [];
+
+      const uniqueSeasonsSet = getUniqueValuesWithSet(data.seasonName);
+      const uniqueSeasonsArray = Array.from(uniqueSeasonsSet);
+
+      for (let i = 0; i < uniqueSeasonsArray.length; i++) {
+        const podcast = {};
+
+        podcast.seasonName = uniqueSeasonsArray[i];
+        podcast.seasonNumber = data.seasonNumber[i];
+        podcasts.push(podcast);
+      }
+
+      setPodcast(podcasts);
+    }
+  }, [data]);
 
   return (
     <Section relative>
@@ -55,17 +110,19 @@ const Dropdown = ({
         <div className="z-50 absolute end-0 top-auto mt-2">
           <div className="w-40 min-w-fit rounded border border-gray-200 bg-white">
             <ul className="space-y-1 border-t border-gray-200 p-4">
-              {PODCAST.map(({ seasonName, seasonNumber }) => (
-                <li
-                  key={seasonName}
-                  className="hover:text-gray-700/75 cursor-pointer"
-                  onClick={() => handleClick(seasonNumber)}
-                >
-                  <label className="inline-flex items-center gap-2 cursor-pointer">
-                    {seasonName}
-                  </label>
-                </li>
-              ))}
+              {podcast?
+                
+                .map(({ seasonName, seasonNumber }: seasonType) => (
+                  <li
+                    key={seasonName}
+                    className="hover:text-gray-700/75 cursor-pointer"
+                    onClick={() => handleClick(seasonNumber)}
+                  >
+                    <label className="inline-flex items-center gap-2 cursor-pointer">
+                      {seasonName}
+                    </label>
+                  </li>
+                ))}
             </ul>
           </div>
         </div>

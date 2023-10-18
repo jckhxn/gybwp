@@ -54,8 +54,9 @@ export const getNextEpisode = (episode: string, episodes: [Object]) => {
   let episodeFound = false;
   let nextEpisodeUUID;
 
+  // This section needs to see if there's a UUID greater than the current one
   PODCAST.forEach((season) => {
-    season.episodes.forEach((e) => {
+    season?.episodes?.forEach((e) => {
       if (episodeFound) {
         nextEpisodeUUID = e.uuid;
         episodeFound = false;

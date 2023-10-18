@@ -1,6 +1,6 @@
 // @ts-nocheck
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // components
 import Image from "next/image";
 import { Section, SectionHeading } from "components/shared";
@@ -14,9 +14,42 @@ import { HERO, PODCAST, CTA, useGetEpisodesBySeason } from "./static-data";
 import Slider from "components/Slider";
 import { BuzzSproutPlayer } from "components/BuzzSproutPlayer";
 
-const HomePageComponent = () => {
-  const [activeSeason, setActiveSeason] = useState(PODCAST.length);
+// SWR
+import useSWR from "swr";
+import { groq, createClient } from "next-sanity";
+const client = createClient({
+  projectId: "hxymd1na",
+  dataset: "production",
+  apiVersion: "2023-08-22",
 
+  useCdn: true,
+});
+const HomePageComponent = () => {
+  const [activeSeason, setActiveSeason] = useState();
+
+  const { data, error, isLoading } = useSWR(
+    groq`*[seasonName match "Season *"] { 
+      seasonName
+    }`,
+    (query) => client.fetch(query)
+  );
+  useEffect(() => {
+    if (!isLoading) {
+      // Create a new Set object to store the unique values.
+      const set = new Set();
+
+      // Iterate over the array of objects and add the value of the specified property to the Set.
+      // @ts-ignore
+      data.forEach((object) => {
+        set.add(object["seasonName"]);
+      });
+
+      // Convert the Set object back to an array and return it.
+      // @ts-ignore
+
+      return setActiveSeason([...set].length);
+    }
+  }, [data]);
   return (
     <>
       {/* MAIN SECTION */}
@@ -68,7 +101,9 @@ const HomePageComponent = () => {
       <Section className="mt-8 mb-12 py-8 px-4 overflow-x-hidden h-[700px]">
         <div className="flex gap-8 justify-between mt-8 mx-8 md:mx-[10vw]">
           <div className="w-full mx-0">
-            <h1 className="leading-normal text-lg">{`Season ${activeSeason}`}</h1>
+            <h1 className="leading-normal text-lg">{`Season ${
+              activeSeason || ""
+            }`}</h1>
           </div>
 
           <Dropdown setActiveSeason={setActiveSeason} />
