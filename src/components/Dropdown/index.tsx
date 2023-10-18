@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from "react";
 
 // components
@@ -20,7 +21,7 @@ const client = createClient({
 });
 
 // Sort through the Sanity Season duplicates
-function getUniqueValuesWithSet(object) {
+function getUniqueValuesWithSet(object: seasonType) {
   const uniqueValues = new Set();
 
   for (const [key, value] of Object.entries(object)) {
@@ -74,7 +75,7 @@ const Dropdown = ({
 
       setPodcast(podcasts);
     }
-  }, [data]);
+  }, [data, isLoading]);
 
   return (
     <Section relative>
@@ -110,19 +111,17 @@ const Dropdown = ({
         <div className="z-50 absolute end-0 top-auto mt-2">
           <div className="w-40 min-w-fit rounded border border-gray-200 bg-white">
             <ul className="space-y-1 border-t border-gray-200 p-4">
-              {podcast?
-                
-                .map(({ seasonName, seasonNumber }: seasonType) => (
-                  <li
-                    key={seasonName}
-                    className="hover:text-gray-700/75 cursor-pointer"
-                    onClick={() => handleClick(seasonNumber)}
-                  >
-                    <label className="inline-flex items-center gap-2 cursor-pointer">
-                      {seasonName}
-                    </label>
-                  </li>
-                ))}
+              {podcast.map(({ seasonName, seasonNumber }: seasonType) => (
+                <li
+                  key={seasonName}
+                  className="hover:text-gray-700/75 cursor-pointer"
+                  onClick={() => handleClick(seasonNumber)}
+                >
+                  <label className="inline-flex items-center gap-2 cursor-pointer">
+                    {seasonName}
+                  </label>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
