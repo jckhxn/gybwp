@@ -183,21 +183,21 @@ const episode = {
           of: [{ type: "string" }],
         },
 
-        {
-          // Array of objects with text and linkUrl
-          name: "links",
-          title: "Episode Links",
-          type: "array",
-          of: [
-            {
-              type: "object",
-              fields: [
-                { name: "text", title: "Description of Link", type: "string" },
-                { name: "linkUrl", title: "Link", type: "url" },
-              ],
-            },
-          ],
-        },
+        // {
+        //   Old Episode Links Content stuff
+        //   name: "links",
+        //   title: "Episode Links",
+        //   type: "array",
+        //   of: [
+        //     {
+        //       type: "object",
+        //       fields: [
+        //         { name: "text", title: "Description of Link", type: "string" },
+        //         { name: "linkUrl", title: "Link", type: "url" },
+        //       ],
+        //     },
+        //   ],
+        // },
       ],
     },
   ],
