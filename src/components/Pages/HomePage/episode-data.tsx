@@ -40,9 +40,9 @@ export type episodeType = {
 };
 
 export type seasonType = {
-  seasonNumber: number;
-  seasonName: string;
-  episodes: episodeType[];
+  seasonNumber?: number;
+  seasonName?: string;
+  episodes?: episodeType[];
 };
 
 //

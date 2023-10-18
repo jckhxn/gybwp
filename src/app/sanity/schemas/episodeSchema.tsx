@@ -1,5 +1,5 @@
 const episode = {
-  name: "episode",  
+  name: "episode",
   title: "Episodes",
   type: "document",
   fields: [
