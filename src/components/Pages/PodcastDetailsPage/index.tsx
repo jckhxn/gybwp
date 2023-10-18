@@ -22,6 +22,7 @@ import { SPONSORS } from "components/Pages/SponsorsPage/static-data";
 // SWR
 import useSWR from "swr";
 import { groq, createClient } from "next-sanity";
+import { Content } from "components/Content";
 
 const client = createClient({
   projectId: "hxymd1na",
@@ -45,6 +46,7 @@ const PodcastDetailsPageComponent = () => {
   const [episode, setEpisode] = useState<compiledEpisodeType>();
   const [nextEpisode, setNextEpisode] = useState<string>();
 
+  let ImageCount = 0;
   const router = useRouter();
 
   const thisWindow =
@@ -56,6 +58,17 @@ const PodcastDetailsPageComponent = () => {
     groq`{ "episodes":*[_type == "episode"],"episodeDetails":*[_type == "episode"  && uuid == "${uuid}"]}{
       episodeDetails[]
 {
+  content
+  {
+    files[]
+    {
+      link,
+      name,
+      type,
+      "file":pdf.asset->url,
+      "image":image.asset->url,
+      }
+    },
 blurb,
 episodeName,
 episodeNumber,
@@ -265,36 +278,28 @@ url,
             </Section>
           ) : null}
         </Section>
-        <Section className="bg-light flex  justify-center items-center">
-          {!isClip && episode.details.links ? (
+        <Section className="bg-light flex justify-center items-center   ">
+          {!isClip && episode.content?.files ? (
             <Section className=" mx-6 md:mx-20 ">
               <SectionHeading className="text-center">
-                {DATA.importantLinksHeader}
+                {DATA.additionalContentHeader}
               </SectionHeading>
-
-              <div className=" flex mt-4 justify-center items-center ">
-                {episode.details.links?.map(
-                  ({ text, linkText, linkUrl, secondaryText = "" }, idx) => {
-                    if (!text || !linkUrl) {
-                      return null;
-                    }
-
+              {/* Creates a grid for Additional Content */}
+              <div className=" lg:grid place-items-center   auto-cols-auto text-center underline ">
+                {episode.content?.files?.map(
+                  ({ file, name, link, type, image }, idx) => {
                     return (
-                      <div
-                        key={`episode-link-${idx}`}
-                        className="underline mb-4 md:flex-wrap md:w-max"
-                      >
-                        <Link href={linkUrl}>{text}</Link>
-
-                        {/* <a
-                      className="hover:text-primary"
-                      target="_blank"
-                      href={linkUrl}
-                    >
-                      {linkText || linkUrl}
-                    </a>{" "}
-                    {secondaryText} */}
-                      </div>
+                      <>
+                        <Content
+                          key={`Content Item -${idx}`}
+                          file={file}
+                          name={name}
+                          link={link}
+                          type={type}
+                          image={image}
+                          ImageCount={ImageCount}
+                        />
+                      </>
                     );
                   }
                 )}
