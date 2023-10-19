@@ -1,7 +1,7 @@
 // @ts-nocheck
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import routes from "routes";
 
 // components
@@ -16,13 +16,14 @@ import { BuzzSproutPlayer } from "components/BuzzSproutPlayer";
 
 // copy
 import { episodeType } from "components/Pages/HomePage/episode-data";
-import { DATA, CTA, getEpisode, getNextEpisode } from "./static-data";
+import { DATA, CTA } from "./static-data";
 import { SPONSORS } from "components/Pages/SponsorsPage/static-data";
 
 // SWR
 import useSWR from "swr";
 import { groq, createClient } from "next-sanity";
 import { Content } from "components/Content";
+import next from "next";
 
 const client = createClient({
   projectId: "hxymd1na",
@@ -46,7 +47,6 @@ const PodcastDetailsPageComponent = () => {
   const [episode, setEpisode] = useState<compiledEpisodeType>();
   const [nextEpisode, setNextEpisode] = useState<string>();
 
-  let ImageCount = 0;
   const router = useRouter();
 
   const thisWindow =
@@ -54,8 +54,13 @@ const PodcastDetailsPageComponent = () => {
 
   const uuid = thisWindow?.split("/")[2];
 
+  const { data: episodes } = useSWR(
+    groq`*[_type == "episode"]{uuid} | order(uuid asc)`,
+    (query) => client.fetch(query)
+  );
+
   const { data, error, isLoading } = useSWR(
-    groq`{ "episodes":*[_type == "episode"],"episodeDetails":*[_type == "episode"  && uuid == "${uuid}"]}{
+    groq`{ "episodes":*[_type == "episode"]{uuid} | order(uuid desc),"episodeDetails":*[_type == "episode"  && uuid == "${uuid}"]}{
       episodeDetails[]
 {
   content
@@ -97,20 +102,40 @@ url,
     (query) => client.fetch(query)
   );
 
+  // This func finds the next episode.
+  function findFirstHigherUUID(objectsArray, number) {
+    // Using the find method to find the first object where 'uuid' is higher than the given number
+    let foundObject = objectsArray?.find(function (obj) {
+      return obj.uuid > number;
+    });
+
+    // If a matching object is found, return its 'uuid', otherwise return null
+
+    return foundObject ? `/episode/${foundObject.uuid}` : null;
+  }
+
+  // Returns if UUID is in episodes obj.
+  function isUUIDPresent(objectsArray, targetUUID) {
+    // Using some method to check if any object's 'uuid' matches the targetUUID
+    console.log(targetUUID);
+    return objectsArray?.find(function (obj) {
+      return obj.uuid === targetUUID || null;
+    });
+  }
+
   useEffect(() => {
     if (!isLoading) {
+      // Fix weird refresh error and episode not found redirect to Error page
       setEpisode(data.episodeDetails[0]);
 
-      if (!data.episodeDetails.length) {
-        // Error Handling if Episode doesn't exist
-        throw new Error("No episode for this link.");
-      }
+      const isEpisode = isUUIDPresent(episodes, uuid);
+
+      if (!isEpisode) router.refresh();
 
       if (episode) {
-        const nextEpisode = getNextEpisode(episode.uuid, episode);
-        if (nextEpisode) {
-          setNextEpisode(nextEpisode);
-        }
+        const nextEp = findFirstHigherUUID(episodes, episode?.uuid);
+
+        setNextEpisode(nextEp);
       }
     }
 
@@ -118,6 +143,7 @@ url,
   }, [isLoading, data, episode]);
 
   const isClip = episode?.uuid?.includes("_");
+
   if (episode)
     return (
       <>
@@ -297,7 +323,6 @@ url,
                           link={link}
                           type={type}
                           image={image}
-                          ImageCount={ImageCount}
                         />
                       </>
                     );
