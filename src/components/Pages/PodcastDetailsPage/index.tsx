@@ -2,7 +2,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import routes from "routes";
 
 // components
 import { Section, SectionHeading } from "components/shared";
@@ -23,7 +22,6 @@ import { SPONSORS } from "components/Pages/SponsorsPage/static-data";
 import useSWR from "swr";
 import { groq, createClient } from "next-sanity";
 import { Content } from "components/Content";
-import next from "next";
 
 const client = createClient({
   projectId: "hxymd1na",
@@ -48,11 +46,12 @@ const PodcastDetailsPageComponent = () => {
   const [nextEpisode, setNextEpisode] = useState<string>();
 
   const router = useRouter();
+  const pathname = usePathname();
 
   const thisWindow =
     typeof window !== "undefined" ? window.location.pathname : null;
 
-  const uuid = thisWindow?.split("/")[2];
+  const uuid = pathname.split("/")[2];
 
   const { data: episodes } = useSWR(
     groq`*[_type == "episode"]{uuid} | order(uuid asc)`,
@@ -117,10 +116,12 @@ url,
   // Returns if UUID is in episodes obj.
   function isUUIDPresent(objectsArray, targetUUID) {
     // Using some method to check if any object's 'uuid' matches the targetUUID
-    console.log(targetUUID);
-    return objectsArray?.find(function (obj) {
-      return obj.uuid === targetUUID || null;
+
+    const foundObject = objectsArray?.find(function (obj) {
+      return obj.uuid === targetUUID;
     });
+
+    return foundObject !== undefined; // Return true if found, false otherwise
   }
 
   useEffect(() => {
@@ -129,9 +130,7 @@ url,
       setEpisode(data.episodeDetails[0]);
 
       const isEpisode = isUUIDPresent(episodes, uuid);
-
-      if (!isEpisode) router.refresh();
-
+      if (!data.episodeDetails.length) throw new Error("Episode not found.");
       if (episode) {
         const nextEp = findFirstHigherUUID(episodes, episode?.uuid);
 
