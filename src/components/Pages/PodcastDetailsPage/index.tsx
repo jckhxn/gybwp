@@ -104,7 +104,13 @@ url,
   // This func finds the next episode.
   function findFirstHigherUUID(objectsArray, number) {
     // Using the find method to find the first object where 'uuid' is higher than the given number
+
     let foundObject = objectsArray?.find(function (obj) {
+      // Check if obj.uuid includes a hyphen (a multi-part episode), if it does, skip this object
+      if (obj.uuid.includes("-")) {
+        return false;
+      }
+
       return obj.uuid > number;
     });
 
@@ -112,7 +118,25 @@ url,
 
     return foundObject ? `/episode/${foundObject.uuid}` : null;
   }
+  // This func finds the next part.
+  function findNextEpPart(objectsArray, number) {
+    // Extract the numeric part of the input number using a regular expression
+    const inputNumber = parseInt(number?.match(/\d+$/)[0]);
 
+    // Increment the numeric part to find the next number in sequence
+    const nextNumber = inputNumber + 1;
+
+    // Create the next 'uuid' string by combining the original prefix and the incremented number
+    const nextUuid = `${number?.split("-")[0]}-${nextNumber}`;
+
+    // Check if the next 'uuid' exists in the objects array
+    let foundObject = objectsArray?.find(function (obj) {
+      return obj.uuid === nextUuid;
+    });
+
+    // If a matching object is found, return its 'uuid', otherwise return null
+    return foundObject ? `/episode/${foundObject.uuid}` : null;
+  }
   // Returns if UUID is in episodes obj.
   function isUUIDPresent(objectsArray, targetUUID) {
     // Using some method to check if any object's 'uuid' matches the targetUUID
@@ -124,12 +148,11 @@ url,
     return foundObject !== undefined; // Return true if found, false otherwise
   }
 
+  console.log(findNextEpPart(episodes, "401-1"));
   useEffect(() => {
     if (!isLoading) {
       // Fix weird refresh error and episode not found redirect to Error page
       setEpisode(data.episodeDetails[0]);
-
-      const isEpisode = isUUIDPresent(episodes, uuid);
       if (!data.episodeDetails.length) throw new Error("Episode not found.");
       if (episode) {
         const nextEp = findFirstHigherUUID(episodes, episode?.uuid);
@@ -142,7 +165,8 @@ url,
   }, [isLoading, data, episode]);
 
   const isClip = episode?.uuid?.includes("_");
-
+  const isPart = episode?.uuid?.includes("-");
+  const isNextPart = findNextEpPart(episodes, episode?.uuid);
   if (episode)
     return (
       <>
@@ -169,13 +193,23 @@ url,
                   {DATA.nextEpisodeButton}
                 </Button>
               ) : null}
+              {isPart && isNextPart ? (
+                <Button
+                  onClick={() => router.push(isNextPart)}
+                  className="ml-2 px-6 py-2 mt-4"
+                  color="primary"
+                >
+                  Play Part {isNextPart.split("-")[1]}
+                </Button>
+              ) : null}
             </div>
             <div className="flex flex-col-reverse xl:flex-row flex-wrap justify-around mx-10 mb-10 mt-4 xl:mt-0">
               <div className="flex flex-col mt-12 lg:max-w-[40vw]">
                 <h2 className="text-2xl font-bold">{episode.episodeName}</h2>
                 <div className="mb-8 font-light">
                   Season {episode.seasonNumber} | Episode{" "}
-                  {episode.episodeNumber}{" "}
+                  {episode.episodeNumber}
+                  {isPart ? `, Part ${episode.uuid.split("-")[1]}` : null}
                   {isClip ? `| Clip ${episode.uuid.split("_")[1]}` : null}
                 </div>
 
