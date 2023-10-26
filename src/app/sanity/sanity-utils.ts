@@ -9,6 +9,14 @@ const client = createClient({
 interface Params {
   uuid: string;
 }
+export async function getAllEpisodes() {
+  return client.fetch(
+    groq`*[_type == "episode"]{
+     uuid,
+     _createdAt
+    }`
+  );
+}
 export async function getEpisodeDetails(uuid: Params) {
   return client.fetch(
     groq`*[_type == "episode" && uuid == "${uuid}"]{
