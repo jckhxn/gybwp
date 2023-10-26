@@ -1,4 +1,5 @@
 // Sanity
+import { episodeType } from "components/Pages/HomePage/episode-data";
 import { getAllEpisodes } from "./sanity/sanity-utils";
 
 export default async function sitemap() {
@@ -6,8 +7,9 @@ export default async function sitemap() {
 
   const episodes = await getAllEpisodes();
 
-  const episodeUrls = episodes.map((episode) => ({
+  const episodeUrls = episodes.map((episode: episodeType) => ({
     url: `${baseUrl}/episode/${episode.uuid}`,
+    //@ts-ignore
     lastModified: episode._createdAt,
   }));
   return [
