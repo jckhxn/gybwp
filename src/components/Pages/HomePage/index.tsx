@@ -22,7 +22,7 @@ const client = createClient({
   dataset: "production",
   apiVersion: "2023-08-22",
 
-  useCdn: true,
+  useCdn: false,
 });
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState();
