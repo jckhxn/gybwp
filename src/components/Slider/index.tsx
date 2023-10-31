@@ -14,10 +14,11 @@ import Link from "next/link";
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 // And maybe not even then, lol gsap why are you so complicated
 
-const Slider: React.FC<{ items?: any[]; activeSeason: number }> = ({
-  items,
-  activeSeason,
-}) => {
+const Slider: React.FC<{
+  items?: any[];
+  activeSeason: number;
+  parts: boolean;
+}> = ({ parts, items, activeSeason }) => {
   const [sliderIndex, setSliderIndex] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -142,29 +143,32 @@ const Slider: React.FC<{ items?: any[]; activeSeason: number }> = ({
           ))}
         </div>
       </div>
-
-      <div className="mt-6 gap-4 ml-[8px] md:ml-[50px]">
-        <Button
-          aria-label={`${
-            sliderIndex === 0 ? "disabled" : "enabled"
-          } menu back button`}
-          className="h-[60px] w-[60px] md:h-[70px] md:w-[70px] mt-4 mr-4"
-          type={sliderIndex === 0 ? "disabled" : "default"}
-          onClick={() => decrementSlider()}
-        >
-          ←
-        </Button>
-        <Button
-          aria-label="menu forward button"
-          className="h-[60px] w-[60px] md:h-[70px] md:w-[70px] mt-4"
-          type={
-            sliderIndex >= items.length - increment ? "disabled" : "default"
-          }
-          onClick={() => incrementSlider()}
-        >
-          →
-        </Button>
-      </div>
+      
+{/* If displaying multiple parts, don't show Slider controls. */}
+      {parts ? null : (
+        <div className="mt-6 gap-4 ml-[8px] md:ml-[50px]">
+          <Button
+            aria-label={`${
+              sliderIndex === 0 ? "disabled" : "enabled"
+            } menu back button`}
+            className="h-[60px] w-[60px] md:h-[70px] md:w-[70px] mt-4 mr-4"
+            type={sliderIndex === 0 ? "disabled" : "default"}
+            onClick={() => decrementSlider()}
+          >
+            ←
+          </Button>
+          <Button
+            aria-label="menu forward button"
+            className="h-[60px] w-[60px] md:h-[70px] md:w-[70px] mt-4"
+            type={
+              sliderIndex >= items.length - increment ? "disabled" : "default"
+            }
+            onClick={() => incrementSlider()}
+          >
+            →
+          </Button>
+        </div>
+      )}
     </>
   );
 };

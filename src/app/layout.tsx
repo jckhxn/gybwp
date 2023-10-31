@@ -29,10 +29,10 @@ export const metadata: Metadata = {
     default: "Growing Your Business With People",
     template: `%s | Growing Your Business With People`,
   },
-  description: "Growing Your Business With People Podcast",
+  description: "",
   openGraph: {
     title: "Growing Your Business With People",
-    description: "Growing Your Business With People Podcast",
+    description: "",
     images: [
       {
         url: "",

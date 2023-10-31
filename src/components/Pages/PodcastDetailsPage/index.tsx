@@ -9,6 +9,7 @@ import Image from "next/image";
 import Button from "components/Button";
 import Socials from "components/Socials";
 import Link from "next/link";
+import Slider from "components/Slider";
 
 // BuzzSprout Player
 import { BuzzSproutPlayer } from "components/BuzzSproutPlayer";
@@ -44,6 +45,7 @@ export interface compiledEpisodeType extends episodeType {
 const PodcastDetailsPageComponent = () => {
   const [episode, setEpisode] = useState<compiledEpisodeType>();
   const [nextEpisode, setNextEpisode] = useState<string>();
+  const [filteredGuestEpisodes, setFilteredGuestEpisodes] = useState();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -54,7 +56,7 @@ const PodcastDetailsPageComponent = () => {
   const uuid = pathname.split("/")[2];
 
   const { data: episodes } = useSWR(
-    groq`*[_type == "episode"]{uuid} | order(uuid asc)`,
+    groq`*[_type == "episode"]| order(uuid asc)`,
     (query) => client.fetch(query)
   );
 
@@ -101,22 +103,44 @@ url,
     (query) => client.fetch(query)
   );
 
+  // Get other episodes guest has been on
+  // You'll need to update this for episodes with multiple guests somehow.
+  const { data: episodesFeatGuest, isLoading: guestEpsLoading } = useSWR(
+    groq`*[_type == "episode" && details.featuredGuests[].name match "${episode?.details?.featuredGuests[0].name}"]
+    {
+      episodeName,
+        uuid,
+        image
+    }
+    `,
+    (query) => client.fetch(query)
+  );
+
+  const { data: sponsorsArray, isLoading: sponsorsLoading } = useSWR(
+    groq`*[_type == "sponsor"]`,
+    (query) => client.fetch(query)
+  );
+
   // This func finds the next episode.
   function findFirstHigherUUID(objectsArray, number) {
-    // Using the find method to find the first object where 'uuid' is higher than the given number
+    // Extract the first three numbers from the given number
+    const givenNumberPrefix = parseInt(number.substring(0, 3));
 
+    // Using the find method to find the first object where the first three numbers of 'uuid' is higher than the given number's first three numbers
     let foundObject = objectsArray?.find(function (obj) {
-      // Check if obj.uuid includes a hyphen (a multi-part episode), if it does, skip this object
-      if (obj.uuid.includes("-")) {
-        return false;
-      }
+      // Extract the first three numbers from obj.uuid
+      const objNumberPrefix = parseInt(obj.uuid.substring(0, 3));
 
-      return obj.uuid > number;
+      // Check if obj.uuid includes a hyphen (a multi-part episode)
+      // and if the first three numbers of obj.uuid are higher than the given number's first three numbers
+      if (obj.uuid.includes("-") && objNumberPrefix > givenNumberPrefix) {
+        return true;
+      }
+      return false;
     });
 
     // If a matching object is found, return its 'uuid', otherwise return null
-
-    return foundObject ? `/episode/${foundObject.uuid}` : null;
+    return foundObject ? foundObject.uuid : null;
   }
   // This func finds the next part.
   function findNextEpPart(objectsArray, number) {
@@ -137,18 +161,46 @@ url,
     // If a matching object is found, return its 'uuid', otherwise return null
     return foundObject ? `/episode/${foundObject.uuid}` : null;
   }
-  // Returns if UUID is in episodes obj.
-  function isUUIDPresent(objectsArray, targetUUID) {
-    // Using some method to check if any object's 'uuid' matches the targetUUID
 
-    const foundObject = objectsArray?.find(function (obj) {
-      return obj.uuid === targetUUID;
+  function findEpisodesWithNumber(objectsArray, number) {
+    // Check if the input number is present in any part of the UUID in the objects array
+    let matchingObjects = objectsArray?.filter(function (obj) {
+      const numnerWithoutPart = number?.split("-")[0];
+      // Check if the number is present in the UUID
+      return obj.uuid.includes(numnerWithoutPart);
     });
 
-    return foundObject !== undefined; // Return true if found, false otherwise
+    // Create an array of objects with matching UUIDs and their respective objects
+    let matchingObjectsWithUUIDs = matchingObjects
+      ? matchingObjects.map((obj) => {
+          return {
+            ...obj,
+          };
+        })
+      : [];
+
+    return matchingObjectsWithUUIDs;
   }
 
-  console.log(findNextEpPart(episodes, "401-1"));
+  // This func returns the episodes guest has been on except current.
+  function filterObjectsByUUID(objectsArray, targetUUID) {
+    // Use the filter method to filter out objects with a matching first three digits of UUID
+
+    return objectsArray?.filter(function (obj) {
+      // Assuming each object in the array has a property named 'uuid'
+      const objFirstThreeDigits = obj.uuid.slice(0, 3);
+      const targetFirstThreeDigits = targetUUID.slice(0, 3);
+      return objFirstThreeDigits !== targetFirstThreeDigits;
+    });
+  }
+
+  const allEpisodeParts = findEpisodesWithNumber(episodes, episode?.uuid);
+  // This is the list of episodes MINUS the current episode.
+  const guestEpisodesFilter = filterObjectsByUUID(
+    episodesFeatGuest,
+    episode?.uuid
+  );
+
   useEffect(() => {
     if (!isLoading) {
       // Fix weird refresh error and episode not found redirect to Error page
@@ -167,6 +219,7 @@ url,
   const isClip = episode?.uuid?.includes("_");
   const isPart = episode?.uuid?.includes("-");
   const isNextPart = findNextEpPart(episodes, episode?.uuid);
+
   if (episode)
     return (
       <>
@@ -252,8 +305,18 @@ url,
                     }
                   }
                 })}
+                {}
               </div>
             </div>
+            {isPart ? (
+              <div className="justify-center items-center overflow-hidden ">
+                {" "}
+                <h1 className="font-medium text-xl lg:text-center">
+                  Episode Parts
+                </h1>
+                <Slider items={allEpisodeParts} />{" "}
+              </div>
+            ) : null}
           </div>
         </Section>
         {/* If you check length it doesn't display, otherwise it renders too many of same. */}
@@ -311,6 +374,17 @@ url,
               );
             })
           : null}
+        <Section>
+          {guestEpisodesFilter?.length ? (
+            <div className=" justify-items-center ">
+              {" "}
+              <h1 className="font-medium text-xl lg:text-center">
+                Episodes Featuring this Guest
+              </h1>
+              <Slider items={guestEpisodesFilter} />{" "}
+            </div>
+          ) : null}
+        </Section>
         <Section className="bg-light flex  justify-center items-center ">
           {!isClip && episode.details ? (
             <Section className=" text-center mx-6 py-5 md:mx-20 mt-8 ">
@@ -370,35 +444,40 @@ url,
             className={`flex flex-row flex-wrap items-center justify-center mt-20 mx-6 md:mx-20 `}
           >
             {episode.sponsors.map((sponsorUUID, idx) => {
-              const sponsor = SPONSORS.filter((s) => s.uuid === sponsorUUID)[0];
-              if (!sponsor) {
-                return null;
-              }
+              if (!sponsorsLoading) {
+                const sponsor = sponsorsArray.filter(
+                  (s) => s.uuid === sponsorUUID
+                )[0];
+                if (!sponsor) {
+                  return null;
+                }
 
-              const { name, uuid, imgUrl, imgAlt, bgColor } = sponsor;
+                console.log(sponsor);
+                const { name, uuid, image, bgColor } = sponsor;
 
-              return (
-                <Link
-                  key={`sponsor-${name}`}
-                  href={`/sponsors/${uuid}`}
-                  className="m-3 lg:m-6"
-                >
-                  <div
-                    className={`${
-                      bgColor || ""
-                    } w-[250px] max-h-[150px] overflow-hidden`}
+                return (
+                  <Link
+                    key={`sponsor-${name}`}
+                    href={`/sponsors/${uuid}`}
+                    className="m-3 lg:m-6"
                   >
-                    <Image
-                      src={imgUrl}
-                      alt={imgAlt}
-                      className="h-[150px] w-auto m-auto px-4"
-                      width={250}
-                      height={150}
-                      quality={100}
-                    />
-                  </div>
-                </Link>
-              );
+                    <div
+                      className={`${
+                        bgColor || ""
+                      } w-[250px] max-h-[150px] overflow-hidden`}
+                    >
+                      <Image
+                        src={image}
+                        alt={"Sponsor"}
+                        className="h-[150px] w-auto m-auto px-4"
+                        width={250}
+                        height={150}
+                        quality={100}
+                      />
+                    </div>
+                  </Link>
+                );
+              }
             })}
           </Section>
         ) : null}

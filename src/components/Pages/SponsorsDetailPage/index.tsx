@@ -51,7 +51,7 @@ const SponsorsDetailPageComponent = () => {
   // setSponsor is an object with {...foundSponsor (details),episodes:(sponsored episodes)}
 
   const { data, error, isLoading } = useSWR(
-    groq`{"sponsors":*[_type == "sponsor" && uuid == "${id}"] ,"episodes":*[_type == "episode" &&  "${id}" in sponsors]| order(uuid asc)}`,
+    groq`{"sponsors":*[_type == "sponsor" && uuid == "${id}"] ,"episodes":*[_type == "episode" &&  "${id}" in sponsors]| order(uuid desc)}`,
     (query) => client.fetch(query)
   );
 
@@ -90,7 +90,7 @@ const SponsorsDetailPageComponent = () => {
   if (!sponsor) {
     return null;
   }
-  console.log(sponsor);
+
   return (
     <>
       <Section flex className="bg-main">
