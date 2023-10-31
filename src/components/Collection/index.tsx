@@ -18,7 +18,6 @@ const Collection = ({
   description?: string;
   items: Array<episodeType>;
 }) => {
-  console.log(items);
   return (
     <Section>
       <div className="mt-8 max-w-screen-xl px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:px-8">
@@ -61,7 +60,10 @@ const Collection = ({
 
                   <div className="flex justify-center items-center ">
                     {" "}
-                    Season {seasonNumber} | Episode {episodeNumber}
+                    Season {seasonNumber} | Episode{" "}
+                    {uuid.includes("-")
+                      ? `Part ${uuid.split("-")[1]}`
+                      : episodeNumber}
                   </div>
                 </Link>
               </li>

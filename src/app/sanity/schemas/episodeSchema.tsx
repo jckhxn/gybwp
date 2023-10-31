@@ -59,7 +59,7 @@ const episode = {
     {
       // Sponsors of the Episode
       name: "sponsors",
-      title: "List of Sponsors",
+      title: "List of Sponsors (Lowercase, one word)",
       type: "array",
       of: [{ type: "string" }],
     },

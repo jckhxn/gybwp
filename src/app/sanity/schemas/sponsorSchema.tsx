@@ -12,7 +12,7 @@ const sponsor = {
     {
       // UUID of the Sponsor
       name: "uuid",
-      title: "UUID (Sponsor Name again)",
+      title: "UUID (lowercase)",
       type: "string",
     },
     {

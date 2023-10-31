@@ -6,7 +6,7 @@ export type sponsorUUIDs =
   | "sevenstep"
   | "paradox"
   | "survale"
-  | "futureSolve";
+  | "futuresolve";
 
 export type socialsType = {
   name: string;
@@ -177,7 +177,7 @@ export const SPONSORS: sponsorType[] = [
   },
   {
     name: "futureSolve",
-    uuid: "futureSolve",
+    uuid: "futuresolve",
     imgUrl:
       "https://pbs.twimg.com/profile_images/1303386729030782976/nkjWT3mE_400x400.jpg",
     bgColor: "bg-white",
