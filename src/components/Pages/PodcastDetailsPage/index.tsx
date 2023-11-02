@@ -45,7 +45,7 @@ export interface compiledEpisodeType extends episodeType {
 const PodcastDetailsPageComponent = () => {
   const [episode, setEpisode] = useState<compiledEpisodeType>();
   const [nextEpisode, setNextEpisode] = useState<string>();
-  const [filteredGuestEpisodes, setFilteredGuestEpisodes] = useState();
+  const [allPrevGuestEpisodes, setPrevGuestEpisodes] = useState([]);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -103,12 +103,11 @@ url,
     (query) => client.fetch(query)
   );
 
-  // Get other episodes guest has been on
-  // You'll need to update this for episodes with multiple guests somehow.
   const { data: episodesFeatGuest, isLoading: guestEpsLoading } = useSWR(
     groq`*[_type == "episode" && details.featuredGuests[].name match "${episode?.details?.featuredGuests[0].name}"]
     {
       episodeName,
+      episodeNumber,
         uuid,
         image
     }
@@ -182,24 +181,7 @@ url,
     return matchingObjectsWithUUIDs;
   }
 
-  // This func returns the episodes guest has been on except current.
-  function filterObjectsByUUID(objectsArray, targetUUID) {
-    // Use the filter method to filter out objects with a matching first three digits of UUID
-
-    return objectsArray?.filter(function (obj) {
-      // Assuming each object in the array has a property named 'uuid'
-      const objFirstThreeDigits = obj.uuid.slice(0, 3);
-      const targetFirstThreeDigits = targetUUID.slice(0, 3);
-      return objFirstThreeDigits !== targetFirstThreeDigits;
-    });
-  }
-
   const allEpisodeParts = findEpisodesWithNumber(episodes, episode?.uuid);
-  // This is the list of episodes MINUS the current episode.
-  const guestEpisodesFilter = filterObjectsByUUID(
-    episodesFeatGuest,
-    episode?.uuid
-  );
 
   useEffect(() => {
     if (!isLoading) {
@@ -211,9 +193,47 @@ url,
 
         setNextEpisode(nextEp);
       }
-    }
+      // Get all episodes (omit current) for all guests
+      const fetchGuestEpisodes = async () => {
+        try {
+          const filteredEpisodesPromises = episode?.details?.featuredGuests.map(
+            async (guest, idx) => {
+              const guestEpisodes = await client.fetch(groq`
+              *[_type == "episode" && details.featuredGuests[].name match "${guest.name}"] {
+                episodeName,
+                episodeNumber,
+                uuid,
+                image,
+                details
+              }
+            `);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+              // Filter out current episode from the list
+              const filteredGuestEps = guestEpisodes?.filter(function (obj) {
+                // Assuming each object in the array has a property named 'uuid'
+                const objFirstThreeDigits = obj.uuid?.slice(0, 3);
+                const targetFirstThreeDigits = episode?.uuid?.slice(0, 3);
+                return objFirstThreeDigits !== targetFirstThreeDigits;
+              });
+
+              return filteredGuestEps || []; // Handle undefined values
+            }
+          );
+
+          // Wait for all promises to resolve and update state
+          const allFilteredEpisodes = await Promise.all(
+            filteredEpisodesPromises
+          );
+          setPrevGuestEpisodes(allFilteredEpisodes); // Use flat() to flatten the array of arrays
+        } catch (error) {
+          console.error("Error fetching guest episodes:", error);
+          // Handle errors
+        }
+      };
+
+      // Call the fetchGuestEpisodes function
+      fetchGuestEpisodes();
+    }
   }, [isLoading, data, episode]);
 
   const isClip = episode?.uuid?.includes("_");
@@ -323,10 +343,11 @@ url,
         {episode.details
           ? episode.details.featuredGuests?.map((guest, idx) => {
               const isOdd = idx % 2;
+
               return (
                 <Section
                   key={`featured-guest-${guest.name}-${idx}`}
-                  className=" justify-items-center overflow-hidden bg-gray-50 sm:grid sm:grid-cols-2"
+                  className=" justify-items-center overflow-hidden mx-auto  bg-gray-50 sm:grid sm:grid-cols-2"
                 >
                   {!isOdd && guest.image ? (
                     <Image
@@ -339,7 +360,7 @@ url,
                       quality={100}
                     />
                   ) : null}
-                  <div className="p-8 md:p-12 lg:px-16 lg:py-24 h-[500px]">
+                  <div className="p-8 md:p-12 lg:px-16 lg:py-24 h-[500px] ">
                     <div className="mx-auto max-w-xl text-center sm:text-left">
                       <h2 className="text-xl font-bold text-gray-900 md:text-2xl mb-6">
                         {guest.name}
@@ -347,8 +368,7 @@ url,
                       <p className="text-gray-500 md:mt-4">{guest.about}</p>
                       <div className="border-b-[.5px] border-black my-4" />
                       <p className="italic font-thin">{guest.title}</p>
-
-                      <div className="mt-6 md:mt-12">
+                      <div className="mt-6  md:mt-12">
                         <a
                           href={guest.url}
                           target="_blank"
@@ -370,21 +390,19 @@ url,
                       quality={100}
                     />
                   ) : null}
+                  {allPrevGuestEpisodes[idx]?.length > 0 ? (
+                    <div className=" ">
+                      <h1 className="font-medium text-xl lg:text-center">
+                        Episodes Featuring this Guest
+                      </h1>
+                      <Slider items={allPrevGuestEpisodes[idx]} />
+                    </div>
+                  ) : null}
                 </Section>
               );
             })
           : null}
-        <Section>
-          {guestEpisodesFilter?.length ? (
-            <div className=" justify-items-center ">
-              {" "}
-              <h1 className="font-medium text-xl lg:text-center">
-                Episodes Featuring this Guest
-              </h1>
-              <Slider items={guestEpisodesFilter} />{" "}
-            </div>
-          ) : null}
-        </Section>
+
         <Section className="bg-light flex  justify-center items-center ">
           {!isClip && episode.details ? (
             <Section className=" text-center mx-6 py-5 md:mx-20 mt-8 ">
@@ -393,7 +411,7 @@ url,
               </SectionHeading>
 
               {episode.details?.description ? (
-                <div className="mt-8 ">
+                <div className="mt-8  ">
                   <div
                     key={`episode description `}
                     className="text-gray-500  whitespace-break-spaces   md:mt-4  "
@@ -452,7 +470,6 @@ url,
                   return null;
                 }
 
-                console.log(sponsor);
                 const { name, uuid, image, bgColor } = sponsor;
 
                 return (
