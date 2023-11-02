@@ -58,7 +58,6 @@ const SponsorsDetailPageComponent = () => {
   useEffect(() => {
     if (!isLoading) {
       const { sponsors, episodes } = data;
-      console.log(episodes);
 
       setSponsor({
         ...sponsors,
