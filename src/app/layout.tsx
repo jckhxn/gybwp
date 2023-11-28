@@ -1,6 +1,6 @@
 import React from "react";
 import { usePathname } from "next/navigation";
-
+import Script from "next/script";
 // components
 import DefaultLayout from "components/Layout";
 import Footer from "components/Footer";
@@ -60,6 +60,7 @@ export default function RootLayout({
 
   return (
     <>
+      <Script src="https://chimpstatic.com/mcjs-connected/js/users/7d857ff401d002b8dc37739e3/835959873fabbfe064a730251.js" />
       <html lang="en">
         <body>
           <Layout>
