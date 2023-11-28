@@ -60,7 +60,7 @@ export default function RootLayout({
 
   return (
     <>
-      <Script src="https://chimpstatic.com/mcjs-connected/js/users/7d857ff401d002b8dc37739e3/835959873fabbfe064a730251.js" />
+      <Script src="https://chimpstatic.com/mcjs-connected/js/users/bc1727d945a3a3a609f35fc2b/97fc58cd3b18466f1358e4025.js" />
       <html lang="en">
         <body>
           <Layout>
