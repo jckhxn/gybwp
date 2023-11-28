@@ -1,6 +1,7 @@
 // @ts-nocheck
 "use client";
 import React, { useEffect, useState } from "react";
+
 // components
 import Image from "next/image";
 import { Section, SectionHeading } from "components/shared";
@@ -50,8 +51,10 @@ const HomePageComponent = () => {
       return setActiveSeason([...set].length);
     }
   }, [data]);
+  
   return (
     <>
+    
       {/* MAIN SECTION */}
       <Section className="overflow-hidden bg-main sm:grid sm:grid-cols-2 sm:items-center">
         <div className="p-8 md:p-12 lg:px-16 lg:py-24">
