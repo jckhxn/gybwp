@@ -61,7 +61,7 @@ export default function RootLayout({
   return (
     <>
       <html lang="en">
-        <Script src="https://chimpstatic.com/mcjs-connected/js/users/bc1727d945a3a3a609f35fc2b/4428f83f24271d4bf34520928.js" />
+        <Script src="https://chimpstatic.com/mcjs-connected/js/users/bc1727d945a3a3a609f35fc2b/97fc58cd3b18466f1358e4025.js" />
         <body>
           <Layout>
             <main className={openSans.className}>
