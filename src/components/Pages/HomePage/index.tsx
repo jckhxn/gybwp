@@ -92,7 +92,7 @@ const HomePageComponent = () => {
           loading="eager"
           alt="Main Page Hero"
           src={heroImage}
-          className="h-full w-full  object-cover sm:h-[calc(100%_-_2rem)] sm:w-auto sm:self-end sm:rounded-ss-[30px] md:h-[calc(100%_-_4rem)] md:w-auto md:rounded-ss-[60px]"
+          className="h-full w-full object-cover  sm:h-auto sm:w-auto sm:max-h-[calc(100%-2rem)] sm:self-end sm:rounded-ss-[30px] md:h-auto md:w-auto md:max-h-[calc(100%-4rem)] md:rounded-ss-[60px]"
         />
       </Section>
       {/* Large Podcast Playa */}
