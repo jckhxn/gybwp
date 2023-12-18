@@ -29,13 +29,15 @@ export const metadata: Metadata = {
     default: "Growing Your Business With People",
     template: `%s | Growing Your Business With People`,
   },
-  description: "",
+  description:
+    "Our podcast, “Growing your business with People!” is dedicated to CEOs and Business Leaders who understand that the key to growth is found in their biggest and most important investment - people!",
   openGraph: {
     title: "Growing Your Business With People",
-    description: "",
+    description:
+      "Our podcast, “Growing your business with People!” is dedicated to CEOs and Business Leaders who understand that the key to growth is found in their biggest and most important investment - people!",
     images: [
       {
-        url: "",
+        url: "https://gybwp.com/images/logo.png",
         width: 1200,
         height: 630,
       },
