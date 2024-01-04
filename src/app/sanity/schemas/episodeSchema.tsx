@@ -1,4 +1,4 @@
-import { Rule } from "@sanity/validation";
+import { Rule } from "@sanity/types";
 const episode = {
   name: "episode",
   title: "Episodes",
