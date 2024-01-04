@@ -79,7 +79,7 @@ const Dropdown = ({
       setPodcast(podcasts);
     }
   }, [data, isLoading]);
-  console.log(data.seasonNumber);
+
   return (
     <Section relative>
       <Button
