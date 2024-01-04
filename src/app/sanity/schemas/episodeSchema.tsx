@@ -22,6 +22,14 @@ const episode = {
       name: "seasonName",
       title: "Season Name",
       type: "string",
+      validation: (Rule) =>
+        Rule.custom((value) => {
+          if (!value.includes("Season")) {
+            // The freakin' thing must say Season.
+            return 'Season name must start with  "Season", e.g "Season Four"';
+          }
+          return true;
+        }),
     },
     {
       // Season Number
