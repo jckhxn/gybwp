@@ -21,6 +21,7 @@ const client = createClient({
 });
 
 // Sort through the Sanity Season duplicates
+// Make them in order lol
 function getUniqueValuesWithSet(object: seasonType) {
   const uniqueValues = new Set();
 
@@ -37,7 +38,7 @@ const Dropdown = ({
   setActiveSeason: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const { data, error, isLoading } = useSWR(
-    groq`{"seasonName":*[_type == "episode"].seasonName,"seasonNumber":array::unique(*[_type == "episode" ].seasonNumber)}`,
+    groq`{"seasonName":array::unique(*[_type == "episode"].seasonName),"seasonNumber":array::unique(*[_type == "episode" ].seasonNumber)}`,
     (query) => client.fetch(query)
   );
 
@@ -63,7 +64,9 @@ const Dropdown = ({
       const podcasts = [];
 
       const uniqueSeasonsSet = getUniqueValuesWithSet(data.seasonName);
+
       const uniqueSeasonsArray = Array.from(uniqueSeasonsSet);
+      // Sort the season names in the desired order (e.g., "Season One" before "Season Two")
 
       for (let i = 0; i < uniqueSeasonsArray.length; i++) {
         const podcast = {};
@@ -76,7 +79,7 @@ const Dropdown = ({
       setPodcast(podcasts);
     }
   }, [data, isLoading]);
-
+  console.log(data.seasonNumber);
   return (
     <Section relative>
       <Button
@@ -118,7 +121,7 @@ const Dropdown = ({
                   onClick={() => handleClick(seasonNumber)}
                 >
                   <label className="inline-flex items-center gap-2 cursor-pointer">
-                    {seasonName}
+                    Season {seasonNumber}
                   </label>
                 </li>
               ))}

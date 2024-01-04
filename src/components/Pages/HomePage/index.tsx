@@ -29,11 +29,11 @@ const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState();
 
   const { data, error, isLoading } = useSWR(
-    groq`*[seasonName match "Season *"] { 
-      seasonName
-    }`,
+    groq`*[_type == "episode"] | order(uuid asc)
+    {seasonName}`,
     (query) => client.fetch(query)
   );
+
   useEffect(() => {
     if (!isLoading) {
       // Create a new Set object to store the unique values.
@@ -44,9 +44,6 @@ const HomePageComponent = () => {
       data.forEach((object) => {
         set.add(object["seasonName"]);
       });
-
-      // Convert the Set object back to an array and return it.
-      // @ts-ignore
 
       return setActiveSeason([...set].length);
     }
