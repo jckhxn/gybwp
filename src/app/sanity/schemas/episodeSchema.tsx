@@ -1,5 +1,4 @@
-import { link } from "fs";
-
+import { Rule } from "@sanity/validation";
 const episode = {
   name: "episode",
   title: "Episodes",
@@ -22,8 +21,9 @@ const episode = {
       name: "seasonName",
       title: "Season Name",
       type: "string",
-      validation: (Rule) =>
-        Rule.custom((value) => {
+
+      validation: (Rule: Rule) =>
+        Rule.custom((value: string) => {
           if (!value.includes("Season")) {
             // The freakin' thing must say Season.
             return 'Season name must start with  "Season", e.g "Season Four"';
