@@ -17,13 +17,13 @@ const episode = {
       type: "number",
     },
     // Make adding an ep to a season automatic, do other stuff lol
-    {
-      name: "season",
-      title: "Season",
-      type: "reference",
-      weak: true,
-      to: [{ type: "seasons" }],
-    },
+    // {
+    //   name: "season",
+    //   title: "Season",
+    //   type: "reference",
+    //   weak: true,
+    //   to: [{ type: "seasons" }],
+    // },
 
     {
       // Season Name
