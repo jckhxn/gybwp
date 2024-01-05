@@ -16,12 +16,34 @@ const episode = {
       title: "Episode Number",
       type: "number",
     },
+    // Make adding an ep to a season automatic, do other stuff lol
+    {
+      name: "season",
+      title: "Season",
+      type: "reference",
+      weak: true,
+      to: [{ type: "seasons" }],
+    },
+
     {
       // Season Name
       name: "seasonName",
       title: "Season Name",
       type: "string",
-
+      options: {
+        list: [
+          { title: "Season One", value: "Season One" },
+          { title: "Season Two", value: "Season Two" },
+          { title: "Season Three", value: "Season Three" },
+          { title: "Season Four", value: "Season Four" },
+          { title: "Season Five", value: "Season Five" },
+          { title: "Season Six", value: "Season Six" },
+          { title: "Season Seven", value: "Season Seven" },
+          { title: "Season Eight", value: "Season Eight" },
+          { title: "Season Nine", value: "Season Nine" },
+          { title: "Season Ten", value: "Season Ten" },
+        ],
+      },
       validation: (Rule: Rule) =>
         Rule.custom((value: string) => {
           if (!value.includes("Season")) {
@@ -31,6 +53,22 @@ const episode = {
           return true;
         }),
     },
+
+    // {
+    //   // Season Name
+    //   name: "seasonName",
+    //   title: "Season Name",
+    //   type: "string",
+
+    //   validation: (Rule: Rule) =>
+    //     Rule.custom((value: string) => {
+    //       if (!value.includes("Season")) {
+    //         // The freakin' thing must say Season.
+    //         return 'Season name must start with  "Season", e.g "Season Four"';
+    //       }
+    //       return true;
+    //     }),
+    // },
     {
       // Season Number
       name: "seasonNumber",
