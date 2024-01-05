@@ -37,6 +37,8 @@ const Dropdown = ({
 }: {
   setActiveSeason: React.Dispatch<React.SetStateAction<number>>;
 }) => {
+  // This groq query returns all seasons, in order, that have episodes in them
+  // *[_type == "seasons" && count(episodes) > 0]  | order(seasonNumber asc)
   const { data, error, isLoading } = useSWR(
     groq`{"seasonName":array::unique(*[_type == "episode"].seasonName),"seasonNumber":array::unique(*[_type == "episode" ].seasonNumber)}`,
     (query) => client.fetch(query)
@@ -47,7 +49,7 @@ const Dropdown = ({
 
   const handleClick = (seasonNumber?: number) => {
     if (seasonNumber) {
-      setActiveSeason(seasonNumber);
+      setActiveSeason(seasonNumber);  
     }
     setIsOpen(!isOpen);
   };

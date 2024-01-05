@@ -28,6 +28,14 @@ const client = createClient({
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState();
 
+  // This groq query returns all the seasons, in order.
+  //  This needs to only return seasons with episodes in them
+  //
+  //   *[_type == "seasons"] | order(seasonNumber asc)
+  // {
+  //   seasonName,
+  //     seasonNumber
+  // }
   const { data, error, isLoading } = useSWR(
     groq`*[_type == "episode"] | order(uuid asc)
     {seasonName}`,
