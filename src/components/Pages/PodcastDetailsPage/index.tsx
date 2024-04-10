@@ -77,7 +77,6 @@ const PodcastDetailsPageComponent = () => {
     },
 blurb,
 "episodeName":coalesce(youtube.title,episodeName),
-
 "episodeNumber":coalesce(youtube.episodeNumber,episodeNumber),
 "image":coalesce(youtube.thumbnail,image),
 podcastLinks,

@@ -21,6 +21,8 @@ export const youtubeInput = definePlugin<{ apiKey: string }>((config) => {
               validation: (Rule) => Rule.required(),
             },
             { name: "title", type: "string" },
+            { name: "episodeNumber", type: "number" },
+            { name: "seasonNumber", type: "number" },
             { name: "description", type: "string" },
             { name: "publishedAt", type: "string" },
             {
