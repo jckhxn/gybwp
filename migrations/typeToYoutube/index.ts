@@ -6,7 +6,7 @@
 // "image":coalesce(youtube.thumbnail,image),
 // "seasonNumber":coalesce(youtube.seasonNumber,seasonNumber),
 // "url":coalesce("https://www.youtube.com/"+youtube.id,url),
-// "uuid":coalesce(youtube.uuid,uuid),
+// "uuid":coalesce(youtube.uuid,uuid)
 import { defineMigration, at, setIfMissing, unset } from "sanity/migrate";
 
 export default defineMigration({
