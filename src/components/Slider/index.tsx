@@ -105,6 +105,7 @@ const Slider: React.FC<{
 
     return standardEpisode;
   };
+  
 
   return (
     <>
@@ -143,8 +144,8 @@ const Slider: React.FC<{
           ))}
         </div>
       </div>
-      
-{/* If displaying multiple parts, don't show Slider controls. */}
+
+      {/* If displaying multiple parts, don't show Slider controls. */}
       {parts ? null : (
         <div className="mt-6 gap-4 ml-[8px] md:ml-[50px]">
           <Button

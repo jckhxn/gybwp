@@ -1,6 +1,7 @@
 import article from "./articleSchema";
 import episode from "./episodeSchema";
 import featuredArticle from "./featuredArticlesSchema";
+import { youtube } from "./youtube";
 import { season } from "./seasonSchema";
 
 import sponsor from "./sponsorSchema";

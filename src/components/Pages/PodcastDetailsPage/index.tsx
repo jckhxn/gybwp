@@ -76,15 +76,16 @@ const PodcastDetailsPageComponent = () => {
       }
     },
 blurb,
-episodeName,
-episodeNumber,
-image,
+"episodeName":coalesce(youtube.title,episodeName),
+
+"episodeNumber":coalesce(youtube.episodeNumber,episodeNumber),
+"image":coalesce(youtube.thumbnail,image),
 podcastLinks,
 seasonName,
-seasonNumber,
+"seasonNumber":coalesce(youtube.seasonNumber,seasonNumber),
 sponsors,
-url,
-uuid,
+"url":coalesce("https://www.youtube.com/"+youtube.id,url),
+"uuid":coalesce(youtube.uuid,uuid),
 details{
 description,
 links,
@@ -204,7 +205,8 @@ url,
                 episodeNumber,
                 uuid,
                 image,
-                details
+                details,
+              
               }
             `);
 
@@ -304,7 +306,7 @@ url,
                   title="YouTube video player"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
-                ></iframe>
+                ></iframe>{" "}
                 <iframe
                   className="hidden sm:block"
                   width="560"
@@ -349,14 +351,14 @@ url,
                   key={`featured-guest-${guest.name}-${idx}`}
                   className=" justify-items-center overflow-hidden mx-auto  bg-gray-50 sm:grid sm:grid-cols-2"
                 >
+                  {console.log(guest.image)}
                   {!isOdd && guest.image ? (
                     <Image
                       alt={`guest ${guest.name} picture`}
                       src={guest.image}
-                      className="  object-cover  sm:h-full"
-                      fit
-                      height={500}
-                      width={500}
+                      className=" "
+                      height={400}
+                      width={400}
                       quality={100}
                     />
                   ) : null}
