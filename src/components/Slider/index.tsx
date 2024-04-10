@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import Button from "components/Button";
 import Image from "next/image";
 import Link from "next/link";
+import { ScrollArea, ScrollBar } from "components/ScrollArea";
 
 //
 //
@@ -105,70 +106,89 @@ const Slider: React.FC<{
 
     return standardEpisode;
   };
+  const works: Artwork[] = [
+    {
+      artist: "Ornella Binni",
+      art: "https://images.unsplash.com/photo-1465869185982-5a1a7522cbcb?auto=format&fit=crop&w=300&q=80",
+    },
+    {
+      artist: "Tom Byrom",
+      art: "https://images.unsplash.com/photo-1548516173-3cabfa4607e9?auto=format&fit=crop&w=300&q=80",
+    },
+    {
+      artist: "Vladimir Malyavko",
+      art: "https://images.unsplash.com/photo-1494337480532-3725c85fd2ab?auto=format&fit=crop&w=300&q=80",
+    },
+  ];
 
   return (
     <>
-      <div
-        className="mt-8 overflow-x-visible w-full relative h-[400px]"
-        ref={wrapperRef}
-      >
+      <ScrollArea className="">
         <div
-          id="slider"
-          className="flex absolute left-[8px] md:left-[50px]"
-          ref={sliderRef}
+          className="mt-8 overflow-x-visible w-full relative h-[400px]"
+          ref={wrapperRef}
         >
-          {items.map(({ episodeName, episodeNumber, image, uuid }, idx) => (
-            <div
-              key={`carousel-item-${idx}`}
-              className="bg-white border border-gray-200 w-[250px] mr-[40px] h-[400px]"
+          <div
+            id="slider"
+            className="flex absolute left-[8px] md:left-[50px]"
+            ref={sliderRef}
+          >
+            {items.map(({ episodeName, episodeNumber, image, uuid }, idx) => (
+              <div
+                key={`carousel-item-${idx}`}
+                className="bg-white border border-gray-200 w-[250px] mr-[40px] h-[400px]"
+              >
+                <Link href={`/episode/${uuid}`} className="bg-main group">
+                  <Image
+                    src={image || ""}
+                    alt={episodeName}
+                    className="rounded-box object-cover group-hover:opacity-90 h-[250px]"
+                    width={250}
+                    height={350}
+                  />
+                  <div className="mt-4 px-3 pb-4 h-20">
+                    <h3 className="text-md font-semibold text-gray-700 group-hover:underline group-hover:underline-offset-4">
+                      {generateHeader({ episodeNumber, uuid })}
+                    </h3>
+                    <p className="mt-3 text-sm text-gray-500 overflow-ellipsis">
+                      {episodeName}
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+      {/* If displaying multiple parts, don't show Slider controls. */}
+      <ScrollArea className="">
+        {parts ? null : (
+          <div className="mt-6 gap-4 ml-[8px] md:ml-[50px]">
+            <Button
+              aria-label={`${
+                sliderIndex === 0 ? "disabled" : "enabled"
+              } menu back button`}
+              className="h-[60px] w-[60px] md:h-[70px] md:w-[70px] mt-4 mr-4"
+              type={sliderIndex === 0 ? "disabled" : "default"}
+              onClick={() => decrementSlider()}
             >
-              <Link href={`/episode/${uuid}`} className="bg-main group">
-                <Image
-                  src={image || ""}
-                  alt={episodeName}
-                  className="rounded-box object-cover group-hover:opacity-90 h-[250px]"
-                  width={250}
-                  height={350}
-                />
-                <div className="mt-4 px-3 pb-4 h-20">
-                  <h3 className="text-md font-semibold text-gray-700 group-hover:underline group-hover:underline-offset-4">
-                    {generateHeader({ episodeNumber, uuid })}
-                  </h3>
-                  <p className="mt-3 text-sm text-gray-500 overflow-ellipsis">
-                    {episodeName}
-                  </p>
-                </div>
-              </Link>
-            </div>
-          ))}
-        </div>
-      </div>
-      
-{/* If displaying multiple parts, don't show Slider controls. */}
-      {parts ? null : (
-        <div className="mt-6 gap-4 ml-[8px] md:ml-[50px]">
-          <Button
-            aria-label={`${
-              sliderIndex === 0 ? "disabled" : "enabled"
-            } menu back button`}
-            className="h-[60px] w-[60px] md:h-[70px] md:w-[70px] mt-4 mr-4"
-            type={sliderIndex === 0 ? "disabled" : "default"}
-            onClick={() => decrementSlider()}
-          >
-            ←
-          </Button>
-          <Button
-            aria-label="menu forward button"
-            className="h-[60px] w-[60px] md:h-[70px] md:w-[70px] mt-4"
-            type={
-              sliderIndex >= items.length - increment ? "disabled" : "default"
-            }
-            onClick={() => incrementSlider()}
-          >
-            →
-          </Button>
-        </div>
-      )}
+              ←
+            </Button>
+            <Button
+              aria-label="menu forward button"
+              className="h-[60px] w-[60px] md:h-[70px] md:w-[70px] mt-4"
+              type={
+                sliderIndex >= items.length - increment ? "disabled" : "default"
+              }
+              onClick={() => incrementSlider()}
+            >
+              →
+            </Button>
+          </div>
+        )}
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </>
   );
 };
