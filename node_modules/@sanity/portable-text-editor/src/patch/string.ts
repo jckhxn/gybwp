@@ -1,7 +1,4 @@
-import * as DMP from 'diff-match-patch'
-
-// eslint-disable-next-line new-cap
-const dmp = new DMP.diff_match_patch()
+import {applyPatches, parsePatch} from '@sanity/diff-match-patch'
 
 type fn = (oldVal: any, newVal: any) => any
 const OPERATIONS: Record<string, fn> = {
@@ -17,8 +14,11 @@ const OPERATIONS: Record<string, fn> = {
   unset(currentValue: any, nextValue: any) {
     return undefined
   },
-  diffMatchPatch(currentValue: string, nextValue: string) {
-    return dmp.patch_apply(dmp.patch_fromText(nextValue), currentValue)[0]
+  diffMatchPatch(currentValue: string, nextValue: string): string {
+    const [result] = applyPatches(parsePatch(nextValue), currentValue, {
+      allowExceedingIndices: true,
+    })
+    return result
   },
 }
 
@@ -26,13 +26,13 @@ const SUPPORTED_PATCH_TYPES = Object.keys(OPERATIONS)
 
 export default function apply(
   value: string,
-  patch: {type: string; path: any[]; value: any}
+  patch: {type: string; path: any[]; value: any},
 ): string {
   if (!SUPPORTED_PATCH_TYPES.includes(patch.type)) {
     throw new Error(
       `Received patch of unsupported type: "${JSON.stringify(
-        patch.type
-      )}" for string. This is most likely a bug.`
+        patch.type,
+      )}" for string. This is most likely a bug.`,
     )
   }
 
@@ -40,7 +40,7 @@ export default function apply(
     throw new Error(
       `Cannot apply deep operations on string values. Received patch with type "${
         patch.type
-      }" and path "${patch.path.join('.')} that targeted the value "${JSON.stringify(value)}"`
+      }" and path "${patch.path.join('.')} that targeted the value "${JSON.stringify(value)}"`,
     )
   }
   const func = OPERATIONS[patch.type]
