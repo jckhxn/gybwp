@@ -6,6 +6,7 @@ const episode = {
   type: "document",
   fields: [
     // Grab all metadata from youtube from rewritten plugin.
+    // Episde metadata should fall under youtube
     {
       name: "youtube",
       title: "Youtube Embed",
