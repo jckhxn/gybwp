@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react'
 import {Spinner} from '@sanity/ui'
+import {useEffect, useState} from 'react'
 
 interface DelayedSpinnerProps {
   delay?: number

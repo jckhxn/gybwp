@@ -1,23 +1,24 @@
-import {history, defaultKeymap, historyKeymap} from '@codemirror/commands'
-import {highlightSelectionMatches} from '@codemirror/search'
-import {javascriptLanguage} from '@codemirror/lang-javascript'
 import {closeBrackets} from '@codemirror/autocomplete'
+import {defaultKeymap, history, historyKeymap} from '@codemirror/commands'
+import {javascriptLanguage} from '@codemirror/lang-javascript'
 import {
-  lineNumbers,
-  highlightActiveLineGutter,
-  highlightSpecialChars,
-  drawSelection,
-  highlightActiveLine,
-  keymap,
-} from '@codemirror/view'
-import {
+  bracketMatching,
+  defaultHighlightStyle,
   indentOnInput,
   syntaxHighlighting,
-  defaultHighlightStyle,
-  bracketMatching,
 } from '@codemirror/language'
+import {highlightSelectionMatches} from '@codemirror/search'
+import {type Extension} from '@codemirror/state'
+import {
+  drawSelection,
+  highlightActiveLine,
+  highlightActiveLineGutter,
+  highlightSpecialChars,
+  keymap,
+  lineNumbers,
+} from '@codemirror/view'
 
-export const codemirrorExtensions = [
+export const codemirrorExtensions: Extension[] = [
   [javascriptLanguage],
   lineNumbers(),
   highlightActiveLine(),
@@ -30,5 +31,16 @@ export const codemirrorExtensions = [
   history(),
   drawSelection(),
   syntaxHighlighting(defaultHighlightStyle, {fallback: true}),
-  keymap.of([defaultKeymap, historyKeymap].flat().filter(Boolean)),
+  keymap.of(
+    [
+      // Override the default keymap for Mod-Enter to not insert a new line, we have a custom event handler for executing queries
+      {key: 'Mod-Enter', run: () => true},
+
+      // Add the default keymap and history keymap
+      defaultKeymap,
+      historyKeymap,
+    ]
+      .flat()
+      .filter(Boolean),
+  ),
 ]
