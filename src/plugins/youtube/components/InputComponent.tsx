@@ -9,7 +9,10 @@ export type YoutubeObject = {
   id: string;
   title: string;
   description: string;
+  episodeNumber: number;
+  seasonNumber: number;
   publishedAt: string;
+  uuid: string;
   thumbnails: string[];
 };
 
@@ -36,7 +39,11 @@ export function YoutubeInputComponent(props: Props) {
       )}
       {!!props.value?.id && (
         <Box style={{ position: "relative" }}>
-          <VideoPreview id={props.value.id} title={props.value.title} />
+          <VideoPreview
+            id={props.value.id}
+            title={props.value.title}
+            description={props.value.description}
+          />
           <ActionsMenu
             onReset={reset}
             apiKey={props.apiKey}
