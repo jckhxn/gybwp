@@ -105,7 +105,6 @@ const Slider: React.FC<{
 
     return standardEpisode;
   };
-  
 
   return (
     <>
