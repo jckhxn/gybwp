@@ -1,5 +1,6 @@
 import { Box, Text } from "@sanity/ui";
 import { useState } from "react";
+import VideoInfo from "./VideoInfo";
 
 export function VideoPreview(props: { id: string; title: string }) {
   const [loadEmbed, setLoadEmbed] = useState(false);
@@ -76,6 +77,9 @@ export function VideoPreview(props: { id: string; title: string }) {
           />
         )}
       </Box>
+      {/* Pull in props. */}
+
+      <VideoInfo />
     </>
   );
 }
