@@ -1,18 +1,25 @@
-
-
 // https://www.sanity.io/guides/your-first-input-component-for-sanity-studio-v3
 // https://www.sanity.io/ui/
 // https://www.sanity.io/ui/arcade
-import {useCallback} from 'react'
+import { useCallback } from "react";
 import { set, unset } from "sanity";
-import {Stack, Card,Heading TextInput} from '@sanity/ui'
-type Props = {};
+import { Stack, Card, Heading, TextInput } from "@sanity/ui";
 
-const VideoInfo = (props: Props) => {
-  const handleChange = (event) => {
-    /* more code to come */
-  };
-  //
+const VideoInfo = ({
+  id,
+  title,
+  description,
+}: {
+  // Destructure props object
+  id?: string;
+  title?: string;
+  description?: string;
+}) => {
+  const handleChange = useCallback((field, value) => {
+    // Function to handle changes
+    // Update state or call a function from props to update data (explained later)
+  }, []);
+
   return (
     <>
       <Card padding={[4, 5, 6]}>
@@ -20,24 +27,30 @@ const VideoInfo = (props: Props) => {
           <Heading as="h1">Video Details</Heading>
           <TextInput
             fontSize={[2, 2, 3, 4]}
-            onChange={(event) => setValue(event.currentTarget.value)}
+            onChange={(event) =>
+              handleChange("title", event.currentTarget.value)
+            } // Pass field name and value
             padding={[3, 3, 4]}
             placeholder="TextInput"
-            value="{value}"
+            value={title}
           />
           <TextInput
             fontSize={[2, 2, 3, 4]}
-            onChange={(event) => setValue(event.currentTarget.value)}
+            onChange={(event) =>
+              handleChange("description", event.currentTarget.value)
+            }
             padding={[3, 3, 4]}
             placeholder="TextInput"
-            value="{value}"
+            value={description}
           />
           <TextInput
             fontSize={[2, 2, 3, 4]}
-            onChange={(event) => setValue(event.currentTarget.value)}
+            onChange={(event) =>
+              handleChange("blurb", event.currentTarget.value)
+            } // Update "blurb" field
             padding={[3, 3, 4]}
-            placeholder="TextInput"
-            value="{value}"
+            placeholder="Insert blurb here."
+            value=""
           />
         </Stack>
       </Card>
