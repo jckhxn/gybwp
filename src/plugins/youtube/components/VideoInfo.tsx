@@ -1,69 +1,33 @@
-import { useState, useEffect } from "react";
-import {
-  Stack,
-  Card,
-  Heading,
-  Text,
-  TextInput,
-  Flex,
-  Box,
-  TextArea,
-} from "@sanity/ui";
-import { FormField, set, unset } from "sanity";
+import { useState, useCallback } from "react";
+import { Heading, Flex, Box, TextArea } from "@sanity/ui";
+import { FormField, set, unset } from "sanity"; // We only need set for updates
 
 const VideoInfo = ({
   id,
   title,
   description,
   blurb = "",
+  onChange,
 }: {
   id?: string;
   title?: string;
   description?: string;
   blurb?: string;
+  onChange: (updatedField: string, newValue: string) => void;
 }) => {
-  const [titleUpdate, setTitleUpdate] = useState(title);
-  const [descriptionUpdate, setDescriptionUpdate] = useState(description);
-  const [blurbUpdate, setBlurbUpdate] = useState(blurb);
+  const [fields, setFields] = useState({
+    title: title,
+    description: description,
+    blurb: blurb,
+  });
 
-  const updateData = async () => {
-    const patch = set({
-      _id: id, // Assuming you have the document ID
-      title: titleUpdate,
-      description: descriptionUpdate,
-      blurb: blurbUpdate,
-    });
-    await patch.commit("production"); // Replace with your dataset name
-  };
-
-  const handleChange = (fieldName, newValue) => {
-    // Update local state
-    if (fieldName === "title") {
-      setTitleUpdate(newValue);
-    }
-    if (fieldName === "description") {
-      setDescriptionUpdate(newValue);
-    }
-    if (fieldName === "blurb") {
-      setBlurbUpdate(newValue);
-    }
-  };
-
-  // Update data in Sanity on state change using useEffect
-  useEffect(() => {
-    const updateOnchange = async () => {
-      await updateData();
-    };
-
-    // Trigger update on any state change (titleUpdate, descriptionUpdate, blurbUpdate)
-    if (
-      titleUpdate !== title ||
-      descriptionUpdate !== description ||
-      blurbUpdate !== blurb
-    ) {
-      updateOnchange();
-    }
-  }, [titleUpdate, descriptionUpdate, blurbUpdate]); // Dependency array
+  const handleChange = useCallback(
+    (fieldName, newValue) => {
+      setFields((prevFields) => ({ ...prevFields, [fieldName]: newValue }));
+      set(newValue);
+    },
+    [onChange]
+  );
 
   return (
     <>
@@ -76,7 +40,7 @@ const VideoInfo = ({
               onChange={(event) =>
                 handleChange("title", event.currentTarget.value)
               }
-              value={titleUpdate} // Use the updated state value
+              value={fields.title} // Use the updated state from fields
             />
             <FormField title="Episode Description">
               <TextArea
@@ -84,7 +48,7 @@ const VideoInfo = ({
                 onChange={(event) =>
                   handleChange("description", event.currentTarget.value)
                 }
-                value={descriptionUpdate} // Use the updated state value
+                value={fields.description} // Use the updated state from fields
               />
             </FormField>
             <FormField title="Episode Blurb">
@@ -94,7 +58,7 @@ const VideoInfo = ({
                   handleChange("blurb", event.currentTarget.value)
                 }
                 placeholder="Enter a blurb here"
-                value={blurbUpdate} // Use the updated state value
+                value={fields.blurb} // Use the updated state from fields
               />
             </FormField>
           </Box>
