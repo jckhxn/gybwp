@@ -2,7 +2,11 @@ import { Box, Text } from "@sanity/ui";
 import { useState } from "react";
 import VideoInfo from "./VideoInfo";
 
-export function VideoPreview(props: {
+export function VideoPreview({
+  id,
+  title,
+  description,
+}: {
   id: string;
   title: string;
   description: string;
@@ -30,20 +34,20 @@ export function VideoPreview(props: {
             <source
               type="image/webp"
               srcSet={[
-                `https://i.ytimg.com/vi_webp/${props.id}/mqdefault.webp 320w`,
-                `https://i.ytimg.com/vi_webp/${props.id}/hqdefault.webp 480w`,
-                `https://i.ytimg.com/vi_webp/${props.id}/sddefault.webp 640w`,
+                `https://i.ytimg.com/vi_webp/${id}/mqdefault.webp 320w`,
+                `https://i.ytimg.com/vi_webp/${id}/hqdefault.webp 480w`,
+                `https://i.ytimg.com/vi_webp/${id}/sddefault.webp 640w`,
               ].join(", ")}
             />
             <img
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              src={`https://i.ytimg.com/vi/${props.id}/sddefault.jpg`}
+              src={`https://i.ytimg.com/vi/${id}/sddefault.jpg`}
               srcSet={[
-                `https://i.ytimg.com/vi/${props.id}/mqdefault.jpg 320w`,
-                `https://i.ytimg.com/vi/${props.id}/hqdefault.jpg 480w`,
-                `https://i.ytimg.com/vi/${props.id}/sddefault.jpg 640w`,
+                `https://i.ytimg.com/vi/${id}/mqdefault.jpg 320w`,
+                `https://i.ytimg.com/vi/${id}/hqdefault.jpg 480w`,
+                `https://i.ytimg.com/vi/${id}/sddefault.jpg 640w`,
               ].join(", ")}
-              alt={props.title}
+              alt={title}
             />
           </picture>
           <button
@@ -74,16 +78,15 @@ export function VideoPreview(props: {
         {loadEmbed && (
           <iframe
             style={{ height: "100%", width: "100%", border: 0 }}
-            src={`https://www.youtube-nocookie.com/embed/${props.id}?autoplay=1&fs=0`}
+            src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&fs=0`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
-            title={props.title}
+            title={title}
           />
         )}
       </Box>
-      {/* Pull in props. */}
 
-      <VideoInfo />
+      <VideoInfo title={title} description={description} />
     </>
   );
 }
