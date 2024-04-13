@@ -1,59 +1,105 @@
-// https://www.sanity.io/guides/your-first-input-component-for-sanity-studio-v3
-// https://www.sanity.io/ui/
-// https://www.sanity.io/ui/arcade
-import { useCallback } from "react";
-import { set, unset } from "sanity";
-import { Stack, Card, Heading, TextInput } from "@sanity/ui";
+import { useState, useEffect } from "react";
+import {
+  Stack,
+  Card,
+  Heading,
+  Text,
+  TextInput,
+  Flex,
+  Box,
+  TextArea,
+} from "@sanity/ui";
+import { FormField, set, unset } from "sanity";
 
 const VideoInfo = ({
   id,
   title,
   description,
+  blurb = "",
 }: {
-  // Destructure props object
   id?: string;
   title?: string;
   description?: string;
+  blurb?: string;
 }) => {
-  const handleChange = useCallback((field, value) => {
-    // Function to handle changes
-    // Update state or call a function from props to update data (explained later)
-  }, []);
+  const [titleUpdate, setTitleUpdate] = useState(title);
+  const [descriptionUpdate, setDescriptionUpdate] = useState(description);
+  const [blurbUpdate, setBlurbUpdate] = useState(blurb);
+
+  const updateData = async () => {
+    const patch = set({
+      _id: id, // Assuming you have the document ID
+      title: titleUpdate,
+      description: descriptionUpdate,
+      blurb: blurbUpdate,
+    });
+    await patch.commit("production"); // Replace with your dataset name
+  };
+
+  const handleChange = (fieldName, newValue) => {
+    // Update local state
+    if (fieldName === "title") {
+      setTitleUpdate(newValue);
+    }
+    if (fieldName === "description") {
+      setDescriptionUpdate(newValue);
+    }
+    if (fieldName === "blurb") {
+      setBlurbUpdate(newValue);
+    }
+  };
+
+  // Update data in Sanity on state change using useEffect
+  useEffect(() => {
+    const updateOnchange = async () => {
+      await updateData();
+    };
+
+    // Trigger update on any state change (titleUpdate, descriptionUpdate, blurbUpdate)
+    if (
+      titleUpdate !== title ||
+      descriptionUpdate !== description ||
+      blurbUpdate !== blurb
+    ) {
+      updateOnchange();
+    }
+  }, [titleUpdate, descriptionUpdate, blurbUpdate]); // Dependency array
 
   return (
     <>
-      <Card padding={[4, 5, 6]}>
-        <Stack space={4}>
-          <Heading as="h1">Video Details</Heading>
-          <TextInput
-            fontSize={[2, 2, 3, 4]}
-            onChange={(event) =>
-              handleChange("title", event.currentTarget.value)
-            } // Pass field name and value
-            padding={[3, 3, 4]}
-            placeholder="TextInput"
-            value={title}
-          />
-          <TextInput
-            fontSize={[2, 2, 3, 4]}
-            onChange={(event) =>
-              handleChange("description", event.currentTarget.value)
-            }
-            padding={[3, 3, 4]}
-            placeholder="TextInput"
-            value={description}
-          />
-          <TextInput
-            fontSize={[2, 2, 3, 4]}
-            onChange={(event) =>
-              handleChange("blurb", event.currentTarget.value)
-            } // Update "blurb" field
-            padding={[3, 3, 4]}
-            placeholder="Insert blurb here."
-            value=""
-          />
-        </Stack>
-      </Card>
+      <Heading as="h1">Video Details</Heading>
+      <FormField title="Episode Title">
+        <Flex gap={2} width="100%">
+          <Box flex={1}>
+            <TextArea
+              height="100%"
+              onChange={(event) =>
+                handleChange("title", event.currentTarget.value)
+              }
+              value={titleUpdate} // Use the updated state value
+            />
+            <FormField title="Episode Description">
+              <TextArea
+                height="100%"
+                onChange={(event) =>
+                  handleChange("description", event.currentTarget.value)
+                }
+                value={descriptionUpdate} // Use the updated state value
+              />
+            </FormField>
+            <FormField title="Episode Blurb">
+              <TextArea
+                height="100%"
+                onChange={(event) =>
+                  handleChange("blurb", event.currentTarget.value)
+                }
+                placeholder="Enter a blurb here"
+                value={blurbUpdate} // Use the updated state value
+              />
+            </FormField>
+          </Box>
+        </Flex>
+      </FormField>
     </>
   );
 };
