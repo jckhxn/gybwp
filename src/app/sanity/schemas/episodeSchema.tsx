@@ -13,11 +13,16 @@ const episode = {
       type: "youtubeVideo",
       validation: (Rule) => Rule.required(),
     },
+
     {
       // Blurb about the Episode
       name: "blurb",
       title: "Episode Blurb",
       type: "string",
+      deprecated: {
+        reason: "Use Youtube Link instead",
+      },
+      readonly: true,
     },
     {
       // Name of the Episode

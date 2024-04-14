@@ -75,7 +75,7 @@ const PodcastDetailsPageComponent = () => {
       "image":image.asset->url,
       }
     },
-blurb,
+    "blurb":coalesce(youtube.blurb,blurb),
 "episodeName":coalesce(youtube.title,episodeName),
 "episodeNumber":coalesce(youtube.episodeNumber,episodeNumber),
 "image":coalesce(youtube.thumbnail,image),
