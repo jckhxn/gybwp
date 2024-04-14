@@ -85,8 +85,6 @@ export function VideoPreview({
           />
         )}
       </Box>
-
-      <VideoInfo title={title} description={description} />
     </>
   );
 }

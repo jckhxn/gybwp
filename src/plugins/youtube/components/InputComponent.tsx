@@ -4,6 +4,7 @@ import { ActionsMenu } from "./ActionsMenu";
 import { VideoPreview } from "./VideoPreview";
 import { VideoSearch } from "./VideoSearch";
 import { YoutubeVideoData } from "../utils";
+import VideoInfo from "./VideoInfo";
 
 export type YoutubeObject = {
   id: string;
@@ -29,6 +30,7 @@ export function YoutubeInputComponent(props: Props) {
   }
 
   function patchData(data: YoutubeVideoData) {
+    console.log(data);
     props.onChange(set(data));
   }
 
@@ -50,6 +52,7 @@ export function YoutubeInputComponent(props: Props) {
             onReplace={patchData}
             details={props.value}
           />
+          <VideoInfo details={props.value} onReplace={patchData} />
         </Box>
       )}
     </Stack>

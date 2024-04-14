@@ -1,33 +1,45 @@
-import { useState, useCallback } from "react";
 import { Heading, Flex, Box, TextArea } from "@sanity/ui";
-import { FormField, set, unset } from "sanity"; // We only need set for updates
+import { useState } from "react";
+import {
+  FormField,
+  ObjectInputProps,
+  ObjectSchemaType,
+  TextInput,
+  set,
+  unset,
+} from "sanity"; // We only need set for updates
+import { YoutubeObject } from "./InputComponent";
+import { YoutubeVideoData } from "../utils";
+export type YoutubeInputProps = ObjectInputProps<
+  YoutubeObject,
+  ObjectSchemaType
+>;
 
-const VideoInfo = ({
-  id,
-  title,
-  description,
-  blurb = "",
-  onChange,
-}: {
-  id?: string;
-  title?: string;
-  description?: string;
-  blurb?: string;
-  onChange: (updatedField: string, newValue: string) => void;
-}) => {
-  const [fields, setFields] = useState({
-    title: title,
-    description: description,
-    blurb: blurb,
-  });
+type Props = YoutubeInputProps & {
+  apiKey: string;
+  onReplace: (data: YoutubeVideoData) => void;
+};
+const VideoInfo = (props: Props) => {
+  const { details } = props;
+  const [title, setTitle] = useState(details.title);
+  const [description, setDescription] = useState(details.description);
+  const [blurb, setBlurb] = useState(""); // Assuming blurb is not provided initially
 
-  const handleChange = useCallback(
-    (fieldName, newValue) => {
-      setFields((prevFields) => ({ ...prevFields, [fieldName]: newValue }));
-      set(newValue);
-    },
-    [onChange]
-  );
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+
+    props.onReplace({ ...details, title });
+  };
+
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+    props.onReplace({ ...details, description });
+  };
+
+  const handleBlurbChange = (event) => {
+    setBlurb(event.target.value);
+    props.onReplace({ ...details, blurb });
+  };
 
   return (
     <>
@@ -37,28 +49,23 @@ const VideoInfo = ({
           <Box flex={1}>
             <TextArea
               height="100%"
-              onChange={(event) =>
-                handleChange("title", event.currentTarget.value)
-              }
-              value={fields.title} // Use the updated state from fields
+              value={title}
+              onChange={handleTitleChange}
             />
             <FormField title="Episode Description">
               <TextArea
                 height="100%"
-                onChange={(event) =>
-                  handleChange("description", event.currentTarget.value)
-                }
-                value={fields.description} // Use the updated state from fields
+                rows={10}
+                value={description}
+                onChange={handleDescriptionChange}
               />
             </FormField>
             <FormField title="Episode Blurb">
               <TextArea
                 height="100%"
-                onChange={(event) =>
-                  handleChange("blurb", event.currentTarget.value)
-                }
                 placeholder="Enter a blurb here"
-                value={fields.blurb} // Use the updated state from fields
+                value={blurb}
+                onChange={handleBlurbChange}
               />
             </FormField>
           </Box>
@@ -67,5 +74,4 @@ const VideoInfo = ({
     </>
   );
 };
-
 export default VideoInfo;
