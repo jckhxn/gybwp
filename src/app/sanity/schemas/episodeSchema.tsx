@@ -19,6 +19,7 @@ const episode = {
       name: "blurb",
       title: "Episode Blurb",
       type: "string",
+
       deprecated: {
         reason: "Use Youtube Link instead",
       },
