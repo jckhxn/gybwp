@@ -28,17 +28,17 @@ const VideoInfo = (props: Props) => {
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
 
-    props.onReplace({ ...details, title });
+    props.onReplace({ ...details, title: event.target.value });
   };
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
-    props.onReplace({ ...details, description });
+    props.onReplace({ ...details, description: event.target.value });
   };
 
   const handleBlurbChange = (event) => {
     setBlurb(event.target.value);
-    props.onReplace({ ...details, blurb });
+    props.onReplace({ ...details, blurb: event.target.value });
   };
 
   return (
@@ -51,6 +51,7 @@ const VideoInfo = (props: Props) => {
               height="100%"
               value={title}
               onChange={handleTitleChange}
+              onPaste={handleTitleChange}
             />
             <FormField title="Episode Description">
               <TextArea
