@@ -3,7 +3,6 @@ import { useState } from "react";
 import { FormField, ObjectInputProps, ObjectSchemaType } from "sanity"; // We only need set for updates
 import { YoutubeObject } from "./InputComponent";
 import { YoutubeVideoData } from "../utils";
-import { setuid } from "process";
 export type YoutubeInputProps = ObjectInputProps<
   YoutubeObject,
   ObjectSchemaType
@@ -17,7 +16,7 @@ const VideoInfo = (props: Props) => {
   const { details } = props;
   const [title, setTitle] = useState(details.title);
   const [description, setDescription] = useState(details.description);
-  const [blurb, setBlurb] = useState(""); // Assuming blurb is not provided initially
+  const [blurb, setBlurb] = useState(details.blurb ? details.blurb : ""); // Assuming blurb is not provided initially
   const [uuid, setUUID] = useState(details.uuid);
 
   const handleTitleChange = (event) => {
