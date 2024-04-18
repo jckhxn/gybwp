@@ -96,16 +96,17 @@ const Slider: React.FC<{
       return "Season Trailer";
     }
 
-    if (uuid.includes("-")) {
+    if (uuid?.includes("-")) {
       return standardEpisode + ` - Part ${uuid.split("-")[1]}`;
     }
 
-    if (uuid.includes("_")) {
+    if (uuid?.includes("_")) {
       return "Clip | " + standardEpisode;
     }
 
     return standardEpisode;
   };
+  console.log(items);
 
   return (
     <>

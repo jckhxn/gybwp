@@ -132,7 +132,7 @@ url,
 
       // Check if obj.uuid includes a hyphen (a multi-part episode)
       // and if the first three numbers of obj.uuid are higher than the given number's first three numbers
-      if (obj.uuid.includes("-") && objNumberPrefix > givenNumberPrefix) {
+      if (obj.uuid?.includes("-") && objNumberPrefix > givenNumberPrefix) {
         return true;
       }
       return false;
@@ -164,9 +164,9 @@ url,
   function findEpisodesWithNumber(objectsArray, number) {
     // Check if the input number is present in any part of the UUID in the objects array
     let matchingObjects = objectsArray?.filter(function (obj) {
-      const numnerWithoutPart = number?.split("-")[0];
+      const numberWithoutPart = number?.split("-")[0];
       // Check if the number is present in the UUID
-      return obj.uuid.includes(numnerWithoutPart);
+      return obj.uuid?.includes(numberWithoutPart);
     });
 
     // Create an array of objects with matching UUIDs and their respective objects
