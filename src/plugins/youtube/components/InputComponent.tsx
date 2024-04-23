@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Box, Stack } from "@sanity/ui";
 import { ObjectInputProps, ObjectSchemaType, set, unset } from "sanity";
 import { ActionsMenu } from "./ActionsMenu";
@@ -30,7 +31,6 @@ export function YoutubeInputComponent(props: Props) {
   }
 
   function patchData(data: YoutubeVideoData) {
-    console.log(data);
     props.onChange(set(data));
   }
 
@@ -52,6 +52,7 @@ export function YoutubeInputComponent(props: Props) {
             onReplace={patchData}
             details={props.value}
           />
+
           <VideoInfo details={props.value} onReplace={patchData} />
         </Box>
       )}

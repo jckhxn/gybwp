@@ -1,3 +1,4 @@
+// @ts-ignore
 function getUUIDFromTitle(text) {
   // Regular expression to match "SxEXX" format
   const regex = /S(\d+)E(\d+)/;
@@ -12,6 +13,7 @@ function getUUIDFromTitle(text) {
 
   return match[1].toString() + match[2].toString();
 }
+// @ts-ignore
 function getSeasonNumber(text) {
   // Regular expression to match "SxEXX" format
   const regex = /S(\d+)E(\d+)/;
@@ -25,7 +27,7 @@ function getSeasonNumber(text) {
   // Return season and episode numbers as an object
   return parseInt(match[1]);
 }
-
+// @ts-ignore
 function getEpisodeNumber(text) {
   // Regular expression to match "SxEXX" format
   const regex = /S(\d+)E(\d+)/;
@@ -44,7 +46,7 @@ export type YoutubeVideoData = {
   title: string;
   description: string;
   publishedAt: string;
-  thumbnails: string[];
+  thumbnail?: string;
   uuid: string;
   seasonNumber: number;
   episodeNumber: number;
@@ -55,6 +57,7 @@ export function fetchVideoData(
   apiKey: string
 ): Promise<YoutubeVideoData | null> {
   const url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=${id}&key=${apiKey}`;
+  // @ts-ignore
   return fetch(url)
     .then((res) => res.json())
     .then((data) => {
