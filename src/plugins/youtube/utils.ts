@@ -87,7 +87,7 @@ export function deriveVideoId(input: string): string | null {
     return new URL(input).searchParams.get("v");
   }
 
-  if (/^https?:\/\/youtu\.be\/[a-zA-Z0-9_-]{11}($|\/)/.test(input)) {
+  if (/^https?:\/\/youtu\.be\/[a-zA-Z0-9_-]{11}(?:\?.*)?$/.test(input)) {
     return new URL(input).pathname.split("/")[1];
   }
 
