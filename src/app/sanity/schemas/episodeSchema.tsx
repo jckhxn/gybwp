@@ -1,29 +1,33 @@
 import { Rule } from "@sanity/types";
+import { validation } from "sanity";
+
+// TODO: Make Seasons a collection in schema,
+//  Cleanup episode schema
 const episode = {
+  // Documents preview based on youtube.title param
+  preview: {
+    select: {
+      title: "youtube.title",
+    },
+    prepare(selection) {
+      const { title } = selection;
+      return {
+        title: title,
+      };
+    },
+  },
   name: "episode",
   title: "Episodes",
   type: "document",
   fields: [
+    // Grab all metadata from youtube from rewritten plugin.
+    // Episde metadata should fall under youtube
     {
-      // Name of the Episode
-      name: "episodeName",
-      title: "Episode Name",
-      type: "string",
+      name: "youtube",
+      title: "Youtube Embed",
+      type: "youtubeVideo",
+      validation: (Rule) => Rule.required(),
     },
-    {
-      // Number of the Episode
-      name: "episodeNumber",
-      title: "Episode Number",
-      type: "number",
-    },
-    // Make adding an ep to a season automatic, do other stuff lol
-    // {
-    //   name: "season",
-    //   title: "Season",
-    //   type: "reference",
-    //   weak: true,
-    //   to: [{ type: "seasons" }],
-    // },
 
     {
       // Season Name
@@ -53,27 +57,54 @@ const episode = {
           return true;
         }),
     },
+    {
+      // Blurb about the Episode
+      name: "blurb",
+      title: "Episode Blurb",
+      type: "string",
 
+      deprecated: {
+        reason: "Use Youtube Link instead",
+      },
+      readonly: true,
+    },
+    {
+      // Name of the Episode
+      name: "episodeName",
+      title: "Episode Name",
+      type: "string",
+      deprecated: {
+        reason: "Use Youtube Link instead",
+      },
+      readonly: true,
+    },
+    {
+      // Number of the Episode
+      name: "episodeNumber",
+      title: "Episode Number",
+      type: "number",
+      deprecated: {
+        reason: "Use Youtube Link instead",
+      },
+      readonly: true,
+    },
+    // Make adding an ep to a season automatic, do other stuff lol
     // {
-    //   // Season Name
-    //   name: "seasonName",
-    //   title: "Season Name",
-    //   type: "string",
-
-    //   validation: (Rule: Rule) =>
-    //     Rule.custom((value: string) => {
-    //       if (!value.includes("Season")) {
-    //         // The freakin' thing must say Season.
-    //         return 'Season name must start with  "Season", e.g "Season Four"';
-    //       }
-    //       return true;
-    //     }),
+    //   name: "season",
+    //   title: "Season",
+    //   type: "reference",
+    //   weak: true,
+    //   to: [{ type: "seasons" }],
     // },
     {
       // Season Number
       name: "seasonNumber",
       title: "Season Number",
       type: "number",
+      deprecated: {
+        reason: "Use Youtube Link instead",
+      },
+      readonly: true,
     },
 
     {
@@ -81,6 +112,10 @@ const episode = {
       name: "uuid",
       title: "UUID",
       type: "string",
+      deprecated: {
+        reason: "Use Youtube Link instead",
+      },
+      readonly: true,
     },
 
     {
@@ -114,18 +149,21 @@ const episode = {
       name: "url",
       title: "Video Podcast URL",
       type: "url",
+      deprecated: {
+        reason: "Use Youtube Link instead",
+      },
+      readonly: true,
     },
+
     {
       // Image  of the Episode
       name: "image",
       title: "YouTube URL Image",
       type: "url",
-    },
-    {
-      // Blurb about the Episode
-      name: "blurb",
-      title: "Episode Blurb",
-      type: "string",
+      deprecated: {
+        reason: "Use Youtube Link instead",
+      },
+      readonly: true,
     },
 
     {
@@ -225,6 +263,10 @@ const episode = {
           name: "description",
           title: "Description of Episode",
           type: "text",
+          deprecated: {
+            reason: "Can be pulled from YouTube Video",
+          },
+          readonly: true,
         },
         {
           name: "hashtags",
