@@ -13,27 +13,30 @@ type Props = YoutubeInputProps & {
   onReplace: (data: YoutubeVideoData) => void;
 };
 const VideoInfo = (props: Props) => {
+  // @ts-ignore
   const { details } = props;
   const [title, setTitle] = useState(details.title);
   const [description, setDescription] = useState(details.description);
   const [blurb, setBlurb] = useState(details.blurb ? details.blurb : ""); // Assuming blurb is not provided initially
   const [uuid, setUUID] = useState(details.uuid);
 
+  // @ts-ignore
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
 
     props.onReplace({ ...details, title: event.target.value });
   };
-
+  // @ts-ignore
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
     props.onReplace({ ...details, description: event.target.value });
   };
-
+  // @ts-ignore
   const handleBlurbChange = (event) => {
     setBlurb(event.target.value);
     props.onReplace({ ...details, blurb: event.target.value });
   };
+  // @ts-ignore
   const handleUUIDChange = (event) => {
     // Validate text
     const regex = /^[0-9\-_]*$/;

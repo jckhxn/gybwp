@@ -9,7 +9,7 @@ const episode = {
     select: {
       title: "youtube.title",
     },
-    prepare(selection) {
+    prepare(selection: { title: any; }) {
       const { title } = selection;
       return {
         title: title,
@@ -26,7 +26,7 @@ const episode = {
       name: "youtube",
       title: "Youtube Embed",
       type: "youtubeVideo",
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: { required: () => any; }) => Rule.required(),
     },
 
     {

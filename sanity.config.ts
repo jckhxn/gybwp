@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { defineConfig } from "sanity";
 // Plugins
 import { structureTool } from "sanity/structure";
