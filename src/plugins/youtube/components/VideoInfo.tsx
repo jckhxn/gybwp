@@ -1,0 +1,89 @@
+import { Heading, Flex, Box, TextArea } from "@sanity/ui";
+import { useState } from "react";
+import { FormField, ObjectInputProps, ObjectSchemaType } from "sanity"; // We only need set for updates
+import { YoutubeObject } from "./InputComponent";
+import { YoutubeVideoData } from "../utils";
+export type YoutubeInputProps = ObjectInputProps<
+  YoutubeObject,
+  ObjectSchemaType
+>;
+
+type Props = YoutubeInputProps & {
+  apiKey: string;
+  onReplace: (data: YoutubeVideoData) => void;
+};
+const VideoInfo = (props: Props) => {
+  const { details } = props;
+  const [title, setTitle] = useState(details.title);
+  const [description, setDescription] = useState(details.description);
+  const [blurb, setBlurb] = useState(details.blurb ? details.blurb : ""); // Assuming blurb is not provided initially
+  const [uuid, setUUID] = useState(details.uuid);
+
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+
+    props.onReplace({ ...details, title: event.target.value });
+  };
+
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+    props.onReplace({ ...details, description: event.target.value });
+  };
+
+  const handleBlurbChange = (event) => {
+    setBlurb(event.target.value);
+    props.onReplace({ ...details, blurb: event.target.value });
+  };
+  const handleUUIDChange = (event) => {
+    // Validate text
+    const regex = /^[0-9\-_]*$/;
+    const validatedUUID = regex.test(event.target.value);
+    if (validatedUUID) {
+      setUUID(event.target.value);
+      props.onReplace({ ...details, uuid: event.target.value });
+    }
+  };
+
+  return (
+    <>
+      <Heading as="h1">Video Details</Heading>
+      <FormField title="Episode Title">
+        <Flex gap={2} width="100%">
+          <Box flex={1}>
+            <TextArea
+              height="100%"
+              value={title}
+              onChange={handleTitleChange}
+              onPaste={handleTitleChange}
+            />
+            <FormField title="Episode Description">
+              <TextArea
+                height="100%"
+                rows={10}
+                value={description}
+                onChange={handleDescriptionChange}
+              />
+            </FormField>
+            <FormField title="Episode Blurb">
+              <TextArea
+                height="100%"
+                placeholder="Enter a blurb here"
+                value={blurb}
+                onChange={handleBlurbChange}
+              />
+            </FormField>
+            <FormField title="Episode UUID">
+              <TextArea
+                height="100%"
+                placeholder="Change or add part or clip number"
+                value={uuid}
+                onChange={handleUUIDChange}
+              />
+            </FormField>
+          </Box>
+        </Flex>
+      </FormField>
+    </>
+  );
+};
+export default VideoInfo;
