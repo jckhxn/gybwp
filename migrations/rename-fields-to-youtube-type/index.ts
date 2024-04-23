@@ -14,7 +14,7 @@ const fieldsToMigrate = [
   { from: "image", to: "youtube.thumbnail" },
   { from: "seasonNumber", to: "youtube.seasonNumber" },
   { from: "uuid", to: "youtube.uuid" },
-  { from: "url", to: "youtube.id", transform: (url) => url.split("/")[3] },
+  { from: "url", to: "youtube.id", transform: (url: string) => url.split("/")[3] },
 
   // Add more field mappings as needed
 ];
