@@ -135,10 +135,10 @@ const HomePageComponent = () => {
             </p>
           </div>
 
-          <div className="mx-auto mt-8 max-w-xl text-center">
+          <div className="mx-auto mt-8 max-w-xl text-center ">
             <Button
               as="a"
-              color={"white"}
+              color={"bg-[#0A66C2]"}
               href={CTA.buttonUrl}
               className="px-12 py-3"
             >
