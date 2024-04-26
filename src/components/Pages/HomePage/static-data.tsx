@@ -35,7 +35,7 @@ export const HERO = {
 export const CTA = {
   header: "Growing your business with People!",
   body: "Growing your business with your biggest and most important investment - People!",
-  buttonText: "Subscribe to our Newsletter!",
+  buttonText: "Subscribe on LinkedIn",
   buttonUrl: routes.external.newsletter,
 };
 

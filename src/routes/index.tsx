@@ -24,7 +24,7 @@ const routes = {
     follow:
       "https://www.linkedin.com/company/growing-your-business-with-people ",
     newsletter:
-      "https://www.linkedin.com/newsletters/gybwp-newsletter-7049506606413213696/",
+      "https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7049506606413213696",
   },
 };
 
