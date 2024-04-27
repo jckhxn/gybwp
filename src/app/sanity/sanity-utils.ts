@@ -1,10 +1,15 @@
 import { createClient, groq } from "next-sanity";
-const client = createClient({
+export const client = createClient({
   projectId: "hxymd1na",
   dataset: "production",
   apiVersion: "2023-08-22",
 
   useCdn: false,
+  // perspective: "published",
+  // stega: {
+  //   enabled: false,
+  //   studioUrl: "/dash",
+  // },
 });
 interface Params {
   uuid: string;
