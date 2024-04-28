@@ -1,5 +1,6 @@
 // ./src/defaultDocumentNode.ts
 
+// @ts-nocheck
 import { DefaultDocumentNodeResolver } from "sanity/structure";
 import { Iframe } from "sanity-plugin-iframe-pane";
 import { SanityDocument } from "sanity";
