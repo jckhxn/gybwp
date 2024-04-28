@@ -3,11 +3,12 @@ import { defineConfig } from "sanity";
 // Plugins
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
-import { presentationTool } from "@sanity/presentation";
-import { locate } from "./src/app/sanity/locate";
+
+import { locate } from "./src/app/lib/locate";
+import { pages } from "@tinloof/sanity-studio";
+
 import { youtubeInput } from "./src/plugins/youtube";
 import schemas from "./src/app/sanity/schemas";
-import { defaultDocumentNode } from "./src/app/lib/defaultDocumentNode";
 
 const config = defineConfig({
   projectId: "hxymd1na",
@@ -16,10 +17,20 @@ const config = defineConfig({
   apiVersion: "2023-08-22",
   basePath: "/dash",
   plugins: [
-    structureTool({ defaultDocumentNode }),
-    visionTool(),
+    structureTool(),
+    pages({
+      title: "Live Preview",
 
+      creatablePages: ["episode"],
+      locate,
+      previewUrl: {
+        draftMode: {
+          enable: "/api/draft",
+        },
+      },
+    }),
     youtubeInput({ apiKey: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY }),
+    visionTool(),
   ],
   schema: { types: schemas },
   useCdn: false,
