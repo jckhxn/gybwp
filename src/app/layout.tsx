@@ -71,7 +71,7 @@ export default function RootLayout({
             <main className={openSans.className}>
               <Header />
               {children}
-              {/* {draftMode().isEnabled && <LiveVisualEditing />} */}
+              {draftMode().isEnabled && <LiveVisualEditing />}
               <Footer />
             </main>
           </Layout>

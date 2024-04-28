@@ -1,6 +1,6 @@
 import { Rule } from "@sanity/types";
 import { validation } from "sanity";
-
+import { definePathname } from "@tinloof/sanity-studio";
 // TODO: Make Seasons a collection in schema,
 //  Cleanup episode schema
 const episode = {
@@ -8,11 +8,14 @@ const episode = {
   preview: {
     select: {
       title: "youtube.title",
+      seasonNumber: "youtube.seasonNumber",
+      episodeNumber: "youtube.episodeNumber",
     },
-    prepare(selection: { title: any; }) {
-      const { title } = selection;
+    prepare(selection: { title: any; seasonNumber: any; episodeNumber: any }) {
+      const { title, seasonNumber, episodeNumber } = selection;
       return {
         title: title,
+        subtitle: `S${seasonNumber} E${episodeNumber}`,
       };
     },
   },
@@ -20,13 +23,15 @@ const episode = {
   title: "Episodes",
   type: "document",
   fields: [
-    // Grab all metadata from youtube from rewritten plugin.
-    // Episde metadata should fall under youtube
+    definePathname({
+      name: "episode",
+      hidden: ({ value }) => (value === undefined ? true : false),
+    }),
     {
       name: "youtube",
       title: "Youtube Embed",
       type: "youtubeVideo",
-      validation: (Rule: { required: () => any; }) => Rule.required(),
+      validation: (Rule: { required: () => any }) => Rule.required(),
     },
 
     {
@@ -66,6 +71,7 @@ const episode = {
       deprecated: {
         reason: "Use Youtube Link instead",
       },
+      hidden: ({ value }) => (value === undefined ? true : false),
       readonly: true,
     },
     {
@@ -76,6 +82,7 @@ const episode = {
       deprecated: {
         reason: "Use Youtube Link instead",
       },
+      hidden: ({ value }) => (value === undefined ? true : false),
       readonly: true,
     },
     {
@@ -86,6 +93,7 @@ const episode = {
       deprecated: {
         reason: "Use Youtube Link instead",
       },
+      hidden: ({ value }) => (value === undefined ? true : false),
       readonly: true,
     },
     // Make adding an ep to a season automatic, do other stuff lol
@@ -104,6 +112,7 @@ const episode = {
       deprecated: {
         reason: "Use Youtube Link instead",
       },
+      hidden: ({ value }) => (value === undefined ? true : false),
       readonly: true,
     },
 
@@ -115,6 +124,7 @@ const episode = {
       deprecated: {
         reason: "Use Youtube Link instead",
       },
+      hidden: ({ value }) => (value === undefined ? true : false),
       readonly: true,
     },
 
@@ -152,6 +162,7 @@ const episode = {
       deprecated: {
         reason: "Use Youtube Link instead",
       },
+      hidden: ({ value }) => (value === undefined ? true : false),
       readonly: true,
     },
 
@@ -163,6 +174,7 @@ const episode = {
       deprecated: {
         reason: "Use Youtube Link instead",
       },
+      hidden: ({ value }) => (value === undefined ? true : false),
       readonly: true,
     },
 
@@ -266,6 +278,7 @@ const episode = {
           deprecated: {
             reason: "Can be pulled from YouTube Video",
           },
+          hidden: ({ value }) => (value === undefined ? true : false),
           readonly: true,
         },
         {
@@ -274,22 +287,6 @@ const episode = {
           type: "array",
           of: [{ type: "string" }],
         },
-
-        // {
-        //   Old Episode Links Content stuff
-        //   name: "links",
-        //   title: "Episode Links",
-        //   type: "array",
-        //   of: [
-        //     {
-        //       type: "object",
-        //       fields: [
-        //         { name: "text", title: "Description of Link", type: "string" },
-        //         { name: "linkUrl", title: "Link", type: "url" },
-        //       ],
-        //     },
-        //   ],
-        // },
       ],
     },
   ],

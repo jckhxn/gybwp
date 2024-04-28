@@ -5,11 +5,11 @@ export const client = createClient({
   apiVersion: "2023-08-22",
 
   useCdn: false,
-  // perspective: "published",
-  // stega: {
-  //   enabled: false,
-  //   studioUrl: "/dash",
-  // },
+  perspective: "published",
+  stega: {
+    enabled: false,
+    studioUrl: "/dash",
+  },
 });
 interface Params {
   uuid: string;

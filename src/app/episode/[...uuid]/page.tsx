@@ -2,9 +2,11 @@
 
 import React from "react";
 import PodcastDetailsPageComponent from "../../../components/Pages/PodcastDetailsPage";
+import PodcastPreview from "../../sanity/components/PodcastPreview";
 // Get Episode Data
 import { getEpisodeDetails } from "../../sanity/sanity-utils";
 import { Metadata } from "next";
+import { draftMode } from "next/headers";
 
 type Props = {
   params: { uuid: string };
@@ -12,6 +14,7 @@ type Props = {
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const { params } = props;
+
   const [episodeDetails] = await getEpisodeDetails(params.uuid);
 
   if (episodeDetails)
@@ -42,10 +45,10 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
     };
 };
 
-export default function page() {
-  return (
-    <>
-      <PodcastDetailsPageComponent />
-    </>
+export default function page({ props }) {
+  return draftMode().isEnabled ? (
+    <PodcastPreview />
+  ) : (
+    <PodcastDetailsPageComponent />
   );
 }
