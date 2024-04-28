@@ -1,5 +1,5 @@
-"use client";
 // @ts-nocheck
+"use client";
 // Next Stuff
 import imageUrlBuilder from "@sanity/image-url";
 import { dataset, projectId } from "../env";
@@ -84,7 +84,9 @@ export default function PodcastPreview({
               className="block sm:hidden"
               width="280"
               height="157"
-              src={`https://www.youtube.com/embed/${data.url.split("/")[3]}`}
+              src={`https://www.youtube.com/embed/${
+                data.url?.split("/")[3] || data.youtube.id
+              }`}
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
@@ -93,7 +95,9 @@ export default function PodcastPreview({
               className="hidden sm:block"
               width="560"
               height="315"
-              src={`https://www.youtube.com/embed/${data.url.split("/")[3]}`}
+              src={`https://www.youtube.com/embed/${
+                data.url?.split("/")[3] || data.youtube.id
+              }`}
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
@@ -204,6 +208,6 @@ export default function PodcastPreview({
       </Section>
     </>
   ) : (
-    <h1>Ah geez Rick, no data to return</h1>
+    <h1>Possible invalid UUID.</h1>
   );
 }

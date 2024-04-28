@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Rule } from "@sanity/types";
 import { validation } from "sanity";
 import { definePathname } from "@tinloof/sanity-studio";
