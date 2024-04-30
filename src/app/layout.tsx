@@ -1,5 +1,5 @@
 import React from "react";
-import { usePathname } from "next/navigation";
+import { draftMode } from "next/headers";
 import Script from "next/script";
 // components
 import DefaultLayout from "components/Layout";
@@ -22,6 +22,7 @@ import type { AppProps } from "next/app";
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 import type { Metadata } from "next";
+import LiveVisualEditing from "./sanity/components/LiveVisualEditing";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gybwp.com"),
@@ -70,7 +71,7 @@ export default function RootLayout({
             <main className={openSans.className}>
               <Header />
               {children}
-
+              {draftMode().isEnabled && <LiveVisualEditing />}
               <Footer />
             </main>
           </Layout>

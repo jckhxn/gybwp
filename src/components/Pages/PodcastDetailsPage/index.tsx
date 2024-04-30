@@ -23,6 +23,7 @@ import { SPONSORS } from "components/Pages/SponsorsPage/static-data";
 import useSWR from "swr";
 import { groq, createClient } from "next-sanity";
 import { Content } from "components/Content";
+import { EPISODES, PODCAST_DETAILS_QUERY } from "../../../app/lib/queries";
 
 const client = createClient({
   projectId: "hxymd1na",
@@ -45,102 +46,21 @@ export interface compiledEpisodeType extends episodeType {
 const PodcastDetailsPageComponent = () => {
   const [episode, setEpisode] = useState<compiledEpisodeType>();
   const [nextEpisode, setNextEpisode] = useState<string>();
-  const [allPrevGuestEpisodes, setPrevGuestEpisodes] = useState([]);
+  const [prevEpisode, setPrevEpisode] = useState<string>();
 
   const router = useRouter();
   const pathname = usePathname();
-
-  const thisWindow =
-    typeof window !== "undefined" ? window.location.pathname : null;
-
   const uuid = pathname.split("/")[2];
 
-  const { data: episodes } = useSWR(
-    groq`*[_type == "episode"]| order(uuid asc)`,
+  const { data: episodes, isLoading: episodesLoading } = useSWR(
+    EPISODES,
     (query) => client.fetch(query)
   );
 
-  const { data, error, isLoading } = useSWR(
-    groq`{ "episodes":*[_type == "episode"]{uuid} | order(uuid desc),"episodeDetails":*[_type == "episode"  && uuid == "${uuid}"]}{
-      episodeDetails[]
-{
-  content
-  {
-    files[]
-    {
-      link,
-      name,
-      type,
-      "file":pdf.asset->url,
-      "image":image.asset->url,
-      }
-    },
-    "blurb":coalesce(youtube.blurb,blurb),
-"episodeName":coalesce(youtube.title,episodeName),
-"episodeNumber":coalesce(youtube.episodeNumber,episodeNumber),
-"image":coalesce(youtube.thumbnail,image),
-podcastLinks,
-seasonName,
-"seasonNumber":coalesce(youtube.seasonNumber,seasonNumber),
-sponsors,
-"url":coalesce("https://www.youtube.com/"+youtube.id,url),
-"uuid":coalesce(youtube.uuid,uuid),
-details{
-description,
-links,
-featuredGuests[]
-{
-name,
-about,
-title,
-url,
-"image":image.asset->url
-}
-}
-
-}
-}`,
-    (query) => client.fetch(query)
+  const { data, error, isLoading } = useSWR(PODCAST_DETAILS_QUERY, (query) =>
+    client.fetch(query, { uuid })
   );
 
-  const { data: episodesFeatGuest, isLoading: guestEpsLoading } = useSWR(
-    groq`*[_type == "episode" && details.featuredGuests[].name match "${episode?.details?.featuredGuests[0].name}"]
-    {
-      episodeName,
-      episodeNumber,
-        uuid,
-        image
-    }
-    `,
-    (query) => client.fetch(query)
-  );
-
-  const { data: sponsorsArray, isLoading: sponsorsLoading } = useSWR(
-    groq`*[_type == "sponsor"]`,
-    (query) => client.fetch(query)
-  );
-
-  // This func finds the next episode.
-  function findFirstHigherUUID(objectsArray, number) {
-    // Extract the first three numbers from the given number
-    const givenNumberPrefix = parseInt(number.substring(0, 3));
-
-    // Using the find method to find the first object where the first three numbers of 'uuid' is higher than the given number's first three numbers
-    let foundObject = objectsArray?.find(function (obj) {
-      // Extract the first three numbers from obj.uuid
-      const objNumberPrefix = parseInt(obj.uuid.substring(0, 3));
-
-      // Check if obj.uuid includes a hyphen (a multi-part episode)
-      // and if the first three numbers of obj.uuid are higher than the given number's first three numbers
-      if (obj.uuid?.includes("-") && objNumberPrefix > givenNumberPrefix) {
-        return true;
-      }
-      return false;
-    });
-
-    // If a matching object is found, return its 'uuid', otherwise return null
-    return foundObject ? foundObject.uuid : null;
-  }
   // This func finds the next part.
   function findNextEpPart(objectsArray, number) {
     // Extract the numeric part of the input number using a regular expression
@@ -188,52 +108,11 @@ url,
       // Fix weird refresh error and episode not found redirect to Error page
       setEpisode(data.episodeDetails[0]);
       if (!data.episodeDetails.length) throw new Error("Episode not found.");
-      if (episode) {
-        const nextEp = findFirstHigherUUID(episodes, episode?.uuid);
 
-        setNextEpisode(nextEp);
+      if (data) {
+        setNextEpisode(data.episodeDetails[0].nextEpisode);
+        setPrevEpisode(data.episodeDetails[0].prevEpisode);
       }
-      // Get all episodes (omit current) for all guests
-      const fetchGuestEpisodes = async () => {
-        try {
-          const filteredEpisodesPromises = episode?.details?.featuredGuests.map(
-            async (guest, idx) => {
-              const guestEpisodes = await client.fetch(groq`
-              *[_type == "episode" && details.featuredGuests[].name match "${guest.name}"] {
-                episodeName,
-                episodeNumber,
-                uuid,
-                image,
-                details,
-              
-              }
-            `);
-
-              // Filter out current episode from the list
-              const filteredGuestEps = guestEpisodes?.filter(function (obj) {
-                // Assuming each object in the array has a property named 'uuid'
-                const objFirstThreeDigits = obj.uuid?.slice(0, 3);
-                const targetFirstThreeDigits = episode?.uuid?.slice(0, 3);
-                return objFirstThreeDigits !== targetFirstThreeDigits;
-              });
-
-              return filteredGuestEps || []; // Handle undefined values
-            }
-          );
-
-          // Wait for all promises to resolve and update state
-          const allFilteredEpisodes = await Promise.all(
-            filteredEpisodesPromises
-          );
-          setPrevGuestEpisodes(allFilteredEpisodes); // Use flat() to flatten the array of arrays
-        } catch (error) {
-          console.error("Error fetching guest episodes:", error);
-          // Handle errors
-        }
-      };
-
-      // Call the fetchGuestEpisodes function
-      fetchGuestEpisodes();
     }
   }, [isLoading, data, episode]);
 
@@ -251,21 +130,21 @@ url,
                 nextEpisode ? "text-center" : "text-left ml-6"
               } mb-4 md:text-left md:mb-0`}
             >
-              <Button
-                onClick={router.back}
-                className="px-10 py-2 mt-4"
-                color="main"
-              >
-                {DATA.backButtonText}
-              </Button>
-              {nextEpisode ? (
-                <Button
-                  onClick={() => router.push(nextEpisode)}
-                  className="ml-2 px-6 py-2 mt-4"
-                  color="primary"
-                >
-                  {DATA.nextEpisodeButton}
+              <Link href={`/episode/${prevEpisode}`}>
+                <Button className="px-10 py-2 mt-4" color="main">
+                  {DATA.backButtonText}
                 </Button>
+              </Link>
+              {nextEpisode ? (
+                <Link href={`/episode/${nextEpisode}`}>
+                  <Button
+                    onClick={() => router.push(nextEpisode)}
+                    className="ml-2 px-6 py-2 mt-4"
+                    color="primary"
+                  >
+                    {DATA.nextEpisodeButton}
+                  </Button>
+                </Link>
               ) : null}
               {isPart && isNextPart ? (
                 <Button
@@ -351,21 +230,26 @@ url,
                   className=" justify-items-center overflow-hidden mx-auto  bg-gray-50 sm:grid sm:grid-cols-2"
                 >
                   {!isOdd && guest.image ? (
-                    <Image
-                      alt={`guest ${guest.name} picture`}
-                      src={guest.image}
-                      className=" "
-                      height={400}
-                      width={400}
-                      quality={100}
-                    />
+                    <>
+                      <Image
+                        alt={`guest ${guest.name} picture`}
+                        src={guest.image}
+                        className=" "
+                        height={400}
+                        width={400}
+                        quality={100}
+                      />
+                      <Slider items={guest?.episodes} />
+                    </>
                   ) : null}
+
                   <div className="p-8 md:p-12 lg:px-16 lg:py-24 h-[500px] ">
                     <div className="mx-auto max-w-xl text-center sm:text-left">
                       <h2 className="text-xl font-bold text-gray-900 md:text-2xl mb-6">
                         {guest.name}
                       </h2>
                       <p className="text-gray-500 md:mt-4">{guest.about}</p>
+
                       <div className="border-b-[.5px] border-black my-4" />
                       <p className="italic font-thin">{guest.title}</p>
                       <div className="mt-6  md:mt-12">
@@ -389,14 +273,6 @@ url,
                       width={500}
                       quality={100}
                     />
-                  ) : null}
-                  {allPrevGuestEpisodes[idx]?.length > 0 ? (
-                    <div className=" ">
-                      <h1 className="font-medium text-xl lg:text-center">
-                        Episodes Featuring this Guest
-                      </h1>
-                      <Slider items={allPrevGuestEpisodes[idx]} />
-                    </div>
                   ) : null}
                 </Section>
               );
@@ -457,44 +333,34 @@ url,
             </Section>
           ) : null}
         </Section>
+
         {episode.sponsors?.length ? (
           <Section
             className={`flex flex-row flex-wrap items-center justify-center mt-20 mx-6 md:mx-20 `}
           >
-            {episode.sponsors.map((sponsorUUID, idx) => {
-              if (!sponsorsLoading) {
-                const sponsor = sponsorsArray.filter(
-                  (s) => s.uuid === sponsorUUID
-                )[0];
-                if (!sponsor) {
-                  return null;
-                }
-
-                const { name, uuid, image, bgColor } = sponsor;
-
-                return (
-                  <Link
-                    key={`sponsor-${name}`}
-                    href={`/sponsors/${uuid}`}
-                    className="m-3 lg:m-6"
+            {episode.sponsors.map(({ name, uuid, image, bgColor }) => {
+              return (
+                <Link
+                  key={`sponsor-${name}`}
+                  href={`/sponsors/${uuid}`}
+                  className="m-3 lg:m-6"
+                >
+                  <div
+                    className={`${
+                      bgColor || ""
+                    } w-[250px] max-h-[150px] overflow-hidden`}
                   >
-                    <div
-                      className={`${
-                        bgColor || ""
-                      } w-[250px] max-h-[150px] overflow-hidden`}
-                    >
-                      <Image
-                        src={image}
-                        alt={"Sponsor"}
-                        className="h-[150px] w-auto m-auto px-4"
-                        width={250}
-                        height={150}
-                        quality={100}
-                      />
-                    </div>
-                  </Link>
-                );
-              }
+                    <Image
+                      src={image}
+                      alt={"Sponsor"}
+                      className="h-[150px] w-auto m-auto px-4"
+                      width={250}
+                      height={150}
+                      quality={100}
+                    />
+                  </div>
+                </Link>
+              );
             })}
           </Section>
         ) : null}
