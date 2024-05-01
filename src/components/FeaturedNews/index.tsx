@@ -16,6 +16,7 @@ import { store } from "../../redux/store";
 // SWR
 import useSWR from "swr";
 import { groq, createClient } from "next-sanity";
+import { FEATURED_ARTICLES_QUERY } from "../../app/lib/queries";
 
 const client = createClient({
   projectId: "hxymd1na",
@@ -30,9 +31,8 @@ interface FeaturedNewsProps {
 
 const FeaturedNews = ({ color = "light" }: FeaturedNewsProps) => {
   const [featuredArticles, setFeaturedArticles] = useState();
-  const { data, error, isLoading } = useSWR(
-    groq`*[_type == "featuredArticle"]`,
-    (query) => client.fetch(query)
+  const { data, error, isLoading } = useSWR(FEATURED_ARTICLES_QUERY, (query) =>
+    client.fetch(query)
   );
   useEffect(() => {
     if (!isLoading) {
