@@ -20,7 +20,7 @@ import { DATA, CTA } from "./static-data";
 import { SPONSORS } from "components/Pages/SponsorsPage/static-data";
 
 // SWR
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { createClient } from "next-sanity";
 import { Content } from "components/Content";
 import { EPISODES, PODCAST_DETAILS_QUERY } from "../../../app/lib/queries";
@@ -73,12 +73,12 @@ const PodcastDetailsPageComponent = () => {
         setPrevEpisode(data.episodeDetails[0].prevEpisode);
       }
     }
-  }, [isLoading, data, episode]);
+    mutate(PODCAST_DETAILS_QUERY);
+  }, [isLoading, data, episode, router]);
 
   const isClip = episode?.uuid?.includes("_");
   const isPart = episode?.uuid?.includes("-");
   // const isNextPart = data.nextEpisode;
-
 
   if (episode)
     return (
@@ -90,21 +90,14 @@ const PodcastDetailsPageComponent = () => {
                 nextEpisode ? "text-center" : "text-left ml-6"
               } mb-4 md:text-left md:mb-0`}
             >
-              <Button
-                onClick={router.push(prevEpisode)}
-                className="px-10 py-2 mt-4"
-                color="main"
-              >
-                {DATA.backButtonText}
-              </Button>
-
+              <Link href={`/episode/${prevEpisode}`}>
+                <Button className="px-10 py-2 mt-4" color="main">
+                  {DATA.backButtonText}
+                </Button>
+              </Link>
               {nextEpisode ? (
                 <Link href={`/episode/${nextEpisode}`}>
-                  <Button
-                    onClick={router.push(nextEpisode)}
-                    className="ml-2 px-6 py-2 mt-4"
-                    color="primary"
-                  >
+                  <Button className="ml-2 px-6 py-2 mt-4" color="primary">
                     {DATA.nextEpisodeButton}
                   </Button>
                 </Link>
