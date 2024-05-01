@@ -21,7 +21,7 @@ import { SPONSORS } from "components/Pages/SponsorsPage/static-data";
 
 // SWR
 import useSWR from "swr";
-import { groq, createClient } from "next-sanity";
+import { createClient } from "next-sanity";
 import { Content } from "components/Content";
 import { EPISODES, PODCAST_DETAILS_QUERY } from "../../../app/lib/queries";
 
@@ -51,6 +51,7 @@ const PodcastDetailsPageComponent = () => {
   const router = useRouter();
   const pathname = usePathname();
   const uuid = pathname.split("/")[2];
+  const epID = uuid.split("-")[0];
 
   const { data: episodes, isLoading: episodesLoading } = useSWR(
     EPISODES,
@@ -58,50 +59,8 @@ const PodcastDetailsPageComponent = () => {
   );
 
   const { data, error, isLoading } = useSWR(PODCAST_DETAILS_QUERY, (query) =>
-    client.fetch(query, { uuid })
+    client.fetch(query, { uuid, epID })
   );
-
-  // This func finds the next part.
-  function findNextEpPart(objectsArray, number) {
-    // Extract the numeric part of the input number using a regular expression
-    const inputNumber = parseInt(number?.match(/\d+$/)[0]);
-
-    // Increment the numeric part to find the next number in sequence
-    const nextNumber = inputNumber + 1;
-
-    // Create the next 'uuid' string by combining the original prefix and the incremented number
-    const nextUuid = `${number?.split("-")[0]}-${nextNumber}`;
-
-    // Check if the next 'uuid' exists in the objects array
-    let foundObject = objectsArray?.find(function (obj) {
-      return obj.uuid === nextUuid;
-    });
-
-    // If a matching object is found, return its 'uuid', otherwise return null
-    return foundObject ? `/episode/${foundObject.uuid}` : null;
-  }
-
-  function findEpisodesWithNumber(objectsArray, number) {
-    // Check if the input number is present in any part of the UUID in the objects array
-    let matchingObjects = objectsArray?.filter(function (obj) {
-      const numberWithoutPart = number?.split("-")[0];
-      // Check if the number is present in the UUID
-      return obj.uuid?.includes(numberWithoutPart);
-    });
-
-    // Create an array of objects with matching UUIDs and their respective objects
-    let matchingObjectsWithUUIDs = matchingObjects
-      ? matchingObjects.map((obj) => {
-          return {
-            ...obj,
-          };
-        })
-      : [];
-
-    return matchingObjectsWithUUIDs;
-  }
-
-  const allEpisodeParts = findEpisodesWithNumber(episodes, episode?.uuid);
 
   useEffect(() => {
     if (!isLoading) {
@@ -118,7 +77,8 @@ const PodcastDetailsPageComponent = () => {
 
   const isClip = episode?.uuid?.includes("_");
   const isPart = episode?.uuid?.includes("-");
-  const isNextPart = findNextEpPart(episodes, episode?.uuid);
+  // const isNextPart = data.nextEpisode;
+
 
   if (episode)
     return (
@@ -130,15 +90,18 @@ const PodcastDetailsPageComponent = () => {
                 nextEpisode ? "text-center" : "text-left ml-6"
               } mb-4 md:text-left md:mb-0`}
             >
-              <Link href={`/episode/${prevEpisode}`}>
-                <Button className="px-10 py-2 mt-4" color="main">
-                  {DATA.backButtonText}
-                </Button>
-              </Link>
+              <Button
+                onClick={router.push(prevEpisode)}
+                className="px-10 py-2 mt-4"
+                color="main"
+              >
+                {DATA.backButtonText}
+              </Button>
+
               {nextEpisode ? (
                 <Link href={`/episode/${nextEpisode}`}>
                   <Button
-                    onClick={() => router.push(nextEpisode)}
+                    onClick={router.push(nextEpisode)}
                     className="ml-2 px-6 py-2 mt-4"
                     color="primary"
                   >
@@ -146,15 +109,21 @@ const PodcastDetailsPageComponent = () => {
                   </Button>
                 </Link>
               ) : null}
-              {isPart && isNextPart ? (
-                <Button
-                  onClick={() => router.push(isNextPart)}
-                  className="ml-2 px-6 py-2 mt-4"
-                  color="primary"
-                >
-                  Play Part {isNextPart.split("-")[1]}
-                </Button>
-              ) : null}
+
+              {/* I think this function isn't needed. */}
+              {/* {isPart &&
+                data?.episodeDetails[0]?.allParts.includes(
+                  data?.episodeDetails[0]?.nextEpisode
+                ) && (
+                  <Link
+                    href={`/episode/${data?.episodeDetails[0]?.nextEpisode}`}
+                  >
+                    <Button className="ml-2 px-6 py-2 mt-4" color="primary">
+                      Play Part{" "}
+                      {data?.episodeDetails[0]?.nextEpisode.split("-")[1]}
+                    </Button>
+                  </Link>
+                )} */}
             </div>
             <div className="flex flex-col-reverse xl:flex-row flex-wrap justify-around mx-10 mb-10 mt-4 xl:mt-0">
               <div className="flex flex-col mt-12 lg:max-w-[40vw]">
@@ -214,7 +183,7 @@ const PodcastDetailsPageComponent = () => {
                 <h1 className="font-medium text-xl lg:text-center">
                   Episode Parts
                 </h1>
-                <Slider items={allEpisodeParts} />{" "}
+                <Slider items={data?.episodeDetails[0].allParts} />{" "}
               </div>
             ) : null}
           </div>

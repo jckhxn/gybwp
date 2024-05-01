@@ -80,29 +80,3 @@ export const useGetEpisodesBySeason = (seasonToFind: number) => {
 
   return [...foundSeason].reverse();
 };
-
-export const getEpisodesBySponsor = (uuid: string, episodesData: object) => {
-  // console.log(episodesData);
-  // const sponsoredEpisodes: episodeType[] = [];
-  // const episodes = store.getState().episodes;
-  // const episodesArray = Object.keys(episodes)
-  //   .filter((key) => key !== "_persist")
-  //   .map(function (property) {
-  //     return episodes[property];
-  //   });
-  // const getValueForKey = (obj, key) => {
-  //   const keys = Object.keys(obj);
-  //   const value = keys.find((k) => k === key);
-  //   return obj[value];
-  // };
-  // episodesArray.map((episode) => {
-  //   // Map over every episode, if episode sponsors == uuid,
-  //   // push to sponsored Episodes
-  //   const value = getValueForKey(episode, "sponsors");
-  //   if (value?.includes(uuid)) {
-  //     sponsoredEpisodes.push(episode);
-  //   }
-  //   Object.keys(episode).map((episodeDetails) => {});
-  // });
-  // return sponsoredEpisodes;
-};

@@ -5,8 +5,6 @@ import React from "react";
 import Articles from "components/Articles";
 import FeaturedNews from "../../components/FeaturedNews";
 
-import { ReduxProvider } from "../../redux/provider";
-
 //
 //
 //

@@ -12,6 +12,7 @@ import { PODCAST } from "components/Pages/HomePage/static-data";
 import useSWR from "swr";
 import { groq, createClient } from "next-sanity";
 import { seasonType } from "components/Pages/HomePage/episode-data";
+import { TOTAL_SEASONS_QUERY } from "../../app/lib/queries";
 const client = createClient({
   projectId: "hxymd1na",
   dataset: "production",
@@ -39,9 +40,8 @@ const Dropdown = ({
 }) => {
   // This groq query returns all seasons, in order, that have episodes in them
   // *[_type == "seasons" && count(episodes) > 0]  | order(seasonNumber asc)
-  const { data, error, isLoading } = useSWR(
-    groq`{"seasonName":array::unique(*[_type == "episode"].seasonName),"seasonNumber":array::unique(*[_type == "episode" ].seasonNumber)}`,
-    (query) => client.fetch(query)
+  const { data, error, isLoading } = useSWR(TOTAL_SEASONS_QUERY, (query) =>
+    client.fetch(query)
   );
 
   const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +49,7 @@ const Dropdown = ({
 
   const handleClick = (seasonNumber?: number) => {
     if (seasonNumber) {
-      setActiveSeason(seasonNumber);  
+      setActiveSeason(seasonNumber);
     }
     setIsOpen(!isOpen);
   };

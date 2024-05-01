@@ -17,6 +17,7 @@ import { store } from "../../redux/store";
 // // SWR
 import useSWR from "swr";
 import { groq, createClient } from "next-sanity";
+import { OTHER_ARTICLES_QUERY } from "../../app/lib/queries";
 
 const client = createClient({
   projectId: "hxymd1na",
@@ -28,9 +29,8 @@ const client = createClient({
 
 const Articles = () => {
   const [articles, setArticles] = useState();
-  const { data, error, isLoading } = useSWR(
-    groq`*[_type == "article"]`,
-    (query) => client.fetch(query)
+  const { data, error, isLoading } = useSWR(OTHER_ARTICLES_QUERY, (query) =>
+    client.fetch(query)
   );
   useEffect(() => {
     if (!isLoading) {
@@ -39,15 +39,6 @@ const Articles = () => {
       setArticles(data);
     }
   }, [data, isLoading]);
-
-  // Goes from object into an array of objects.
-  // const articles = store.getState().articles;
-
-  // const articlesArray = (
-  //   Object.keys(articles) as Array<keyof typeof articles>
-  // ).map(function (property) {
-  //   return articles[property];
-  // });
 
   const [currentPage, setCurrentPage] = useState(1);
   const totalCount: number = ARTICLES.length;

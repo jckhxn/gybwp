@@ -1,12 +1,26 @@
 // PUT ALL QUERIES HERE EVENTUALLY
 // ./sanity/lib/queries.ts
 
+import { FEATURED_ARTICLES } from "components/Pages/News/static-data";
 import { groq } from "next-sanity";
 
 // Get all Episodes by UUID
 export const EPISODES = groq`*[_type == "episode"]| order(uuid asc){uuid}`;
 
-// Used in Preview Component.
+// Get Episodes for Season
+export const SEASON_EPISODES_QUERY = groq`{
+  "episodes": *[_type == "episode" && seasonNumber == $number] | order(uuid desc),
+  "totalSeasons": {
+    "seasonName": array::unique(*[_type == "episode"].seasonName | order(seasonName asc)),
+    "seasonNumber": array::unique(*[_type == "episode"].seasonNumber | order(seasonNumber asc)),
+    "totalSeasonCount": count(array::unique(*[_type == "episode"].seasonNumber))
+  }
+}
+`;
+
+//  Total Seasons with Episodes Query
+export const TOTAL_SEASONS_QUERY = groq`{"seasonName":array::unique(*[_type == "episode"].seasonName),"seasonNumber":array::unique(*[_type == "episode" ].seasonNumber)}`;
+// Used in Live Preview Component.
 export const EPISODE_QUERY = groq`*[_type == "episode" && youtube.uuid == $uuid][0]`;
 
 // Get details for current Podcast.
@@ -50,6 +64,13 @@ export const PODCAST_DETAILS_QUERY = groq`{
     }
       }
     },
+    "allParts":*[_type == "episode" && uuid match $epID] | order(uuid asc) {
+    episodeName,
+    episodeNumber,
+    image,
+    uuid,
+}
+,
     "nextEpisode": *[_type == "episode" && _createdAt > ^._createdAt && uuid != ^._id] | order(_createdAt asc, uuid asc)[0].uuid,
     "prevEpisode": *[_type == "episode" && _createdAt < ^._createdAt && uuid != ^._id] | order(_createdAt desc, uuid desc)[0].uuid,
     "sponsors":*[_type=="sponsor" && uuid in ^.sponsors]{
@@ -57,3 +78,9 @@ export const PODCAST_DETAILS_QUERY = groq`{
     }
 }
 }`;
+
+// Featured News Articles
+export const FEATURED_ARTICLES_QUERY = groq`*[_type == "featuredArticle"]`;
+
+// Other Articles Query
+export const OTHER_ARTICLES_QUERY = groq`*[_type == "article"]`;

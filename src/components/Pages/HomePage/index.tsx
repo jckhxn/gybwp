@@ -17,7 +17,11 @@ import { BuzzSproutPlayer } from "components/BuzzSproutPlayer";
 
 // SWR
 import useSWR from "swr";
-import { groq, createClient } from "next-sanity";
+import { createClient } from "next-sanity";
+import {
+  SEASON_EPISODES_QUERY,
+  TOTAL_SEASONS_QUERY,
+} from "../../../app/lib/queries";
 const client = createClient({
   projectId: "hxymd1na",
   dataset: "production",
@@ -28,34 +32,9 @@ const client = createClient({
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState();
 
-  // This groq query returns all the seasons, in order.
-  //  This needs to only return seasons with episodes in them
-  //
-  //   *[_type == "seasons"] | order(seasonNumber asc)
-  // {
-  //   seasonName,
-  //     seasonNumber
-  // }
-  const { data, error, isLoading } = useSWR(
-    groq`*[_type == "episode"] | order(uuid asc)
-    {seasonName}`,
-    (query) => client.fetch(query)
+  const { data, error, isLoading } = useSWR(SEASON_EPISODES_QUERY, (query) =>
+    client.fetch(query, { number: 5 })
   );
-
-  useEffect(() => {
-    if (!isLoading) {
-      // Create a new Set object to store the unique values.
-      const set = new Set();
-
-      // Iterate over the array of objects and add the value of the specified property to the Set.
-      // @ts-ignore
-      data.forEach((object) => {
-        set.add(object["seasonName"]);
-      });
-
-      return setActiveSeason([...set].length);
-    }
-  }, [data]);
 
   return (
     <>
@@ -116,10 +95,7 @@ const HomePageComponent = () => {
           <Dropdown setActiveSeason={setActiveSeason} />
         </div>
 
-        <Slider
-          activeSeason={activeSeason}
-          items={useGetEpisodesBySeason(activeSeason)}
-        />
+        <Slider activeSeason={activeSeason} items={data} />
       </Section>
 
       {/* CTA */}
