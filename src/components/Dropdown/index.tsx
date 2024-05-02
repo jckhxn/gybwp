@@ -10,7 +10,7 @@ import { PODCAST } from "components/Pages/HomePage/static-data";
 
 // SWR
 import useSWR from "swr";
-import { groq, createClient } from "next-sanity";
+import { createClient } from "next-sanity";
 import { seasonType } from "components/Pages/HomePage/episode-data";
 import { TOTAL_SEASONS_QUERY } from "../../app/lib/queries";
 const client = createClient({
@@ -51,6 +51,7 @@ const Dropdown = ({
     if (seasonNumber) {
       setActiveSeason(seasonNumber);
     }
+
     setIsOpen(!isOpen);
   };
 

@@ -62,6 +62,7 @@ const PodcastDetailsPageComponent = () => {
     client.fetch(query, { uuid, epID })
   );
 
+  if (data) console.log(data);
   useEffect(() => {
     if (!isLoading) {
       // Fix weird refresh error and episode not found redirect to Error page

@@ -1,22 +1,19 @@
 // PUT ALL QUERIES HERE EVENTUALLY
 // ./sanity/lib/queries.ts
 
-import { FEATURED_ARTICLES } from "components/Pages/News/static-data";
 import { groq } from "next-sanity";
 
 // Get all Episodes by UUID
 export const EPISODES = groq`*[_type == "episode"]| order(uuid asc){uuid}`;
 
-// Get Episodes for Season
-export const SEASON_EPISODES_QUERY = groq`{
-  "episodes": *[_type == "episode" && seasonNumber == $number] | order(uuid desc),
-  "totalSeasons": {
-    "seasonName": array::unique(*[_type == "episode"].seasonName | order(seasonName asc)),
-    "seasonNumber": array::unique(*[_type == "episode"].seasonNumber | order(seasonNumber asc)),
-    "totalSeasonCount": count(array::unique(*[_type == "episode"].seasonNumber))
-  }
+// Get Episodes for latest Season
+export const INITIAL_SEASON_EPISODES_QUERY = groq`{
+  "episodes":*[_type == "episode" && seasonName == *[_type == "episode" && defined(seasonName)][0].seasonName]|order(uuid desc),
+      "latestSeasonNumber": *[_type == "episode" && defined(seasonNumber)][0].seasonNumber
 }
 `;
+// Get episodes homepage.
+export const SEASON_EPISODES_QUERY = groq`*[_type == "episode" && seasonNumber == $seasonNumber]|order(uuid desc)`;
 
 //  Total Seasons with Episodes Query
 export const TOTAL_SEASONS_QUERY = groq`{"seasonName":array::unique(*[_type == "episode"].seasonName),"seasonNumber":array::unique(*[_type == "episode" ].seasonNumber)}`;
@@ -78,6 +75,12 @@ export const PODCAST_DETAILS_QUERY = groq`{
     }
 }
 }`;
+
+// Get specific Sponsor
+export const SPONSOR_DETAILS_QUERY = groq`{"sponsors":*[_type == "sponsor" && uuid == $id] ,"episodes":*[_type == "episode" &&  $id in sponsors]| order(uuid desc)}`;
+
+// Get all Sponsors
+export const ALL_SPONSORS_QUERY = groq`*[_type == "sponsor"]`;
 
 // Featured News Articles
 export const FEATURED_ARTICLES_QUERY = groq`*[_type == "featuredArticle"]`;

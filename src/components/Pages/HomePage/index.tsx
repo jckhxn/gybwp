@@ -18,10 +18,7 @@ import { BuzzSproutPlayer } from "components/BuzzSproutPlayer";
 // SWR
 import useSWR from "swr";
 import { createClient } from "next-sanity";
-import {
-  SEASON_EPISODES_QUERY,
-  TOTAL_SEASONS_QUERY,
-} from "../../../app/lib/queries";
+import { INITIAL_SEASON_EPISODES_QUERY } from "../../../app/lib/queries";
 const client = createClient({
   projectId: "hxymd1na",
   dataset: "production",
@@ -32,9 +29,16 @@ const client = createClient({
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState();
 
-  const { data, error, isLoading } = useSWR(SEASON_EPISODES_QUERY, (query) =>
-    client.fetch(query, { number: 5 })
+  const { data, error, isLoading } = useSWR(
+    INITIAL_SEASON_EPISODES_QUERY,
+    (query) => client.fetch(query)
   );
+
+  useEffect(() => {
+    if (data?.latestSeasonNumber) {
+      setActiveSeason(data?.latestSeasonNumber);
+    }
+  }, [data]);
 
   return (
     <>
@@ -95,7 +99,10 @@ const HomePageComponent = () => {
           <Dropdown setActiveSeason={setActiveSeason} />
         </div>
 
-        <Slider activeSeason={activeSeason} items={data} />
+        <Slider
+          activeSeason={activeSeason}
+          items={useGetEpisodesBySeason(activeSeason)}
+        />
       </Section>
 
       {/* CTA */}

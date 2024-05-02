@@ -20,6 +20,7 @@ import routes from "routes";
 // SWR
 import useSWR from "swr";
 import { groq, createClient } from "next-sanity";
+import { SPONSOR_DETAILS_QUERY } from "../../../app/lib/queries";
 
 const client = createClient({
   projectId: "hxymd1na",
@@ -50,9 +51,8 @@ const SponsorsDetailPageComponent = () => {
   //  episodes where sponsors[] = id
   // setSponsor is an object with {...foundSponsor (details),episodes:(sponsored episodes)}
 
-  const { data, error, isLoading } = useSWR(
-    groq`{"sponsors":*[_type == "sponsor" && uuid == "${id}"] ,"episodes":*[_type == "episode" &&  "${id}" in sponsors]| order(uuid desc)}`,
-    (query) => client.fetch(query)
+  const { data, error, isLoading } = useSWR(SPONSOR_DETAILS_QUERY, (query) =>
+    client.fetch(query, { id })
   );
 
   useEffect(() => {

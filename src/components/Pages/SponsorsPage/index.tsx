@@ -9,13 +9,14 @@ import { Section, SectionHeading } from "components/shared";
 
 // copy
 import { SPONSORS, PARTNERS, SPONSORS_INFO } from "./static-data";
-// State
-import { getAllSponsors } from "../../../app/sanity/sanity-utils";
-import { store } from "../../../redux/store";
 
 // SWR
 import useSWR from "swr";
 import { groq, createClient } from "next-sanity";
+import {
+  ALL_SPONSORS_QUERY,
+  SPONSOR_DETAILS_QUERY,
+} from "../../../app/lib/queries";
 const client = createClient({
   projectId: "hxymd1na",
   dataset: "production",
@@ -30,18 +31,11 @@ const client = createClient({
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 
 const SponsorsPageComponent = () => {
-  const { data, error, isLoading } = useSWR(
-    groq`*[_type == "sponsor"]`,
-    (query) => client.fetch(query)
+  const { data, error, isLoading } = useSWR(ALL_SPONSORS_QUERY, (query) =>
+    client.fetch(query)
   );
 
   if (data) {
-    const sponsorsArray = Object.keys(data)
-      .filter((key) => key !== "_persist")
-      .map(function (property) {
-        return data[property];
-      });
-
     return (
       <div className="bg-light my-4 mx-6 md:mx-12 py-16">
         {/* SPONSORS */}
@@ -50,7 +44,7 @@ const SponsorsPageComponent = () => {
             <SectionHeading>{SPONSORS_INFO.sponsorsHeader}</SectionHeading>
 
             <div className="flex flex-wrap justify-center mt-12">
-              {sponsorsArray.map(({ name, uuid, image, bgColor }) => (
+              {data.map(({ name, uuid, image, bgColor }) => (
                 <Link
                   key={`sponsor-${name}`}
                   href={`/sponsors/${uuid}`}
