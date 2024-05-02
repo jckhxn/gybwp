@@ -7,7 +7,8 @@ import { seasonType, episodeType } from "./episode-data";
 
 // SWR
 import useSWR from "swr";
-import { groq, createClient } from "next-sanity";
+import { createClient } from "next-sanity";
+import { SEASON_EPISODES_QUERY } from "../../../app/lib/queries";
 
 const client = createClient({
   projectId: "hxymd1na",
@@ -60,23 +61,8 @@ export const PODCAST: seasonType[] = [
 // DO NOT TOUCH ANYTHING BELOW THIS LINE
 
 export const useGetEpisodesBySeason = (seasonToFind: number) => {
-  const { data, error, isLoading } = useSWR(
-    groq`*[_type == "episode"] | order(uuid asc)`,
-    (query) => client.fetch(query)
+  const { data, error, isLoading } = useSWR(SEASON_EPISODES_QUERY, (query) =>
+    client.fetch(query, { seasonNumber: seasonToFind })
   );
-  if (error) return <div>failed to load</div>;
-  if (isLoading) return <div>loading...</div>;
-
-  const episodesArray = Object.keys(data)
-    .filter((key) => key !== "_persist")
-    .map(function (property) {
-      return data[property];
-    });
-
-  const foundSeason = episodesArray.filter(
-    // @ts-ignore
-    (season) => season.seasonNumber === seasonToFind
-  );
-
-  return [...foundSeason].reverse();
+  if (data) return data;
 };
