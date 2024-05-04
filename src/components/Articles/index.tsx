@@ -16,16 +16,8 @@ import { store } from "../../redux/store";
 
 // // SWR
 import useSWR from "swr";
-import { groq, createClient } from "next-sanity";
+import { client } from "../../app/sanity/sanity-utils";
 import { OTHER_ARTICLES_QUERY } from "../../app/lib/queries";
-
-const client = createClient({
-  projectId: "hxymd1na",
-  dataset: "production",
-  apiVersion: "2023-08-22",
-
-  useCdn: true,
-});
 
 const Articles = () => {
   const [articles, setArticles] = useState();
@@ -34,8 +26,6 @@ const Articles = () => {
   );
   useEffect(() => {
     if (!isLoading) {
-      console.log(data);
-
       setArticles(data);
     }
   }, [data, isLoading]);

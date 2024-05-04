@@ -7,7 +7,7 @@ import { visionTool } from "@sanity/vision";
 import { locate } from "./src/app/lib/locate";
 import { pages } from "@tinloof/sanity-studio";
 
-import { youtubeInput } from "./src/plugins/youtube";
+import { youtubeInput } from "./src/app/sanity/plugins/youtube";
 import schemas from "./src/app/sanity/schemas";
 
 const config = defineConfig({

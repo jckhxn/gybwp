@@ -11,21 +11,17 @@ import FeaturedNews from "../../FeaturedNews/";
 import Dropdown from "components/Dropdown";
 
 // copy
-import { HERO, PODCAST, CTA, useGetEpisodesBySeason } from "./static-data";
+import { HERO, CTA, useGetEpisodesBySeason } from "./static-data";
 import Slider from "components/Slider";
 import { BuzzSproutPlayer } from "components/BuzzSproutPlayer";
 
 // SWR
-import useSWR from "swr";
-import { createClient } from "next-sanity";
-import { INITIAL_SEASON_EPISODES_QUERY } from "../../../app/lib/queries";
-const client = createClient({
-  projectId: "hxymd1na",
-  dataset: "production",
-  apiVersion: "2023-08-22",
-
-  useCdn: false,
-});
+import useSWR, { mutate } from "swr";
+import { client } from "../../../app/sanity/sanity-utils";
+import {
+  INITIAL_SEASON_EPISODES_QUERY,
+  SEASON_EPISODES_QUERY,
+} from "../../../app/lib/queries";
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState();
 
@@ -34,11 +30,16 @@ const HomePageComponent = () => {
     (query) => client.fetch(query)
   );
 
+  // Fucking SWR
   useEffect(() => {
     if (data?.latestSeasonNumber) {
       setActiveSeason(data?.latestSeasonNumber);
     }
   }, [data]);
+
+  useEffect(() => {
+    mutate(SEASON_EPISODES_QUERY);
+  }, [activeSeason]);
 
   return (
     <>

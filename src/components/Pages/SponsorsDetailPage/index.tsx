@@ -19,16 +19,9 @@ import routes from "routes";
 
 // SWR
 import useSWR from "swr";
-import { groq, createClient } from "next-sanity";
+import { client } from "../../../app/sanity/sanity-utils";
+
 import { SPONSOR_DETAILS_QUERY } from "../../../app/lib/queries";
-
-const client = createClient({
-  projectId: "hxymd1na",
-  dataset: "production",
-  apiVersion: "2023-08-22",
-
-  useCdn: true,
-});
 
 //
 //
