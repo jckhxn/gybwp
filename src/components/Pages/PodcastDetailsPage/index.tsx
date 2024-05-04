@@ -44,16 +44,10 @@ const PodcastDetailsPageComponent = () => {
   const uuid = pathname.split("/")[2];
   const epID = uuid.split("-")[0];
 
-  const { data: episodes, isLoading: episodesLoading } = useSWR(
-    EPISODES,
-    (query) => client.fetch(query)
-  );
-
   const { data, error, isLoading } = useSWR(PODCAST_DETAILS_QUERY, (query) =>
     client.fetch(query, { uuid, epID })
   );
 
-  if (data) console.log(data);
   useEffect(() => {
     if (!isLoading) {
       // Fix weird refresh error and episode not found redirect to Error page
@@ -253,7 +247,7 @@ const PodcastDetailsPageComponent = () => {
 
               {episode.details?.hashtags?.length ? (
                 <div className="mt-8 italic font-thin">
-                  {data.episodeDetails[0]?.hashtags.map((ht) => `#${ht} `)}
+                  {data.episodeDetails[0]?.hashtags?.map((ht) => `#${ht} `)}
                 </div>
               ) : null}
             </Section>
