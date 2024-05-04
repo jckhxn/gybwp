@@ -10,16 +10,9 @@ import { PODCAST } from "components/Pages/HomePage/static-data";
 
 // SWR
 import useSWR from "swr";
-import { createClient } from "next-sanity";
+import { client } from "../../app/sanity/sanity-utils";
 import { seasonType } from "components/Pages/HomePage/episode-data";
 import { TOTAL_SEASONS_QUERY } from "../../app/lib/queries";
-const client = createClient({
-  projectId: "hxymd1na",
-  dataset: "production",
-  apiVersion: "2023-08-22",
-
-  useCdn: true,
-});
 
 // Sort through the Sanity Season duplicates
 // Make them in order lol

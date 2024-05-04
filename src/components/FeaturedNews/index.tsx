@@ -10,21 +10,12 @@ import defaultImageSrc from "public/images/logo.png";
 // copy
 import { NEWS_INFO } from "./static-data";
 import { FEATURED_ARTICLES } from "components/Pages/News/static-data";
-// State
-import { getFeaturedArticles } from "../../app/sanity/sanity-utils";
-import { store } from "../../redux/store";
+
 // SWR
 import useSWR from "swr";
-import { groq, createClient } from "next-sanity";
+
 import { FEATURED_ARTICLES_QUERY } from "../../app/lib/queries";
-
-const client = createClient({
-  projectId: "hxymd1na",
-  dataset: "production",
-  apiVersion: "2023-08-22",
-
-  useCdn: true,
-});
+import { client } from "../../app/sanity/sanity-utils";
 interface FeaturedNewsProps {
   color: "light" | "secondary";
 }

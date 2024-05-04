@@ -7,16 +7,8 @@ import { seasonType, episodeType } from "./episode-data";
 
 // SWR
 import useSWR from "swr";
-import { createClient } from "next-sanity";
+import { client } from "../../../app/sanity/sanity-utils";
 import { SEASON_EPISODES_QUERY } from "../../../app/lib/queries";
-
-const client = createClient({
-  projectId: "hxymd1na",
-  dataset: "production",
-  apiVersion: "2023-08-22",
-
-  useCdn: true,
-});
 
 //
 //
@@ -60,9 +52,12 @@ export const PODCAST: seasonType[] = [
 //
 // DO NOT TOUCH ANYTHING BELOW THIS LINE
 
-export const useGetEpisodesBySeason = (seasonToFind: number) => {
-  const { data, error, isLoading } = useSWR(SEASON_EPISODES_QUERY, (query) =>
-    client.fetch(query, { seasonNumber: seasonToFind })
+export const useGetEpisodesBySeason = (seasonToFind?: number) => {
+  const { data, error, isLoading } = useSWR(
+    // Prevent it from firing unwanted network calls on intial paint.
+    seasonToFind ? SEASON_EPISODES_QUERY : null,
+    (query) => client.fetch(query, { seasonNumber: seasonToFind })
   );
+
   if (data) return data;
 };

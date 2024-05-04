@@ -9,7 +9,7 @@ export const EPISODES = groq`*[_type == "episode"]| order(uuid asc){uuid}`;
 // Get Episodes for latest Season
 export const INITIAL_SEASON_EPISODES_QUERY = groq`{
   "episodes":*[_type == "episode" && seasonName == *[_type == "episode" && defined(seasonName)][0].seasonName]|order(uuid desc),
-      "latestSeasonNumber": *[_type == "episode" && defined(seasonNumber)][0].seasonNumber
+  "latestSeasonNumber":count(array::unique(*[_type == "episode"].seasonName))
 }
 `;
 // Get episodes homepage.

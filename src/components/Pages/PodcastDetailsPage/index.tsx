@@ -17,21 +17,12 @@ import { BuzzSproutPlayer } from "components/BuzzSproutPlayer";
 // copy
 import { episodeType } from "components/Pages/HomePage/episode-data";
 import { DATA, CTA } from "./static-data";
-import { SPONSORS } from "components/Pages/SponsorsPage/static-data";
 
 // SWR
 import useSWR, { mutate } from "swr";
-import { createClient } from "next-sanity";
 import { Content } from "components/Content";
+import { client } from "../../../app/sanity/sanity-utils";
 import { EPISODES, PODCAST_DETAILS_QUERY } from "../../../app/lib/queries";
-
-const client = createClient({
-  projectId: "hxymd1na",
-  dataset: "production",
-  apiVersion: "2023-08-22",
-
-  useCdn: false,
-});
 
 //
 //
