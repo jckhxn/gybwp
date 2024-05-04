@@ -47,6 +47,7 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 
 export default function page() {
   return draftMode().isEnabled ? (
+    // Preview Component for dashboard
     <PodcastPreview />
   ) : (
     <PodcastDetailsPageComponent />

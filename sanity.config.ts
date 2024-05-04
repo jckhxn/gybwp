@@ -9,6 +9,7 @@ import { pages } from "@tinloof/sanity-studio";
 
 import { youtubeInput } from "./src/app/sanity/plugins/youtube";
 import schemas from "./src/app/sanity/schemas";
+import path from "path";
 
 const config = defineConfig({
   projectId: "hxymd1na",
@@ -16,6 +17,7 @@ const config = defineConfig({
   title: "JKL Data",
   apiVersion: "2023-08-22",
   basePath: "/dash",
+
   plugins: [
     structureTool(),
     pages({
@@ -27,6 +29,8 @@ const config = defineConfig({
         draftMode: {
           enable: "/api/draft",
         },
+
+        preview: "/episode/",
       },
     }),
     youtubeInput({ apiKey: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY }),
