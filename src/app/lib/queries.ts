@@ -23,7 +23,7 @@ export const EPISODE_QUERY = groq`*[_type == "episode" && youtube.uuid == $uuid]
 // Get details for current Podcast.
 export const PODCAST_DETAILS_QUERY = groq`{
   "episodeDetails": *[_type == "episode" && uuid == $uuid] {
-    _createdAt,
+    ...,
     content {
       files[] {
         link,
@@ -37,42 +37,28 @@ export const PODCAST_DETAILS_QUERY = groq`{
     "episodeName": coalesce(youtube.title, episodeName),
     "episodeNumber": coalesce(youtube.episodeNumber, episodeNumber),
     "image": coalesce(youtube.thumbnail, image),
-    podcastLinks,
-    seasonName,
     "seasonNumber": coalesce(youtube.seasonNumber, seasonNumber),
-    sponsors,
     "url": coalesce("https://www.youtube.com/" + youtube.id, url),
     "uuid": coalesce(youtube.uuid, uuid),
     details {
-      description,
-      links,
+    ...,
       featuredGuests[] {
-        name,
-        about,
-        title,
-        url,
+        ...,
         "image": image.asset->url,
        "episodes": *[_type=="episode" && details.featuredGuests[].name match ^.name && !(uuid == $uuid)] {
-      uuid,
+      ...,
       "episodeName": coalesce(youtube.title, episodeName),
       "episodeNumber": coalesce(youtube.episodeNumber, episodeNumber),
       "url": coalesce("https://www.youtube.com/" + youtube.id, url),
-      image
+      
     }
       }
     },
-    "allParts":*[_type == "episode" && uuid match $epID] | order(uuid asc) {
-    episodeName,
-    episodeNumber,
-    image,
-    uuid,
-}
+    "allParts":*[_type == "episode" && uuid match $epID] | order(uuid asc) 
 ,
     "nextEpisode": *[_type == "episode" && _createdAt > ^._createdAt && uuid != ^._id] | order(_createdAt asc, uuid asc)[0].uuid,
     "prevEpisode": *[_type == "episode" && _createdAt < ^._createdAt && uuid != ^._id] | order(_createdAt desc, uuid desc)[0].uuid,
-    "sponsors":*[_type=="sponsor" && uuid in ^.sponsors]{
-      name,uuid,image,bgColor
-    }
+    "sponsors":*[_type=="sponsor" && uuid in ^.sponsors]
 }
 }`;
 
