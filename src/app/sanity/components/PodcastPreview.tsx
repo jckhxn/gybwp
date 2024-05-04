@@ -1,7 +1,7 @@
 // @ts-nocheck
 "use client";
 // Next Stuff
-
+import { draftMode } from "next/headers";
 import imageUrlBuilder from "@sanity/image-url";
 import { dataset, projectId } from "../env";
 const builder = imageUrlBuilder({ projectId, dataset });
@@ -209,6 +209,9 @@ export default function PodcastPreview({
       </Section>
     </>
   ) : (
-    <h1>Possible invalid UUID.</h1>
+    <h1 className="text-center">
+      Possibly missing data, please enter more information in the document
+      field.
+    </h1>
   );
 }

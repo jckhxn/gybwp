@@ -25,7 +25,13 @@ const episode = {
   type: "document",
   fields: [
     definePathname({
-      name: "episode",
+      name: "pathname",
+      initialValue: { current: "/episode/" },
+      options: {
+        folder: {
+          canUnlock: true,
+        },
+      },
       hidden: ({ value }) => (value === undefined ? true : false),
     }),
     {
