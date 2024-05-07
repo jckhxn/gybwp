@@ -6,6 +6,13 @@ import { groq } from "next-sanity";
 // Get all Episodes by UUID
 export const EPISODES = groq`*[_type == "episode"]| order(uuid asc){uuid}`;
 
+// Get episode details
+export const EPISODES_DETAILS_QUERY = groq`*[_type == "episode" && uuid == $uuid]{
+  episodeName,
+  blurb,
+  image,
+  url,
+}`;
 // Get Episodes for latest Season
 export const INITIAL_SEASON_EPISODES_QUERY = groq`{
   "episodes":*[_type == "episode" && seasonName == *[_type == "episode" && defined(seasonName)][0].seasonName]|order(uuid desc),

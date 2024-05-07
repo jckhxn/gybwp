@@ -4,9 +4,10 @@ import React from "react";
 import PodcastDetailsPageComponent from "../../../components/Pages/PodcastDetailsPage";
 import PodcastPreview from "../../sanity/components/PodcastPreview";
 // Get Episode Data
-import { getEpisodeDetails } from "../../sanity/sanity-utils";
+import { client } from "../../sanity/sanity-utils";
 import { Metadata } from "next";
 import { draftMode } from "next/headers";
+import { EPISODES_DETAILS_QUERY } from "../../lib/queries";
 
 type Props = {
   params: { uuid: string };
@@ -15,7 +16,9 @@ type Props = {
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const { params } = props;
 
-  const [episodeDetails] = await getEpisodeDetails(params.uuid);
+  const [episodeDetails] = await client.fetch(EPISODES_DETAILS_QUERY, {
+    uuid: String(params.uuid),
+  });
 
   if (episodeDetails)
     return {
