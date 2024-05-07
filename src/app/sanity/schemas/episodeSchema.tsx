@@ -2,8 +2,7 @@
 import { Rule } from "@sanity/types";
 import { validation } from "sanity";
 import { definePathname } from "@tinloof/sanity-studio";
-// TODO: Make Seasons a collection in schema,
-//  Cleanup episode schema
+
 const episode = {
   // Documents preview based on youtube.title param
   preview: {
