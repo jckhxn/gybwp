@@ -1,4 +1,4 @@
-import TOUPageComponent from "../components/Pages/TOUPage";
+import TOUPageComponent from "../components/TOUPage";
 import React from "react";
 
 type Props = {};

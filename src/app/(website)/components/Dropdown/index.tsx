@@ -6,12 +6,12 @@ import { Section } from "../shared";
 import Button from "../Button";
 
 // copy
-import { PODCAST } from "../Pages/HomePage/static-data";
+import { PODCAST } from "../HomePage/static-data";
 
 // SWR
 import useSWR from "swr";
 import { client } from "../../sanity/sanity-utils";
-import { seasonType } from "../Pages/HomePage/episode-data";
+import { seasonType } from "../HomePage/episode-data";
 import { TOTAL_SEASONS_QUERY } from "../../lib/queries";
 
 // Sort through the Sanity Season duplicates

@@ -6,7 +6,7 @@ import Button from "../Button";
 import Image from "next/image";
 
 // copy
-import { socialsType } from "../Pages/SponsorsPage/static-data";
+import { socialsType } from "../SponsorsPage/static-data";
 import { Section } from "../shared";
 
 //

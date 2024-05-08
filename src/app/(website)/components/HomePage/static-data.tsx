@@ -1,5 +1,5 @@
 // @ts-nocheck
-import routes from "routes";
+import routes from "@/src/app/(website)/routes";
 import * as podcast from "./episode-data";
 
 // types
@@ -7,8 +7,8 @@ import { seasonType, episodeType } from "./episode-data";
 
 // SWR
 import useSWR from "swr";
-import { client } from "../../../sanity/sanity-utils";
-import { SEASON_EPISODES_QUERY } from "../../../lib/queries";
+import { client } from "../../sanity/sanity-utils";
+import { SEASON_EPISODES_QUERY } from "../../lib/queries";
 
 //
 //

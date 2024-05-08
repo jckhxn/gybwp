@@ -3,31 +3,28 @@
 // Next Stuff
 import { draftMode } from "next/headers";
 import imageUrlBuilder from "@sanity/image-url";
-import { dataset, projectId } from "../env";
+import { dataset, projectId } from "../../sanity/env";
 const builder = imageUrlBuilder({ projectId, dataset });
 
 import { usePathname, useRouter } from "next/navigation";
 // components
-import { Section, SectionHeading } from "../../components/shared";
+import { Section, SectionHeading } from "../shared";
 import Image from "next/image";
-import Button from "../../components/Button";
-import Socials from "../../components/Socials";
+import Button from "../Button";
+import Socials from "../Socials";
 import Link from "next/link";
-import Slider from "../../components/Slider";
+import Slider from "../Slider";
 // BuzzSprout Player
-import { BuzzSproutPlayer } from "../../components/BuzzSproutPlayer";
+import { BuzzSproutPlayer } from "../BuzzSproutPlayer";
 
-import {
-  DATA,
-  CTA,
-} from "../../../(website)/components/Pages/PodcastDetailsPage/static-data";
+import { DATA, CTA } from "../PodcastDetailsPage/static-data";
 
 import { QueryResponseInitial, useQuery } from "@sanity/react-loader";
 import { QueryParams, SanityDocument } from "next-sanity";
 
 import { useState } from "react";
 import { EPISODE_QUERY } from "../../lib/queries";
-import { episodeType } from "../../components/Pages/HomePage/episode-data";
+import { episodeType } from "../HomePage/episode-data";
 
 export interface compiledEpisodeType extends episodeType {
   season: string;

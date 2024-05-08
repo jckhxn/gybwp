@@ -4,9 +4,9 @@ import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 // components
-import Button from "../../Button";
-import { Section, SectionHeading } from "../../shared";
-import Collection from "../../Collection";
+import Button from "../Button";
+import { Section, SectionHeading } from "../shared";
+import Collection from "../Collection";
 import Image from "next/image";
 
 // copy
@@ -14,14 +14,14 @@ import { SPONSORS_DETAILS_INFO, getSponsor } from "./static-data";
 import { sponsorType } from "../SponsorsPage/static-data";
 import { getEpisodesBySponsor } from "../HomePage/static-data";
 import { episodeType } from "../HomePage/episode-data";
-import Socials from "../../Socials";
+import Socials from "../Socials";
 import routes from "routes";
 
 // SWR
 import useSWR from "swr";
-import { client } from "../../../sanity/sanity-utils";
+import { client } from "../../sanity/sanity-utils";
 
-import { SPONSOR_DETAILS_QUERY } from "../../../lib/queries";
+import { SPONSOR_DETAILS_QUERY } from "../../lib/queries";
 
 //
 //

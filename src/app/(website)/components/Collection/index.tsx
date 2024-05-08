@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 // copy
-import { episodeType } from "../Pages/HomePage/episode-data";
+import { episodeType } from "../HomePage/episode-data";
 
 const Collection = ({
   header,

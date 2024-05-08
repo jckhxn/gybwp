@@ -1,6 +1,6 @@
-import consultingmain from "../../../../../../public/images/consultingmain.jpeg";
-import consulting1 from "../../../../../../public/images/consulting1.jpg";
-import consulting2 from "../../../../../../public/images/consulting2.jpg";
+import consultingmain from "@/public/images/consultingmain.jpeg";
+import consulting1 from "@/public/images/consulting1.jpg";
+import consulting2 from "@/public/images/consulting2.jpg";
 export const CONSULTING_INFO = {
   headerImg: consultingmain,
   header: "SOME OF OUR SERVICES",

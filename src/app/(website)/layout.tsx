@@ -3,7 +3,6 @@ import React from "react";
 import { draftMode } from "next/headers";
 import Script from "next/script";
 // components
-import DefaultLayout from "./components/Layout";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 
@@ -60,22 +59,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const Layout = DefaultLayout;
-
   return (
     <>
       <html lang="en">
         <Script src="https://chimpstatic.com/mcjs-connected/js/users/bc1727d945a3a3a609f35fc2b/1d0bfba9b96b61926de13410b.js" />
 
         <body>
-          <Layout>
-            <main className={openSans.className}>
-              <Header />
-              {children}
-              {draftMode().isEnabled && <LiveVisualEditing />}
-              <Footer />
-            </main>
-          </Layout>
+          <main className={openSans.className}>
+            <Header />
+            {children}
+            {draftMode().isEnabled && <LiveVisualEditing />}
+            <Footer />
+          </main>
         </body>
       </html>
     </>

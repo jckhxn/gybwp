@@ -1,4 +1,4 @@
-import routes from "routes";
+import routes from "@/src/app/(website)/routes";
 
 // data
 import { PODCAST } from "../HomePage/static-data";

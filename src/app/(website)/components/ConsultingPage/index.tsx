@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 // components
-import { Section, SectionHeading } from "../../shared";
+import { Section, SectionHeading } from "../shared";
 import Image from "next/image";
 import Link from "next/link";
 // copy
@@ -12,7 +12,7 @@ import {
   LEFT_IMAGE_CTA,
   RIGHT_IMAGE_CTA,
 } from "./static-data";
-import Button from "../../Button";
+import Button from "../Button";
 
 //
 //

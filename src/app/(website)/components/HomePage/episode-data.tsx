@@ -1,6 +1,6 @@
 // types
 import { socialsType, sponsorUUIDs } from "../SponsorsPage/static-data";
-import * as icons from "../../Socials/logos";
+import * as icons from "../Socials/logos";
 
 type guestsType = {
   name: string;

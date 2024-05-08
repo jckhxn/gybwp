@@ -1,8 +1,8 @@
 // @ts-nocheck
 
 import React from "react";
-import PodcastDetailsPageComponent from "../../components/Pages/PodcastDetailsPage";
-import PodcastPreview from "../../sanity/components/PodcastPreview";
+import PodcastDetailsPageComponent from "@/src/app/(website)/components/PodcastDetailsPage";
+import PodcastPreview from "@/src/app/(website)/components/PodcastPreview";
 // Get Episode Data
 import { client } from "../../sanity/sanity-utils";
 import { Metadata } from "next";

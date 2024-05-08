@@ -4,15 +4,15 @@ import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 // components
-import { Section, SectionHeading } from "../../shared";
+import { Section, SectionHeading } from "../shared";
 import Image from "next/image";
-import Button from "../../Button";
-import Socials from "../../Socials";
+import Button from "../Button";
+import Socials from "../Socials";
 import Link from "next/link";
-import Slider from "../../Slider";
+import Slider from "../Slider";
 
 // BuzzSprout Player
-import { BuzzSproutPlayer } from "../../BuzzSproutPlayer";
+import { BuzzSproutPlayer } from "../BuzzSproutPlayer";
 
 // copy
 import { episodeType } from "../HomePage/episode-data";
@@ -20,9 +20,9 @@ import { DATA, CTA } from "./static-data";
 
 // SWR
 import useSWR, { mutate } from "swr";
-import { Content } from "../../Content";
-import { client } from "../../../sanity/sanity-utils";
-import { EPISODES, PODCAST_DETAILS_QUERY } from "../../../lib/queries";
+import { Content } from "../Content";
+import { client } from "../../sanity/sanity-utils";
+import { EPISODES, PODCAST_DETAILS_QUERY } from "../../lib/queries";
 
 //
 //

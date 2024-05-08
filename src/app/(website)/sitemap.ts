@@ -1,5 +1,5 @@
 // Sanity
-import { episodeType } from "./components/Pages/HomePage/episode-data";
+import { episodeType } from "./components/HomePage/episode-data";
 import { client } from "./sanity/sanity-utils";
 
 import { ALL_EPISODES } from "./lib/queries";
