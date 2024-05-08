@@ -15,6 +15,7 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
+      "@/*": ["./*"],
       "components/*": ["./src/app/(website)/components/*"],
       "public/*": ["./public/*"],
       "routes": ["./src/routes"],
