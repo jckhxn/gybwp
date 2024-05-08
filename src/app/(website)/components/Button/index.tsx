@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { MouseEventHandler, ReactNode } from "react";
 
-export type ButtonColors = "main" | "primary" | "secondary" | "white";
+export type ButtonColors = "main" | "primary" | "secondary" | "white" | "light";
 
 interface ButtonProps {
   children: ReactNode;
@@ -46,6 +46,10 @@ const Button = ({
     case "white":
       bgColor = "bg-white";
       bgHoverColor = "hover:bg-white/80";
+      break;
+    case "light":
+      bgColor = "bg-light";
+      bgHoverColor = "hover:bg-light/80";
       break;
     default:
       bgColor = "bg-main";

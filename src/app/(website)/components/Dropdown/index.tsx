@@ -80,7 +80,7 @@ const Dropdown = ({
     <Section relative>
       <Button
         color="white"
-        className="inline-flex border-b border-black rounded-none px-2 py-1"
+        className=" inline-flex border-b border-black rounded-none px-2 py-1"
         onClick={() => handleClick()}
       >
         More
@@ -107,7 +107,7 @@ const Dropdown = ({
       </Button>
 
       {isOpen && (
-        <div className="z-50 absolute end-0 top-auto mt-2">
+        <div className="bg-light z-50 absolute end-0 top-auto mt-2">
           <div className="w-40 min-w-fit rounded border border-gray-200 bg-white">
             <ul className="space-y-1 border-t border-gray-200 p-4">
               {podcast.map(({ seasonName, seasonNumber }: seasonType) => (
