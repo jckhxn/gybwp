@@ -81,7 +81,7 @@ const HomePageComponent = () => {
           loading="eager"
           alt="Main Page Hero"
           src={heroImage}
-          className="h-full w-full object-cover     sm:h-auto sm:w-auto sm:max-h-[calc(100%-2rem)] sm:self-end sm:rounded-ss-[30px] md:h-auto md:w-auto md:max-h-[calc(100%-4rem)] md:rounded-ss-[60px]"
+          className="h-full w-full  object-cover     sm:h-auto sm:w-auto sm:max-h-[400px] sm:self-end sm:rounded-ss-[30px] md:h-auto md:w-auto md:max-h-[700px] "
         />
       </Section>
       {/* Large Podcast Playa */}
@@ -89,8 +89,8 @@ const HomePageComponent = () => {
         <BuzzSproutPlayer lg />
       </Section>
       {/* EPISODES */}
-      <Section className="mt-8 mb-12 py-8 px-4 overflow-x-hidden h-[700px]">
-        <div className="flex gap-8 justify-between mt-8 mx-8 md:mx-[10vw]">
+      <Section className="py-8 px-4 overflow-x-hidden h-[650px]">
+        <div className="flex gap-8 justify-between mx-8 md:mx-[10vw]">
           <div className="w-full mx-0">
             <h1 className="leading-normal text-lg">{`Season ${
               activeSeason || ""
