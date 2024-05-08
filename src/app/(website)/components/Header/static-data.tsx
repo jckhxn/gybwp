@@ -1,4 +1,4 @@
-import routes from "routes";
+import routes from "@/src/app/(website)/routes";
 
 export const PAGES = [
   { name: "Home", url: routes.internal.home },

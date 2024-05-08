@@ -1,10 +1,9 @@
 import React from "react";
-import routes from "routes";
-import { useRouter } from "next/navigation";
+import routes from "@/src/app/(website)/routes";
 
 // components
-import { Section } from "../../shared";
-import Button from "../../Button";
+import { Section } from "../shared";
+import Button from "../Button";
 
 //
 //
@@ -13,8 +12,6 @@ import Button from "../../Button";
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 
 const ErrorPage = ({ error }: { error?: Error }) => {
-  const router = useRouter();
-
   return (
     <>
       <Section className="bg-light">
@@ -46,7 +43,7 @@ const ErrorPage = ({ error }: { error?: Error }) => {
 
             <div className="flex items-center w-full mt-6 gap-x-3 shrink-0 sm:w-auto">
               <Button
-                onClick={() => router.back()}
+                // onClick={() => router.back()}
                 className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 border rounded-lg gap-x-2 sm:w-auto hover:bg-gray-100"
               >
                 <svg

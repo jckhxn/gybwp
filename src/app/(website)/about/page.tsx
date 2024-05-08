@@ -1,6 +1,6 @@
 import React from "react";
 
-import AboutPageComponent from "../../(website)/components/Pages/AboutPage";
+import AboutPageComponent from "../components/AboutPage";
 type Props = {};
 
 const page = (props: Props) => {

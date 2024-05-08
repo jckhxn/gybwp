@@ -1,8 +1,8 @@
 import React from "react";
 
 // components
-import { Section } from "../../shared";
-import DocumentHeader from "../../DocumentHeader";
+import { Section } from "../shared";
+import DocumentHeader from "../DocumentHeader";
 import { PRIVACY_POLICY_VERBIAGE, UPDATED_DATE } from "./static-data";
 
 //

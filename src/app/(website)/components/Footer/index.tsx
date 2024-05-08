@@ -1,5 +1,5 @@
 import React from "react";
-import routes from "routes";
+import routes from "@/src/app/(website)/routes";
 
 // components
 import Link from "next/link";

@@ -1,8 +1,8 @@
 import React from "react";
 
 // components
-import { Section } from "../../shared";
-import DocumentHeader from "../../DocumentHeader";
+import { Section } from "../shared";
+import DocumentHeader from "../DocumentHeader";
 
 // copy
 import { TOU_VERBIAGE, UPDATED_DATE } from "./static-data";

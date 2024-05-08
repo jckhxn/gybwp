@@ -1,5 +1,5 @@
 import React from "react";
-import PrivacyPageComponent from "../../components/Pages/PrivacyPage";
+import PrivacyPageComponent from "@/src/app/(website)/components/PrivacyPage";
 type Props = {};
 
 const page = (props: Props) => {

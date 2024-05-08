@@ -1,5 +1,5 @@
 // images
-import * as logos from "../../Socials/logos";
+import * as logos from "../Socials/logos";
 
 export type sponsorUUIDs =
   | "bayard"

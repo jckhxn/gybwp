@@ -7,7 +7,7 @@ import { Section, SectionHeading } from "../shared";
 import { usePagination, DOTS } from "./usePagination";
 
 // copy
-import { ARTICLES } from "../Pages/News/static-data";
+import { ARTICLES } from "../News/static-data";
 import { ARTICLES_INFO } from "./static-data";
 import Link from "next/link";
 

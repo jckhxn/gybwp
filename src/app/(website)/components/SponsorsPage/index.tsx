@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 // components
 import Image from "next/image";
 import Link from "next/link";
-import { Section, SectionHeading } from "../../shared";
+import { Section, SectionHeading } from "../shared";
 
 // copy
 import { SPONSORS, PARTNERS, SPONSORS_INFO } from "./static-data";
@@ -13,11 +13,8 @@ import { SPONSORS, PARTNERS, SPONSORS_INFO } from "./static-data";
 // SWR
 import useSWR from "swr";
 
-import {
-  ALL_SPONSORS_QUERY,
-  SPONSOR_DETAILS_QUERY,
-} from "../../../lib/queries";
-import { client } from "../../../sanity/sanity-utils";
+import { ALL_SPONSORS_QUERY, SPONSOR_DETAILS_QUERY } from "../../lib/queries";
+import { client } from "../../sanity/sanity-utils";
 //
 //
 //

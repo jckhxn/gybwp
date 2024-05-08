@@ -1,7 +1,7 @@
 "use client"; // Error components must be Client Components
 
 import { useEffect } from "react";
-import ErrorPageComponent from "./components/Pages/ErrorPage";
+import ErrorPageComponent from "@/src/app/(website)/components/ErrorPage";
 export default function Error({
   error,
   reset,
@@ -10,7 +10,6 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log the error to an error reporting service
     console.error(error);
   }, [error]);
 

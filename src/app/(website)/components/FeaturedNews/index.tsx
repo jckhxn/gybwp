@@ -9,7 +9,7 @@ import defaultImageSrc from "public/images/logo.png";
 
 // copy
 import { NEWS_INFO } from "./static-data";
-import { FEATURED_ARTICLES } from "../Pages/News/static-data";
+import { FEATURED_ARTICLES } from "../News/static-data";
 
 // SWR
 import useSWR from "swr";

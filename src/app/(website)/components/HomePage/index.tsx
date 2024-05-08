@@ -4,24 +4,24 @@ import React, { useEffect, useState } from "react";
 
 // components
 import Image from "next/image";
-import { Section, SectionHeading } from "../../shared";
-import heroImage from "../../../../../../public/images/main-page-hero.jpg";
-import Button from "../../Button";
-import FeaturedNews from "../../FeaturedNews";
-import Dropdown from "../../Dropdown";
+import { Section, SectionHeading } from "../shared";
+import heroImage from "@/public/images/main-page-hero.jpg";
+import Button from "../Button";
+import FeaturedNews from "../FeaturedNews";
+import Dropdown from "../Dropdown";
 
 // copy
 import { HERO, CTA, useGetEpisodesBySeason } from "./static-data";
-import Slider from "../../Slider";
-import { BuzzSproutPlayer } from "../../BuzzSproutPlayer";
+import Slider from "../Slider";
+import { BuzzSproutPlayer } from "../BuzzSproutPlayer";
 
 // SWR
 import useSWR, { mutate } from "swr";
-import { client } from "../../../sanity/sanity-utils";
+import { client } from "../../sanity/sanity-utils";
 import {
   INITIAL_SEASON_EPISODES_QUERY,
   SEASON_EPISODES_QUERY,
-} from "../../../lib/queries";
+} from "../../lib/queries";
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState();
 

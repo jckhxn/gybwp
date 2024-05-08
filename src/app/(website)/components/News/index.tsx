@@ -2,8 +2,8 @@
 import React from "react";
 
 // components
-import Articles from "../../Articles";
-import FeaturedNews from "../../FeaturedNews";
+import Articles from "../Articles";
+import FeaturedNews from "../FeaturedNews";
 
 //
 //

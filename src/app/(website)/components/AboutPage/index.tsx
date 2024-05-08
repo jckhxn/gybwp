@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 // components
-import { Section, SectionHeading } from "../../shared";
+import { Section, SectionHeading } from "../shared";
 
 // copy
 import { ABOUT_INFO } from "./static-data";
