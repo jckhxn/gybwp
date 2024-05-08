@@ -4,12 +4,11 @@ import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 
-import { locate } from "./src/app/lib/locate";
+import { locate } from "./src/app/(website)/lib/locate";
 import { pages } from "@tinloof/sanity-studio";
 
-import { youtubeInput } from "./src/app/sanity/plugins/youtube";
-import schemas from "./src/app/sanity/schemas";
-import path from "path";
+import { youtubeInput } from "./src/app/(website)/sanity/plugins/youtube";
+import schemas from "./src/app/(website)/sanity/schemas";
 
 const config = defineConfig({
   projectId: "hxymd1na",
