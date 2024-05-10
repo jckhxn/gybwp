@@ -2,13 +2,20 @@
 
 import React from "react";
 import PodcastDetailsPageComponent from "@/src/app/(website)/components/PodcastDetailsPage";
-import PodcastPreview from "@/src/app/(website)/components/PodcastPreview";
+import PodcastPreview from "@/src/app/(website)/components/EpisodePreview";
+import EpisodeDetails from "@/src/app/(website)/components/EpisodeDetails";
+
 // Get Episode Data
 import { client } from "../../sanity/sanity-utils";
 import { Metadata } from "next";
+import { QueryParams, SanityDocument } from "next-sanity";
 import { draftMode } from "next/headers";
-import { EPISODES_DETAILS_QUERY } from "../../lib/queries";
-
+import {
+  EPISODES_DETAILS_QUERY,
+  PODCAST_DETAILS_QUERY,
+} from "../../lib/queries";
+import EpisodePreview from "@/src/app/(website)/components/EpisodePreview";
+import { loadQuery } from "@/src/app/(website)/lib/store";
 type Props = {
   params: { uuid: string };
 };
@@ -48,11 +55,31 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
     };
 };
 
-export default function page() {
+export default async function page({
+  params,
+}: {
+  params: QueryParams & { uuid: string };
+}): Promise<JSX.Element> {
+  const initial = await loadQuery<SanityDocument>(
+    PODCAST_DETAILS_QUERY,
+    {
+      uuid: String(params.uuid),
+      epID: String(params.uuid).split("-")[0],
+    },
+    {
+      perspective: draftMode().isEnabled ? "previewDrafts" : "published",
+    }
+  );
+
   return draftMode().isEnabled ? (
-    // Preview Component for dashboard
-    <PodcastPreview />
+    <EpisodePreview
+      initial={initial}
+      params={{
+        uuid: String(params.uuid),
+        epID: String(params.uuid).split("-")[0],
+      }}
+    />
   ) : (
-    <PodcastDetailsPageComponent />
+    <EpisodeDetails data={initial.data} />
   );
 }

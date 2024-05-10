@@ -23,6 +23,8 @@ import {
   INITIAL_SEASON_EPISODES_QUERY,
   SEASON_EPISODES_QUERY,
 } from "../../lib/queries";
+
+import EpisodeSlider from "@/src/app/(website)/components/EpisodeSlider";
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState();
 
@@ -84,7 +86,7 @@ const HomePageComponent = () => {
         <BuzzSproutPlayer lg />
       </Section>
       {/* EPISODES */}
-      <Section className="py-8 px-4 overflow-x-hidden h-[650px]">
+      {/* <Section className="py-8 px-4 overflow-x-hidden h-[650px]">
         <div className="flex gap-8 justify-between mx-8 md:mx-[10vw]">
           <div className="w-full mx-0">
             <h1 className="leading-normal text-lg">{`Season ${
@@ -99,7 +101,8 @@ const HomePageComponent = () => {
           activeSeason={activeSeason}
           items={useGetEpisodesBySeason(activeSeason)}
         />
-      </Section>
+      </Section> */}
+      <EpisodeSlider />
 
       {/* CTA */}
       <Section className={`bg-secondary`}>

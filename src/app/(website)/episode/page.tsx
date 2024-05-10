@@ -1,6 +1,6 @@
 import React from "react";
 import { draftMode } from "next/headers";
-import { EpisodesPage } from "../components/EpisodePage/episodes-page";
+import { EpisodesPage } from "../components/EpisodesPage/episodes-page";
 
 type Props = {};
 

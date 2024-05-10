@@ -9,16 +9,7 @@
 // "uuid":coalesce(youtube.uuid,uuid)
 
 const fieldsToMigrate = [
-  { from: "episodeName", to: "youtube.title" },
-  { from: "episodeNumber", to: "youtube.episodeNumber" },
-  { from: "image", to: "youtube.thumbnail" },
-  { from: "seasonNumber", to: "youtube.seasonNumber" },
-  { from: "uuid", to: "youtube.uuid" },
-  {
-    from: "url",
-    to: "youtube.id",
-    transform: (url: string) => url.split("/")[3],
-  },
+  { from: "blurb", to: "youtube.blurb" },
 
   // Add more field mappings as needed
 ];
