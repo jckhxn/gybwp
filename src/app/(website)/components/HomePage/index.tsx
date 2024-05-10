@@ -62,7 +62,7 @@ const HomePageComponent = () => {
                 {HERO.buttonText}
               </Link>
               <Link
-                className="inline-flex h-10 items-center justify-center rounded-md border border-gray-200 border-gray-200 
+                className="inline-flex h-10 items-center justify-center rounded-md border border-gray-200 
                 text-gray-50 bg-primary px-8 text-sm font-medium shadow-sm transition-colors hover:bg-gray-100 hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-primary dark:hover:bg-primary dark:hover:text-white dark:focus-visible:ring-gray-300"
                 href={HERO.secondButtonUrl}
               >

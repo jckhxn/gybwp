@@ -1,5 +1,6 @@
 import React from "react";
 import { draftMode } from "next/headers";
+import { EpisodesPage } from "../components/EpisodePage/episodes-page";
 
 type Props = {};
 
@@ -8,8 +9,8 @@ const Page = (props: Props) => {
     // If in Live Preview (Dashboard), give new doc speel.
     return <h1 className="text-center">Start a new Episode document.</h1>;
   } else {
-    // Page not found error for regular visitors
-    throw new Error("Get outta here.");
+    // Display all episodes.
+    return <EpisodesPage />;
   }
 };
 
