@@ -6,6 +6,7 @@ export const CONSULTING_INFO = {
   header: "SOME OF OUR SERVICES",
   features: [
     {
+      pill: "Talent",
       title: "Talent Acquisition & Talent Management",
       description: [
         "Benchmarking",
@@ -16,6 +17,7 @@ export const CONSULTING_INFO = {
       ],
     },
     {
+      pill: "Industry",
       title: "Industry Experience",
       description: [
         "We bring extensive experience from industries such as",
@@ -30,6 +32,7 @@ export const CONSULTING_INFO = {
       ],
     },
     {
+      pill: "Experience",
       title: "Functional Experience",
       description: [
         "Global (>70 countries",
@@ -44,6 +47,7 @@ export const CONSULTING_INFO = {
       ],
     },
     {
+      pill: "Business",
       title: "Business Support & Planning",
       description: [
         "Assessment and Audit",
