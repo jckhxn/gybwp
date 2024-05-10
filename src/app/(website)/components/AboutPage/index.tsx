@@ -110,7 +110,7 @@ export default function Component() {
             <div className="grid gap-2">
               <h3 className="text-lg font-semibold">Topics Covered</h3>
               <p className="text-gray-500 dark:text-gray-400">
-                We discuss a wide range of topics (topics here)
+                Business Leadership, Talent Aquisition, and more.
               </p>
             </div>
             <div className="grid gap-2">

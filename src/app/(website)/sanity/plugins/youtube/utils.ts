@@ -1,17 +1,19 @@
 // @ts-ignore
 function getUUIDFromTitle(text) {
-  // Regular expression to match "SxEXX" format
-  const regex = /S(\d+)E(\d+)/;
-  const match = regex.exec(text);
-
-  // Check if format is valid (2 capture groups)
-  if (!match || match.length !== 3) {
+  const pattern = /S(\d+)E(\d+)(?:\sPart\s(\d+))?/;
+  const match = text.match(pattern);
+  if (match) {
+    const season = match[1];
+    const episode = match[2].padStart(2, "0"); // Ensure episode is always two digits
+    const part = match[3];
+    if (part) {
+      return `${season}${episode}-${part}`;
+    } else {
+      return `${season}${episode}`;
+    }
+  } else {
     return null;
   }
-
-  // Return season and episode numbers as an string
-
-  return match[1].toString() + match[2].toString();
 }
 // @ts-ignore
 function getSeasonNumber(text) {

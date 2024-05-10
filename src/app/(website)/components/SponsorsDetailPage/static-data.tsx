@@ -1,8 +1,7 @@
 // @ts-nocheck
-import routes from "routes";
+import routes from "@/src/app/(website)/routes";
 
 import { SPONSORS } from "../SponsorsPage/static-data";
-import { store } from "../../../redux/store";
 
 export const getSponsor = (id: string, data: object) => {
   console.log(data.sponsors);

@@ -132,7 +132,7 @@ const PodcastDetailsPageComponent = () => {
                   title="YouTube video player"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
-                ></iframe>{" "}
+                ></iframe>
                 <iframe
                   className="hidden sm:block"
                   width="560"
@@ -167,7 +167,9 @@ const PodcastDetailsPageComponent = () => {
             ) : null}
           </div>
         </Section>
-        {/* If you check length it doesn't display, otherwise it renders too many of same. */}
+        {/* If you check length it doesn't display, otherwis
+        
+        e it renders too many of same. */}
         {episode.details
           ? episode.details.featuredGuests?.map((guest, idx) => {
               const isOdd = idx % 2;
@@ -237,6 +239,7 @@ const PodcastDetailsPageComponent = () => {
               {episode.details?.description ? (
                 <div className="mt-8  ">
                   <div
+
                     key={`episode description `}
                     className="text-gray-500  whitespace-break-spaces   md:mt-4  "
                   >
@@ -312,6 +315,7 @@ const PodcastDetailsPageComponent = () => {
             })}
           </Section>
         ) : null}
+        {/* Subscribe Footer */}
         <Section className={`bg-main ${isClip ? "mt-0" : "mt-20"}`}>
           <div className="p-8 md:p-12 lg:px-16 lg:py-24">
             <div className="flex lg:mx-20 text-center md:text-left flex-col md:flex-row items-center">

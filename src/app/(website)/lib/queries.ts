@@ -3,6 +3,12 @@
 
 import { groq } from "next-sanity";
 
+// Guest Details query (by URL param -> slug)
+export const GUEST_QUERY = groq` *[_type == "guest" && slug.current == $slug] {
+  ...,
+"episodes": *[_type == "episode" && references('guests', ^._id)]
+}`;
+
 // Get all Episodes by UUID
 export const EPISODES = groq`*[_type == "episode"]| order(uuid asc){uuid}`;
 
@@ -18,9 +24,9 @@ export const EPISODES_DETAILS_QUERY = groq`*[_type == "episode" && uuid == $uuid
   image,
   url,
 }`;
-// Get Episodes for latest Season
+// Gets the latest season
 export const INITIAL_SEASON_EPISODES_QUERY = groq`{
-  "episodes":*[_type == "episode" && seasonName == *[_type == "episode" && defined(seasonName)][0].seasonName]|order(uuid desc),
+
   "latestSeasonNumber":count(array::unique(*[_type == "episode"].seasonName))
 }
 `;
@@ -33,8 +39,7 @@ export const TOTAL_SEASONS_QUERY = groq`{"seasonName":array::unique(*[_type == "
 export const EPISODE_QUERY = groq`*[_type == "episode" && youtube.uuid == $uuid][0]`;
 
 // Get details for current Podcast.
-export const PODCAST_DETAILS_QUERY = groq`{
-  "episodeDetails": *[_type == "episode" && uuid == $uuid] {
+export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && uuid == $uuid] {
     ...,
     content {
       files[] {
@@ -52,6 +57,7 @@ export const PODCAST_DETAILS_QUERY = groq`{
     "seasonNumber": coalesce(youtube.seasonNumber, seasonNumber),
     "url": coalesce("https://www.youtube.com/" + youtube.id, url),
     "uuid": coalesce(youtube.uuid, uuid),
+    guests[]->,
     details {
     ...,
       featuredGuests[] {
@@ -66,13 +72,13 @@ export const PODCAST_DETAILS_QUERY = groq`{
     }
       }
     },
-    "allParts":*[_type == "episode" && uuid match $epID] | order(uuid asc) 
+    "allParts":*[_type == "episode" && uuid != $uuid && uuid match $epID] | order(uuid asc) 
 ,
     "nextEpisode": *[_type == "episode" && _createdAt > ^._createdAt && uuid != ^._id] | order(_createdAt asc, uuid asc)[0].uuid,
     "prevEpisode": *[_type == "episode" && _createdAt < ^._createdAt && uuid != ^._id] | order(_createdAt desc, uuid desc)[0].uuid,
     "sponsors":*[_type=="sponsor" && uuid in ^.sponsors]
 }
-}`;
+`;
 
 // Get specific Sponsor
 export const SPONSOR_DETAILS_QUERY = groq`{"sponsors":*[_type == "sponsor" && uuid == $id] ,"episodes":*[_type == "episode" &&  $id in sponsors]| order(uuid desc)}`;

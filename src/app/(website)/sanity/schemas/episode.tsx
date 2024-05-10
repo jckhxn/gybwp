@@ -24,7 +24,9 @@ const episode = {
   fields: [
     definePathname({
       name: "pathname",
+
       initialValue: { current: "/episode/" },
+
       options: {
         folder: {
           canUnlock: true,
@@ -38,7 +40,18 @@ const episode = {
       type: "youtubeVideo",
       validation: (Rule: { required: () => any }) => Rule.required(),
     },
-
+    {
+      // Guests
+      name: "guests",
+      title: "Guests",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "guest" }],
+        },
+      ],
+    },
     {
       // Season Name
       name: "seasonName",
@@ -90,6 +103,7 @@ const episode = {
       hidden: ({ value }) => (value === undefined ? true : false),
       readonly: true,
     },
+
     {
       // Number of the Episode
       name: "episodeNumber",
