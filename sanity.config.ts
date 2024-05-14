@@ -4,11 +4,11 @@ import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 
-import { locate } from "./src/app/lib/locate";
+import { locate } from "./src/app/(website)/lib/locate";
 import { pages } from "@tinloof/sanity-studio";
 
-import { youtubeInput } from "./src/plugins/youtube";
-import schemas from "./src/app/sanity/schemas";
+import { youtubeInput } from "./src/app/(website)/sanity/plugins/youtube";
+import schemas from "./src/app/(website)/sanity/schemas";
 
 const config = defineConfig({
   projectId: "hxymd1na",
@@ -16,6 +16,7 @@ const config = defineConfig({
   title: "JKL Data",
   apiVersion: "2023-08-22",
   basePath: "/dash",
+
   plugins: [
     structureTool(),
     pages({
@@ -27,6 +28,8 @@ const config = defineConfig({
         draftMode: {
           enable: "/api/draft",
         },
+
+        preview: "/episode/",
       },
     }),
     youtubeInput({ apiKey: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY }),
