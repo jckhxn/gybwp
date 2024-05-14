@@ -23,6 +23,9 @@ const guest = {
       title: "Profile Picture",
       type: "image",
       description: "Upload the guest's profile picture",
+      options: {
+        hotspot: true,
+      },
     },
     {
       name: "name",

@@ -289,6 +289,11 @@ const episode = {
               ],
             },
           ],
+          deprecated: {
+            reason: "Use Guest field above instead",
+          },
+          hidden: ({ value }) => (value === undefined ? true : false),
+          readonly: true,
         },
         {
           name: "description",
