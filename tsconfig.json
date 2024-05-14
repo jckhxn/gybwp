@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,21 +15,12 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "components/*": [
-        "./src/components/*"
-      ],
-      "public/*": [
-        "./public/*"
-      ],
-      "routes": [
-        "./src/routes"
-      ],
-      "images/*": [
-        "./public/images/*"
-      ],
-      "styles/*": [
-        "./src/styles/*"
-      ]
+      "@/*": ["./*"],
+      "components/*": ["./src/app/(website)/components/*"],
+      "public/*": ["./public/*"],
+      "routes": ["./src/routes"],
+      "images/*": ["./public/images/*"],
+      "styles/*": ["./src/styles/*"]
     },
     "plugins": [
       {
@@ -48,7 +35,5 @@
     "src/pages/api/sponsor.js",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

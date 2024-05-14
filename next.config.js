@@ -5,7 +5,10 @@ const nextConfig = {
   pageExtensions: ["ts", "tsx", "js", "jsx"],
 
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "*" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "*" },
+      { protocol: "http", hostname: "*" },
+    ],
   },
 };
 
