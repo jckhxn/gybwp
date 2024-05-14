@@ -107,9 +107,9 @@ export default function Consulting() {
               <p className="text-gray-600">
                 We work closely with our clients to understand their unique
                 challenges and develop customized strategies that drive
-                sustainable growth and success. Whether you're looking to
+                sustainable growth and success. Whether you&apos;re looking to
                 optimize your operations, leverage technology, or navigate
-                complex organizational changes, we're here to guide you every
+                complex organizational changes, we&apos;re here to guide you every
                 step of the way.
               </p>
             </div>

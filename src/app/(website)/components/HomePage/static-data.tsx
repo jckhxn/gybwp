@@ -6,7 +6,7 @@ import * as podcast from "./episode-data";
 import { seasonType, episodeType } from "./episode-data";
 
 // SWR
-import useSWR from "swr";
+// import useSWR from "swr";
 import { client } from "../../sanity/sanity-utils";
 import { SEASON_EPISODES_QUERY } from "../../lib/queries";
 
@@ -52,12 +52,12 @@ export const PODCAST: seasonType[] = [
 //
 // DO NOT TOUCH ANYTHING BELOW THIS LINE
 
-export const useGetEpisodesBySeason = (seasonToFind?: number) => {
-  const { data, error, isLoading } = useSWR(
-    // Prevent it from firing unwanted network calls on intial paint.
-    seasonToFind ? SEASON_EPISODES_QUERY : null,
-    (query) => client.fetch(query, { seasonNumber: seasonToFind })
-  );
+// export const useGetEpisodesBySeason = (seasonToFind?: number) => {
+//   const { data, error, isLoading } = useSWR(
+//     // Prevent it from firing unwanted network calls on intial paint.
+//     seasonToFind ? SEASON_EPISODES_QUERY : null,
+//     (query) => client.fetch(query, { seasonNumber: seasonToFind })
+//   );
 
-  if (data) return data;
-};
+//   if (data) return data;
+// };

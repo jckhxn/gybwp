@@ -84,7 +84,7 @@ const guest = {
       options: {
         source: "name", // Use the guest's title directly
         maxLength: 96,
-        slugify: (input) => input.toLowerCase().replace(/\s+/g, "-"),
+        slugify: (input: any) => input.toLowerCase().replace(/\s+/g, "-"),
         validation: (Rule: Rule) => Rule.required(),
       },
     },

@@ -16,11 +16,8 @@ import {
 } from "../../lib/queries";
 import EpisodePreview from "@/src/app/(website)/components/EpisodePreview";
 import { loadQuery } from "@/src/app/(website)/lib/store";
-type Props = {
-  params: { uuid: string };
-};
 
-export const generateMetadata = async (props: Props): Promise<Metadata> => {
+export const generateMetadata = async (props): Promise<Metadata> => {
   const { params } = props;
 
   const [episodeDetails] = await client.fetch(EPISODES_DETAILS_QUERY, {
@@ -60,11 +57,13 @@ export default async function page({
 }: {
   params: QueryParams & { uuid: string };
 }): Promise<JSX.Element> {
+  // A very hacky way of doing this
+  const parsedEPID = params.uuid.split("-")[0];
   const initial = await loadQuery<SanityDocument>(
     PODCAST_DETAILS_QUERY,
     {
-      uuid: String(params.uuid),
-      epID: String(params.uuid).split("-")[0],
+      uuid: params.uuid,
+      epID: parsedEPID, // Add a comma here
     },
     {
       perspective: draftMode().isEnabled ? "previewDrafts" : "published",
@@ -75,8 +74,8 @@ export default async function page({
     <EpisodePreview
       initial={initial}
       params={{
-        uuid: String(params.uuid),
-        epID: String(params.uuid).split("-")[0],
+        uuid: params.uuid,
+        epID: parsedEPID,
       }}
     />
   ) : (

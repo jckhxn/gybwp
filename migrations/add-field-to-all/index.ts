@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { defineMigration, at, setIfMissing } from "sanity/migrate";
 
 // Run this for adding fields & values

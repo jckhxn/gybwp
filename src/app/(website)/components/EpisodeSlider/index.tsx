@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { SVGProps, useEffect, useState } from "react";
 import useSWR, { mutate } from "swr";
 import { client } from "@/src/app/(website)/sanity/sanity-utils";
 import { SEASON_EPISODES_QUERY } from "../../lib/queries";
@@ -57,7 +57,9 @@ export default function EpisodeSlider() {
   );
 }
 
-function ChevronLeftIcon(props) {
+function ChevronLeftIcon(
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
+) {
   return (
     <svg
       {...props}
@@ -76,7 +78,9 @@ function ChevronLeftIcon(props) {
   );
 }
 
-function ChevronRightIcon(props) {
+function ChevronRightIcon(
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
+) {
   return (
     <svg
       {...props}

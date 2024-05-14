@@ -16,6 +16,8 @@ const EpisodePreview = ({
   initial: QueryResponseInitial<SanityDocument>;
   params: QueryParams;
 }) => {
+  // FOR SOME REASON
+  // This causes the call depth issue
   const { data } = useQuery<SanityDocument | null>(
     PODCAST_DETAILS_QUERY,
     params,
