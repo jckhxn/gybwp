@@ -31,7 +31,7 @@ export default function SeasonDropdown({
   useEffect(() => {
     // Only fire once.
     if (data) setActiveSeason(data?.latestSeasonNumber);
-  }, [data]);
+  }, [data, setActiveSeason]);
 
   return (
     <Select onValueChange={(value: any) => setActiveSeason(value)}>

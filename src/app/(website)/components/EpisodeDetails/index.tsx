@@ -1,4 +1,5 @@
-"use client";
+// @ts-nocheck
+
 import { Badge } from "@/src/app/(website)/components/ui/badge";
 import { Button } from "@/src/app/(website)/components/ui/button";
 
@@ -26,7 +27,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 width="360"
                 height="240"
                 src={`https://www.youtube.com/embed/${
-                  data[0]?.url.split("/")[3]
+                  data[0]?.url?.split("/")[3]
                 }`}
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -38,7 +39,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 width="560"
                 height="515"
                 src={`https://www.youtube.com/embed/${
-                  data[0]?.url.split("/")[3]
+                  data[0]?.url?.split("/")[3]
                 }`}
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -47,7 +48,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
               {/* Navigation Buttons */}
               <div className="flex justify-between items-center">
                 {data[0]?.prevEpisode ? (
-                  <Link href={`/episode/${data[0].prevEpisode}`}>
+                  <Link href={`/episode/${data[0]?.prevEpisode}`}>
                     <Button size="sm" variant="default">
                       <ChevronLeftIcon className="h-4 w-4" />
                       Previous
@@ -56,7 +57,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 ) : null}
 
                 {data[0]?.nextEpisode ? (
-                  <Link href={`/episode/${data[0].nextEpisode}`}>
+                  <Link href={`/episode/${data[0]?.nextEpisode}`}>
                     <Button size="sm" variant="default">
                       Next
                       <ChevronRightIcon className="h-4 w-4" />
@@ -71,8 +72,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 {/* Podcast Links */}
                 <div className="flex flex-wrap items-center gap-2">
                   {data[0]?.podcastLinks?.length > 0
-                    ? data[0].podcastLinks.map((podcast: any, idx: number) => (
-                        <Link key={idx} href={podcast.link}>
+                    ? data[0].podcastLinks?.map((podcast: any, idx: number) => (
+                        <Link key={idx} href={podcast?.link}>
                           <Badge className="text-white" variant="default">
                             {podcast.name}
                           </Badge>
@@ -82,11 +83,11 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 </div>
               </div>
               {/* Episode Parts */}
-              {data[0]?.allParts && data[0]?.allParts.length > 0 && (
+              {data[0]?.allParts && data[0]?.allParts?.length > 0 && (
                 <div className="space-y-4">
                   <h3 className="text-2xl font-bold">Episode Parts</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {data[0]?.allParts.map(
+                    {data[0]?.allParts?.map(
                       (
                         {
                           youtube: { title, blurb },
@@ -265,29 +266,31 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 ">
                       {/* Start Content Sections */}
 
-                      {data[0]?.content?.files?.map(({ name, image, type }) => {
-                        switch (type) {
-                          case "image":
-                            return (
-                              <>
-                                <img
-                                  alt="Related Image"
-                                  className="w-full rounded-md"
-                                  height={260}
-                                  src={image}
-                                  style={{
-                                    objectFit: "cover",
-                                  }}
-                                  width={260}
-                                />
-                              </>
-                            );
-                          case "link":
-                            return <></>;
-                          default:
-                            return null;
+                      {data[0]?.content?.files?.map(
+                        ({ name, image, type }, idx) => {
+                          switch (type) {
+                            case "image":
+                              return (
+                                <div key={idx}>
+                                  <Image
+                                    alt="Related Image"
+                                    className="w-full rounded-md"
+                                    height={260}
+                                    src={image}
+                                    style={{
+                                      objectFit: "cover",
+                                    }}
+                                    width={260}
+                                  />
+                                </div>
+                              );
+                            case "link":
+                              return <></>;
+                            default:
+                              return null;
+                          }
                         }
-                      })}
+                      )}
                     </div>
                   </div>
                 </>

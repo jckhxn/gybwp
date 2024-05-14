@@ -10,6 +10,7 @@ import Image from "next/image";
 import logo from "@/public/images/logo.png";
 import hero from "@/public/images/blueprint.png";
 import host from "@/public/images/consulting1.jpg";
+import { SVGProps } from "react";
 
 export default function Component() {
   return (
@@ -80,9 +81,9 @@ export default function Component() {
                 <h3 className="text-lg font-semibold">Jeff Lackey</h3>
                 <p className="text-gray-500 dark:text-gray-400">Host, GYBWP</p>
               </div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                I firmly believe people aren't just a company's most vital
-                asset; they're an investment primed for growth.
+              <p className="text-mdm text-gray-500 dark:text-gray-400">
+                I firmly believe people aren&apos;t just a company&apos;s most
+                vital asset; they&apos;re an investment primed for growth.
               </p>
             </div>
           </div>
@@ -150,7 +151,7 @@ export default function Component() {
   );
 }
 
-function PodcastIcon(props) {
+function PodcastIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -172,7 +173,7 @@ function PodcastIcon(props) {
   );
 }
 
-function RssIcon(props) {
+function RssIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}

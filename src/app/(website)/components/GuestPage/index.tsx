@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 
 import {
@@ -11,18 +12,30 @@ import { GUEST_QUERY } from "../../lib/queries";
 
 import EpisodeCard from "../EpisodeCard";
 import { urlFor } from "@/src/app/(website)/lib/utils";
-import { SVGProps } from "react";
+import { SVGProps, useEffect, useState } from "react";
 
 type Props = {
   guest: string;
 };
 
-export default async function Component({ guest }: Props) {
-  const data = await client.fetch(GUEST_QUERY, {
-    slug: String(guest),
-  });
+export default function Component({ guest }: Props) {
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await client.fetch(GUEST_QUERY, {
+        slug: String(guest),
+      });
+      setData(result[0]);
+    };
+    fetchData();
+  }, [guest]);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
   // Sanity weird URL builder for assets
-  const guestImageUrl = urlFor(data[0]?.image).url() || "";
+  const guestImageUrl = urlFor(data?.image).url() || "";
   return (
     <div className=" max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
       <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 md:gap-12">
@@ -30,16 +43,14 @@ export default async function Component({ guest }: Props) {
           <Avatar className="w-32 h-32 mb-4">
             <AvatarImage alt="Guest Avatar" src={guestImageUrl} />
 
-            <AvatarFallback>{data[0].name}</AvatarFallback>
+            <AvatarFallback>{data.name}</AvatarFallback>
           </Avatar>
-          <h1 className="text-2xl font-bold mb-2">{data[0].name}</h1>
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
-            {data[0].title}
-          </p>
+          <h1 className="text-2xl font-bold mb-2">{data.name}</h1>
+          <p className="text-gray-500 dark:text-gray-400 mb-4">{data.title}</p>
           <div className="flex items-center gap-4">
             <Link
               className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href={data[0].links ? data[0].links.website : ""}
+              href={data.links ? data.links.website : ""}
             >
               <WebsiteIcon className="w-15 h-15" />
             </Link>
@@ -67,15 +78,15 @@ export default async function Component({ guest }: Props) {
           <div>
             <h2 className="text-xl font-bold mb-4">About</h2>
             <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
-              {data[0].about}
+              {data.about}
             </p>
           </div>
           <div>
             {/* List episodes here */}
             <h2 className="text-xl font-bold mb-4">Episodes</h2>
             <ul className="space-y-4">
-              {data[0].episodes?.length > 0 ? (
-                data[0].episodes.map((episode: any, idx: any) => (
+              {data.episodes?.length > 0 ? (
+                data.episodes.map((episode: any, idx: any) => (
                   <EpisodeCard key={idx} {...episode} />
                 ))
               ) : (

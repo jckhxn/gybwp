@@ -6,7 +6,7 @@ const builder = imageUrlBuilder({
   projectId: "hxymd1na",
   dataset: "production",
 });
-export function urlFor(source) {
+export function urlFor(source: any) {
   return builder.image(source);
 }
 

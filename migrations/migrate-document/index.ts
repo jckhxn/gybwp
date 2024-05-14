@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { defineMigration, createIfNotExists, create } from "sanity/migrate";
 import slugify from "slugify";
 

@@ -7,7 +7,7 @@
 // "seasonNumber":coalesce(youtube.seasonNumber,seasonNumber),
 // "url":coalesce("https://www.youtube.com/"+youtube.id,url),
 // "uuid":coalesce(youtube.uuid,uuid)
-
+// @ts-nocheck
 const fieldsToMigrate = [
   { from: "blurb", to: "youtube.blurb" },
 
