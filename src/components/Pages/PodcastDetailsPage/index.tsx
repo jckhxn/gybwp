@@ -49,11 +49,11 @@ const PodcastDetailsPageComponent = () => {
 
   const router = useRouter();
   const pathname = usePathname();
+  const uuid = pathname.split("/")[2];
 
   const thisWindow =
     typeof window !== "undefined" ? window.location.pathname : null;
 
-  const uuid = pathname.split("/")[2];
 
   const { data: episodes } = useSWR(
     groq`*[_type == "episode"]| order(uuid asc)`,
