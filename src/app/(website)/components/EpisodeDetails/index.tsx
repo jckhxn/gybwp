@@ -72,13 +72,17 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 {/* Podcast Links */}
                 <div className="flex flex-wrap items-center gap-2">
                   {data[0]?.podcastLinks?.length > 0
-                    ? data[0].podcastLinks?.map((podcast: any, idx: number) => (
-                        <Link key={idx} href={podcast?.link}>
-                          <Badge className="text-white" variant="default">
-                            {podcast.name}
-                          </Badge>
-                        </Link>
-                      ))
+                    ? data[0]?.podcastLinks?.map(
+                        (podcast: any, idx: number) => (
+                          <>
+                            <Link key={idx} href={podcast?.link || "#"}>
+                              <Badge className="text-white" variant="default">
+                                {podcast?.name}
+                              </Badge>
+                            </Link>
+                          </>
+                        )
+                      )
                     : null}
                 </div>
               </div>
@@ -113,7 +117,6 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   </div>
                 </div>
               )}
-
               {/* Episode Description */}
               <div className="space-y-4">
                 <h3 className="text-2xl font-bold">Short Description</h3>
@@ -133,7 +136,11 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                             <Image
                               alt="Guest Avatar"
                               className="rounded-full"
-                              src={image ? urlFor(image).url() : ""}
+                              src={
+                                image
+                                  ? urlFor(image).url()
+                                  : "./placeholder.svg"
+                              }
                               style={{
                                 aspectRatio: "64/64",
                                 objectFit: "cover",

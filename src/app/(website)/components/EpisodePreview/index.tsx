@@ -1,13 +1,9 @@
 "use client";
 import React from "react";
-import {
-  EPISODES_DETAILS_QUERY,
-  PODCAST_DETAILS_QUERY,
-} from "../../lib/queries";
+import { PODCAST_DETAILS_QUERY } from "../../lib/queries";
 import { QueryResponseInitial, useQuery } from "@sanity/react-loader";
 import { QueryParams, SanityDocument } from "next-sanity";
 import EpisodeDetails from "../EpisodeDetails";
-type Props = {};
 
 const EpisodePreview = ({
   initial,
@@ -16,8 +12,6 @@ const EpisodePreview = ({
   initial: QueryResponseInitial<SanityDocument>;
   params: QueryParams;
 }) => {
-  // FOR SOME REASON
-  // This causes the call depth issue
   const { data } = useQuery<SanityDocument | null>(
     PODCAST_DETAILS_QUERY,
     params,
