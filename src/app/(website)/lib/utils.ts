@@ -20,12 +20,12 @@ export function truncateText(
   truncationIndicator = "..."
 ) {
   // Check if the text length is less than or equal to the maximum length
-  if (text.length <= maxLength) {
+  if (text?.length <= maxLength) {
     return text;
   } else {
     // Truncate the text and append the truncation indicator
     return (
-      text.substring(0, maxLength - truncationIndicator.length) +
+      text?.substring(0, maxLength - truncationIndicator.length) +
       truncationIndicator
     );
   }

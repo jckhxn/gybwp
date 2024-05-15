@@ -52,32 +52,21 @@ export const generateMetadata = async (props): Promise<Metadata> => {
     };
 };
 
-export default async function page({
-  params,
-}: {
-  params: QueryParams & { uuid: string };
-}): Promise<JSX.Element> {
+export default async function Page({ params }: { params: QueryParams }) {
   // A very hacky way of doing this
-  const parsedEPID = params.uuid.split("-")[0];
+  const { uuid } = params;
+  const epID = uuid.split("-")[0];
+
   const initial = await loadQuery<SanityDocument>(
     PODCAST_DETAILS_QUERY,
-    {
-      uuid: params.uuid,
-      epID: parsedEPID, // Add a comma here
-    },
+    { uuid, epID },
     {
       perspective: draftMode().isEnabled ? "previewDrafts" : "published",
     }
   );
 
   return draftMode().isEnabled ? (
-    <EpisodePreview
-      initial={initial}
-      params={{
-        uuid: params.uuid,
-        epID: parsedEPID,
-      }}
-    />
+    <EpisodePreview initial={initial} params={{ uuid, epID }} />
   ) : (
     <EpisodeDetails data={initial.data} />
   );
