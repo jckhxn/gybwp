@@ -26,6 +26,7 @@ export default function Component({ guest }: Props) {
       const result = await client.fetch(GUEST_QUERY, {
         slug: String(guest),
       });
+
       setData(result[0]);
     };
     fetchData();

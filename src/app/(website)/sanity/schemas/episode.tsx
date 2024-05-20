@@ -24,15 +24,14 @@ const episode = {
   fields: [
     definePathname({
       name: "pathname",
-
       initialValue: { current: "/episode/" },
-
+      description: "Enter the UUID here to use Live Preview editing",
       options: {
         folder: {
           canUnlock: true,
         },
       },
-      hidden: ({ value }) => (value === undefined ? true : false),
+      hidden: ({ document }) => !document?.youtube?.uuid,
     }),
     {
       name: "youtube",
@@ -80,72 +79,6 @@ const episode = {
           return true;
         }),
     },
-    {
-      // Blurb about the Episode
-      name: "blurb",
-      title: "Episode Blurb",
-      type: "string",
-
-      deprecated: {
-        reason: "Use Youtube Link instead",
-      },
-      hidden: ({ value }) => (value === undefined ? true : false),
-      readonly: true,
-    },
-    {
-      // Name of the Episode
-      name: "episodeName",
-      title: "Episode Name",
-      type: "string",
-      deprecated: {
-        reason: "Use Youtube Link instead",
-      },
-      hidden: ({ value }) => (value === undefined ? true : false),
-      readonly: true,
-    },
-
-    {
-      // Number of the Episode
-      name: "episodeNumber",
-      title: "Episode Number",
-      type: "number",
-      deprecated: {
-        reason: "Use Youtube Link instead",
-      },
-      hidden: ({ value }) => (value === undefined ? true : false),
-      readonly: true,
-    },
-    // Make adding an ep to a season automatic, do other stuff lol
-    // {
-    //   name: "season",
-    //   title: "Season",
-    //   type: "reference",
-    //   weak: true,
-    //   to: [{ type: "seasons" }],
-    // },
-    {
-      // Season Number
-      name: "seasonNumber",
-      title: "Season Number",
-      type: "number",
-      deprecated: {
-        reason: "Use Youtube Link instead",
-      },
-      hidden: ({ value }) => (value === undefined ? true : false),
-      readonly: true,
-    },
-
-    {
-      // UUID of the Episode
-      name: "uuid",
-      title: "UUID",
-      type: "string",
-      deprecated: {
-        reason: "Use Youtube Link instead",
-      },
-      hidden: ({ value }) => (value === undefined ? true : false),
-      readonly: true,
-    },
 
     {
       // Audio/Podcast Links of the Episode
@@ -172,29 +105,6 @@ const episode = {
       title: "List of Sponsors (Lowercase, one word)",
       type: "array",
       of: [{ type: "string" }],
-    },
-    {
-      // URL (YouTube Link) of the Episode
-      name: "url",
-      title: "Video Podcast URL",
-      type: "url",
-      deprecated: {
-        reason: "Use Youtube Link instead",
-      },
-      hidden: ({ value }) => (value === undefined ? true : false),
-      readonly: true,
-    },
-
-    {
-      // Image  of the Episode
-      name: "image",
-      title: "YouTube URL Image",
-      type: "url",
-      deprecated: {
-        reason: "Use Youtube Link instead",
-      },
-      hidden: ({ value }) => (value === undefined ? true : false),
-      readonly: true,
     },
 
     {
@@ -268,43 +178,6 @@ const episode = {
       title: "Episode Details",
       type: "object",
       fields: [
-        {
-          name: "featuredGuests",
-          title: "Guest Names",
-          type: "array",
-          of: [
-            {
-              type: "object",
-              fields: [
-                { name: "name", title: "Guest Name", type: "string" },
-                { name: "about", title: "About Guest", type: "string" },
-                { name: "title", title: "Guest Title", type: "string" },
-                { name: "url", title: "Guest URL", type: "url" },
-                {
-                  name: "image",
-                  title: "Guest Image",
-                  type: "image",
-                  options: { hotspot: true },
-                },
-              ],
-            },
-          ],
-          deprecated: {
-            reason: "Use Guest field above instead",
-          },
-          hidden: ({ value }) => (value === undefined ? true : false),
-          readonly: true,
-        },
-        {
-          name: "description",
-          title: "Description of Episode",
-          type: "text",
-          deprecated: {
-            reason: "Can be pulled from YouTube Video",
-          },
-          hidden: ({ value }) => (value === undefined ? true : false),
-          readonly: true,
-        },
         {
           name: "hashtags",
           title: "Episode Hashtags",

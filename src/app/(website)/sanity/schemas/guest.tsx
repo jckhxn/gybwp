@@ -1,4 +1,5 @@
 import { Rule } from "@sanity/types";
+import { defineField } from "sanity";
 const guest = {
   name: "guest",
   title: "Guests",
@@ -74,20 +75,24 @@ const guest = {
       type: "text",
       description: "A short bio or description of the guest",
     },
-    {
+    defineField({
       name: "slug",
       title: "Slug",
       type: "slug",
       description:
         "Unique identifier for the guest page URL (e.g., /guest/jane-doe)",
-
       options: {
         source: "name", // Use the guest's title directly
         maxLength: 96,
         slugify: (input: any) => input.toLowerCase().replace(/\s+/g, "-"),
-        validation: (Rule: Rule) => Rule.required(),
       },
-    },
+      validation: (rule) =>
+        rule
+          .required()
+          .error(
+            "Press 'Generate' to create a slug based on  the guest's name."
+          ),
+    }),
   ],
 };
 export default guest;

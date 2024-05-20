@@ -2600,7 +2600,7 @@
   resolved "https://registry.npmjs.org/@tanstack/virtual-core/-/virtual-core-3.5.0.tgz"
   integrity sha512-KnPRCkQTyqhanNC0K63GBG3wA8I+D1fQuVnAvcBF8f13akOKeQp1gSbu6f77zCxhEk727iV5oQnbHLYzHrECLg==
 
-"@tinloof/sanity-studio@^1.1.3":
+"@tinloof/sanity-studio@^1.2.0":
   version "1.2.0"
   resolved "https://registry.npmjs.org/@tinloof/sanity-studio/-/sanity-studio-1.2.0.tgz"
   integrity sha512-mNOWStQ1tjmH43AYtyT2L8vNP3eb2YuNSpTGvu/x6V4fzONAVNQo4vR1kxjIRu/o1UjRVTcwYE7x2C6XjwXiEQ==
