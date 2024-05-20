@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import ErrorPageComponent from "@/src/app/(website)/components/ErrorPage";
+
 export default function Error({
   error,
   reset,
@@ -15,7 +16,7 @@ export default function Error({
 
   return (
     <>
-      <ErrorPageComponent />
+      <ErrorPageComponent error={error} />
     </>
   );
 }
