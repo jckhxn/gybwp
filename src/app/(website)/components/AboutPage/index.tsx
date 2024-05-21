@@ -36,7 +36,7 @@ export default function Component() {
               <h1 className="text-2xl font-bold tracking-tighter sm:text-2xl md:text-3xl">
                 Our Mission
               </h1>
-              <p className="max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
+              <p className="max-w-[600px] text-gray-700 md:text-xl dark:text-gray-600">
                 Our aim is to explore a range of subjects, supporting CEOs and
                 leaders in advancing their businesses through their foremost
                 asset - their people. With interviews featuring Fortune 100
@@ -65,7 +65,7 @@ export default function Component() {
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
               Meet the Host
             </h2>
-            <p className="max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
+            <p className="max-w-[600px] text-gray-700 md:text-xl dark:text-gray-600">
               Get to know the passionate host behind Growing Your Business With
               People
             </p>
@@ -81,7 +81,7 @@ export default function Component() {
                 <h3 className="text-lg font-semibold">Jeff Lackey</h3>
                 <p className="text-gray-500 dark:text-gray-400">Host, GYBWP</p>
               </div>
-              <p className="text-mdm text-gray-500 dark:text-gray-400">
+              <p className="text-mdm text-gray-700 dark:text-gray-600">
                 I firmly believe people aren&apos;t just a company&apos;s most
                 vital asset; they&apos;re an investment primed for growth.
               </p>
@@ -89,13 +89,13 @@ export default function Component() {
           </div>
         </div>
       </section>
-      <section className="w-full py-12 md:py-24 lg:py-32">
+    <section className="w-full py-12 md:py-24 lg:py-32">
         <div className="container grid items-start justify-center gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-12">
           <div className="space-y-4">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
               About the Podcast
             </h2>
-            <p className="max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
+            <p className="max-w-[600px] text-gray-700 md:text-xl dark:text-gray-600">
               Learn more about the podcast and how you can connect with us.
             </p>
           </div>

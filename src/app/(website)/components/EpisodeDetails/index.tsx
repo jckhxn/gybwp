@@ -142,7 +142,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                               <p className="text-gray-700 dark:text-gray-600">
                                 {title}
                               </p>
-                              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                              <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-600">
                                 <PodcastIcon className="w-4 h-4" />
                                 <Link href={`/guest/${slug?.current || ""}`}>
                                   <span>More info.</span>
