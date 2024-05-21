@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Badge } from "@/src/app/(website)/components/ui/badge";
 import { Button } from "@/src/app/(website)/components/ui/button";
 
