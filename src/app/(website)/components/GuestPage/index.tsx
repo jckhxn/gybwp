@@ -47,7 +47,7 @@ export default function Component({ guest }: Props) {
             <AvatarFallback>{data.name}</AvatarFallback>
           </Avatar>
           <h1 className="text-2xl font-bold mb-2">{data.name}</h1>
-          <p className="text-gray-500 dark:text-gray-400 mb-4">{data.title}</p>
+          <p className="text-gray-700 dark:text-gray-600 mb-4">{data.title}</p>
           <div className="flex items-center gap-4">
             <Link
               className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
@@ -78,7 +78,7 @@ export default function Component({ guest }: Props) {
         <div className="space-y-8">
           <div>
             <h2 className="text-xl font-bold mb-4">About</h2>
-            <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
+            <p className="text-gray-700 dark:text-gray-600 leading-relaxed">
               {data.about}
             </p>
           </div>

@@ -109,8 +109,8 @@ export default function Consulting() {
                 challenges and develop customized strategies that drive
                 sustainable growth and success. Whether you&apos;re looking to
                 optimize your operations, leverage technology, or navigate
-                complex organizational changes, we&apos;re here to guide you every
-                step of the way.
+                complex organizational changes, we&apos;re here to guide you
+                every step of the way.
               </p>
             </div>
             <Image
@@ -128,7 +128,7 @@ export default function Consulting() {
               <div className="inline-block rounded-lg bg-gray-300 px-3 py-1 text-sm font-medium0">
                 Meet your Consultant
               </div>
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+              <h2 className="text-slate-300 text-3xl font-bold tracking-loose sm:text-4xl md:text-5xl">
                 Jeffrey Lackey, Sr
               </h2>
               <p className="text-gray-500 dark:text-gray-400">
@@ -154,7 +154,9 @@ export default function Consulting() {
                 src={consulting2}
               />
               <div className="space-y-1 text-center">
-                <h3 className="text-2xl font-bold">Jeffrey Lackey</h3>
+                <h3 className=" text-slate-300  text-2xl font-bold">
+                  Jeffrey Lackey
+                </h3>
                 <p className="text-gray-500 dark:text-gray-400">
                   Senior Consultant
                 </p>

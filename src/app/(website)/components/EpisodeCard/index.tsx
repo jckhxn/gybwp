@@ -56,7 +56,7 @@ const EpisodeCard = ({
                 {`S${seasonNumber}E${episodeNumber}`}
               </span>
             </div>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-2 text-sm text-gray-700 dark:text-gray-600">
               {truncateText(youtube.blurb as string, 100)}
             </p>
           </div>
