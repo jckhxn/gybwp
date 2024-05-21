@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { Badge } from "@/src/app/(website)/components/ui/badge";
 import { Button } from "@/src/app/(website)/components/ui/button";
 
@@ -15,20 +13,18 @@ import { urlFor } from "@/src/app/(website)/lib/utils";
 
 export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   return (
-    <div className=" bg-light flex flex-col items-center overflow-hidden">
+    <div className="bg-light flex flex-col items-center overflow-hidden">
       <section>
         <div className="container px-4 md:px-6">
           <div className="grid gap-12 lg:grid-cols-[1fr_300px]">
             <div className="space-y-8">
-              <div className=" m-auto" />
+              <div className="m-auto" />
               {/* Mobile version of youtube embed.  */}
               <iframe
                 className="block sm:hidden rounded-lg w-full"
                 width="360"
                 height="240"
-                src={`https://www.youtube.com/embed/${
-                  data[0]?.url?.split("/")[3]
-                }`}
+                src={`https://www.youtube.com/embed/${data[0]?.url?.split("/")[3]}`}
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
@@ -38,9 +34,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 className="hidden sm:block rounded-lg w-full"
                 width="560"
                 height="515"
-                src={`https://www.youtube.com/embed/${
-                  data[0]?.url?.split("/")[3]
-                }`}
+                src={`https://www.youtube.com/embed/${data[0]?.url?.split("/")[3]}`}
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
@@ -65,7 +59,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   </Link>
                 ) : null}
               </div>
-              <div className="space-y-4">
+              <div className="px-4 sm:px-0 space-y-4">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
                   {data[0] ? data[0]?.youtube?.title : "No title presented"}
                 </h2>
@@ -74,13 +68,11 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   {data[0]?.podcastLinks?.length > 0
                     ? data[0]?.podcastLinks?.map(
                         (podcast: any, idx: number) => (
-                          <>
-                            <Link key={idx} href={podcast?.link || "#"}>
-                              <Badge className="text-white" variant="default">
-                                {podcast?.name}
-                              </Badge>
-                            </Link>
-                          </>
+                          <Link key={idx} href={podcast?.link || "#"}>
+                            <Badge className="text-white" variant="default">
+                              {podcast?.name}
+                            </Badge>
+                          </Link>
                         )
                       )
                     : null}
@@ -102,8 +94,6 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                         },
                         index
                       ) => (
-                        /* Start Episode Card */
-
                         <EpisodeCard
                           key={index}
                           youtube={{ title, blurb }}
@@ -118,21 +108,19 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 </div>
               )}
               {/* Episode Description */}
-              <div className="space-y-4">
+              <div className="px-4 sm:px-0 space-y-4">
                 <h3 className="text-2xl font-bold">Short Description</h3>
-                <p className=" text-gray-500 dark:text-gray-400">
+                <p className="text-gray-700 dark:text-gray-600">
                   {data ? data[0]?.blurb : "No description provided"}
                 </p>
               </div>
-              <div className="space-y-4">
+              <div className="px-4 sm:px-0 space-y-4">
                 <h3 className="text-2xl font-bold">Featured Guests</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {/* Map over all guests. */}
-
                   {data
                     ? data[0]?.guests?.map(
                         ({ image, name, title, slug }, idx) => (
-                          <div key={idx} className="flex items-center gap-4">
+                          <div key={idx} className="flex items-center gap-4 ">
                             <Image
                               alt="Guest Avatar"
                               className="rounded-full"
@@ -150,7 +138,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                             />
                             <div>
                               <h4 className="text-lg font-bold">{name}</h4>
-                              <p className="text-gray-500 dark:text-gray-400">
+                              <p className="text-gray-700 dark:text-gray-600">
                                 {title}
                               </p>
                               <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
@@ -165,78 +153,22 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                       )
                     : "No guests added to this episode"}
                 </div>
-                {/* Renders if ANY guest has other episodes */}
-                {/* So make scrollable? */}
-                {/* {data[0].details?.featuredGuests?.episodes ? (
-                  <>
-                    {" "}
-                    <h3 className="text-2xl font-bold">Other Episodes</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                      <div className="bg-gray-100 rounded-lg p-4 space-y-2">
-                        <h4 className="text-lg font-bold">
-                          Episode 1: The Rise of Server-Rendered Frameworks
-                        </h4>
-                        <p className="text-gray-500 dark:text-gray-400">
-                          In this episode, we explore the growing popularity of
-                          server-rendered frameworks and their impact on web
-                          development.
-                        </p>
-                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                          <PodcastIcon className="w-4 h-4" />
-                          <span>Featuring: Jane Doe</span>
-                        </div>
-                      </div>
-                      <div className="bg-gray-100 rounded-lg p-4 space-y-2">
-                        <h4 className="text-lg font-bold">
-                          Episode 2: Navigating the Evolving Landscape of Web
-                          Development
-                        </h4>
-                        <p className="text-gray-500 dark:text-gray-400">
-                          In this episode, we discuss the challenges and
-                          opportunities that web developers face in the years to
-                          come.
-                        </p>
-                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                          <PodcastIcon className="w-4 h-4" />
-                          <span>Featuring: John Smith</span>
-                        </div>
-                      </div>
-                      <div
-                        className="bg-gray-100
-                       rounded-lg p-4 space-y-2"
-                      >
-                        <h4 className="text-lg font-bold">
-                          Episode 3: The Importance of Performance and
-                          Accessibility
-                        </h4>
-                        <p className="text-gray-500 dark:text-gray-400">
-                          In this episode, we explore the growing emphasis on
-                          performance and accessibility in web development.
-                        </p>
-                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                          <PodcastIcon className="w-4 h-4" />
-                          <span>Featuring: Jane Doe</span>
-                        </div>
-                      </div>
-                    </div>{" "}
-                  </>
-                ) : null} */}
               </div>
               <div className="space-y-4">
-                <h3 className="  text-2xl font-bold">
+                <h3 className=" px-5 sm:px-0 text-2xl font-bold">
                   Full Episode Description
                 </h3>
-                <p className=" whitespace-pre-line text-gray-500">
-                  {/* Ideally wrap this in multiple paragraph, fix styling */}
+                {/* Text pre-wrap does some goddamn awful things to the rest of the CSS */}
+                {/* But only on mobile chrome and safari. */}
+                <p className=" w-screen sm:w-full px-5 sm:px-0 whitespace-pre-wrap text-gray-700">
                   {data ? data[0]?.youtube?.description : null}
                 </p>
               </div>
             </div>
             <div className="space-y-8">
-              <div className="space-y-4">
+              <div className=" px-5 sm:px-0 space-y-4">
                 <h3 className="text-2xl font-bold mt-4">Sponsors</h3>
                 <div className="grid grid-cols-2 gap-4">
-                  {/* Sponsors section */}
                   {data &&
                     data[0]?.sponsors?.map(({ uuid, image, bgColor }, idx) => (
                       <div
@@ -265,14 +197,11 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   Support Our Sponsors
                 </Button>
               </div>
-              {/* Content Section */}
               {data[0]?.content ? (
                 <>
                   <div className="space-y-4">
                     <h3 className="text-2xl font-bold">Additional Content</h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 ">
-                      {/* Start Content Sections */}
-
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
                       {data[0]?.content?.files?.map(
                         ({ name, image, type }, idx) => {
                           switch (type) {
@@ -312,11 +241,10 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
               Subscribe to our podcast
             </h2>
-            <p className="text-gray-500 dark:text-gray-400">
+            <p className="text-gray-700 dark:text-gray-600">
               Subscribe today and embark on a transformative journey towards
               driving business success through strategic people management.
             </p>
-
             <Button asChild>
               <Link href={CTA.buttonUrl}>{CTA.buttonText}</Link>
             </Button>
@@ -326,6 +254,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
     </div>
   );
 }
+
 function ChevronLeftIcon(props) {
   return (
     <svg
