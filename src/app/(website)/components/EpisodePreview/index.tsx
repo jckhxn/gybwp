@@ -21,7 +21,7 @@ const EpisodePreview = ({
   );
 
   return data ? (
-    <EpisodeDetails data={data} />
+    <EpisodeDetails data={data} draftMode={true} />
   ) : (
     <div className="bg-red-100">Episode not found</div>
   );

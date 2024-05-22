@@ -13,12 +13,14 @@ import consulting from "@/public/images/consulting1.jpg";
 import consulting2 from "@/public/images/consulting2.jpg";
 import { CONSULTING_INFO } from "./static-data";
 import { useState } from "react";
+
 // State
 const initialFormState = {
   name: "",
   email: "",
   message: "",
 };
+
 //@ts-ignore
 const encode = (data) => {
   return Object.keys(data)
@@ -29,29 +31,43 @@ const encode = (data) => {
 export default function Consulting() {
   const [formState, setFormState] = useState(initialFormState);
   const [submitted, setSubmitted] = useState(false);
-  const validateForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      // @ts-ignore
-      body: encode({ "form-name": "contact-jkl", ...formState }),
-    });
-    setSubmitted(true);
+  const [error, setError] = useState(false);
 
-    setFormState(initialFormState);
+  //@ts-ignore
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormState({ ...formState, [name]: value });
   };
+  //@ts-ignore
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encode({ "form-name": "contact-jkl", ...formState }),
+      });
+      if (response.ok) {
+        setSubmitted(true);
+        setFormState(initialFormState);
+      } else {
+        setError(true);
+      }
+    } catch (error) {
+      setError(true);
+    }
+  };
+
   return (
     <main className="w-full">
       <section className="w-full py-12 md:py-24 lg:py-24 bg-light ">
         <div className="container px-4 md:px-6">
           <div className="flex-row justify-around md:flex ">
-            <div className="   mb-8 text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl  ">
+            <div className="mb-8 text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
               Some of Our Services
             </div>
-            {/* Image */}
             <Image
-              className="mb-14 "
+              className="mb-14"
               width={650}
               height={650}
               src={services}
@@ -62,17 +78,15 @@ export default function Consulting() {
             {CONSULTING_INFO.features.map(
               ({ pill, title, description }, idx) => (
                 <div key={`consulting-feature-${idx}`}>
-                  {/* Start of Card */}
                   <div className="space-y-4">
-                    <div className="inline-block rounded-lg bg-gray-800  text-gray-200 px-3 py-1 text-sm font-medium ">
-                      {/* Pill Text */}
+                    <div className="inline-block rounded-lg bg-gray-800 text-gray-200 px-3 py-1 text-sm font-medium">
                       {pill}
                     </div>
                     <h3 className="text-xl font-bold">{title}</h3>
                     <div className="text-gray-700">
                       {description.map((d, idx) => (
                         <ul
-                          className="list-disc pl-4 "
+                          className="list-disc pl-4"
                           key={`description-${idx}`}
                         >
                           <li>{d}</li>
@@ -80,7 +94,6 @@ export default function Consulting() {
                       ))}
                     </div>
                   </div>
-                  {/* End of Card */}
                 </div>
               )
             )}
@@ -97,7 +110,7 @@ export default function Consulting() {
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                 Empowering Businesses with Tailored Consulting Solutions
               </h2>
-              <p className="text-gray-600 ">
+              <p className="text-gray-600">
                 At our consulting firm, we believe in a holistic approach to
                 business transformation. Our team of experienced professionals
                 combines deep industry expertise with a forward-thinking mindset
@@ -121,7 +134,7 @@ export default function Consulting() {
           </div>
         </div>
       </section>
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-800 ">
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-800">
         <div className="container px-4 md:px-6">
           <div className="grid gap-10 lg:grid-cols-2">
             <div className="space-y-4">
@@ -154,69 +167,80 @@ export default function Consulting() {
                 src={consulting2}
               />
               <div className="space-y-1 text-center">
-                <h3 className=" text-slate-300  text-2xl font-bold">
+                <h3 className="text-slate-300 text-2xl font-bold">
                   Jeffrey Lackey
                 </h3>
                 <p className="text-gray-500 dark:text-gray-400">
                   Senior Consultant
                 </p>
               </div>
-              {/* This form needs to be hooked up lol */}
-              <form
-                method="POST"
-                name="contact-jkl"
-                action=""
-                onSubmit={(e) => validateForm(e)}
-                className="w-full max-w-md space-y-4 "
-                data-netlify="true"
-                data-netlify-honeypot="bot-field"
-                id="contact"
-              >
-                <input type="hidden" name="subject" data-remove-prefix />
-                <input type="hidden" name="form-name" value="contact-jkl" />
-                <div className="space-y-1">
-                  <Label htmlFor="name">Name</Label>
-                  <Input
-                    value={formState.name}
-                    onChange={(e) =>
-                      setFormState({ ...formState, name: e.target.value })
-                    }
-                    required
-                    id="name"
-                    placeholder="Enter your name"
-                  />
+              {submitted ? (
+                <div className="text-green-500">
+                  Thank you for contacting us! We&apos;ll get back to you soon.
                 </div>
-                <div className="space-y-1">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    value={formState.email}
-                    onChange={(e) =>
-                      setFormState({ ...formState, email: e.target.value })
-                    }
-                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                    required
-                    id="email"
-                    placeholder="Enter your email"
-                    type="email"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="message">Message</Label>
-                  <Textarea
-                    onChange={(e) =>
-                      setFormState({ ...formState, message: e.target.value })
-                    }
-                    value={formState.message}
-                    id="message"
-                    placeholder="Enter your message"
-                  />
-                </div>
-                <div className="bg-gray-200">
-                  <Button className="w-full " type="submit">
-                    Contact Jeff
-                  </Button>
-                </div>
-              </form>
+              ) : (
+                <form
+                  method="POST"
+                  name="contact-jkl"
+                  onSubmit={handleSubmit}
+                  className="w-full max-w-md space-y-4"
+                  data-netlify="true"
+                  data-netlify-honeypot="bot-field"
+                >
+                  <input type="hidden" name="form-name" value="contact-jkl" />
+                  <input type="hidden" name="bot-field" />
+                  <div className="space-y-1">
+                    <Label className="text-gray-300" htmlFor="name">
+                      Name
+                    </Label>
+                    <Input
+                      value={formState.name}
+                      onChange={handleChange}
+                      required
+                      id="name"
+                      name="name"
+                      placeholder="Enter your name"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-gray-300" htmlFor="email">
+                      Email
+                    </Label>
+                    <Input
+                      value={formState.email}
+                      onChange={handleChange}
+                      pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                      required
+                      id="email"
+                      name="email"
+                      placeholder="Enter your email"
+                      type="email"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-gray-300" htmlFor="message">
+                      Message
+                    </Label>
+                    <Textarea
+                      onChange={handleChange}
+                      value={formState.message}
+                      id="message"
+                      name="message"
+                      placeholder="Enter your message"
+                    />
+                  </div>
+                  {error && (
+                    <div className="text-red-500">
+                      Something went wrong. Please try again later.
+                    </div>
+                  )}
+                  <div className="bg-gray-200">
+                    <Button className="w-full" type="submit">
+                      Contact Jeff
+                    </Button>
+                  </div>
+                </form>
+              )}
             </div>
           </div>
         </div>

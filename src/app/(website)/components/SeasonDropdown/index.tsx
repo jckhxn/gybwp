@@ -40,7 +40,7 @@ export default function SeasonDropdown({
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Seasons</SelectLabel>
+          <SelectLabel aria-label="Season Dropdown"> Seasons</SelectLabel>
           {/* List all seasons, set value equal to season number you're going to fetch for. */}
           {Array.from({ length: data?.latestSeasonNumber }, (_, index) => (
             // @ts-ignore

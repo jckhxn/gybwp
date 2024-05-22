@@ -12,7 +12,15 @@ import EpisodeCard from "../EpisodeCard";
 import { SanityDocument } from "next-sanity";
 import { urlFor } from "@/src/app/(website)/lib/utils";
 
-export default function EpisodeDetails({ data }: { data: SanityDocument }) {
+export default function EpisodeDetails({
+  data,
+  draftMode,
+}: {
+  data: SanityDocument;
+  draftMode: boolean;
+}) {
+  if ((data.length === 0) & !draftMode) throw new Error("No episode found.");
+
   return (
     <div className="bg-light flex flex-col items-center overflow-hidden">
       <section>
@@ -29,6 +37,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
+                loading="lazy"
               ></iframe>
               {/* Full version of youtube embed */}
               <iframe
@@ -39,6 +48,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
+                loading="lazy"
               ></iframe>
               {/* Navigation Buttons */}
               <div className="flex justify-between items-center">
