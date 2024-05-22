@@ -16,7 +16,7 @@
     "incremental": true,
     "paths": {
       "@/*": ["./*"],
-      "components/*": ["src/app/components/*"],
+      "components/*": ["./src/app/components/*"],
       "public/*": ["./public/*"],
       "routes": ["./src/routes"],
       "images/*": ["./public/images/*"],
