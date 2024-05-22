@@ -3,10 +3,22 @@
 
 import { groq } from "next-sanity";
 
+// Get Seasons
+
+export const SEASON_QUERY = groq`*[_type == "season"]`;
+
 // Guest Details query (by URL param -> slug)
 export const GUEST_QUERY = groq` *[_type == "guest" && slug.current == $slug] {
   ...,
+
 "episodes": *[_type == "episode" && references('guests', ^._id)]
+{
+  ...,
+  "uuid":coalesce(uuid,youtube.uuid),
+  "image":coalesce(image,youtube.thumbnail),
+  "seasonNumber":coalesce(seasonNumber,youtube.seasonNumber),
+  "episodeNumber":coalesce(seasonNumber,youtube.episodeNumber)
+}
 }`;
 
 // Get all Episodes by UUID
@@ -31,12 +43,15 @@ export const INITIAL_SEASON_EPISODES_QUERY = groq`{
 }
 `;
 // Get episodes homepage.
-export const SEASON_EPISODES_QUERY = groq`*[_type == "episode" && seasonNumber == $seasonNumber]|order(uuid desc)`;
+export const SEASON_EPISODES_QUERY = groq`*[_type == "episode" && coalesce(seasonNumber,youtube.seasonNumber) == $seasonNumber]|order(uuid desc){...,
+  "uuid":coalesce(uuid,youtube.uuid),
+  "image":coalesce(image,youtube.thumbnail),
+  "seasonNumber":coalesce(seasonNumber,youtube.seasonNumber),
+  "episodeNumber":coalesce(seasonNumber,youtube.episodeNumber)
+}`;
 
 //  Total Seasons with Episodes Query
 export const TOTAL_SEASONS_QUERY = groq`{"seasonName":array::unique(*[_type == "episode"].seasonName),"seasonNumber":array::unique(*[_type == "episode" ].seasonNumber)}`;
-// Used in Live Preview Component.
-export const EPISODE_QUERY = groq`*[_type == "episode" && youtube.uuid == $uuid][0]`;
 
 // Get details for current Podcast.
 export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && coalesce(uuid,youtube.uuid) == $uuid] {

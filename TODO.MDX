@@ -1,2 +1,14 @@
-*Hot fix* Added coalesce, schema type is youtube.uuid, 
-uuid field no longer exists (migrate these)
+*Hot fix* Added coalesce to fix new schema type issues, 
+Migrate all episodes to Season schema.
+Replace refs to seasonNumber episodeNumber
+Update queries to reflect migration/new schema
+Episode Slider gets 
+  image = placeholder, -> youtube.thumbnail
+  uuid = "100", -> youtube.uuid
+  youtube = {
+    title: "No title presented",
+    description: "No description provided",
+    blurb: "No description provided",
+  },
+  seasonNumber = 0,  -> Season Number
+  episodeNumber = 0, -> Episode Position in Season.
