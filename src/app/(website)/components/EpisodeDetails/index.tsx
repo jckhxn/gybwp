@@ -19,7 +19,9 @@ export default function EpisodeDetails({
   data: SanityDocument;
   draftMode: boolean;
 }) {
-  if ((data.length === 0) & !draftMode) throw new Error("No episode found.");
+  if (data.length === 0 && !draftMode) throw new Error("No episode found.");
+  if (data.length === 0 && draftMode)
+    return <h1>Add more data to preview changes.</h1>;
 
   return (
     <div className="bg-light flex flex-col items-center overflow-hidden">
