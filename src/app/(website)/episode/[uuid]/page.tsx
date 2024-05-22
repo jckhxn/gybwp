@@ -53,7 +53,6 @@ export const generateMetadata = async (props): Promise<Metadata> => {
 };
 
 export default async function Page({ params }: { params: QueryParams }) {
-  // A very hacky way of doing this
   const { uuid } = params;
   const epID = uuid.split("-")[0];
 

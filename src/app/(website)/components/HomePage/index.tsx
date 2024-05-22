@@ -78,6 +78,7 @@ const HomePageComponent = () => {
             height={550}
             src={heroImage}
             width={550}
+            priority={true}
           />
         </div>
       </Section>
