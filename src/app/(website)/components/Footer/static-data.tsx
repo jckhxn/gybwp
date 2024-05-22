@@ -1,5 +1,5 @@
 // components
-import logo from "images/logo.png";
+import logo from "images/logo.webp";
 import { StaticImageData } from "next/image";
 
 export const footer: {

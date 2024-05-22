@@ -8,9 +8,9 @@ import { Textarea } from "@/src/app/(website)/components/ui/textarea";
 import { Button } from "@/src/app/(website)/components/ui/button";
 
 // Static images
-import services from "@/public/images/consultingmain.jpeg";
-import consulting from "@/public/images/consulting1.jpg";
-import consulting2 from "@/public/images/consulting2.jpg";
+import services from "@/public/images/consultingmain.webp";
+import consulting from "@/public/images/consulting1.webp";
+import consulting2 from "@/public/images/consulting2.webp";
 import { CONSULTING_INFO } from "./static-data";
 import { useState } from "react";
 

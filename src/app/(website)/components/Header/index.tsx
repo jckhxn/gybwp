@@ -5,7 +5,7 @@ import routes from "@/src/app/(website)/routes";
 // components
 import Link from "next/link";
 import Image from "next/image";
-import logo from "images/logo.png";
+import logo from "images/logo.webp";
 
 // static data
 import { PAGES, COPY } from "./static-data";
