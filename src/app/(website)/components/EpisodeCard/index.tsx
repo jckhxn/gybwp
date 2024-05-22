@@ -3,7 +3,7 @@ import React from "react";
 
 import placeholder from "@/public/placeholder.svg";
 import Image from "next/image";
-import { Carousel, CarouselItem } from "../ui/carousel";
+
 import { truncateText } from "../../lib/utils";
 
 type YoutubeData = {
@@ -31,6 +31,8 @@ const EpisodeCard = ({
   seasonNumber = 0,
   episodeNumber = 0,
 }: Props) => {
+  // Img, UUID, SeasonNumber/EpisodeNumber
+
   return (
     <>
       {/* Start Podcast Card. */}
