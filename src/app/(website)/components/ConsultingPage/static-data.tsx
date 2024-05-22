@@ -1,8 +1,4 @@
-import consultingmain from "@/public/images/consultingmain.jpeg";
-import consulting1 from "@/public/images/consulting1.jpg";
-import consulting2 from "@/public/images/consulting2.jpg";
 export const CONSULTING_INFO = {
-  headerImg: consultingmain,
   header: "SOME OF OUR SERVICES",
   features: [
     {
@@ -64,7 +60,6 @@ export const CONSULTING_INFO = {
 };
 
 export const LEFT_IMAGE_CTA = {
-  img: consulting1,
   articleTitle: "How Financial Accounting Screws Up HR",
   article: "https://hbr.org/2023/01/how-financial-accounting-screws-up-hr",
   articleImg:
@@ -186,7 +181,6 @@ export const LEFT_IMAGE_CTA = {
 };
 
 export const RIGHT_IMAGE_CTA = {
-  img: consulting2,
   header: "About Jeff Lackey + Our Approach",
   bodyOne:
     "As a global strategic talent leader, I continually seek to remain ahead of technology and innovation trends. I immerse myself in interactions with thought leaders and experts to explore new applications beyond the TA realm. This practice ensures our clients receive fresh, unique perspectives that set them apart.",

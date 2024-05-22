@@ -4,7 +4,7 @@ import routes from "@/src/app/(website)/routes";
 // components
 import Link from "next/link";
 import Image from "next/image";
-import logo from "images/logo.png";
+import logo from "images/logo.webp";
 
 // copy
 import { footer } from "./static-data";

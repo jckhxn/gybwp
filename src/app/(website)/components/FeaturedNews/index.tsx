@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 // components
 import Image from "next/image";
 import { Section, SectionHeading } from "../shared";
-import defaultImageSrc from "public/images/logo.png";
+import defaultImageSrc from "public/images/logo.webp";
 
 // copy
 import { NEWS_INFO } from "./static-data";

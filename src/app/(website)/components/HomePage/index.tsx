@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Section, SectionHeading } from "../shared";
-import heroImage from "@/public/images/main-page-hero.jpg";
+import heroImage from "@/public/images/main-page-hero.webp";
 import Button from "../Button";
 import FeaturedNews from "../FeaturedNews";
 import Dropdown from "../Dropdown";
