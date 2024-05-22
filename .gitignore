@@ -4,6 +4,8 @@
 #Sanity migration script
 /migration
 
+#Sanity dataset 
+/sanity/dataset
 # dependencies
 /node_modules
 /.pnp
