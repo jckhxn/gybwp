@@ -183,28 +183,30 @@ export default function EpisodeDetails({
                 <h3 className="text-2xl font-bold mt-4">Sponsors</h3>
                 <div className="grid grid-cols-2 gap-4">
                   {data &&
-                    data[0]?.sponsors?.map(({ uuid, image, bgColor }, idx) => (
-                      <div
-                        key={idx}
-                        className="flex justify-center mt-8 md:mt-0"
-                      >
+                    data[0]?.season.sponsors?.map(
+                      ({ uuid, image, bgColor }, idx) => (
                         <div
-                          className={`${
-                            bgColor || "bg-black"
-                          } overflow-hidden rounded-full`}
+                          key={idx}
+                          className="flex justify-center mt-8 md:mt-0"
                         >
-                          <Link href={`/sponsors/${uuid}`}>
-                            <Image
-                              className="aspect-[2/2]  object-contain"
-                              src={image}
-                              alt=""
-                              height={120}
-                              width={120}
-                            />
-                          </Link>
+                          <div
+                            className={`${
+                              bgColor || "bg-black"
+                            } overflow-hidden rounded-full`}
+                          >
+                            <Link href={`/sponsors/${uuid}`}>
+                              <Image
+                                className="aspect-[2/2]  object-contain"
+                                src={image}
+                                alt=""
+                                height={120}
+                                width={120}
+                              />
+                            </Link>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    )}
                 </div>
                 <Button className="w-full" variant="primary">
                   Support Our Sponsors

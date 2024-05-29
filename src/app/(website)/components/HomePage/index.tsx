@@ -20,6 +20,7 @@ import { BuzzSproutPlayer } from "../BuzzSproutPlayer";
 import useSWR, { mutate } from "swr";
 import { client } from "../../sanity/sanity-utils";
 import {
+  ALL_SEASONS_QUERY,
   INITIAL_SEASON_EPISODES_QUERY,
   SEASON_EPISODES_QUERY,
 } from "../../lib/queries";
@@ -28,15 +29,14 @@ import EpisodeSlider from "@/src/app/(website)/components/EpisodeSlider";
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState();
 
-  const { data, error, isLoading } = useSWR(
-    INITIAL_SEASON_EPISODES_QUERY,
-    (query) => client.fetch(query)
+  const { data, error, isLoading } = useSWR(ALL_SEASONS_QUERY, (query) =>
+    client.fetch(query)
   );
 
   // Fucking SWR
   useEffect(() => {
-    if (data?.latestSeasonNumber) {
-      setActiveSeason(data?.latestSeasonNumber);
+    if (!isLoading && data[0]?.title) {
+      setActiveSeason(data[0]?.title);
     }
   }, [data]);
 

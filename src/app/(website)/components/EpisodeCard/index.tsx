@@ -10,6 +10,10 @@ type YoutubeData = {
   title?: string;
   blurb?: string;
   description?: string;
+  uuid?: string;
+  seasonNumber?: number;
+  episodeNumber: number;
+  thumbnail?: string;
 };
 
 type Props = {
@@ -21,15 +25,15 @@ type Props = {
 };
 
 const EpisodeCard = ({
-  image = placeholder,
-  uuid = "100",
   youtube = {
     title: "No title presented",
     description: "No description provided",
     blurb: "No description provided",
+    uuid: "100",
+    seasonNumber: 0,
+    episodeNumber: 0,
+    thumbnail: placeholder,
   },
-  seasonNumber = 0,
-  episodeNumber = 0,
 }: Props) => {
   // Img, UUID, SeasonNumber/EpisodeNumber
 
@@ -40,13 +44,13 @@ const EpisodeCard = ({
       <div className="group relative overflow-hidden rounded-lg bg-white shadow-sm transition-all hover:shadow-lg">
         <Link
           className="flex flex-col group relative overflow-hidden rounded-lg bg-white shadow-sm transition-all hover:shadow-lg"
-          href={`/episode/${uuid}`}
+          href={`/episode/${youtube.uuid}`}
         >
           <Image
             alt="Episode Image"
             className="aspect-video object-cover w-full"
             height={400}
-            src={image}
+            src={youtube.thumbnail || placeholder}
             width={600}
           />
           <div className="p-4 sm:p-6">
@@ -55,7 +59,7 @@ const EpisodeCard = ({
                 {youtube.title}
               </h3>
               <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium">
-                {`S${seasonNumber}E${episodeNumber}`}
+                {`S${youtube.seasonNumber}E${youtube.episodeNumber}`}
               </span>
             </div>
             <p className="mt-2 text-sm text-gray-700 dark:text-gray-600">

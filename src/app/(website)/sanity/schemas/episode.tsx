@@ -14,7 +14,8 @@ const episode = {
       const { title, seasonNumber, episodeNumber } = selection;
       return {
         title: title,
-        subtitle: `S${seasonNumber} E${episodeNumber}`,
+        // Change this to Season and Episode Number based on new schema
+        subtitle: `S${seasonNumber} E${episodeNumber} `,
       };
     },
   },
@@ -51,35 +52,13 @@ const episode = {
         },
       ],
     },
-    {
-      // Season Name
-      name: "seasonName",
-      title: "Season Name",
-      type: "string",
-      options: {
-        list: [
-          { title: "Season One", value: "Season One" },
-          { title: "Season Two", value: "Season Two" },
-          { title: "Season Three", value: "Season Three" },
-          { title: "Season Four", value: "Season Four" },
-          { title: "Season Five", value: "Season Five" },
-          { title: "Season Six", value: "Season Six" },
-          { title: "Season Seven", value: "Season Seven" },
-          { title: "Season Eight", value: "Season Eight" },
-          { title: "Season Nine", value: "Season Nine" },
-          { title: "Season Ten", value: "Season Ten" },
-        ],
-      },
-      validation: (Rule: Rule) =>
-        Rule.custom((value: string) => {
-          if (!value.includes("Season")) {
-            // The freakin' thing must say Season.
-            return 'Season name must start with  "Season", e.g "Season Four"';
-          }
-          return true;
-        }),
-    },
 
+    {
+      name: "season",
+      title: "Season",
+      type: "reference",
+      to: [{ type: "season" }],
+    },
     {
       // Audio/Podcast Links of the Episode
       name: "podcastLinks",

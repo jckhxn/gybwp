@@ -3,7 +3,10 @@
 import { SVGProps, useEffect, useState } from "react";
 import useSWR, { mutate } from "swr";
 import { client } from "@/src/app/(website)/sanity/sanity-utils";
-import { SEASON_EPISODES_QUERY } from "../../lib/queries";
+import {
+  EPISODES_BY_SEASON_QUERY,
+  SEASON_EPISODES_QUERY,
+} from "../../lib/queries";
 import EpisodeCard from "@/src/app/(website)/components/EpisodeCard";
 
 import SeasonDropdown from "@/src/app/(website)/components/SeasonDropdown";
@@ -11,14 +14,20 @@ import SeasonDropdown from "@/src/app/(website)/components/SeasonDropdown";
 export default function EpisodeSlider() {
   const [activeSeason, setActiveSeason] = useState();
 
-  // Get latest season episodes initially
+  // // Get latest season episodes initially
+  // const { data, error, isLoading } = useSWR(
+  //   activeSeason ? SEASON_EPISODES_QUERY : null,
+  //   (query) => client.fetch(query, { seasonNumber: activeSeason })
+  // );
+
+  // Get latest season episodes initially (by season name)
   const { data, error, isLoading } = useSWR(
-    activeSeason ? SEASON_EPISODES_QUERY : null,
-    (query) => client.fetch(query, { seasonNumber: activeSeason })
+    activeSeason ? EPISODES_BY_SEASON_QUERY : null,
+    (query) => client.fetch(query, { name: activeSeason })
   );
 
   useEffect(() => {
-    mutate(SEASON_EPISODES_QUERY);
+    mutate(EPISODES_BY_SEASON_QUERY);
   }, [activeSeason]);
 
   return (
