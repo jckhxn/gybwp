@@ -1,4 +1,11 @@
-*Hot fix* Added coalesce to fix new schema type issues, 
+Add sponsors to Season type
+
+Queries need to get season AND sponsors for season for  details page.
+
+Sponsors needs image upload, page needs to refer to image upload asset.
+
+ *Hot fix* Added coalesce to fix new schema type issues, 
+
 Migrate all episodes to Season schema.
 Replace refs to seasonNumber episodeNumber
 Update queries to reflect migration/new schema
@@ -12,3 +19,18 @@ Episode Slider gets
   },
   seasonNumber = 0,  -> Season Number
   episodeNumber = 0, -> Episode Position in Season.
+
+  *** SEASONS SCHEMA ***
+  Seawon has a name, has a Number
+  Episodes are specified by seasonNumber and episodeNumber.
+  Queried by seasonNumber.
+List season, query season by slug or title string.
+
+
+*QUERIES*
+// Get all Seasons
+// *[_type == "season"]|order(_createdAt desc)
+
+
+// Get all episodes for season based on Season Title string
+// *[_type == "episode" && season->title == "Season Test"]

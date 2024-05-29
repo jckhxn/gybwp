@@ -2,6 +2,12 @@ const sponsor = {
   name: "sponsor",
   title: "Sponsors",
   type: "document",
+  // Make this select the image upload of the sponsor
+  // preview: {
+  //   select: {
+  //     media: "image",
+  //   },
+  // },
   fields: [
     {
       // Name of the Sponsor
@@ -50,13 +56,6 @@ const sponsor = {
           ],
         },
       ],
-    },
-    {
-      // Seasons of Podcast Sponsored
-      name: "seasonsSponsored",
-      title: "Seasons Sponsored",
-      type: "array",
-      of: [{ type: "string" }],
     },
   ],
 };

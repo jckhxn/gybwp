@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/src/app/(website)/components/ui/select";
 import {
+  ALL_SEASONS_QUERY,
   INITIAL_SEASON_EPISODES_QUERY,
   TOTAL_SEASONS_QUERY,
 } from "../../lib/queries";
@@ -22,15 +23,14 @@ export default function SeasonDropdown({
 }: {
   setActiveSeason: React.Dispatch<React.SetStateAction<any>>;
 }) {
-  const { data, error, isLoading } = useSWR(
-    INITIAL_SEASON_EPISODES_QUERY,
-    (query) => client.fetch(query)
+  const { data, error, isLoading } = useSWR(ALL_SEASONS_QUERY, (query) =>
+    client.fetch(query)
   );
 
   // Immediately set active season so episodes can be fetched.
   useEffect(() => {
     // Only fire once.
-    if (data) setActiveSeason(data?.latestSeasonNumber);
+    if (data) setActiveSeason(data[0].title);
   }, [data, setActiveSeason]);
 
   return (
@@ -41,14 +41,10 @@ export default function SeasonDropdown({
       <SelectContent>
         <SelectGroup>
           <SelectLabel aria-label="Season Dropdown"> Seasons</SelectLabel>
-          {/* List all seasons, set value equal to season number you're going to fetch for. */}
-          {Array.from({ length: data?.latestSeasonNumber }, (_, index) => (
-            // @ts-ignore
-            <SelectItem
-              key={index} // @ts-ignore
-              value={Number(index + 1)}
-            >
-              Season {index + 1}
+
+          {data?.map(({ title }: { title: string }, idx: number) => (
+            <SelectItem key={idx} value={title}>
+              {title}
             </SelectItem>
           ))}
         </SelectGroup>

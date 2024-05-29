@@ -3,10 +3,6 @@
 
 import { groq } from "next-sanity";
 
-// Get Seasons
-
-export const SEASON_QUERY = groq`*[_type == "season"]`;
-
 // Guest Details query (by URL param -> slug)
 export const GUEST_QUERY = groq` *[_type == "guest" && slug.current == $slug] {
   ...,
@@ -36,12 +32,18 @@ export const EPISODES_DETAILS_QUERY = groq`*[_type == "episode" && uuid == $uuid
   image,
   url,
 }`;
+
+// Get all seasons
+export const ALL_SEASONS_QUERY = groq`*[_type == "season"]|order(_createdAt desc)`;
 // Gets the latest season
 export const INITIAL_SEASON_EPISODES_QUERY = groq`{
 
   "latestSeasonNumber":count(array::unique(*[_type == "episode"].seasonName))
 }
 `;
+
+// Get episodes by season Name
+export const EPISODES_BY_SEASON_QUERY = groq`*[_type == "episode" && season->title == $name] | order(_createdAt desc)`;
 // Get episodes homepage.
 export const SEASON_EPISODES_QUERY = groq`*[_type == "episode" && coalesce(seasonNumber,youtube.seasonNumber) == $seasonNumber]|order(uuid desc){...,
   "uuid":coalesce(uuid,youtube.uuid),
@@ -91,7 +93,10 @@ export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && coalesce(uuid,
 ,
     "nextEpisode": *[_type == "episode" && _createdAt > ^._createdAt && uuid != ^._id] | order(_createdAt asc, uuid asc)[0].uuid,
     "prevEpisode": *[_type == "episode" && _createdAt < ^._createdAt && uuid != ^._id] | order(_createdAt desc, uuid desc)[0].uuid,
-    "sponsors":*[_type=="sponsor" && uuid in ^.sponsors]
+    season-> {
+      ...,
+       sponsors[]->
+    }
 }
 `;
 
