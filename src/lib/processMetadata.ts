@@ -16,7 +16,7 @@ interface Data {
 export default async function processMetadata(data: Data): Promise<Metadata> {
   const { title, description, ogimage, noIndex } = data?.seo || {};
   // @ts-ignore
-  const [{ blurb, youtube }] = data.data;
+  const [{ blurb, youtube, url }] = data.data;
 
   return {
     metadataBase: new URL("https://gybwp.com"),
@@ -25,7 +25,9 @@ export default async function processMetadata(data: Data): Promise<Metadata> {
 
     openGraph: {
       type: "website",
-      url: "https://gybwp.com/" + (data?.pathname?.current || ""),
+      url: youtube.id
+        ? `https://www.youtube.com/watch?v=${youtube.id}`
+        : "https://gybwp.com/" + (data?.pathname?.current || ""),
       title,
       description,
 
@@ -34,9 +36,8 @@ export default async function processMetadata(data: Data): Promise<Metadata> {
       videos: [
         // Embed the youtube video in the opengraph embed.
         {
-          url: "url",
-          secureUrl: `https://www.youtube.com/embed/
-          ${youtube.id}`,
+          url: url,
+          secureUrl: `https://www.youtube.com/embed/${youtube.id}`,
           type: "video.other",
         },
       ],
