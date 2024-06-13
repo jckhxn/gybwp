@@ -2,7 +2,7 @@ import React from "react";
 
 type Props = { data: JSON };
 
-const JSONLD = (data: Props) => {
+const JSONLD = ({ data }: Props) => {
   return (
     <script
       type="application/ld+json"
