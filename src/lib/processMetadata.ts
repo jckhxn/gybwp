@@ -25,7 +25,7 @@ export default async function processMetadata(data: Data): Promise<Metadata> {
 
     openGraph: {
       type: "website",
-      url: youtube.id
+      url: youtube?.id
         ? `https://www.youtube.com/watch?v=${youtube.id}`
         : "https://gybwp.com/" + (data?.pathname?.current || ""),
       title,
