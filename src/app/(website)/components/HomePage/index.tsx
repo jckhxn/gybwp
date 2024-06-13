@@ -45,10 +45,17 @@ const HomePageComponent = () => {
   useEffect(() => {
     mutate(SEASON_EPISODES_QUERY);
   }, [activeSeason]);
-
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Growing Your Business With People!",
+    description:
+      "Listen to 'Growing Your Business with People!' – the podcast for CEOs and business leaders focusing on growth through investing in their teams.",
+    image: "https://gybwp.com/images/logo.webp",
+  };
   return (
     <>
-      <JSONLD />
+      <JSONLD data={structuredData} />
       {/* MAIN SECTION */}
       <Section className="w-full py-12 md:py-24 lg:py-3 bg-main ">
         <div className="container grid items-center gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-2 ">
