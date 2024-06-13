@@ -12,6 +12,8 @@ import EpisodeCard from "../EpisodeCard";
 import { SanityDocument } from "next-sanity";
 import { urlFor } from "@/src/app/(website)/lib/utils";
 import JSONLD from "../SEO/jsonld";
+import episode from "../../sanity/schemas/episode";
+import season from "../../sanity/schemas/season";
 
 export default function EpisodeDetails({
   data,
@@ -33,6 +35,7 @@ export default function EpisodeDetails({
 
     description: data[0]?.blurb,
 
+    url: data[0].url,
     thumbnailUrl: `https://i.ytimg.com/vi/${data[0]?.url?.split("/")[3]}/hqdefault.jpg`,
 
     uploadDate: "2024-03-23T00:00:00.000Z",
