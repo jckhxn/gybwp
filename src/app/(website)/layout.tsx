@@ -23,22 +23,29 @@ import type { AppProps } from "next/app";
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 import type { Metadata } from "next";
 import LiveVisualEditing from "./sanity/components/LiveVisualEditing";
+import Head from "next/head";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gybwp.com"),
+
+  alternates: {
+    canonical: "./",
+  },
   title: {
     default: "Growing Your Business With People",
     template: `%s | Growing Your Business With People`,
   },
   description:
-    "Our podcast, “Growing your business with People!” is dedicated to CEOs and Business Leaders who understand that the key to growth is found in their biggest and most important investment - people!",
+    "Listen to 'Growing Your Business with People!' – the podcast for CEOs and business leaders focusing on growth through investing in their teams.",
+
   openGraph: {
     title: "Growing Your Business With People",
     description:
-      "Our podcast, “Growing your business with People!” is dedicated to CEOs and Business Leaders who understand that the key to growth is found in their biggest and most important investment - people!",
+      "Listen to 'Growing Your Business with People!' – the podcast for CEOs and business leaders focusing on growth through investing in their teams.",
+
     images: [
       {
-        url: "https://gybwp.com/images/logo.png",
+        url: "https://gybwp.com/images/logo.webp",
         width: 1200,
         height: 630,
       },

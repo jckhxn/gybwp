@@ -17,41 +17,8 @@ import {
 import EpisodePreview from "@/src/app/(website)/components/EpisodePreview";
 import { loadQuery } from "@/src/app/(website)/lib/store";
 
-export const generateMetadata = async (props): Promise<Metadata> => {
-  const { params } = props;
-
-  const [episodeDetails] = await client.fetch(EPISODES_DETAILS_QUERY, {
-    uuid: String(params.uuid),
-  });
-
-  if (episodeDetails)
-    return {
-      title: episodeDetails.episodeName,
-      description: episodeDetails.blurb,
-      openGraph: {
-        title: episodeDetails.episodeName,
-        description: episodeDetails.blurb,
-        image: episodeDetails.image,
-        videos: [
-          {
-            url: episodeDetails.url,
-            secureUrl: `https://www.youtube.com/embed/${
-              episodeDetails.url.split("/")[3]
-            }`,
-            type: "video.other",
-          },
-        ],
-        images: [
-          {
-            url: episodeDetails.image,
-            width: 1200,
-            height: 630,
-          },
-        ],
-      },
-    };
-};
-
+import processMetadata from "@/src/lib/processMetadata";
+import JSONLD from "../../components/SEO/jsonld";
 export default async function Page({ params }: { params: QueryParams }) {
   const { uuid } = params;
   const epID = uuid.split("-")[0];
@@ -67,6 +34,27 @@ export default async function Page({ params }: { params: QueryParams }) {
   return draftMode().isEnabled ? (
     <EpisodePreview initial={initial} params={{ uuid, epID }} />
   ) : (
-    <EpisodeDetails data={initial.data} />
+    <>
+      <EpisodeDetails data={initial.data} />
+    </>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { path: string[] };
+}) {
+  const { uuid } = params;
+  const epID = uuid.split("-")[0];
+
+  const initial = await loadQuery<SanityDocument>(
+    PODCAST_DETAILS_QUERY,
+    { uuid, epID },
+    {
+      perspective: draftMode().isEnabled ? "previewDrafts" : "published",
+    }
+  );
+  // if (!data) notFound();
+  return processMetadata(initial);
 }
