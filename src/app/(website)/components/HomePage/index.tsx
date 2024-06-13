@@ -1,7 +1,7 @@
 // @ts-nocheck
 "use client";
 import React, { useEffect, useState } from "react";
-
+import Head from "next/head";
 // components
 import Image from "next/image";
 import Link from "next/link";
@@ -26,6 +26,8 @@ import {
 } from "../../lib/queries";
 
 import EpisodeSlider from "@/src/app/(website)/components/EpisodeSlider";
+import JSONLD from "../SEO/jsonld";
+
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState();
 
@@ -46,6 +48,7 @@ const HomePageComponent = () => {
 
   return (
     <>
+      <JSONLD />
       {/* MAIN SECTION */}
       <Section className="w-full py-12 md:py-24 lg:py-3 bg-main ">
         <div className="container grid items-center gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-2 ">

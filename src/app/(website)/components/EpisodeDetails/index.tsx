@@ -73,9 +73,9 @@ export default function EpisodeDetails({
                 ) : null}
               </div>
               <div className="px-4 sm:px-0 space-y-4">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl">
                   {data[0] ? data[0]?.youtube?.title : "No title presented"}
-                </h2>
+                </h1>
                 {/* Podcast Links */}
                 <div className="flex flex-wrap items-center gap-2">
                   {data[0]?.podcastLinks?.length > 0
