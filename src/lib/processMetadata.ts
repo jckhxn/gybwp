@@ -31,7 +31,16 @@ export default async function processMetadata(data: Data): Promise<Metadata> {
       title,
       description,
 
-      images: youtube.thumbnail,
+      images: [
+        {
+          url:
+            youtube.thumbnail ||
+            ogimage ||
+            "https://gybwp.com/images/logo.webp",
+          width: 1200,
+          height: 630,
+        },
+      ],
 
       videos: [
         // Embed the youtube video in the opengraph embed.
