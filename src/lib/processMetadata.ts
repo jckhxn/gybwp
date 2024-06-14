@@ -31,7 +31,7 @@ export default async function processMetadata(data: Data): Promise<Metadata> {
       title,
       description,
 
-      images: ogimage ? ogimage : youtube.thumbnail,
+      images: youtube.thumbnail,
 
       videos: [
         // Embed the youtube video in the opengraph embed.
