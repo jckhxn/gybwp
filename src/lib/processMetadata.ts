@@ -25,13 +25,13 @@ export default async function processMetadata(data: Data): Promise<Metadata> {
 
     openGraph: {
       type: "website",
-      url: youtube?.id
+      url: url
         ? `https://www.youtube.com/watch?v=${youtube.id}`
         : "https://gybwp.com/" + (data?.pathname?.current || ""),
       title,
       description,
 
-      images: ogimage || youtube.thumbnail,
+      images: ogimage ? ogimage : youtube.thumbnail,
 
       videos: [
         // Embed the youtube video in the opengraph embed.

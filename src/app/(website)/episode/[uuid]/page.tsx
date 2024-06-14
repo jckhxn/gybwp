@@ -18,7 +18,7 @@ import EpisodePreview from "@/src/app/(website)/components/EpisodePreview";
 import { loadQuery } from "@/src/app/(website)/lib/store";
 
 import processMetadata from "@/src/lib/processMetadata";
-import JSONLD from "../../components/SEO/jsonld";
+
 export default async function Page({ params }: { params: QueryParams }) {
   const { uuid } = params;
   const epID = uuid.split("-")[0];

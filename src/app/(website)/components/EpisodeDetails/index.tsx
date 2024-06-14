@@ -12,8 +12,6 @@ import EpisodeCard from "../EpisodeCard";
 import { SanityDocument } from "next-sanity";
 import { urlFor } from "@/src/app/(website)/lib/utils";
 import JSONLD from "../SEO/jsonld";
-import episode from "../../sanity/schemas/episode";
-import season from "../../sanity/schemas/season";
 
 export default function EpisodeDetails({
   data,
