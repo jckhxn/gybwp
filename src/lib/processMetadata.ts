@@ -37,6 +37,7 @@ export default async function processMetadata(data: Data): Promise<Metadata> {
             youtube.thumbnail ||
             ogimage ||
             "https://gybwp.com/images/logo.webp",
+
           width: 1200,
           height: 630,
         },
@@ -52,7 +53,9 @@ export default async function processMetadata(data: Data): Promise<Metadata> {
       ],
     },
     alternates: {
-      canonical: "https://gybwp.com/" + (data?.pathname?.current || ""),
+      canonical: url
+        ? url
+        : "https://gybwp.com/" + (data?.pathname?.current || ""),
     },
     robots: {
       index: !noIndex,
