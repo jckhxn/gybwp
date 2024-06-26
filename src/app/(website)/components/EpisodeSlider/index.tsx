@@ -31,8 +31,8 @@ export default function EpisodeSlider() {
   }, [activeSeason]);
 
   return (
-    <section className="w-full max-w-6xl mx-auto py-8 md:py-12">
-      <div className="flex items-center justify-between mb-6">
+    <section className="w-full max-w-6xl mx-auto py-8 md:py-12 ">
+      <div className=" flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold">Latest Episodes</h2>
         <SeasonDropdown setActiveSeason={setActiveSeason} />
         {/* This scroll doesn't work yet */}

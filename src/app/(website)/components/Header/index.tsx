@@ -27,7 +27,7 @@ const Navigation = () => {
               <Image
                 priority
                 loading="eager"
-                className="h-16 w-auto"
+                className="h-20 w-auto"
                 alt="Growing Your Business with People Logo"
                 src={logo}
               />

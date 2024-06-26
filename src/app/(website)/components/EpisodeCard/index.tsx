@@ -1,9 +1,6 @@
 import Link from "next/link";
 import React from "react";
-
-import placeholder from "@/public/placeholder.svg";
 import Image from "next/image";
-
 import { truncateText } from "../../lib/utils";
 
 type YoutubeData = {
@@ -32,45 +29,52 @@ const EpisodeCard = ({
     uuid: "100",
     seasonNumber: 0,
     episodeNumber: 0,
-    thumbnail: placeholder,
+    thumbnail: "/api/placeholder/600/400",
   },
 }: Props) => {
-  // Img, UUID, SeasonNumber/EpisodeNumber
-
   return (
-    <>
-      {/* Start Podcast Card. */}
-
-      <div className="group relative overflow-hidden rounded-lg bg-white shadow-sm transition-all hover:shadow-lg">
-        <Link
-          className="flex flex-col group relative overflow-hidden rounded-lg bg-white shadow-sm transition-all hover:shadow-lg"
-          href={`/episode/${youtube.uuid}`}
-        >
+    <div className="group relative overflow-hidden rounded-lg bg-[#293243] shadow-md transition-all duration-300 hover:shadow-xl h-[400px] flex flex-col">
+      <Link className="flex flex-col h-full" href={`/episode/${youtube.uuid}`}>
+        <div className="relative overflow-hidden h-[200px]">
           <Image
-            alt="Episode Image"
-            className="aspect-video object-cover w-full"
-            height={400}
-            src={youtube.thumbnail || placeholder}
-            width={600}
+            alt={`Thumbnail for ${youtube.title}`}
+            className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+            src={youtube.thumbnail}
+            layout="fill"
           />
-          <div className="p-4 sm:p-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold tracking-tight">
-                {youtube.title}
-              </h3>
-              <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium">
-                {`S${youtube.seasonNumber}E${youtube.episodeNumber}`}
-              </span>
-            </div>
-            <p className="mt-2 text-sm text-gray-700 dark:text-gray-600">
-              {truncateText(youtube.blurb as string, 100)}
+          <div className="absolute top-2 right-2 rounded-full bg-[#293243] bg-opacity-90 px-3 py-1 text-xs font-medium text-white">
+            {`S${youtube.seasonNumber}E${youtube.episodeNumber}`}
+          </div>
+        </div>
+        <div className="flex flex-col justify-between flex-grow p-4 text-white">
+          <div>
+            <h3 className="text-lg font-semibold tracking-tight group-hover:text-blue-300 transition-colors duration-300 line-clamp-2 h-[56px]">
+              {youtube.title}
+            </h3>
+            <p className="mt-2 text-sm text-gray-300 line-clamp-3 h-[60px]">
+              {youtube.blurb}
             </p>
           </div>
-        </Link>
-
-        {/* End Podcast Card */}
-      </div>
-    </>
+          <div className="mt-2 flex items-center text-sm text-gray-300 group-hover:text-blue-300 transition-colors duration-300">
+            <svg
+              className="mr-2 h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            Watch now
+          </div>
+        </div>
+      </Link>
+    </div>
   );
 };
 
