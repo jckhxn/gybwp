@@ -3,7 +3,7 @@ import React from "react";
 import { PODCAST_DETAILS_QUERY } from "../../lib/queries";
 import { QueryResponseInitial, useQuery } from "@sanity/react-loader";
 import { QueryParams, SanityDocument } from "next-sanity";
-import EpisodeDetails from "../EpisodeDetails";
+import EpisodeDetails from "../EpisodeDetails/indexOLD";
 
 const EpisodePreview = ({
   initial,

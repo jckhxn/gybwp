@@ -2,24 +2,52 @@
 import { Badge } from "@/src/app/(website)/components/ui/badge";
 import { Button } from "@/src/app/(website)/components/ui/button";
 
-import Image from "next/image";
 import Link from "next/link";
+import React from "react";
+import Image from "next/image";
+
+import { PlayCircle, Share2, Info } from "lucide-react";
 
 // Sanity client
 
 import { CTA } from "../HomePage/static-data";
-import EpisodeCard from "../EpisodeCard";
+
 import { SanityDocument } from "next-sanity";
 import { urlFor } from "@/src/app/(website)/lib/utils";
 import JSONLD from "../SEO/jsonld";
+type YoutubeData = {
+  title?: string;
+  blurb?: string;
+  description?: string;
+  uuid?: string;
+  seasonNumber?: number;
+  episodeNumber: number;
+  thumbnail?: string;
+};
 
-export default function EpisodeDetails({
-  data,
-  draftMode,
-}: {
-  data: SanityDocument;
+type Props = {
   draftMode: boolean;
-}) {
+  data: SanityDocument;
+  image?: string;
+  uuid?: string;
+  youtube?: YoutubeData;
+  seasonNumber?: number;
+  episodeNumber?: number;
+};
+
+const EpisodeCard = ({
+  data,
+  youtube = {
+    title: "No title presented",
+    description: "No description provided",
+    blurb: "No description provided",
+    uuid: "100",
+    seasonNumber: 0,
+    episodeNumber: 0,
+    thumbnail: "/api/placeholder/600/400",
+  },
+  draftMode,
+}: Props) => {
   if (data.length === 0 && !draftMode) throw new Error("No episode found.");
   if (data.length === 0 && draftMode)
     return <h1>Add more data to preview changes.</h1>;
@@ -46,13 +74,15 @@ export default function EpisodeDetails({
     <>
       {/* Pass along rich data */}
       <JSONLD data={structuredData} />
-      <div className="bg-light flex flex-col items-center overflow-hidden">
-        <section>
-          <div className="container px-4 md:px-6">
-            <div className="grid gap-12 lg:grid-cols-[1fr_300px]">
-              <div className="space-y-8">
-                <div className="m-auto" />
-                {/* Mobile version of youtube embed.  */}
+      <div className="bg-light min-h-screen">
+        <div className="container mx-auto px-4 py-8">
+          <div className="lg:flex lg:space-x-8">
+            <div className="lg:w-2/3">
+              <h1 className="text-3xl font-bold mb-4 text-[#293243]">
+                {data[0] ? data[0]?.youtube?.title : "No title presented"}
+              </h1>
+              {/* Video Player  */}
+              <div className="relative aspect-video mb-6 rounded-lg overflow-hidden shadow-lg">
                 <iframe
                   className="block sm:hidden rounded-lg w-full"
                   width="360"
@@ -94,204 +124,149 @@ export default function EpisodeDetails({
                     </Link>
                   ) : null}
                 </div>
-                <div className="px-4 sm:px-0 space-y-4">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-                    {data[0] ? data[0]?.youtube?.title : "No title presented"}
-                  </h1>
-                  {/* Podcast Links */}
-                  <div className="flex flex-wrap items-center gap-2">
-                    {data[0]?.podcastLinks?.length > 0
-                      ? data[0]?.podcastLinks?.map(
-                          (podcast: any, idx: number) => (
-                            <Link key={idx} href={podcast?.link || "#"}>
-                              <Badge className="text-white" variant="default">
-                                {podcast?.name}
-                              </Badge>
-                            </Link>
-                          )
-                        )
-                      : null}
-                  </div>
-                </div>
-                {/* Episode Parts */}
-                {data[0]?.allParts && data[0]?.allParts?.length > 0 && (
-                  <div className="space-y-4">
-                    <h3 className="text-2xl font-bold">Episode Parts</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                      {data[0]?.allParts?.map(
-                        (
-                          {
-                            youtube: { title, blurb },
-                            image,
-                            seasonNumber,
-                            episodeNumber,
-                            uuid,
-                          },
-                          index
-                        ) => (
-                          <EpisodeCard
-                            key={index}
-                            youtube={{ title, blurb }}
-                            image={image}
-                            seasonNumber={seasonNumber}
-                            episodeNumber={episodeNumber}
-                            uuid={uuid}
-                          />
-                        )
-                      )}
-                    </div>
-                  </div>
-                )}
-                {/* Episode Description */}
-                <div className="px-4 sm:px-0 space-y-4">
-                  <h3 className="text-2xl font-bold">Short Description</h3>
-                  <p className="text-gray-700 dark:text-gray-600">
-                    {data ? data[0]?.blurb : "No description provided"}
-                  </p>
-                </div>
-                <div className="px-4 sm:px-0 space-y-4">
-                  <h3 className="text-2xl font-bold">Featured Guests</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {data
-                      ? data[0]?.guests?.map(
-                          ({ image, name, title, slug }, idx) => (
-                            <div key={idx} className="flex items-center gap-4 ">
-                              <Image
-                                alt="Guest Avatar"
-                                className="rounded-full"
-                                src={
-                                  image
-                                    ? urlFor(image).url()
-                                    : "./placeholder.svg"
-                                }
-                                style={{
-                                  aspectRatio: "64/64",
-                                  objectFit: "cover",
-                                }}
-                                width={100}
-                                height={100}
-                              />
-                              <div>
-                                <h4 className="text-lg font-bold">{name}</h4>
-                                <p className="text-gray-700 dark:text-gray-600">
-                                  {title}
-                                </p>
-                                <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-600">
-                                  <PodcastIcon className="w-4 h-4" />
-                                  <Link href={`/guest/${slug?.current || ""}`}>
-                                    <span>More info.</span>
-                                  </Link>
-                                </div>
-                              </div>
-                            </div>
-                          )
-                        )
-                      : "No guests added to this episode"}
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <h3 className=" px-5 sm:px-0 text-2xl font-bold">
-                    Full Episode Description
-                  </h3>
-                  {/* Text pre-wrap does some goddamn awful things to the rest of the CSS */}
-                  {/* But only on mobile chrome and safari. */}
-                  <p className=" w-screen sm:w-full px-5 sm:px-0 whitespace-pre-wrap text-gray-700">
-                    {data ? data[0]?.youtube?.description : null}
-                  </p>
-                </div>
               </div>
-              <div className="space-y-8">
-                <div className=" px-5 sm:px-0 space-y-4">
-                  <h3 className="text-2xl font-bold mt-4">Sponsors</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    {data &&
-                      data[0]?.season.sponsors?.map(
-                        ({ uuid, image, bgColor }, idx) => (
-                          <div
-                            key={idx}
-                            className="flex justify-center mt-8 md:mt-0"
-                          >
-                            <div
-                              className={`${
-                                bgColor || "bg-black"
-                              } overflow-hidden rounded-full`}
-                            >
-                              <Link href={`/sponsors/${uuid}`}>
-                                <Image
-                                  className="aspect-[2/2]  object-contain"
-                                  src={image}
-                                  alt=""
-                                  height={120}
-                                  width={120}
-                                />
-                              </Link>
+              {/* Podcast Links */}
+              <div className="flex flex-col font-bold items-center gap-2 mb-3">
+                Podcast Links
+                {data[0]?.podcastLinks?.length > 0
+                  ? data[0]?.podcastLinks?.map((podcast: any, idx: number) => (
+                      <Link key={idx} href={podcast?.link || "#"}>
+                        <Badge className="text-white" variant="default">
+                          {podcast?.name}
+                        </Badge>
+                      </Link>
+                    ))
+                  : null}
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h2 className="text-xl font-semibold mb-2">
+                  Short Description
+                </h2>
+                <p className="text-gray-700 whitespace-pre-line">
+                  {data[0]?.blurb}
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h2 className="text-xl font-semibold mb-4">Featured Guests</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {data
+                    ? data[0]?.guests?.map(
+                        ({ image, name, title, slug }, idx) => (
+                          <div key={idx} className="flex items-center gap-4 ">
+                            <Image
+                              alt="Guest Avatar"
+                              className="rounded-full"
+                              src={
+                                image
+                                  ? urlFor(image).url()
+                                  : "./placeholder.svg"
+                              }
+                              style={{
+                                aspectRatio: "64/64",
+                                objectFit: "cover",
+                              }}
+                              width={100}
+                              height={100}
+                            />
+                            <div>
+                              <h4 className="text-lg font-bold">{name}</h4>
+                              <p className="text-gray-700 dark:text-gray-600">
+                                {title}
+                              </p>
+                              <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-600">
+                                <PodcastIcon className="w-4 h-4" />
+                                <Link href={`/guest/${slug?.current || ""}`}>
+                                  <span>More info.</span>
+                                </Link>
+                              </div>
                             </div>
                           </div>
                         )
-                      )}
-                  </div>
-                  <Button className="w-full" variant="primary">
-                    Support Our Sponsors
-                  </Button>
+                      )
+                    : "No guests added to this episode"}
                 </div>
-                {data[0]?.content ? (
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold mb-4">
+                  Full Episode Description
+                </h2>
+                <p className="text-gray-700 mb-4 whitespace-pre-wrap">
+                  {data[0]?.youtube?.description}
+                </p>
+                {/* Only do this if key takeaways exist. */}
+                {data[0]?.youtube?.takeaways ? (
                   <>
-                    <div className="space-y-4">
-                      <h3 className="text-2xl font-bold">Additional Content</h3>
-                      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        {data[0]?.content?.files?.map(
-                          ({ name, image, type }, idx) => {
-                            switch (type) {
-                              case "image":
-                                return (
-                                  <div key={idx}>
-                                    <Image
-                                      alt="Related Image"
-                                      className="w-full rounded-md"
-                                      height={260}
-                                      src={image}
-                                      style={{
-                                        objectFit: "cover",
-                                      }}
-                                      width={260}
-                                    />
-                                  </div>
-                                );
-                              case "link":
-                                return <></>;
-                              default:
-                                return null;
-                            }
-                          }
-                        )}
-                      </div>
-                    </div>
+                    <h3 className="font-semibold mb-2">Key Takeaways:</h3>
+                    <ul className="list-disc list-inside space-y-2 text-gray-700">
+                      {data[0]?.youtube?.takeaways.map((item, idx) => (
+                        <li key={idx}>{item}</li>
+                      ))}
+                    </ul>
                   </>
                 ) : null}
               </div>
             </div>
+            <aside className="lg:w-1/3 mt-8 lg:mt-0">
+              <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h2 className="text-xl font-semibold mb-4">Sponsors</h2>
+                <div className="grid grid-cols-2 gap-4">
+                  {data &&
+                    data[0]?.season.sponsors?.map(
+                      ({ uuid, image, bgColor }, idx) => (
+                        <div
+                          key={idx}
+                          className="flex justify-center mt-8 md:mt-0"
+                        >
+                          <div
+                            className={`${
+                              bgColor || "bg-black"
+                            } overflow-hidden rounded-full`}
+                          >
+                            <Link href={`/sponsors/${uuid}`}>
+                              <Image
+                                className="aspect-[2/2]  object-contain"
+                                src={image}
+                                alt=""
+                                height={120}
+                                width={120}
+                              />
+                            </Link>
+                          </div>
+                        </div>
+                      )
+                    )}
+                </div>
+                <Button className="w-full" variant="primary">
+                  Support Our Sponsors
+                </Button>
+              </div>
+              <div className="bg-[#293243] text-white p-6 rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold mb-2">
+                  Subscribe to our podcast
+                </h2>
+                <p className="mb-4">
+                  Subscribe today and embark on a transformative journey towards
+                  driving business success through strategic people management.
+                </p>
+                <button className="bg-light text-[#293243] px-4 py-2 rounded-full hover:bg-opacity-90 transition w-full">
+                  Subscribe on LinkedIn
+                </button>
+              </div>
+              <div className="mt-6 flex justify-center">
+                <button className="flex items-center text-[#293243] hover:underline">
+                  <Share2 size={20} className="mr-2" />
+                  Share this episode
+                </button>
+              </div>
+            </aside>
           </div>
-        </section>
-        <section className="py-12 md:py-24 rounded-md w-full flex justify-center items-center">
-          <div className="container px-4 md:px-6">
-            <div className="mx-auto max-w-3xl space-y-6 text-center">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-                Subscribe to our podcast
-              </h2>
-              <p className="text-gray-700 dark:text-gray-600">
-                Subscribe today and embark on a transformative journey towards
-                driving business success through strategic people management.
-              </p>
-              <Button asChild>
-                <Link href={CTA.buttonUrl}>{CTA.buttonText}</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
+        </div>
       </div>
     </>
   );
-}
+};
+
+export default EpisodeCard;
 
 function ChevronLeftIcon(props) {
   return (
