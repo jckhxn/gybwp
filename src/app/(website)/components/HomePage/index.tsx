@@ -49,12 +49,13 @@ const HomePageComponent = () => {
     "@context": "https://schema.org",
     "@type": "PodcastSeries",
     "@id": "gybwp",
-    "name": "Growing Your Business With People Podcast",
-    "url": "https://gybwp.com",
-    "thumbnailUrl": "https://gybwp/images/logo.webp",
-    "image": "https://gybwp.com/images/logo.webp",
-    "headline": "Listen to 'Growing Your Business with People!' – the podcast for CEOs and business leaders focusing on growth through investing in their teams."
-  }
+    name: "Growing Your Business With People Podcast",
+    url: "https://gybwp.com",
+    thumbnailUrl: "https://gybwp/images/logo.webp",
+    image: "https://gybwp.com/images/logo.webp",
+    headline:
+      "Listen to 'Growing Your Business with People!' – the podcast for CEOs and business leaders focusing on growth through investing in their teams.",
+  };
   return (
     <>
       <JSONLD data={structuredData} />
@@ -70,14 +71,14 @@ const HomePageComponent = () => {
             </p>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
               <Link
-                className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-white-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-primary dark:text-white dark:hover:bg-primary-50/90 dark:focus-visible:ring-gray-300"
+                className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-gray-50 shadow transition-all duration-300 hover:bg-white-900/90 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 active:scale-95 disabled:pointer-events-none disabled:opacity-50 dark:bg-primary dark:text-white dark:hover:bg-primary-50/90 dark:focus-visible:ring-gray-300"
                 href={HERO.buttonUrl}
               >
                 {HERO.buttonText}
               </Link>
               <Link
-                className="inline-flex h-10 items-center justify-center rounded-md border border-gray-200 
-                text-gray-50 bg-primary px-8 text-sm font-medium shadow-sm transition-colors hover:bg-gray-100 hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-primary dark:hover:bg-primary dark:hover:text-white dark:focus-visible:ring-gray-300"
+                className="inline-flex h-10 items-center justify-center rounded-md 
+        text-gray-50 bg-primary px-8 text-sm font-medium shadow-sm transition-all duration-300 hover:bg-gray-100 hover:text-white hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 active:scale-95 disabled:pointer-events-none disabled:opacity-50 dark:bg-primary dark:hover:bg-primary dark:hover:text-white"
                 href={HERO.secondButtonUrl}
               >
                 {HERO.secondButtonText}
@@ -94,28 +95,11 @@ const HomePageComponent = () => {
           />
         </div>
       </Section>
-      {/* Large Podcast Playa */}
-      <Section className="">
-        <BuzzSproutPlayer lg />
-      </Section>
-      {/* EPISODES */}
-      {/* <Section className="py-8 px-4 overflow-x-hidden h-[650px]">
-        <div className="flex gap-8 justify-between mx-8 md:mx-[10vw]">
-          <div className="w-full mx-0">
-            <h1 className="leading-normal text-lg">{`Season ${
-              activeSeason || ""
-            }`}</h1>
-          </div>
 
-          <Dropdown setActiveSeason={setActiveSeason} />
-        </div>
-
-        <Slider
-          activeSeason={activeSeason}
-          items={useGetEpisodesBySeason(activeSeason)}
-        />
-      </Section> */}
+      {/* Episode Selector */}
       <EpisodeSlider />
+      {/* Large Podcast Playa */}
+      <BuzzSproutPlayer lg />
 
       {/* CTA */}
       <Section className={`bg-secondary`}>

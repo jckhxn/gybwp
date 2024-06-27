@@ -174,6 +174,17 @@ const EpisodeCard = ({
                   loading="lazy"
                 ></iframe>
               </div>
+                {/* Replace the existing share button with this new one */}
+                <div className="mt-6 flex justify-center">
+                <button
+                  className="flex items-center bg-main text-gray-300 px-4 py-2 rounded-full hover:bg-opacity-90 transition  "
+                  onClick={() => setIsShareModalOpen(true)}
+                >
+                  <Share2 size={20} className="mr-2" />
+                  Share this episode
+                </button>
+              </div>
+              <ShareModal />
               {/* Navigation Buttons */}
               <div className="flex justify-between items-center mb-2">
                 {data[0]?.prevEpisode ? (
@@ -196,7 +207,9 @@ const EpisodeCard = ({
               </div>
               {/* Podcast Links */}
 
-              <div className="font-bold mb-2">Podcast Links</div>
+              {data[0].podcastLinks ? (
+                <div className="font-bold mb-2">Podcast Links</div>
+              ) : null}
               <div className="flex flex-wrap items-center gap-2 mb-2">
                 {data[0]?.podcastLinks?.length > 0
                   ? data[0]?.podcastLinks?.map((podcast: any, idx: number) => (
@@ -286,23 +299,23 @@ const EpisodeCard = ({
             </div>
             <aside className="lg:w-1/3 mt-8 lg:mt-0">
               <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-                <h2 className="text-xl font-semibold mb-4">Sponsors</h2>
+                <h2 className="text-xl font-semibold mb-4 ">Sponsors</h2>
                 <div className="grid grid-cols-2 gap-4">
                   {data &&
                     data[0]?.season.sponsors?.map(
                       ({ uuid, image, bgColor }, idx) => (
                         <div
                           key={idx}
-                          className="flex justify-center mt-8 md:mt-0"
+                          className="flex justify-center mt-8 md:mt-0 "
                         >
                           <div
                             className={`${
                               bgColor || "bg-black"
-                            } overflow-hidden rounded-full shadow-lg`}
+                            } overflow-hidden rounded-full shadow-lg `}
                           >
                             <Link href={`/sponsors/${uuid}`}>
                               <Image
-                                className="aspect-[2/2]  object-contain "
+                                className=" aspect-[2/2]  object-contain "
                                 src={image}
                                 alt=""
                                 height={120}
@@ -330,17 +343,7 @@ const EpisodeCard = ({
                   Subscribe on LinkedIn
                 </button>
               </div>
-              {/* Replace the existing share button with this new one */}
-              <div className="mt-6 flex justify-center">
-                <button
-                  className="flex items-center text-[#293243] hover:underline"
-                  onClick={() => setIsShareModalOpen(true)}
-                >
-                  <Share2 size={20} className="mr-2" />
-                  Share this episode
-                </button>
-              </div>
-              <ShareModal />
+            
             </aside>
           </div>
         </div>
