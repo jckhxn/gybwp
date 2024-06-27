@@ -1,31 +1,4 @@
-
- *Hot fix* Added coalesce to fix new schema type issues, 
-
-Migrate all episodes to Season schema.
-Replace refs to seasonNumber episodeNumber
-Update queries to reflect migration/new schema
-Episode Slider gets 
-  image = placeholder, -> youtube.thumbnail
-  uuid = "100", -> youtube.uuid
-  youtube = {
-    title: "No title presented",
-    description: "No description provided",
-    blurb: "No description provided",
-  },
-  seasonNumber = 0,  -> Season Number
-  episodeNumber = 0, -> Episode Position in Season.
-
-  *** SEASONS SCHEMA ***
-  Seawon has a name, has a Number
-  Episodes are specified by seasonNumber and episodeNumber.
-  Queried by seasonNumber.
-List season, query season by slug or title string.
-
-
-*QUERIES*
-// Get all Seasons
-// *[_type == "season"]|order(_createdAt desc)
-
-
-// Get all episodes for season based on Season Title string
-// *[_type == "episode" && season->title == "Season Test"]
+Move "share this episode" to under video player
+Width on full episode description still too wide
+guest page
+Write notes about changes.
