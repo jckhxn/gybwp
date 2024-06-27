@@ -39,7 +39,7 @@ const EpisodeCard = ({
           <Image
             alt={`Thumbnail for ${youtube.title}`}
             className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
-            src={youtube.thumbnail}
+            src={`${youtube.thumbnail}`}
             layout="fill"
           />
           <div className="absolute top-2 right-2 rounded-full bg-[#293243] bg-opacity-90 px-3 py-1 text-xs font-medium text-white">
