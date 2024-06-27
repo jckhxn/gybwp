@@ -35,12 +35,12 @@ const EpisodeCard = ({
   return (
     <div className="group relative overflow-hidden rounded-lg bg-[#293243] shadow-md transition-all duration-300 hover:shadow-xl h-[400px] flex flex-col">
       <Link className="flex flex-col h-full" href={`/episode/${youtube.uuid}`}>
-        <div className="relative overflow-hidden h-[200px]">
+        <div className="relative overflow-hidden h-[200px] w-full">
           <Image
             alt={`Thumbnail for ${youtube.title}`}
-            className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
             src={`${youtube.thumbnail}`}
-            layout="fill"
+            fill
           />
           <div className="absolute top-2 right-2 rounded-full bg-[#293243] bg-opacity-90 px-3 py-1 text-xs font-medium text-white">
             {`S${youtube.seasonNumber}E${youtube.episodeNumber}`}
