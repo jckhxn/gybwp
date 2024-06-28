@@ -1,7 +1,6 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import { truncateText } from "../../lib/utils";
 
 type YoutubeData = {
   title?: string;
@@ -55,7 +54,7 @@ const EpisodeCard = ({
               {youtube.blurb}
             </p>
           </div>
-          <div className="mt-2 flex items-center text-sm text-gray-300 group-hover:text-blue-300 transition-colors duration-300">
+          <button className="mt-2 flex items-center text-sm text-gray-300 hover:text-blue-300 transition-colors duration-300 focus:outline-none">
             <svg
               className="mr-2 h-4 w-4"
               fill="none"
@@ -64,14 +63,14 @@ const EpisodeCard = ({
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
             Watch now
-          </div>
+          </button>
         </div>
       </Link>
     </div>
