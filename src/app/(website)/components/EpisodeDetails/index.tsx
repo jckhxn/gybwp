@@ -127,7 +127,7 @@ const EpisodeCard = ({
 
     name: data[0]?.youtube?.title,
 
-    description: data[0]?.blurb,
+    description: data[0]?.blurb || "No description provided",
 
     url: data[0].url,
     thumbnailUrl: `https://i.ytimg.com/vi/${data[0]?.url?.split("/")[3]}/hqdefault.jpg`,
@@ -174,8 +174,8 @@ const EpisodeCard = ({
                   loading="lazy"
                 ></iframe>
               </div>
-                {/* Replace the existing share button with this new one */}
-                <div className="mt-6 flex justify-center">
+              {/* Replace the existing share button with this new one */}
+              <div className="mt-6 flex justify-center">
                 <button
                   className="flex items-center bg-main text-gray-300 px-4 py-2 rounded-full hover:bg-opacity-90 transition  "
                   onClick={() => setIsShareModalOpen(true)}
@@ -343,7 +343,6 @@ const EpisodeCard = ({
                   Subscribe on LinkedIn
                 </button>
               </div>
-            
             </aside>
           </div>
         </div>
