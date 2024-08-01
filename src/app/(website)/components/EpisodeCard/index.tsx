@@ -40,6 +40,7 @@ const EpisodeCard = ({
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             src={`${youtube.thumbnail}`}
             fill
+            priority
           />
           <div className="absolute top-2 right-2 rounded-full bg-[#293243] bg-opacity-90 px-3 py-1 text-xs font-medium text-white">
             {`S${youtube.seasonNumber}E${youtube.episodeNumber}`}
@@ -54,7 +55,7 @@ const EpisodeCard = ({
               {youtube.blurb}
             </p>
           </div>
-          <button className="mt-2 flex items-center text-sm text-gray-300 hover:text-blue-300 transition-colors duration-300 focus:outline-none">
+          <button className="mt-2  h-10 flex items-center text-sm text-gray-300 hover:text-blue-300 transition-colors duration-300 focus:outline-none">
             <svg
               className="mr-2 h-4 w-4"
               fill="none"
@@ -63,9 +64,9 @@ const EpisodeCard = ({
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>

@@ -34,16 +34,19 @@ export default function SeasonDropdown({
   }, [data, setActiveSeason]);
 
   return (
-    <Select onValueChange={(value: any) => setActiveSeason(value)}>
-      <SelectTrigger className="w-[280px] ">
+    <Select
+      onValueChange={(value: any) => setActiveSeason(value)}
+      aria-label="Season Dropdown"
+    >
+      <SelectTrigger aria-label="Season Dropdown" className="w-[280px] ">
         <SelectValue placeholder={data ? "Select a season" : ""} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel aria-label="Season Dropdown"> Seasons</SelectLabel>
+          <SelectLabel> Seasons</SelectLabel>
 
           {data?.map(({ title }: { title: string }, idx: number) => (
-            <SelectItem key={idx} value={title}>
+            <SelectItem aria-label={title} key={idx} value={title}>
               {title}
             </SelectItem>
           ))}
