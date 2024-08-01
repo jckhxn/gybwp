@@ -87,7 +87,7 @@ const HomePageComponent = () => {
           </div>
           <Image
             alt="Hero"
-            className=" lg:ml-64 mx-auto aspect-square   overflow-hidden rounded-xl object-cover"
+            className="lg:ml-64 mx-auto aspect-square   overflow-hidden rounded-xl object-cover"
             height={550}
             src={heroImage}
             width={550}
