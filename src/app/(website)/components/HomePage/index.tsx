@@ -35,7 +35,7 @@ const HomePageComponent = () => {
     client.fetch(query)
   );
 
-  console.log("Hello testing github");
+console.log("Hello testing github");
   // Fucking SWR
   useEffect(() => {
     if (!isLoading && data[0]?.title) {
