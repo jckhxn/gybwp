@@ -7,7 +7,15 @@ import Link from "next/link";
 
 import Image from "next/image";
 
-import { Share2, X, Facebook, Twitter, Linkedin, Mail } from "lucide-react";
+import {
+  Share2,
+  X,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Mail,
+  File,
+} from "lucide-react";
 
 // Sanity client
 
@@ -98,6 +106,7 @@ const EpisodeCard = ({
               <X size={24} />
             </button>
           </div>
+
           <div className="flex justify-center space-x-4">
             {shareLinks.map((link) => (
               <a
@@ -183,6 +192,14 @@ const EpisodeCard = ({
                   <Share2 size={20} className="mr-2" />
                   Share this episode
                 </button>
+                {data[0]?.content?.files[0]?.file ? (
+                  <button className="flex items-center bg-main text-gray-300 px-4 py-2 rounded-full hover:bg-opacity-90 transition  ">
+                    <Link href={data[0]?.content?.files[0]?.file || ""}>
+                      <File size={20} className="mr-2" />
+                      View Transcript
+                    </Link>
+                  </button>
+                ) : null}
               </div>
               <ShareModal />
               {/* Navigation Buttons */}
