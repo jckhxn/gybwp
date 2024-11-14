@@ -81,6 +81,7 @@ export function VideoSearch(props: {
     <FormField
       title="YouTube URL"
       description="Enter a YouTube video URL"
+      // @ts-ignore
       error={error}
     >
       <Flex gap={2}>
