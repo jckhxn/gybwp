@@ -2,85 +2,109 @@ import { Box, Button, Flex, TextInput } from "@sanity/ui";
 import { KeyboardEvent, useRef, useState } from "react";
 import { FormField } from "sanity";
 import { YoutubeVideoData, deriveVideoId, fetchVideoData } from "../utils";
+import YoutubeFetcher from "./SyncButton";
 
 export function VideoSearch(props: {
   apiKey: string;
   onSubmit: (data: YoutubeVideoData) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const timeout = useRef<ReturnType<typeof setTimeout>>();
+  const timeout = useRef<NodeJS.Timeout>();
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  function validateInput() {
+  const handleVideoFetch = (videoUrl: string) => {
+    if (inputRef.current) {
+      inputRef.current.value = videoUrl;
+      const event = new Event("change", { bubbles: true });
+      inputRef.current.dispatchEvent(event);
+    }
+  };
+
+  const validateInput = (): string | null => {
     const input = inputRef.current?.value;
-    if (!input) return setError(null);
+    if (!input) {
+      setError(null);
+      return null;
+    }
     const id = deriveVideoId(input);
-    if (!id) return setError("Invalid Youtube URL");
+    if (!id) {
+      setError("Invalid Youtube URL");
+      return null;
+    }
     setError(null);
     return id;
-  }
+  };
 
-  function submit() {
+  const submit = async () => {
     if (!inputRef.current?.value) {
-      return setError("Missing YouTube URL");
+      setError("Missing YouTube URL");
+      return;
     }
 
     const id = validateInput();
-
     if (!id) return;
 
-    fetchVideoData(id, props.apiKey)
-      .then((data) => {
-        if (!data) return setError("YouTube video not found");
-        props.onSubmit(data);
-      })
-      .catch((_error) => {
-        console.error(_error);
-        setError("Error fetching YouTube data");
-      });
-  }
+    setLoading(true);
+    try {
+      const data = await fetchVideoData(id, props.apiKey);
+      if (!data) {
+        setError("YouTube video not found");
+        return;
+      }
+      props.onSubmit(data);
+    } catch (err) {
+      console.error(err);
+      setError("Error fetching YouTube data");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  function onPaste() {
-    setTimeout(() => validateInput(), 0);
-  }
+  const onPaste = () => {
+    setTimeout(validateInput, 0);
+  };
 
-  function onKeyDown(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.key !== "Enter") return;
-    submit();
-  }
+  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      submit();
+    }
+  };
 
-  function onChange() {
+  const onChange = () => {
     setError(null);
     clearTimeout(timeout.current);
     timeout.current = setTimeout(validateInput, 800);
-  }
-
-  function onBlur() {
-    validateInput();
-  }
+  };
 
   return (
     <FormField
-      title="Enter YouTube video link"
-      validation={error ? [{ level: "error", message: error, path: [] }] : []}
+      title="YouTube URL"
+      description="Enter a YouTube video URL"
+      error={error}
     >
-      <Flex gap={2} width="100%">
+      <Flex gap={2}>
         <Box flex={1}>
           <TextInput
             ref={inputRef}
-            height="100%"
             onPaste={onPaste}
             onKeyDown={onKeyDown}
-            onBlur={onBlur}
             onChange={onChange}
-            placeholder="https://www.youtube.com/watch?v=<video_id>"
+            onBlur={validateInput}
+            placeholder="https://www.youtube.com/watch?v=..."
           />
         </Box>
         <Button
           mode="ghost"
           text="Submit"
-          type="button"
-          onClick={() => submit()}
+          onClick={submit}
+          disabled={loading}
+          tone={error ? "critical" : "primary"}
+        />
+        <YoutubeFetcher
+          inputRef={inputRef}
+          onVideoFetch={handleVideoFetch}
+          validateAndSubmit={submit}
         />
       </Flex>
     </FormField>

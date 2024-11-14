@@ -18,7 +18,7 @@ const config = defineConfig({
   basePath: "/dash",
 
   plugins: [
-    structureTool(),
+    structureTool({}),
     pages({
       title: "Live Preview",
 
