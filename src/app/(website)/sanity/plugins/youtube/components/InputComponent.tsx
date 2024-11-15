@@ -1,6 +1,14 @@
 // @ts-nocheck
 import { Box, Stack } from "@sanity/ui";
-import { ObjectInputProps, ObjectSchemaType, set, unset } from "sanity";
+import {
+  ObjectInputProps,
+  ObjectSchemaType,
+  set,
+  unset,
+  useFormValue,
+  useClient,
+} from "sanity";
+
 import { ActionsMenu } from "./ActionsMenu";
 import { VideoPreview } from "./VideoPreview";
 import { VideoSearch } from "./VideoSearch";
@@ -26,11 +34,24 @@ export type YoutubeInputProps = ObjectInputProps<
 type Props = YoutubeInputProps & { apiKey: string };
 
 export function YoutubeInputComponent(props: Props) {
+  const client = useClient({ apiVersion: "2022-03-07" });
+  // Get parent document ID for updating the document
+  const documentId = useFormValue(["_id"]) as string;
+
   function reset() {
     props.onChange(unset());
   }
 
-  function patchData(data: YoutubeVideoData) {
+  async function patchData(data: YoutubeVideoData) {
+    await client
+      .transaction()
+      .createIfNotExists({ _type: "episode", _id: documentId })
+      .commit();
+
+    await client
+      .patch(documentId)
+      .set({ pathname: { current: String(data.uuid) } })
+      .commit();
     props.onChange(set(data));
   }
 
