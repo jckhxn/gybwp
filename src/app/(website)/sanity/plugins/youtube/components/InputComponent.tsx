@@ -50,7 +50,7 @@ export function YoutubeInputComponent(props: Props) {
 
     await client
       .patch(documentId)
-      .set({ pathname: { current: String(data.uuid) } })
+      .set({ pathname: { current: `/episode/${String(data.uuid)}` } })
       .commit();
     props.onChange(set(data));
   }
