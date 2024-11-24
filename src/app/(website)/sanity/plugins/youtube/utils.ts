@@ -45,13 +45,13 @@ function getEpisodeNumber(text) {
 }
 
 // Format duraation
-function formatDuration(duration) {
+function formatDuration(duration: string) {
   const regex = /PT(?:(\d+)H)?(?:(\d+)M)?/;
   const match = duration.match(regex);
 
   // Extract hours and minutes (default to 0 if not present)
-  const hours = match[1] ? parseInt(match[1], 10) : 0;
-  const minutes = match[2] ? parseInt(match[2], 10) : 0;
+  const hours = match && match[1] ? parseInt(match[1], 10) : 0;
+  const minutes = match && match[2] ? parseInt(match[2], 10) : 0;
 
   // Format the output based on the presence of hours
   if (hours > 0) {
@@ -60,7 +60,7 @@ function formatDuration(duration) {
     return `${minutes}m`;
   }
 }
-function extractBlurb(text) {
+function extractBlurb(text: string) {
   const regex = /Episode Summary:\s*(.+?)(?=\n\n[A-Z])/s;
   const match = text.match(regex);
   return match ? match[1].trim() : "No Episode Summary found.";
