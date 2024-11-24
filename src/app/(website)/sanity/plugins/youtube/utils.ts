@@ -43,6 +43,29 @@ function getEpisodeNumber(text) {
   // Return season and episode numbers as an object
   return parseInt(match[2]);
 }
+
+// Format duraation
+function formatDuration(duration) {
+  const regex = /PT(?:(\d+)H)?(?:(\d+)M)?/;
+  const match = duration.match(regex);
+
+  // Extract hours and minutes (default to 0 if not present)
+  const hours = match[1] ? parseInt(match[1], 10) : 0;
+  const minutes = match[2] ? parseInt(match[2], 10) : 0;
+
+  // Format the output based on the presence of hours
+  if (hours > 0) {
+    return `${hours}H ${minutes}m`;
+  } else {
+    return `${minutes}m`;
+  }
+}
+function extractBlurb(text) {
+  const regex = /Episode Summary:\s*(.+?)(?=\n\n[A-Z])/s;
+  const match = text.match(regex);
+  return match ? match[1].trim() : "No Episode Summary found.";
+}
+
 export type YoutubeVideoData = {
   id: string;
   title: string;
@@ -58,12 +81,14 @@ export function fetchVideoData(
   id: string,
   apiKey: string
 ): Promise<YoutubeVideoData | null> {
-  const url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=${id}&key=${apiKey}`;
+  const url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${id}&key=${apiKey}`;
   // @ts-ignore
   return fetch(url)
     .then((res) => res.json())
     .then((data) => {
+      console.log(data);
       const snippet = data?.items?.[0]?.snippet;
+      const contentDetails = data?.items?.[0]?.contentDetails;
 
       if (!snippet) return null;
       if (!snippet.title) return null;
@@ -74,11 +99,13 @@ export function fetchVideoData(
         id,
         title: snippet.title as string,
         description: snippet.description as string,
+        blurb: extractBlurb(snippet.description),
         publishedAt: snippet.publishedAt as string,
         thumbnail: snippet.thumbnails.standard.url as string,
         uuid: getUUIDFromTitle(snippet.title),
         seasonNumber: getSeasonNumber(snippet.title),
         episodeNumber: getEpisodeNumber(snippet.title),
+        duration: formatDuration(contentDetails.duration),
       };
     });
 }
