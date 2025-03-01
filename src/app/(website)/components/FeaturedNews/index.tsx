@@ -25,8 +25,9 @@ const FeaturedNews = ({ color = "light" }: FeaturedNewsProps) => {
   const { data, error, isLoading } = useSWR(FEATURED_ARTICLES_QUERY, (query) =>
     client.fetch(query)
   );
+
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && data) {
       const featuredArticles = (
         Object.keys(data) as Array<keyof typeof featuredArticles>
       ).map(function (property) {
