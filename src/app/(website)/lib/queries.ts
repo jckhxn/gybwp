@@ -112,7 +112,8 @@ export const SPONSOR_DETAILS_QUERY = groq`{"sponsors":*[_type == "sponsor" && uu
 export const ALL_SPONSORS_QUERY = groq`*[_type == "sponsor"]`;
 
 // Featured News Articles
-export const FEATURED_ARTICLES_QUERY = groq`  `;
+
+export const FEATURED_ARTICLES_QUERY = groq`*[_type == "featuredArticle"] `;
 
 // Other Articles Query
 export const OTHER_ARTICLES_QUERY = groq`*[_type == "article"]`;
