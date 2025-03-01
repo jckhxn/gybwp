@@ -8,6 +8,7 @@ This project is a modern web application designed specifically for the Growing Y
 
 - **Live Preview**: Instantly preview changes as you make them, ensuring your content looks perfect before publishing.
 - **Easy-to-Use CMS**: Sanity CMS provides a flexible and powerful content management experience, making it simple to update and manage your site's content.
+- **SEO and Open Graph**: Implemented SEO best practices and Open Graph meta tags to enhance search engine visibility and social media sharing.
 - **Tech Stack**:
   - **Next.js**: A React framework for building fast and user-friendly web applications.
   - **Sanity CMS**: A headless CMS that provides a flexible and powerful content management experience.
