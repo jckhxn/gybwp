@@ -1,8 +1,8 @@
-# Project Name
+# Growing Your Business With People!
 
 ## Description
 
-This project is a modern web application designed specifically for a podcast. Built with Next.js, it utilizes Sanity CMS for content management and the YouTube API for video content. The site is crafted to be fast, responsive, and easy to manage, providing an engaging platform for listeners to explore podcast episodes and related content.
+This project is a modern web application designed specifically for the Growing Your Business With People podcast. Built with Next.js, it utilizes Sanity CMS for content management and the YouTube API for video content. The site is crafted to be fast, responsive, and easy to manage, providing an engaging platform for listeners to explore podcast episodes and related content.
 
 ## Features
 
