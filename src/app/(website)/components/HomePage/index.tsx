@@ -35,7 +35,7 @@ const HomePageComponent = () => {
     client.fetch(query)
   );
 
-  // Fucking SWR
+  // SWR
   useEffect(() => {
     if (!isLoading && data[0]?.title) {
       setActiveSeason(data[0]?.title);
