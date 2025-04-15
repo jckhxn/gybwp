@@ -3,18 +3,18 @@
 import React, { useEffect, useState } from "react";
 
 // components
-import { Section, SectionHeading } from "../shared";
-import { usePagination, DOTS } from "./usePagination";
+import { Section, SectionHeading } from "../../shared";
+import { usePagination, DOTS } from "../usePagination";
 
 // copy
-import { ARTICLES } from "../News/static-data";
-import { ARTICLES_INFO } from "./static-data";
+import { ARTICLES } from "../../News/static-data";
+import { ARTICLES_INFO } from "../static-data";
 import Link from "next/link";
 
 // // SWR
 import useSWR from "swr";
-import { client } from "../../sanity/sanity-utils";
-import { OTHER_ARTICLES_QUERY } from "../../lib/queries";
+import { client } from "../../../sanity/sanity-utils";
+import { OTHER_ARTICLES_QUERY } from "../../../lib/queries";
 
 const Articles = () => {
   const [articles, setArticles] = useState();
