@@ -1,3 +1,4 @@
+// index.tsx
 import React from "react";
 
 // Types for Props
