@@ -160,18 +160,7 @@ const EpisodeCard = ({
                 {data[0] ? data[0]?.youtube?.title : "No title presented"}
               </h1>
               {/* Video Player  */}
-              <div className="relative aspect-video mb-6 rounded-lg overflow-hidden shadow-lg">
-                <iframe
-                  className="block sm:hidden rounded-lg w-full h-full"
-                  width="360"
-                  height="240"
-                  src={`https://www.youtube.com/embed/${data[0]?.url?.split("/")[3]}`}
-                  title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  loading="lazy"
-                ></iframe>
-                {/* Full version of youtube embed */}
+              <div className="relative aspect-video mb-8 rounded-lg overflow-hidden shadow-lg">
                 <iframe
                   className="hidden sm:block rounded-lg w-full h-full"
                   width="560"
@@ -184,22 +173,23 @@ const EpisodeCard = ({
                 ></iframe>
               </div>
               {/* Replace the existing share button with this new one */}
-              <div className="mt-6 flex justify-center">
+              <div className="mt-8 flex justify-center gap-4">
                 <button
-                  className="flex items-center bg-main text-gray-300 px-4 py-2 rounded-full hover:bg-opacity-90 transition  "
+                  className="flex items-center bg-main text-gray-300 px-6 py-3 rounded-full hover:bg-opacity-90 transition"
                   onClick={() => setIsShareModalOpen(true)}
                 >
                   <Share2 size={20} className="mr-2" />
                   Share this episode
                 </button>
-                {data[0]?.content?.files[0]?.file ? (
-                  <button className="flex items-center bg-main text-gray-300 px-4 py-2 rounded-full hover:bg-opacity-90 transition  ">
-                    <Link href={data[0]?.content?.files[0]?.file || ""}>
-                      <File size={20} className="mr-2" />
-                      View Transcript
-                    </Link>
-                  </button>
-                ) : null}
+                {data[0]?.content?.files[0]?.file && (
+                  <Link
+                    href={data[0]?.content?.files[0]?.file || ""}
+                    className="flex items-center bg-main text-gray-300 px-6 py-3 rounded-full hover:bg-opacity-90 transition"
+                  >
+                    <File size={20} className="mr-2" />
+                    View Transcript
+                  </Link>
+                )}
               </div>
               <ShareModal />
               {/* Navigation Buttons */}

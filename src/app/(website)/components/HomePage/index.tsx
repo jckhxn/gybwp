@@ -60,25 +60,24 @@ const HomePageComponent = () => {
     <>
       <JSONLD data={structuredData} />
       {/* MAIN SECTION */}
-      <Section className="w-full py-12 md:py-24 lg:py-3 bg-main ">
-        <div className="container grid items-center gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-2 ">
-          <div className="space-y-4">
-            <h1 className="text-gray-200 text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
+      <Section className="w-full py-16 md:py-32 lg:py-40 bg-main animate-fadeIn">
+        <div className="container grid items-center gap-8 px-6 md:px-12 lg:grid-cols-2 lg:gap-12">
+          <div className="space-y-6">
+            <h1 className="text-gray-200 text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
               {HERO.header}
             </h1>
-            <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+            <p className="max-w-[650px] text-gray-400 md:text-lg lg:text-xl xl:text-lg">
               {HERO.body}
             </p>
-            <div className="flex flex-col gap-2 min-[400px]:flex-row">
+            <div className="flex flex-col gap-4 sm:flex-row">
               <Link
-                className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-gray-50 shadow transition-all duration-300 hover:bg-white-900/90 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 active:scale-95 disabled:pointer-events-none disabled:opacity-50 dark:bg-primary dark:text-white dark:hover:bg-primary-50/90 dark:focus-visible:ring-gray-300"
+                className="inline-flex h-12 items-center justify-center rounded-md bg-primary px-10 text-base font-medium text-gray-50 shadow transition-all duration-300 hover:bg-accent hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 active:scale-95 disabled:pointer-events-none disabled:opacity-50 dark:bg-primary dark:text-white dark:hover:bg-accent"
                 href={HERO.buttonUrl}
               >
                 {HERO.buttonText}
               </Link>
               <Link
-                className="inline-flex h-10 items-center justify-center rounded-md 
-        text-gray-50 bg-primary px-8 text-sm font-medium shadow-sm transition-all duration-300 hover:bg-gray-100 hover:text-white hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 active:scale-95 disabled:pointer-events-none disabled:opacity-50 dark:bg-primary dark:hover:bg-primary dark:hover:text-white"
+                className="inline-flex h-12 items-center justify-center rounded-md text-gray-50 bg-primary px-10 text-base font-medium shadow-sm transition-all duration-300 hover:bg-accent hover:text-white hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 active:scale-95 disabled:pointer-events-none disabled:opacity-50 dark:bg-primary dark:hover:bg-accent"
                 href={HERO.secondButtonUrl}
               >
                 {HERO.secondButtonText}
@@ -87,10 +86,10 @@ const HomePageComponent = () => {
           </div>
           <Image
             alt="Hero"
-            className="lg:ml-64 mx-auto aspect-square   overflow-hidden rounded-xl object-cover"
-            height={550}
+            className="lg:ml-64 mx-auto aspect-square overflow-hidden rounded-xl object-cover shadow-lg hover:shadow-xl transition-shadow duration-300"
+            height={600}
             src={heroImage}
-            width={550}
+            width={600}
             priority={true}
           />
         </div>
