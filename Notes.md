@@ -1,5 +1,9 @@
 # Improvements
 
+
+# Homepage 
+https://v0.dev/chat/redesign-podcast-home-2dgQS30Lrqw
+
 # Episode Details
 
     https://v0.dev/chat/redesign-podcast-episode-page-C8cqrfqO5N6
