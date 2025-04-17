@@ -11,17 +11,25 @@ import defaultImageSrc from "public/images/logo.webp";
 import { NEWS_INFO } from "./static-data";
 import { FEATURED_ARTICLES } from "../News/static-data";
 
+import { ExternalLink } from "lucide-react";
+import Button from "../ui/Button";
 // SWR
 import useSWR from "swr";
 
 import { FEATURED_ARTICLES_QUERY } from "../../lib/queries";
 import { client } from "../../sanity/sanity-utils";
+import {
+  fetchOpenGraphImage,
+  testImageLink,
+  validateAndFetchImage,
+} from "../../lib/utils";
 interface FeaturedNewsProps {
   color: "light" | "secondary";
 }
 
 const FeaturedNews = ({ color = "light" }: FeaturedNewsProps) => {
   const [featuredArticles, setFeaturedArticles] = useState();
+
   const { data, error, isLoading } = useSWR(FEATURED_ARTICLES_QUERY, (query) =>
     client.fetch(query)
   );
@@ -36,12 +44,22 @@ const FeaturedNews = ({ color = "light" }: FeaturedNewsProps) => {
       setFeaturedArticles(featuredArticles);
     }
   }, [data, isLoading]);
-  // const featuredArticles = store.getState().featuredArticles;
-  // const featuredArticlesArray = (
-  //   Object.keys(featuredArticles) as Array<keyof typeof featuredArticles>
-  // ).map(function (property) {
-  //   return featuredArticles[property];
-  // });
+
+  // Image with fallback component
+  const ImageWithFallback = ({ src, alt, ...props }) => {
+    const [imgSrc, setImgSrc] = useState(src);
+
+    const handleError = () => {
+      console.log("Image failed to load, using default image");
+      setImgSrc("/placeholder.svg");
+    };
+
+    useEffect(() => {
+      setImgSrc(src);
+    }, [src]);
+
+    return <Image {...props} src={imgSrc} alt={alt} onError={handleError} />;
+  };
 
   if (FEATURED_ARTICLES.length) {
     const fontColor = color === "light" ? "black" : "white";
@@ -66,11 +84,11 @@ const FeaturedNews = ({ color = "light" }: FeaturedNewsProps) => {
                     target="_blank"
                     className="block rounded-md p-4 text-center group"
                   >
-                    <Image
+                    <ImageWithFallback
                       height={224}
                       width={450}
                       alt={`featured article by ${company}`}
-                      src={image || defaultImageSrc}
+                      src={image || "/placeholder.svg"}
                       className="h-56 w-full rounded-sm object-cover"
                     />
 

@@ -1,6 +1,7 @@
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import imageUrlBuilder from "@sanity/image-url";
+import axios from "axios";
 
 const builder = imageUrlBuilder({
   projectId: "hxymd1na",
