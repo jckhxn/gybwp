@@ -27,6 +27,9 @@ import {
 
 import EpisodeSlider from "@/src/app/(website)/components/EpisodeSlider";
 import JSONLD from "../SEO/jsonld";
+import { Newsletter } from "../Newsletter";
+import { LatestEpisode, LatestEpisodes } from "../LatestEpisode";
+import { BrowseEpisodes } from "../BrowseEpisodes";
 
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState();
@@ -96,12 +99,15 @@ const HomePageComponent = () => {
       </Section>
 
       {/* Episode Selector */}
-      <EpisodeSlider />
+      <LatestEpisode />
+      <BrowseEpisodes />
+      {/* <EpisodeSlider /> */}
       {/* Large Podcast Playa */}
-      <BuzzSproutPlayer lg />
+      {/* <BuzzSproutPlayer lg /> */}
 
       {/* CTA */}
-      <Section className={`bg-secondary`}>
+      <Newsletter />
+      {/* <Section className={`bg-secondary`}>
         <div className="p-8 md:p-12 lg:px-16 lg:py-24">
           <div className="mx-auto max-w-lg text-center">
             <SectionHeading className="text-white text-3xl md:text-3xl">
@@ -124,7 +130,7 @@ const HomePageComponent = () => {
             </Button>
           </div>
         </div>
-      </Section>
+      </Section> */}
 
       {/* IN THE NEWS */}
       <FeaturedNews color="light" />

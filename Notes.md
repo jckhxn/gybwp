@@ -1,7 +1,10 @@
 # Improvements
 
+Finish home page components
+Move to site builder
 
-# Homepage 
+# Homepage
+
 https://v0.dev/chat/redesign-podcast-home-2dgQS30Lrqw
 
 # Episode Details

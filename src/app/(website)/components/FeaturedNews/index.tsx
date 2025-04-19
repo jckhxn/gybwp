@@ -99,9 +99,7 @@ const FeaturedNews = ({ color = "light" }: FeaturedNewsProps) => {
           <div className="w-16 h-1 bg-primary rounded-full my-4"></div>
         </div>
 
-        {/* Centered content container with proper width */}
         <div className="mx-auto max-w-4xl py-12">
-          {/* Full width grid on all screen sizes */}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
             {featuredArticles.map(
               ({ company, title, description, link, image }, idx) => (
