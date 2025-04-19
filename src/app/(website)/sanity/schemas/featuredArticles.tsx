@@ -1,3 +1,5 @@
+import { deprecate } from "util";
+
 const featuredArticle = {
   name: "featuredArticle",
   title: "Featured Articles",
@@ -28,11 +30,21 @@ const featuredArticle = {
       type: "string",
     },
     {
-      // Date of the Article
       name: "image",
-      title: "Image of Article ",
-      type: "string",
+      title: "Article Image",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
     },
+    // {
+    //   // Image of the Article
+    //   name: "image",
+    //   title: "Image of Article ",
+    //   type: "string",
+    //   deprecated: true,
+    //   description: "This field is deprecated. Use 'image' instead.",
+    // },
     {
       // Date of the Article
       name: "date",
