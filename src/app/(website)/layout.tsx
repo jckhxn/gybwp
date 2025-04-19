@@ -8,7 +8,7 @@ import Header from "./components/Header";
 
 // styling
 import "tailwindcss/tailwind.css";
-import "/dist/output.css";
+
 import { Open_Sans } from "next/font/google";
 const openSans = Open_Sans({ subsets: ["latin"], weight: "variable" });
 
