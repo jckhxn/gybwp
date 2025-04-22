@@ -13,11 +13,11 @@ export const BrowseEpisodes = () => {
   const [seasons, setSeasons] = useState([]);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
-  
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Fetch all seasons
-  const { data: seasonsData } = useSWR(ALL_SEASONS_QUERY, (query) => 
+  const { data: seasonsData } = useSWR(ALL_SEASONS_QUERY, (query) =>
     client.fetch(query)
   );
 
@@ -32,10 +32,10 @@ export const BrowseEpisodes = () => {
     if (data && Array.isArray(data)) {
       // Display up to 5 episodes
       setEpisodes(data.slice(0, 5));
-      
+
       // Reset scroll states when episodes change
       setShowLeftArrow(false); // Left arrow should be hidden initially
-      
+
       // Only check right arrow on next render after episodes are updated
       setTimeout(() => {
         const container = scrollContainerRef.current;
@@ -64,11 +64,11 @@ export const BrowseEpisodes = () => {
         setShowRightArrow(container.scrollWidth > container.clientWidth);
       }
     };
-    
+
     checkForScrollbar();
-    window.addEventListener('resize', checkForScrollbar);
-    
-    return () => window.removeEventListener('resize', checkForScrollbar);
+    window.addEventListener("resize", checkForScrollbar);
+
+    return () => window.removeEventListener("resize", checkForScrollbar);
   }, [episodes]);
 
   // Handle scroll event
@@ -76,8 +76,10 @@ export const BrowseEpisodes = () => {
     const container = scrollContainerRef.current;
     if (container) {
       const isAtStart = container.scrollLeft === 0;
-      const isAtEnd = container.scrollLeft + container.clientWidth >= container.scrollWidth - 10;
-      
+      const isAtEnd =
+        container.scrollLeft + container.clientWidth >=
+        container.scrollWidth - 10;
+
       setShowLeftArrow(!isAtStart);
       setShowRightArrow(!isAtEnd);
     }
@@ -108,10 +110,11 @@ export const BrowseEpisodes = () => {
               Browse Our Episodes
             </h2>
             <p className="max-w-[700px] text-gray-600 md:text-lg">
-              Discover our library of conversations with industry leaders and experts.
+              Discover our library of conversations with industry leaders and
+              experts.
             </p>
           </div>
-          
+
           {seasons.length > 0 && (
             <div className="flex justify-center w-full mb-6 overflow-x-auto px-2 py-2">
               <div className="inline-flex rounded-md shadow-sm flex-wrap justify-center">
@@ -122,11 +125,13 @@ export const BrowseEpisodes = () => {
                     onClick={() => setActiveSeason(season.title)}
                     className={`
                       px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium whitespace-nowrap
-                      ${season.title === activeSeason 
-                        ? 'bg-primary text-white' 
-                        : 'bg-white text-gray-700 hover:bg-gray-50'}
-                      ${seasons.indexOf(season) === 0 ? 'rounded-l-lg' : ''}
-                      ${seasons.indexOf(season) === seasons.length - 1 ? 'rounded-r-lg' : ''}
+                      ${
+                        season.title === activeSeason
+                          ? "bg-primary text-white"
+                          : "bg-white text-gray-700 hover:bg-gray-50"
+                      }
+                      ${seasons.indexOf(season) === 0 ? "rounded-l-lg" : ""}
+                      ${seasons.indexOf(season) === seasons.length - 1 ? "rounded-r-lg" : ""}
                       border border-gray-200
                       focus:z-10 focus:outline-none focus:ring-2 focus:ring-primary
                     `}
@@ -148,19 +153,30 @@ export const BrowseEpisodes = () => {
             <div className="w-full relative">
               {/* Left arrow */}
               {showLeftArrow && (
-                <button 
+                <button
                   onClick={scrollLeft}
                   className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-md hidden md:flex items-center justify-center"
                   aria-label="Scroll left"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-primary"
+                  >
                     <path d="m15 18-6-6 6-6" />
                   </svg>
                 </button>
               )}
-              
+
               {/* Episodes container */}
-              <div 
+              <div
                 ref={scrollContainerRef}
                 className="flex overflow-x-auto pb-6 gap-6 snap-x scrollbar-hide px-1"
                 onScroll={handleScroll}
@@ -241,20 +257,31 @@ export const BrowseEpisodes = () => {
                   </div>
                 ))}
               </div>
-              
+
               {/* Right arrow */}
               {showRightArrow && (
-                <button 
+                <button
                   onClick={scrollRight}
                   className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-md hidden md:flex items-center justify-center"
                   aria-label="Scroll right"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-primary"
+                  >
                     <path d="m9 18 6-6-6-6" />
                   </svg>
                 </button>
               )}
-              
+
               {/* Mobile scroll indicator dots */}
               <div className="flex justify-center gap-1 mt-4 md:hidden">
                 <div className="w-2 h-2 rounded-full bg-primary"></div>
