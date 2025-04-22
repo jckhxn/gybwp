@@ -1,12 +1,13 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ScrollToSection } from "../shared/ScrollToSection";
 
 export const LatestEpisode = () => {
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container px-4 md:px-6">
-        <div className="flex flex-col items-start gap-4 md:gap-8">
+    <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50">
+      <div className="container mx-auto px-4 md:px-6 max-w-6xl">
+        <div className="flex flex-col items-center gap-4 md:gap-8 text-center">
           <div className="space-y-2">
             <div className="inline-block rounded-lg bg-primary/10 px-3 py-1 text-sm text-primary">
               Featured
@@ -14,7 +15,7 @@ export const LatestEpisode = () => {
             <h2 className="text-3xl font-bold tracking-tighter md:text-4xl lg:text-5xl">
               Latest Episode
             </h2>
-            <p className="max-w-[700px] text-muted-foreground md:text-lg">
+            <p className="max-w-[700px] text-gray-600 md:text-lg">
               Listen to our most recent conversation with industry leaders.
             </p>
           </div>
@@ -90,10 +91,9 @@ export const LatestEpisode = () => {
               </div>
             </div>
           </div>
-          <div className="flex justify-end w-full">
-            <Link
-              href="/#episodes"
-              scroll={true}
+          <div className="flex justify-center w-full pt-6">
+            <ScrollToSection
+              targetId="episodes"
               className="inline-flex items-center text-primary hover:underline"
             >
               Browse all episodes
@@ -112,7 +112,7 @@ export const LatestEpisode = () => {
                 <path d="M5 12h14"></path>
                 <path d="m12 5 7 7-7 7"></path>
               </svg>
-            </Link>
+            </ScrollToSection>
           </div>
         </div>
       </div>
