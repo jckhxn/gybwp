@@ -14,6 +14,7 @@ export const BrowseEpisodes = () => {
   const [seasons, setSeasons] = useState([]);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
+  const [activeEpisodeIndex, setActiveEpisodeIndex] = useState(0);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -72,7 +73,7 @@ export const BrowseEpisodes = () => {
     return () => window.removeEventListener("resize", checkForScrollbar);
   }, [episodes]);
 
-  // Handle scroll event
+  // Handle scroll event with improved detection of active slide
   const handleScroll = () => {
     const container = scrollContainerRef.current;
     if (container) {
@@ -83,6 +84,17 @@ export const BrowseEpisodes = () => {
 
       setShowLeftArrow(!isAtStart);
       setShowRightArrow(!isAtEnd);
+
+      // Calculate which episode is most visible in the viewport
+      if (episodes.length > 0) {
+        const cardWidth = container.scrollWidth / episodes.length;
+        const centerPosition = container.scrollLeft + container.clientWidth / 2;
+        const activeIndex = Math.min(
+          Math.floor(centerPosition / cardWidth),
+          episodes.length - 1
+        );
+        setActiveEpisodeIndex(activeIndex);
+      }
     }
   };
 
@@ -96,6 +108,20 @@ export const BrowseEpisodes = () => {
   const scrollRight = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({ left: 300, behavior: "smooth" });
+    }
+  };
+
+  // Scroll to a specific episode
+  const scrollToEpisode = (index) => {
+    if (scrollContainerRef.current && episodes.length > 0) {
+      const container = scrollContainerRef.current;
+      const cardWidth = container.scrollWidth / episodes.length;
+      const targetScrollPosition = cardWidth * index;
+
+      container.scrollTo({
+        left: targetScrollPosition,
+        behavior: "smooth",
+      });
     }
   };
 
@@ -287,10 +313,17 @@ export const BrowseEpisodes = () => {
               )}
 
               {/* Mobile scroll indicator dots */}
-              <div className="flex justify-center gap-1 mt-4 md:hidden">
-                <div className="w-2 h-2 rounded-full bg-primary"></div>
-                <div className="w-2 h-2 rounded-full bg-gray-300"></div>
-                <div className="w-2 h-2 rounded-full bg-gray-300"></div>
+              <div className="flex justify-center gap-1.5 mt-4 md:hidden">
+                {episodes.map((_, idx) => (
+                  <button
+                    key={`dot-${idx}`}
+                    onClick={() => scrollToEpisode(idx)}
+                    className={`w-2.5 h-2.5 rounded-full ${
+                      idx === activeEpisodeIndex ? "bg-primary" : "bg-gray-300"
+                    } transition-colors duration-300`}
+                    aria-label={`Go to episode ${idx + 1}`}
+                  />
+                ))}
               </div>
             </div>
           ) : (

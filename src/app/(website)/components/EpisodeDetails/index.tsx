@@ -15,6 +15,8 @@ import {
   Linkedin,
   Mail,
   File,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 // Sanity client
@@ -197,7 +199,7 @@ const EpisodeCard = ({
                 {data[0]?.prevEpisode ? (
                   <Link href={`${data[0]?.prevEpisode}`}>
                     <Button size="sm" variant="default">
-                      <ChevronLeftIcon className="h-4 w-4" />
+                      <ChevronLeft className="h-4 w-4" />
                       Previous
                     </Button>
                   </Link>
@@ -207,7 +209,7 @@ const EpisodeCard = ({
                   <Link href={`${data[0]?.nextEpisode}`}>
                     <Button size="sm" variant="default">
                       Next
-                      <ChevronRightIcon className="h-4 w-4" />
+                      <ChevronRight className="h-4 w-4" />
                     </Button>
                   </Link>
                 ) : null}
@@ -359,44 +361,6 @@ const EpisodeCard = ({
 };
 
 export default EpisodeCard;
-
-function ChevronLeftIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m15 18-6-6 6-6" />
-    </svg>
-  );
-}
-
-function ChevronRightIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m9 18 6-6-6-6" />
-    </svg>
-  );
-}
 
 function FileIcon(props) {
   return (
