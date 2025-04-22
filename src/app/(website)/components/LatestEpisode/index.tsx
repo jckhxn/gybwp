@@ -19,7 +19,6 @@ export const LatestEpisode = () => {
         // Fetch the latest episode directly using the new LATEST_EPISODE query
         const latestEpisodeData = await client.fetch(LATEST_EPISODE);
 
-        console.log("Episode Details:", latestEpisodeData);
         if (latestEpisodeData && latestEpisodeData.youtube?.uuid) {
           setLatestEpisode(latestEpisodeData.youtube);
         }
