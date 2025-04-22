@@ -6,8 +6,16 @@ import type { SanityImageProps } from "@tinloof/sanity-web";
 
 import { SanityImage as SanityImageBase } from "@tinloof/sanity-web";
 
-// Sanity Data Blob -> Image URL
+// Format UTC data string
+export function formatDate(dateString: string) {
+  return Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(new Date(dateString));
+}
 
+// Sanity Data Blob -> Image URL
 export function SanityImage({
   data,
 

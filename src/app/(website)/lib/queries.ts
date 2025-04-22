@@ -13,7 +13,8 @@ export const GUEST_QUERY = groq` *[_type == "guest" && slug.current == $slug] {
   "uuid":coalesce(uuid,youtube.uuid),
   "image":coalesce(image,youtube.thumbnail),
   "seasonNumber":coalesce(seasonNumber,youtube.seasonNumber),
-  "episodeNumber":coalesce(seasonNumber,youtube.episodeNumber)
+  "episodeNumber":coalesce(seasonNumber,youtube.episodeNumber),
+  "publishedAt":youtube.publishedAt
 }
 }`;
 
@@ -21,10 +22,11 @@ export const GUEST_QUERY = groq` *[_type == "guest" && slug.current == $slug] {
 export const EPISODES = groq`*[_type == "episode"]| order(uuid asc){uuid}`;
 
 // Get all Episodes for sitemap
-export const ALL_EPISODES = groq`*[_type == "episode"]{
-  uuid,
-  _createdAt
- }`;
+export const ALL_EPISODES = groq`*[_type == "episode"] | order(uuid desc)`;
+
+// Get the latest episode document
+export const LATEST_EPISODE = groq`*[_type == "episode"] | order(_createdAt desc)[0]`;
+
 // Get episode details
 export const EPISODES_DETAILS_QUERY = groq`*[_type == "episode" && uuid == $uuid]{
   episodeName,
@@ -49,7 +51,8 @@ export const SEASON_EPISODES_QUERY = groq`*[_type == "episode" && coalesce(seaso
   "uuid":coalesce(uuid,youtube.uuid),
   "image":coalesce(image,youtube.thumbnail),
   "seasonNumber":coalesce(seasonNumber,youtube.seasonNumber),
-  "episodeNumber":coalesce(seasonNumber,youtube.episodeNumber)
+  "episodeNumber":coalesce(seasonNumber,youtube.episodeNumber),
+  "publishedAt":youtube.publishedAt
 }`;
 
 //  Total Seasons with Episodes Query
@@ -74,6 +77,7 @@ export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && coalesce(uuid,
     "seasonNumber": coalesce(youtube.seasonNumber, seasonNumber),
     "url": coalesce("https://www.youtube.com/" + youtube.id, url),
     "uuid": coalesce(youtube.uuid, uuid),
+    "publishedAt": youtube.publishedAt,
     guests[]->,
     details {
     ...,

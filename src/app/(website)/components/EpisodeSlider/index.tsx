@@ -47,9 +47,7 @@ export default function EpisodeSlider() {
       const container = scrollContainerRef.current;
       if (container) {
         // Reset scroll position to start when data changes
-        if (container.scrollLeft !== 0) {
-          container.scrollLeft = 0;
-        }
+        container.scrollLeft = 0; // Force scroll to beginning
         setShowRightArrow(container.scrollWidth > container.clientWidth);
         setShowLeftArrow(false); // Ensure left arrow is hidden initially
       }
@@ -66,7 +64,7 @@ export default function EpisodeSlider() {
   const handleScroll = () => {
     const container = scrollContainerRef.current;
     if (container) {
-      const isAtStart = container.scrollLeft === 0;
+      const isAtStart = container.scrollLeft <= 5; // Adding a small threshold
       const isAtEnd =
         container.scrollLeft + container.clientWidth >=
         container.scrollWidth - 10;
@@ -166,7 +164,7 @@ export default function EpisodeSlider() {
                       key={idx}
                       className="flex-shrink-0 w-[85vw] sm:w-[350px] md:w-[320px] snap-start"
                     >
-                      <EpisodeCard {...episode} />
+                      {/* <EpisodeCard {...episode} /> */}
                     </div>
                   ))}
                 </div>
