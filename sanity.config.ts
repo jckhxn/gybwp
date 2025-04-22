@@ -9,7 +9,6 @@ import { pages } from "@tinloof/sanity-studio";
 
 import { youtubeInput } from "./src/app/(website)/sanity/plugins/youtube";
 import schemas from "./src/app/(website)/sanity/schemas";
-// import { media } from "sanity-plugin-media";
 
 const config = defineConfig({
   projectId: "hxymd1na",
@@ -35,7 +34,6 @@ const config = defineConfig({
     }),
     youtubeInput({ apiKey: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY }),
     visionTool(),
-    // media(),
   ],
   schema: { types: schemas },
   useCdn: false,
