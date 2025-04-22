@@ -34,7 +34,6 @@ const config = defineConfig({
     }),
     youtubeInput({ apiKey: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY }),
     visionTool(),
-    mediaTool(),
   ],
   schema: { types: schemas },
   useCdn: false,
