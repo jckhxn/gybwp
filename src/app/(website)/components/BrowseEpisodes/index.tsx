@@ -6,6 +6,7 @@ import Image from "next/image";
 import useSWR from "swr";
 import { client } from "@/src/app/(website)/sanity/sanity-utils";
 import { ALL_SEASONS_QUERY, EPISODES_BY_SEASON_QUERY } from "../../lib/queries";
+import { formatDate } from "../../lib/utils";
 
 export const BrowseEpisodes = () => {
   const [activeSeason, setActiveSeason] = useState(null);
@@ -222,9 +223,12 @@ export const BrowseEpisodes = () => {
                           {episode.youtube?.title ||
                             `Episode ${episode.youtube?.episodeNumber}`}
                         </h3>
-                        <p className="text-sm text-gray-500">
+                        {/* <p className="text-sm text-gray-500">
                           Season {episode.youtube?.seasonNumber} | Episode{" "}
                           {episode.youtube?.episodeNumber}
+                        </p> */}
+                        <p className="text-sm text-gray-500">
+                          {formatDate(episode.youtube?.publishedAt)}
                         </p>
                       </div>
                       <p className="text-gray-600 flex-1 line-clamp-3">

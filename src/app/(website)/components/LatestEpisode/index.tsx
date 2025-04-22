@@ -1,9 +1,70 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ScrollToSection } from "../shared/ScrollToSection";
+import { client } from "../../sanity/sanity-utils";
+import { LATEST_EPISODE, PODCAST_DETAILS_QUERY } from "../../lib/queries";
+import { formatDate } from "../../lib/utils";
 
 export const LatestEpisode = () => {
+  const [latestEpisode, setLatestEpisode] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchLatestEpisode = async () => {
+      try {
+        // Fetch the latest episode directly using the new LATEST_EPISODE query
+        const latestEpisodeData = await client.fetch(LATEST_EPISODE);
+
+        console.log("Episode Details:", latestEpisodeData);
+        if (latestEpisodeData && latestEpisodeData.youtube?.uuid) {
+          setLatestEpisode(latestEpisodeData.youtube);
+        }
+        if (latestEpisodeData && latestEpisodeData.uuid) {
+          // Fetch detailed information for this episode
+          const episodeDetails = await client.fetch(PODCAST_DETAILS_QUERY, {
+            uuid: latestEpisodeData.youtube?.uuid,
+          });
+
+          if (episodeDetails && episodeDetails.length > 0) {
+            setLatestEpisode(episodeDetails[0]);
+          }
+        }
+
+        setIsLoading(false);
+      } catch (err) {
+        console.error("Error fetching latest episode:", err);
+        setError(err);
+        setIsLoading(false);
+      }
+    };
+
+    fetchLatestEpisode();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50">
+        <div className="container mx-auto px-4 md:px-6 max-w-6xl text-center">
+          <p>Loading latest episode...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (error || !latestEpisode) {
+    return (
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50">
+        <div className="container mx-auto px-4 md:px-6 max-w-6xl text-center">
+          <p>Unable to load the latest episode. Please try again later.</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50">
       <div className="container mx-auto px-4 md:px-6 max-w-6xl">
@@ -24,10 +85,13 @@ export const LatestEpisode = () => {
               <div className="relative group aspect-video overflow-hidden rounded-l-xl">
                 {/* react-youtube here */}
                 <Image
-                  src="/placeholder.svg?height=400&width=600"
+                  src={
+                    latestEpisode.thumbnail ||
+                    "/placeholder.svg?height=400&width=600"
+                  }
                   width={600}
                   height={400}
-                  alt="Episode Cover"
+                  alt={`${latestEpisode.episodeName || "Latest Episode"} Cover`}
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -52,22 +116,23 @@ export const LatestEpisode = () => {
               <div className="space-y-4 p-6">
                 <div className="space-y-2">
                   <h3 className="text-2xl font-bold">
-                    Episode 42: Building Sustainable Business Models
+                    {latestEpisode.title ||
+                      `Episode ${latestEpisode.episodeNumber || ""}`}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Released April 10, 2025
+                    Released{" "}
+                    {latestEpisode.publishedAt
+                      ? formatDate(latestEpisode.publishedAt)
+                      : "Recently"}
                   </p>
                 </div>
                 <p className="text-muted-foreground">
-                  In this episode, we talk with Jane Smith, founder of EcoTech
-                  Solutions, about how she built a profitable business while
-                  maintaining a strong commitment to environmental
-                  sustainability. Learn practical strategies for balancing
-                  purpose and profit in your own business journey.
+                  {latestEpisode.blurb ||
+                    "Tune in to our latest episode where we discuss important topics and insights with industry experts."}
                 </p>
                 <div className="pt-4">
                   <Link
-                    href="/episodes/42"
+                    href={`/episode/${latestEpisode.uuid}`}
                     className="inline-flex items-center rounded-full bg-primary px-6 py-3 text-lg font-medium text-primary-foreground shadow-md transition-colors hover:bg-primary/90"
                   >
                     View Episode Details
