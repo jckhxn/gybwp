@@ -40,11 +40,7 @@ export default async function Page({ params }: { params: QueryParams }) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { path: string[] };
-}) {
+export async function generateMetadata({ params }: { params: QueryParams }) {
   const { uuid } = params;
   const epID = uuid.split("-")[0];
 
