@@ -1,2 +1,6 @@
 https://www.jkladvisors.ai/* https://gybwp.com/:splat 301!
 https://www.growingyourbusinesswithpeople.com/* https://gybwp.com/:splat 301!
+
+# Next.js fallback redirects
+/* /.netlify/functions/next/:splat 200
+/api/* /.netlify/functions/next/api/:splat 200
