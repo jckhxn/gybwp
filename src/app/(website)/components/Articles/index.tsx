@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 // components
 import { Section, SectionHeading } from "../shared/";
-import { usePagination, DOTS } from "../../lib/utils";
+import { usePagination, DOTS } from "./usePagination";
 
 // copy
 import { ARTICLES } from "../News/static-data";

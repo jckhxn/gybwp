@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Label } from "@/src/app/(website)/components/ui/label";
 import { Input } from "@/src/app/(website)/components/ui/input";
 import { Textarea } from "@/src/app/(website)/components/ui/textarea";
-import { Button } from "@/src/app/(website)/components/ui/button";
+import Button from "@/src/app/(website)/components/ui/button";
 
 // Static images
 import services from "@/public/images/consultingmain.webp";
