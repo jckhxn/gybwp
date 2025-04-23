@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../ui/button";
+
 import { CTA } from "../HomePage/static-data";
 import Link from "next/link";
 

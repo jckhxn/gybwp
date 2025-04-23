@@ -154,6 +154,21 @@ const HomePageComponent = () => {
                 <div className="absolute -top-6 -left-6 w-32 h-32 rounded-full bg-primary/20 blur-2xl"></div>
                 <div className="absolute -bottom-8 -right-8 w-40 h-40 rounded-full bg-accent/20 blur-2xl"></div>
 
+                {/* Host Badge - Professional Version */}
+                <div className="absolute bottom-6 right-6 z-20 bg-black/70 backdrop-blur-sm px-5 py-3 rounded-md shadow-xl border border-white/10">
+                  <div className="flex items-center gap-3">
+                    <div className="w-[3px] h-12 bg-primary"></div>
+                    <div>
+                      <p className="text-gray-400 text-xs uppercase tracking-wider font-medium">
+                        Host
+                      </p>
+                      <p className="text-white font-bold text-lg">
+                        Jeff Lackey
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 <Image
                   alt="Growing Your Business With People Podcast"
                   className="relative z-10 rounded-2xl shadow-2xl object-cover border-4 border-gray-800/50"

@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { Badge } from "@/src/app/(website)/components/ui/badge";
-import { Button } from "@/src/app/(website)/components/ui/button";
+import Button from "@/src/app/(website)/components/ui/button";
 
 import Image from "next/image";
 import Link from "next/link";

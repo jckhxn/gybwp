@@ -13,7 +13,7 @@ import { NEWS_INFO } from "./static-data";
 import { FEATURED_ARTICLES } from "../News/static-data";
 
 import { ExternalLink } from "lucide-react";
-import Button from "../ui/Button";
+import Button from "../ui/button";
 // SWR
 import useSWR from "swr";
 
