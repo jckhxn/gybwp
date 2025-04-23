@@ -1,7 +1,8 @@
 // @ts-nocheck
 "use client";
 import { Badge } from "@/src/app/(website)/components/ui/badge";
-import { Button } from "@/src/app/(website)/components/ui/button";
+// Fix the Button import to use default import instead of named import
+import Button from "@/src/app/(website)/components/ui/button";
 import React, { useState } from "react";
 import Link from "next/link";
 
