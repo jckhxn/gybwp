@@ -17,6 +17,10 @@ import { SVGProps, useEffect, useState } from "react";
 
 type Props = {
   guest: string;
+  then: Promise<any>["then"];
+  catch: Promise<any>["catch"];
+  finally: Promise<any>["finally"];
+  [Symbol.toStringTag]: string;
 };
 
 const GuestPage = ({ guest }: Props) => {

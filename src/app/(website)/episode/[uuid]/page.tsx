@@ -1,25 +1,22 @@
 // @ts-nocheck
-
 import React from "react";
-import PodcastDetailsPageComponent from "@/src/app/(website)/components/PodcastDetailsPage";
-import PodcastPreview from "@/src/app/(website)/components/EpisodePreview";
+import { draftMode } from "next/headers";
+import { SanityDocument } from "next-sanity";
+
+// Components
+import EpisodePreview from "@/src/app/(website)/components/EpisodePreview";
 import EpisodeDetails from "@/src/app/(website)/components/EpisodeDetails";
 
-// Get Episode Data
-import { client } from "../../sanity/sanity-utils";
-import { Metadata } from "next";
-import { QueryParams, SanityDocument } from "next-sanity";
-import { draftMode } from "next/headers";
-import {
-  EPISODES_DETAILS_QUERY,
-  PODCAST_DETAILS_QUERY,
-} from "../../lib/queries";
-import EpisodePreview from "@/src/app/(website)/components/EpisodePreview";
+// Queries and utilities
+import { PODCAST_DETAILS_QUERY } from "../../lib/queries";
 import { loadQuery } from "@/src/app/(website)/lib/store";
-
 import processMetadata from "@/src/lib/processMetadata";
 
-export default async function Page({ params }: { params: QueryParams }) {
+type PageParams = {
+  uuid: string;
+};
+
+export default async function Page({ params }: { params: PageParams }) {
   const { uuid } = params;
   const epID = uuid.split("-")[0];
 
@@ -40,11 +37,7 @@ export default async function Page({ params }: { params: QueryParams }) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { path: string[] };
-}) {
+export async function generateMetadata({ params }: { params: PageParams }) {
   const { uuid } = params;
   const epID = uuid.split("-")[0];
 
@@ -55,6 +48,6 @@ export async function generateMetadata({
       perspective: draftMode().isEnabled ? "previewDrafts" : "published",
     }
   );
-  // if (!data) notFound();
+
   return processMetadata(initial);
 }
