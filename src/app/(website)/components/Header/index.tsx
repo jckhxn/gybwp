@@ -18,16 +18,18 @@ const Navigation = () => {
     <header className="sticky top-0 z-50 w-full border-b bg-white">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
-          <Image
-            src={logo}
-            alt="Growing Your Business With People Logo"
-            width={60}
-            height={60}
-            className="rounded-full"
-          />
-          <span className="text-lg hidden sm:inline-block">
-            Growing Your Business With People
-          </span>
+          <Link href={routes.internal.home} className="flex items-center gap-2">
+            <Image
+              src={logo}
+              alt="Growing Your Business With People Logo"
+              width={60}
+              height={60}
+              className="rounded-full"
+            />
+            <span className="text-lg hidden sm:inline-block">
+              Growing Your Business With People
+            </span>
+          </Link>
         </div>
         <nav className="hidden md:flex items-center gap-6">
           {PAGES.map(({ name, url }) => (
