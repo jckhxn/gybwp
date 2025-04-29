@@ -433,9 +433,17 @@ export default function EpisodePage() {
                 </h2>
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <div className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs">
+                    <button
+                      onClick={() => {
+                        // Parse timestamp "05:22" to seconds (5*60 + 22 = 322 seconds)
+                        const [mins, secs] = "05:22".split(":").map(Number);
+                        const timeInSeconds = mins * 60 + secs;
+                        playerRef.current?.seekTo(timeInSeconds);
+                      }}
+                      className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs hover:bg-primary/20 transition-colors cursor-pointer"
+                    >
                       05:22
-                    </div>
+                    </button>
                     <p className="text-muted-foreground flex-1">
                       David shares a case study of a manufacturing company that
                       increased productivity by 35% through strategic AI
@@ -443,27 +451,51 @@ export default function EpisodePage() {
                     </p>
                   </div>
                   <div className="flex gap-3">
-                    <div className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs">
+                    <button
+                      onClick={() => {
+                        // Parse timestamp "18:45" to seconds (18*60 + 45 = 1125 seconds)
+                        const [mins, secs] = "18:45".split(":").map(Number);
+                        const timeInSeconds = mins * 60 + secs;
+                        playerRef.current?.seekTo(timeInSeconds);
+                      }}
+                      className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs hover:bg-primary/20 transition-colors cursor-pointer"
+                    >
                       18:45
-                    </div>
+                    </button>
                     <p className="text-muted-foreground flex-1">
                       Discussion on how small businesses can leverage AI without
                       massive technology investments
                     </p>
                   </div>
                   <div className="flex gap-3">
-                    <div className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs">
+                    <button
+                      onClick={() => {
+                        // Parse timestamp "27:10" to seconds (27*60 + 10 = 1630 seconds)
+                        const [mins, secs] = "27:10".split(":").map(Number);
+                        const timeInSeconds = mins * 60 + secs;
+                        playerRef.current?.seekTo(timeInSeconds);
+                      }}
+                      className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs hover:bg-primary/20 transition-colors cursor-pointer"
+                    >
                       27:10
-                    </div>
+                    </button>
                     <p className="text-muted-foreground flex-1">
                       Exploration of AI's role in enhancing customer experience
                       and personalization
                     </p>
                   </div>
                   <div className="flex gap-3">
-                    <div className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs">
+                    <button
+                      onClick={() => {
+                        // Parse timestamp "36:50" to seconds (36*60 + 50 = 2210 seconds)
+                        const [mins, secs] = "36:50".split(":").map(Number);
+                        const timeInSeconds = mins * 60 + secs;
+                        playerRef.current?.seekTo(timeInSeconds);
+                      }}
+                      className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs hover:bg-primary/20 transition-colors cursor-pointer"
+                    >
                       36:50
-                    </div>
+                    </button>
                     <p className="text-muted-foreground flex-1">
                       David's predictions for how AI will transform business
                       leadership over the next decade
