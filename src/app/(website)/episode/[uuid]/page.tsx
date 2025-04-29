@@ -5,7 +5,7 @@ import { SanityDocument } from "next-sanity";
 
 // Components
 import EpisodePreview from "@/src/app/(website)/components/EpisodePreview";
-import EpisodeDetails from "@/src/app/(website)/components/EpisodeDetails";
+import EpisodeDetails from "@/src/app/(website)/components/EpisodeDetails/";
 
 // Queries and utilities
 import { PODCAST_DETAILS_QUERY } from "../../lib/queries";
@@ -24,11 +24,13 @@ export default async function Page({ params }: { params: PageParams }) {
     PODCAST_DETAILS_QUERY,
     { uuid, epID },
     {
-      perspective: draftMode().isEnabled ? "previewDrafts" : "published",
+      perspective: (await draftMode()).isEnabled
+        ? "previewDrafts"
+        : "published",
     }
   );
 
-  return draftMode().isEnabled ? (
+  return (await draftMode()).isEnabled ? (
     <EpisodePreview initial={initial} params={{ uuid, epID }} />
   ) : (
     <>
@@ -45,7 +47,9 @@ export async function generateMetadata({ params }: { params: PageParams }) {
     PODCAST_DETAILS_QUERY,
     { uuid, epID },
     {
-      perspective: draftMode().isEnabled ? "previewDrafts" : "published",
+      perspective: (await draftMode()).isEnabled
+        ? "previewDrafts"
+        : "published",
     }
   );
 
