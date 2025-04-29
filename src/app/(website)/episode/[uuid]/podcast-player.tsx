@@ -34,6 +34,7 @@ export interface PlayerHandle {
   pause: () => void;
   togglePlay: () => void;
   isPlaying: boolean;
+  seekTo: (timeInSeconds: number) => void;
 }
 
 const PodcastPlayer = forwardRef<PlayerHandle, {}>((props, ref) => {
@@ -69,6 +70,15 @@ const PodcastPlayer = forwardRef<PlayerHandle, {}>((props, ref) => {
       togglePlay();
     },
     isPlaying,
+    seekTo: (timeInSeconds: number) => {
+      if (youtubePlayerRef.current) {
+        youtubePlayerRef.current.seekTo(timeInSeconds, true);
+        if (!isPlaying) {
+          youtubePlayerRef.current.playVideo();
+          setIsPlaying(true);
+        }
+      }
+    },
   }));
 
   // Load YouTube API
