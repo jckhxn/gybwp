@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Button from "@/src/app/(website)/components/ui/button";
+import Link from "next/link";
 
 export default function RelatedEpisodes() {
+  // Should receive props from query or have defaults provided.
   const episodes = [
     {
       id: 1,
@@ -52,9 +54,13 @@ export default function RelatedEpisodes() {
           </div>
         </div>
       ))}
-      <Button variant="outline" size="sm" className="w-full">
-        View All Episodes
-      </Button>
+      <div className="pt-4 mt-2">
+        <Link href="/episodes">
+          <Button variant="outline" size="sm" className="w-full">
+            View All Episodes
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }

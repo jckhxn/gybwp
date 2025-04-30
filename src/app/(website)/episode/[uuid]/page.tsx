@@ -39,19 +39,19 @@ export default async function Page({ params }: { params: PageParams }) {
   );
 }
 
-export async function generateMetadata({ params }: { params: PageParams }) {
-  const { uuid } = params;
-  const epID = uuid.split("-")[0];
+// export async function generateMetadata({ params }: { params: PageParams }) {
+//   const { uuid } = params;
+//   const epID = uuid.split("-")[0];
 
-  const initial = await loadQuery<SanityDocument>(
-    PODCAST_DETAILS_QUERY,
-    { uuid, epID },
-    {
-      perspective: (await draftMode()).isEnabled
-        ? "previewDrafts"
-        : "published",
-    }
-  );
+//   const initial = await loadQuery<SanityDocument>(
+//     PODCAST_DETAILS_QUERY,
+//     { uuid, epID },
+//     {
+//       perspective: (await draftMode()).isEnabled
+//         ? "previewDrafts"
+//         : "published",
+//     }
+//   );
 
-  return processMetadata(initial);
-}
+//   return processMetadata(initial);
+// }

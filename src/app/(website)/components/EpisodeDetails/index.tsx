@@ -1,14 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import {
-  useRef,
-  useState,
-  forwardRef,
-  useImperativeHandle,
-  useEffect,
-} from "react";
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
+import routes from "@/src/app/(website)/routes";
 
 import {
   Play,
@@ -36,6 +31,8 @@ import { CTA } from "../HomePage/static-data";
 import PodcastPlayer, {
   PlayerHandle,
 } from "../../episode/[uuid]/podcast-player";
+import RelatedEpisodes from "../../episode/[uuid]/related-episodes";
+import { formatDate, formatDuration } from "../../lib/utils";
 
 // Simple SubscribeForm component
 const SubscribeForm = () => (
@@ -80,41 +77,51 @@ const SubscribeForm = () => (
   </div>
 );
 
-// Simple RelatedEpisodes component
-const RelatedEpisodes = () => (
-  <div className="space-y-4">
-    {[1, 2, 3].map((i) => (
-      <div key={i} className="flex items-start gap-3">
-        <div className="w-16 h-16 bg-muted rounded-md overflow-hidden shrink-0">
-          <Image
-            src={`/placeholder.svg?height=64&width=64&text=Ep ${i}`}
-            alt={`Episode ${i}`}
-            width={64}
-            height={64}
-            className="object-cover"
-          />
-        </div>
-        <div>
-          <h4 className="text-sm font-medium">Episode Title {i}</h4>
-          <p className="text-xs text-muted-foreground">
-            April {5 + i}, 2025 • 35 minutes
-          </p>
-        </div>
-      </div>
-    ))}
-  </div>
-);
+export default function EpisodeDetails({ data }: { data: SanityDocument }) {
+  // For redesign just grab the document manually.
+  const episode = Array.isArray(data) ? data[0] : data;
 
-export default function EpisodePage() {
+  // Extract data from Sanity document
+  const title =
+    episode?.youtube?.title || episode?.episodeName || "Untitled Episode";
+  const blurb = episode?.youtube?.blurb || episode?.blurb || "";
+  const seasonNumber =
+    episode?.youtube?.seasonNumber || episode?.seasonNumber || "";
+  const episodeNumber =
+    episode?.youtube?.episodeNumber || episode?.episodeNumber || "";
+  const publishedAt = episode?.youtube?.publishedAt || episode?.publishedAt;
+  const description = episode?.youtube?.description || "";
+  const takeaways = episode?.youtube?.takeaways || [];
+  const discussionTopics = episode?.youtube?.discussionTopics || [];
+  const highlights = episode?.youtube?.highlights || [];
+  const transcript = episode?.youtube?.transcript || "";
+  const featuredGuests = episode?.details?.featuredGuests || [];
+  const uuid = episode?.youtube?.uuid || episode?.uuid;
+  const duration = episode?.youtube?.duration || "";
+
   // Create a ref to the player component
   const playerRef = useRef<PlayerHandle>(null);
+  // Track playing state
+  const [isPlaying, setIsPlaying] = useState(false);
 
   // Handle play button click
   const handlePlayClick = () => {
     if (playerRef.current) {
       playerRef.current.togglePlay();
+      setIsPlaying(!isPlaying);
     }
   };
+
+  // Update playing state from the player
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (playerRef.current) {
+        setIsPlaying(playerRef.current.isPlaying);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Share modal state
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -243,7 +250,7 @@ export default function EpisodePage() {
       </div>
     );
   };
-
+  console.log(data);
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -252,47 +259,78 @@ export default function EpisodePage() {
           <div className="lg:col-span-2 space-y-8">
             {/* Episode Navigation */}
             <div className="flex justify-between items-center">
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-1"
-              >
-                <ChevronLeft className="h-4 w-4" />
-                Previous Episode
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-1"
-              >
-                Next Episode
-                <ChevronRight className="h-4 w-4" />
-              </Button>
+              {episode?.prevEpisode ? (
+                <Link href={`${episode.prevEpisode}`}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-1"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    Previous Episode
+                  </Button>
+                </Link>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-1 opacity-50"
+                  disabled
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Previous Episode
+                </Button>
+              )}
+
+              {episode?.nextEpisode ? (
+                <Link href={`${episode.nextEpisode}`}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-1"
+                  >
+                    Next Episode
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-1 opacity-50"
+                  disabled
+                >
+                  Next Episode
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              )}
             </div>
 
             {/* Episode Header */}
             <div>
               <Badge variant="outline" className="mb-2">
-                Season 8 • Episode 7
+                Season {seasonNumber} • Episode {episodeNumber}
               </Badge>
               <h1 className="text-3xl font-bold tracking-tight mb-4">
-                AI, Business, and the Future of Work with David Thomas
+                {title}
               </h1>
               <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>April 15, 2025</span>
-                </div>
+                {publishedAt && (
+                  <div className="flex items-center gap-1">
+                    <Calendar className="h-4 w-4" />
+                    <span>{formatDate(publishedAt)}</span>
+                  </div>
+                )}
                 <div className="flex items-center gap-1">
                   <Clock className="h-4 w-4" />
-                  <span>45 minutes</span>
+                  <span>{formatDuration(duration)}</span>
                 </div>
               </div>
             </div>
 
             {/* Video Player */}
             <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-              <PodcastPlayer ref={playerRef} />
+              <PodcastPlayer ref={playerRef} videoId={episode?.youtube?.id} />
             </div>
 
             {/* Action Buttons */}
@@ -301,7 +339,7 @@ export default function EpisodePage() {
                 className="flex items-center gap-2"
                 onClick={handlePlayClick}
               >
-                {playerRef.current?.isPlaying ? (
+                {isPlaying ? (
                   <>
                     <Pause className="h-4 w-4" />
                     Pause Episode
@@ -327,22 +365,138 @@ export default function EpisodePage() {
             <div className="bg-muted/30 dark:bg-muted/10 rounded-lg p-4">
               <h3 className="text-sm font-medium mb-3">Jump to Section:</h3>
               <div className="flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" className="text-xs">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs"
+                  onClick={() => {
+                    const element = document.getElementById("overview");
+                    if (element) {
+                      const headerOffset = 80;
+                      const elementPosition =
+                        element.getBoundingClientRect().top +
+                        window.pageYOffset;
+                      const offsetPosition = elementPosition - headerOffset;
+
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                >
                   Overview
                 </Button>
-                <Button variant="outline" size="sm" className="text-xs">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs"
+                  onClick={() => {
+                    const element = document.getElementById("key-takeaways");
+                    if (element) {
+                      const headerOffset = 80;
+                      const elementPosition =
+                        element.getBoundingClientRect().top +
+                        window.pageYOffset;
+                      const offsetPosition = elementPosition - headerOffset;
+
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                >
                   Key Takeaways
                 </Button>
-                <Button variant="outline" size="sm" className="text-xs">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs"
+                  onClick={() => {
+                    const element =
+                      document.getElementById("discussion-topics");
+                    if (element) {
+                      const headerOffset = 80;
+                      const elementPosition =
+                        element.getBoundingClientRect().top +
+                        window.pageYOffset;
+                      const offsetPosition = elementPosition - headerOffset;
+
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                >
                   Discussion Topics
                 </Button>
-                <Button variant="outline" size="sm" className="text-xs">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs"
+                  onClick={() => {
+                    const element =
+                      document.getElementById("episode-highlights");
+                    if (element) {
+                      const headerOffset = 80;
+                      const elementPosition =
+                        element.getBoundingClientRect().top +
+                        window.pageYOffset;
+                      const offsetPosition = elementPosition - headerOffset;
+
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                >
                   Episode Highlights
                 </Button>
-                <Button variant="outline" size="sm" className="text-xs">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs"
+                  onClick={() => {
+                    const element = document.getElementById("transcript");
+                    if (element) {
+                      const headerOffset = 80;
+                      const elementPosition =
+                        element.getBoundingClientRect().top +
+                        window.pageYOffset;
+                      const offsetPosition = elementPosition - headerOffset;
+
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                >
                   Transcript
                 </Button>
-                <Button variant="outline" size="sm" className="text-xs">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs"
+                  onClick={() => {
+                    const element = document.getElementById("featured-guest");
+                    if (element) {
+                      const headerOffset = 80;
+                      const elementPosition =
+                        element.getBoundingClientRect().top +
+                        window.pageYOffset;
+                      const offsetPosition = elementPosition - headerOffset;
+
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                >
                   Featured Guest
                 </Button>
               </div>
@@ -353,20 +507,22 @@ export default function EpisodePage() {
             {/* Episode Content Sections */}
             <div className="space-y-8">
               {/* Overview Section */}
-              <div className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6">
+              <div
+                id="overview"
+                className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+              >
                 <h2 className="text-xl font-semibold mb-3">Episode Overview</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  We dive into the critical role AI plays in business today, how
-                  organizations can build AI literacy, and the ways AI can
-                  empower employees and transform the workforce. David shares
-                  his insights on the challenges and opportunities AI presents,
-                  the ethical implications of its use, and the importance of
-                  proper implementation to avoid costly mistakes.
+                  {/*  */}
+                  {episode?.youtube?.description}
                 </p>
               </div>
 
               {/* Key Takeaways Section */}
-              <div className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6">
+              <div
+                id="key-takeaways"
+                className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+              >
                 <h2 className="text-xl font-semibold mb-3">Key Takeaways</h2>
                 <ul className="list-disc list-inside space-y-2 text-muted-foreground">
                   <li>
@@ -388,7 +544,10 @@ export default function EpisodePage() {
               </div>
 
               {/* Discussion Topics Section */}
-              <div className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6">
+              <div
+                id="discussion-topics"
+                className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+              >
                 <h2 className="text-xl font-semibold mb-3">
                   Discussion Topics
                 </h2>
@@ -427,7 +586,10 @@ export default function EpisodePage() {
               </div>
 
               {/* Episode Highlights Section */}
-              <div className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6">
+              <div
+                id="episode-highlights"
+                className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+              >
                 <h2 className="text-xl font-semibold mb-3">
                   Episode Highlights
                 </h2>
@@ -508,7 +670,10 @@ export default function EpisodePage() {
             <Separator />
 
             {/* Featured Guest */}
-            <div className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6">
+            <div
+              id="featured-guest"
+              className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+            >
               <h2 className="text-xl font-semibold mb-4">Featured Guest</h2>
               <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                 <Avatar className="h-20 w-20">
@@ -555,7 +720,10 @@ export default function EpisodePage() {
             <Separator />
 
             {/* Episode Transcript */}
-            <div className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6">
+            <div
+              id="transcript"
+              className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+            >
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">Episode Transcript</h2>
                 <Button variant="outline" size="sm">
@@ -601,45 +769,63 @@ export default function EpisodePage() {
                 <div className="mt-4">
                   <p className="text-sm font-medium mb-2">Also available on:</p>
                   <div className="flex flex-wrap gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex items-center gap-1"
+                    <Link
+                      href="https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      <Image
-                        src="/social-logos/apple.png"
-                        alt="Apple Podcasts"
-                        width={16}
-                        height={16}
-                      />
-                      Apple Podcasts
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex items-center gap-1"
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex items-center gap-1"
+                      >
+                        <Image
+                          src="/social-logos/apple.png"
+                          alt="Apple Podcasts"
+                          width={16}
+                          height={16}
+                        />
+                        Apple Podcasts
+                      </Button>
+                    </Link>
+                    <Link
+                      href="https://open.spotify.com/show/77QfEpE5DfbNRqWvmkfWQS"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      <Image
-                        src="/social-logos/spotify.png"
-                        alt="Spotify"
-                        width={16}
-                        height={16}
-                      />
-                      Spotify
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex items-center gap-1"
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex items-center gap-1"
+                      >
+                        <Image
+                          src="/social-logos/spotify.png"
+                          alt="Spotify"
+                          width={16}
+                          height={16}
+                        />
+                        Spotify
+                      </Button>
+                    </Link>
+                    <Link
+                      href={routes.external.listen}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      <Image
-                        src="/social-logos/buzzsprout.png"
-                        alt="Google Podcasts"
-                        width={16}
-                        height={16}
-                      />
-                      Buzzsprout
-                    </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex items-center gap-1"
+                      >
+                        <Image
+                          src="/social-logos/buzzsprout.png"
+                          alt="Buzzsprout"
+                          width={16}
+                          height={16}
+                        />
+                        Buzzsprout
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </CardContent>

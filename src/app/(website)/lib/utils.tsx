@@ -100,3 +100,35 @@ export function truncateText(
     );
   }
 }
+
+/**
+ * Formats a YouTube duration string (like "1H 45m") into a readable format
+ * @param durationString - Duration string from YouTube data or similar format
+ * @param defaultDuration - Default duration to return if parsing fails
+ * @returns Formatted duration string like "1 hour 45 minutes" or "45 minutes"
+ */
+export function formatDuration(
+  durationString?: string,
+  defaultDuration = "45 minutes"
+): string {
+  if (!durationString) return defaultDuration;
+
+  // Parse hours and minutes from the format like "1H 45m"
+  const hoursMatch = durationString.match(/(\d+)H/i);
+  const minutesMatch = durationString.match(/(\d+)m/i);
+
+  const hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
+  const minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+
+  // If we couldn't parse any values, return the default
+  if (hours === 0 && minutes === 0) return defaultDuration;
+
+  // Build the readable string
+  if (hours > 0 && minutes > 0) {
+    return `${hours} hour${hours > 1 ? "s" : ""} ${minutes} minute${minutes > 1 ? "s" : ""}`;
+  } else if (hours > 0) {
+    return `${hours} hour${hours > 1 ? "s" : ""}`;
+  } else {
+    return `${minutes} minute${minutes > 1 ? "s" : ""}`;
+  }
+}
