@@ -59,7 +59,7 @@ export const SEASON_EPISODES_QUERY = groq`*[_type == "episode" && coalesce(seaso
 export const TOTAL_SEASONS_QUERY = groq`{"seasonName":array::unique(*[_type == "episode"].seasonName),"seasonNumber":array::unique(*[_type == "episode" ].seasonNumber)}`;
 
 // Get details for current Podcast.
-export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && coalesce(uuid,youtube.uuid) == $uuid] {
+export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && coalesce(uuid,youtube.uuid) == $uuid][0] {
     ...,
     content {
       files[] {
