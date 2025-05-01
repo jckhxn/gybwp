@@ -370,140 +370,163 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
             <div className="bg-muted/30 dark:bg-muted/10 rounded-lg p-4">
               <h3 className="text-sm font-medium mb-3">Jump to Section:</h3>
               <div className="flex flex-wrap gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs"
-                  onClick={() => {
-                    const element = document.getElementById("overview");
-                    if (element) {
-                      const headerOffset = 80;
-                      const elementPosition =
-                        element.getBoundingClientRect().top +
-                        window.pageYOffset;
-                      const offsetPosition = elementPosition - headerOffset;
+                {/* Overview is always shown if there's a description */}
+                {description && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => {
+                      const element = document.getElementById("overview");
+                      if (element) {
+                        const headerOffset = 80;
+                        const elementPosition =
+                          element.getBoundingClientRect().top +
+                          window.pageYOffset;
+                        const offsetPosition = elementPosition - headerOffset;
 
-                      window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth",
-                      });
-                    }
-                  }}
-                >
-                  Overview
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs"
-                  onClick={() => {
-                    const element = document.getElementById("key-takeaways");
-                    if (element) {
-                      const headerOffset = 80;
-                      const elementPosition =
-                        element.getBoundingClientRect().top +
-                        window.pageYOffset;
-                      const offsetPosition = elementPosition - headerOffset;
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
+                  >
+                    Overview
+                  </Button>
+                )}
 
-                      window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth",
-                      });
-                    }
-                  }}
-                >
-                  Key Takeaways
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs"
-                  onClick={() => {
-                    const element =
-                      document.getElementById("discussion-topics");
-                    if (element) {
-                      const headerOffset = 80;
-                      const elementPosition =
-                        element.getBoundingClientRect().top +
-                        window.pageYOffset;
-                      const offsetPosition = elementPosition - headerOffset;
+                {/* Key Takeaways section */}
+                {takeaways && takeaways.length > 0 && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => {
+                      const element = document.getElementById("key-takeaways");
+                      if (element) {
+                        const headerOffset = 80;
+                        const elementPosition =
+                          element.getBoundingClientRect().top +
+                          window.pageYOffset;
+                        const offsetPosition = elementPosition - headerOffset;
 
-                      window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth",
-                      });
-                    }
-                  }}
-                >
-                  Discussion Topics
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs"
-                  onClick={() => {
-                    const element =
-                      document.getElementById("episode-highlights");
-                    if (element) {
-                      const headerOffset = 80;
-                      const elementPosition =
-                        element.getBoundingClientRect().top +
-                        window.pageYOffset;
-                      const offsetPosition = elementPosition - headerOffset;
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
+                  >
+                    Key Takeaways
+                  </Button>
+                )}
 
-                      window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth",
-                      });
-                    }
-                  }}
-                >
-                  Episode Highlights
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs"
-                  onClick={() => {
-                    const element = document.getElementById("transcript");
-                    if (element) {
-                      const headerOffset = 80;
-                      const elementPosition =
-                        element.getBoundingClientRect().top +
-                        window.pageYOffset;
-                      const offsetPosition = elementPosition - headerOffset;
+                {/* Discussion Topics section */}
+                {discussionTopics && discussionTopics.length > 0 && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => {
+                      const element =
+                        document.getElementById("discussion-topics");
+                      if (element) {
+                        const headerOffset = 80;
+                        const elementPosition =
+                          element.getBoundingClientRect().top +
+                          window.pageYOffset;
+                        const offsetPosition = elementPosition - headerOffset;
 
-                      window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth",
-                      });
-                    }
-                  }}
-                >
-                  Transcript
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs"
-                  onClick={() => {
-                    const element = document.getElementById("featured-guest");
-                    if (element) {
-                      const headerOffset = 80;
-                      const elementPosition =
-                        element.getBoundingClientRect().top +
-                        window.pageYOffset;
-                      const offsetPosition = elementPosition - headerOffset;
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
+                  >
+                    Discussion Topics
+                  </Button>
+                )}
 
-                      window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth",
-                      });
-                    }
-                  }}
-                >
-                  Featured Guest
-                </Button>
+                {/* Episode Highlights section */}
+                {highlights && highlights.length > 0 && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => {
+                      const element =
+                        document.getElementById("episode-highlights");
+                      if (element) {
+                        const headerOffset = 80;
+                        const elementPosition =
+                          element.getBoundingClientRect().top +
+                          window.pageYOffset;
+                        const offsetPosition = elementPosition - headerOffset;
+
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
+                  >
+                    Episode Highlights
+                  </Button>
+                )}
+
+                {/* Transcript section */}
+                {transcript && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => {
+                      const element = document.getElementById("transcript");
+                      if (element) {
+                        const headerOffset = 80;
+                        const elementPosition =
+                          element.getBoundingClientRect().top +
+                          window.pageYOffset;
+                        const offsetPosition = elementPosition - headerOffset;
+
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
+                  >
+                    Transcript
+                  </Button>
+                )}
+
+                {/* Featured Guest section */}
+                {data.guests && data.guests.length > 0 && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => {
+                      const element = document.getElementById("featured-guest");
+                      if (element) {
+                        const headerOffset = 80;
+                        const elementPosition =
+                          element.getBoundingClientRect().top +
+                          window.pageYOffset;
+                        const offsetPosition = elementPosition - headerOffset;
+
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
+                  >
+                    Featured Guest{data.guests.length > 1 ? "s" : ""}
+                  </Button>
+                )}
               </div>
             </div>
 
@@ -511,182 +534,141 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
 
             {/* Episode Content Sections */}
             <div className="space-y-8">
-              {/* Overview Section */}
-              <div
-                id="overview"
-                className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
-              >
-                <h2 className="text-xl font-semibold mb-3">Episode Overview</h2>
-                <div className="space-y-4 text-muted-foreground leading-relaxed">
-                  {/* Ideally this text is its own section but if older ep, do this */}
-                  {formatDescriptionText(episode?.youtube?.description).map(
-                    (paragraph, index) => (
-                      <p key={index}>{paragraph}</p>
-                    )
-                  )}
+              {/* Overview Section - always shown if there's a description */}
+              {description && (
+                <div
+                  id="overview"
+                  className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                >
+                  <h2 className="text-xl font-semibold mb-3">
+                    Episode Overview
+                  </h2>
+                  <div className="space-y-4 text-muted-foreground leading-relaxed">
+                    {formatDescriptionText(description).map(
+                      (paragraph, index) => (
+                        <p key={index}>{paragraph}</p>
+                      )
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Key Takeaways Section */}
-              <div
-                id="key-takeaways"
-                className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
-              >
-                <h2 className="text-xl font-semibold mb-3">Key Takeaways</h2>
-                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                  <li>
-                    How AI is transforming business operations and
-                    decision-making
-                  </li>
-                  <li>
-                    Strategies for building AI literacy across your organization
-                  </li>
-                  <li>Ethical considerations when implementing AI solutions</li>
-                  <li>
-                    Common pitfalls to avoid when adopting AI technologies
-                  </li>
-                  <li>
-                    Future trends in AI and their potential impact on the
-                    workforce
-                  </li>
-                </ul>
-              </div>
+              {takeaways && takeaways.length > 0 && (
+                <div
+                  id="key-takeaways"
+                  className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                >
+                  <h2 className="text-xl font-semibold mb-3">Key Takeaways</h2>
+                  <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                    {takeaways.map((takeaway, index) => (
+                      <li key={index}>{takeaway}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Discussion Topics Section */}
-              <div
-                id="discussion-topics"
-                className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
-              >
-                <h2 className="text-xl font-semibold mb-3">
-                  Discussion Topics
-                </h2>
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-medium text-base">
-                      Building AI Literacy
-                    </h3>
-                    <p className="text-muted-foreground mt-1">
-                      David explains how organizations can develop AI literacy
-                      programs that empower employees at all levels to
-                      understand and work effectively with AI technologies.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-base">
-                      Ethical AI Implementation
-                    </h3>
-                    <p className="text-muted-foreground mt-1">
-                      A deep dive into the ethical considerations businesses
-                      must address when implementing AI, including bias,
-                      transparency, and responsible use.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-base">
-                      Workforce Transformation
-                    </h3>
-                    <p className="text-muted-foreground mt-1">
-                      How AI is reshaping job roles and creating new
-                      opportunities, with strategies for managing this
-                      transition effectively.
-                    </p>
+              {discussionTopics && discussionTopics.length > 0 && (
+                <div
+                  id="discussion-topics"
+                  className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                >
+                  <h2 className="text-xl font-semibold mb-3">
+                    Discussion Topics
+                  </h2>
+                  <div className="space-y-4">
+                    {discussionTopics.map((topic, index) => (
+                      <div key={index}>
+                        <h3 className="font-medium text-base">
+                          {topic.title || `Topic ${index + 1}`}
+                        </h3>
+                        <p className="text-muted-foreground mt-1">
+                          {topic.description || ""}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Episode Highlights Section */}
-              <div
-                id="episode-highlights"
-                className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
-              >
-                <h2 className="text-xl font-semibold mb-3">
-                  Episode Highlights
-                </h2>
-                <div className="space-y-3">
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => {
-                        // Parse timestamp "05:22" to seconds (5*60 + 22 = 322 seconds)
-                        const [mins, secs] = "05:22".split(":").map(Number);
-                        const timeInSeconds = mins * 60 + secs;
-                        playerRef.current?.seekTo(timeInSeconds);
-                      }}
-                      className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs hover:bg-primary/20 transition-colors cursor-pointer"
-                    >
-                      05:22
-                    </button>
-                    <p className="text-muted-foreground flex-1">
-                      David shares a case study of a manufacturing company that
-                      increased productivity by 35% through strategic AI
-                      implementation
-                    </p>
-                  </div>
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => {
-                        // Parse timestamp "18:45" to seconds (18*60 + 45 = 1125 seconds)
-                        const [mins, secs] = "18:45".split(":").map(Number);
-                        const timeInSeconds = mins * 60 + secs;
-                        playerRef.current?.seekTo(timeInSeconds);
-                      }}
-                      className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs hover:bg-primary/20 transition-colors cursor-pointer"
-                    >
-                      18:45
-                    </button>
-                    <p className="text-muted-foreground flex-1">
-                      Discussion on how small businesses can leverage AI without
-                      massive technology investments
-                    </p>
-                  </div>
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => {
-                        // Parse timestamp "27:10" to seconds (27*60 + 10 = 1630 seconds)
-                        const [mins, secs] = "27:10".split(":").map(Number);
-                        const timeInSeconds = mins * 60 + secs;
-                        playerRef.current?.seekTo(timeInSeconds);
-                      }}
-                      className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs hover:bg-primary/20 transition-colors cursor-pointer"
-                    >
-                      27:10
-                    </button>
-                    <p className="text-muted-foreground flex-1">
-                      Exploration of AI's role in enhancing customer experience
-                      and personalization
-                    </p>
-                  </div>
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => {
-                        // Parse timestamp "36:50" to seconds (36*60 + 50 = 2210 seconds)
-                        const [mins, secs] = "36:50".split(":").map(Number);
-                        const timeInSeconds = mins * 60 + secs;
-                        playerRef.current?.seekTo(timeInSeconds);
-                      }}
-                      className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs hover:bg-primary/20 transition-colors cursor-pointer"
-                    >
-                      36:50
-                    </button>
-                    <p className="text-muted-foreground flex-1">
-                      David's predictions for how AI will transform business
-                      leadership over the next decade
-                    </p>
+              {highlights && highlights.length > 0 && (
+                <div
+                  id="episode-highlights"
+                  className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                >
+                  <h2 className="text-xl font-semibold mb-3">
+                    Episode Highlights
+                  </h2>
+                  <div className="space-y-3">
+                    {highlights.map((highlight, index) => (
+                      <div key={index} className="flex gap-3">
+                        <button
+                          onClick={() => {
+                            // Parse timestamp format to seconds
+                            if (highlight.timestamp) {
+                              const [mins, secs] = highlight.timestamp
+                                .split(":")
+                                .map(Number);
+                              const timeInSeconds = mins * 60 + secs;
+                              playerRef.current?.seekTo(timeInSeconds);
+                            }
+                          }}
+                          className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs hover:bg-primary/20 transition-colors cursor-pointer"
+                        >
+                          {highlight.timestamp || "00:00"}
+                        </button>
+                        <p className="text-muted-foreground flex-1">
+                          {highlight.text || ""}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
+              )}
+
+              {/* Transcript Section */}
+              {transcript && (
+                <div
+                  id="transcript"
+                  className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                >
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-semibold">
+                      Episode Transcript
+                    </h2>
+                    <Button variant="outline" size="sm">
+                      View Full Transcript
+                    </Button>
+                  </div>
+                  <div className="max-h-64 overflow-y-auto space-y-4">
+                    {formatDescriptionText(transcript).map(
+                      (paragraph, index) => (
+                        <p
+                          key={index}
+                          className="text-muted-foreground text-sm leading-relaxed"
+                        >
+                          {paragraph}
+                        </p>
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
             <Separator />
 
             {/* Featured Guest */}
-            <div
-              id="featured-guest"
-              className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
-            >
-              <h2 className="text-xl font-semibold mb-4">
-                Featured Guest{data.guests?.length > 1 ? "s" : ""}
-              </h2>
-              {data.guests?.length > 0 ? (
+            {data.guests?.length > 0 && (
+              <div
+                id="featured-guest"
+                className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+              >
+                <h2 className="text-xl font-semibold mb-4">
+                  Featured Guest{data.guests.length > 1 ? "s" : ""}
+                </h2>
                 <div className="space-y-8">
                   {data.guests.map((guest, index) => (
                     <div
@@ -696,7 +678,10 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                       <Avatar className="h-20 w-20">
                         {guest.image ? (
                           <AvatarImage
-                            src={urlFor(guest.image).width(160).height(160).url()}
+                            src={urlFor(guest.image)
+                              .width(160)
+                              .height(160)
+                              .url()}
                             alt={guest.name || "Guest"}
                           />
                         ) : (
@@ -742,50 +727,35 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     </div>
                   ))}
                 </div>
-              ) : (
-                <p className="text-muted-foreground">
-                  No guest information available for this episode.
-                </p>
-              )}
-            </div>
+              </div>
+            )}
 
             <Separator />
 
             {/* Episode Transcript */}
-            <div
-              id="transcript"
-              className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
-            >
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Episode Transcript</h2>
-                <Button variant="outline" size="sm">
-                  View Full Transcript
-                </Button>
+            {transcript && (
+              <div
+                id="transcript"
+                className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-semibold">Episode Transcript</h2>
+                  <Button variant="outline" size="sm">
+                    View Full Transcript
+                  </Button>
+                </div>
+                <div className="max-h-64 overflow-y-auto space-y-4">
+                  {formatDescriptionText(transcript).map((paragraph, index) => (
+                    <p
+                      key={index}
+                      className="text-muted-foreground text-sm leading-relaxed"
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
               </div>
-              <div className="max-h-64 overflow-y-auto space-y-4">
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  <strong>Host:</strong> Welcome to Growing Your Business With
-                  People. I'm your host, and today we're joined by David Thomas
-                  to discuss AI, business, and the future of work.
-                </p>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  <strong>David:</strong> Thanks for having me. I'm excited to
-                  dive into this topic as it's something that's transforming
-                  businesses across every industry.
-                </p>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  <strong>Host:</strong> Let's start with the basics. How would
-                  you describe the current state of AI in business?
-                </p>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  <strong>David:</strong> We're at an inflection point. AI has
-                  moved beyond being a competitive advantage to becoming a
-                  necessity. Organizations that aren't thinking about how to
-                  integrate AI into their operations are already falling
-                  behind...
-                </p>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Sidebar */}
@@ -908,7 +878,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
             <Card>
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold mb-4">Related Episodes</h3>
-                <RelatedEpisodes />
+                {/* @ts-ignore - this is a server component being used in a client component */}
+                <RelatedEpisodes currentEpisodeUuid={uuid} />
               </CardContent>
             </Card>
           </div>
