@@ -100,6 +100,14 @@ export function truncateText(
     );
   }
 }
+// Helper function to format description text into paragraphs
+export const formatDescriptionText = (text: string) => {
+  if (!text) return [];
+
+  // Split by double newlines or single newlines
+  const paragraphs = text.split(/\n{2,}|\n/).filter((p) => p.trim() !== "");
+  return paragraphs;
+};
 
 /**
  * Formats a YouTube duration string (like "1H 45m") into a readable format

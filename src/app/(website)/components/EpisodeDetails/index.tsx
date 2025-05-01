@@ -32,7 +32,12 @@ import PodcastPlayer, {
   PlayerHandle,
 } from "../../episode/[uuid]/podcast-player";
 import RelatedEpisodes from "../../episode/[uuid]/related-episodes";
-import { formatDate, formatDuration } from "../../lib/utils";
+import {
+  formatDate,
+  formatDescriptionText,
+  formatDuration,
+  urlFor,
+} from "../../lib/utils";
 
 // Simple SubscribeForm component
 const SubscribeForm = () => (
@@ -512,10 +517,14 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
               >
                 <h2 className="text-xl font-semibold mb-3">Episode Overview</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  {/*  */}
-                  {episode?.youtube?.description}
-                </p>
+                <div className="space-y-4 text-muted-foreground leading-relaxed">
+                  {/* Ideally this text is its own section but if older ep, do this */}
+                  {formatDescriptionText(episode?.youtube?.description).map(
+                    (paragraph, index) => (
+                      <p key={index}>{paragraph}</p>
+                    )
+                  )}
+                </div>
               </div>
 
               {/* Key Takeaways Section */}
@@ -674,47 +683,70 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
               id="featured-guest"
               className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
             >
-              <h2 className="text-xl font-semibold mb-4">Featured Guest</h2>
-              <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                <Avatar className="h-20 w-20">
-                  <AvatarImage
-                    src="/placeholder.svg?height=80&width=80"
-                    alt="David Thomas"
-                  />
-                  <AvatarFallback>DT</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h3 className="text-lg font-semibold">David Thomas</h3>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    AI Strategy Consultant & Author
-                  </p>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    David Thomas is a leading expert in AI implementation
-                    strategies for businesses of all sizes. With over 15 years
-                    of experience in the tech industry, he helps organizations
-                    navigate the complexities of AI adoption and digital
-                    transformation.
-                  </p>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex items-center gap-1"
+              <h2 className="text-xl font-semibold mb-4">
+                Featured Guest{data.guests?.length > 1 ? "s" : ""}
+              </h2>
+              {data.guests?.length > 0 ? (
+                <div className="space-y-8">
+                  {data.guests.map((guest, index) => (
+                    <div
+                      key={guest._id || index}
+                      className="flex flex-col sm:flex-row gap-4 items-start sm:items-center"
                     >
-                      <ExternalLink className="h-3 w-3" />
-                      Website
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex items-center gap-1"
-                    >
-                      <ExternalLink className="h-3 w-3" />
-                      LinkedIn
-                    </Button>
-                  </div>
+                      <Avatar className="h-20 w-20">
+                        {guest.image ? (
+                          <AvatarImage
+                            src={urlFor(guest.image).width(160).height(160).url()}
+                            alt={guest.name || "Guest"}
+                          />
+                        ) : (
+                          <AvatarImage
+                            src="/placeholder.svg?height=80&width=80"
+                            alt={guest.name || "Guest"}
+                          />
+                        )}
+                        <AvatarFallback>
+                          {guest.name
+                            ? guest.name.substring(0, 2).toUpperCase()
+                            : "GU"}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <h3 className="text-lg font-semibold">
+                          {guest.name || "Guest Name"}
+                        </h3>
+                        {guest.title && (
+                          <p className="text-sm text-muted-foreground mb-2">
+                            {guest.title}
+                          </p>
+                        )}
+                        {guest.about && (
+                          <p className="text-sm text-muted-foreground mb-4">
+                            {guest.about}
+                          </p>
+                        )}
+                        <div className="flex gap-2">
+                          {guest.slug && guest.slug.current && (
+                            <Link href={`/guest/${guest.slug.current}`}>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="flex items-center gap-1"
+                              >
+                                More Details
+                              </Button>
+                            </Link>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
+              ) : (
+                <p className="text-muted-foreground">
+                  No guest information available for this episode.
+                </p>
+              )}
             </div>
 
             <Separator />
@@ -789,7 +821,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                       </Button>
                     </Link>
                     <Link
-                      href="https://open.spotify.com/show/77QfEpE5DfbNRqWvmkfWQS"
+                      href="https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
