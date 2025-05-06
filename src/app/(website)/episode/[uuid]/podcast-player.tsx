@@ -298,7 +298,7 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
           "fullscreenchange",
           handleFullscreenChange
         );
-    }, []);
+    });
 
     return (
       <div className="relative w-full h-full overflow-hidden" ref={playerRef}>

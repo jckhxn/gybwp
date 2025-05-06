@@ -140,3 +140,32 @@ export function formatDuration(
     return `${minutes} minute${minutes > 1 ? "s" : ""}`;
   }
 }
+
+/**
+ * Generates three random numbers between min and max (inclusive)
+ * Ensures that no number ends with 0 as no episode UUIDs end with 0
+ * @param min - Minimum value for random numbers (defaults to 101)
+ * @param max - Maximum value for random numbers (defaults to 807)
+ * @returns An array containing three random integers within the specified range, none ending with 0
+ */
+export function generateRandomNumbers(
+  min: number = 101,
+  max: number = 807
+): [number, number, number] {
+  // Helper function to generate a single valid random number
+  const generateValidNumber = (): number => {
+    let num;
+    do {
+      num = Math.floor(Math.random() * (max - min + 1)) + min;
+    } while (num % 10 === 0); // Ensure number doesn't end with 0
+
+    return num;
+  };
+
+  // Generate three random numbers, ensuring none end with 0
+  const firstNumber = generateValidNumber();
+  const secondNumber = generateValidNumber();
+  const thirdNumber = generateValidNumber();
+
+  return [firstNumber, secondNumber, thirdNumber];
+}

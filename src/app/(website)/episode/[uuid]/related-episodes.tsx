@@ -2,8 +2,13 @@ import Image from "next/image";
 import Button from "@/src/app/(website)/components/ui/button";
 import Link from "next/link";
 
-export default function RelatedEpisodes() {
-  // Should receive props from query or have defaults provided.
+export default async function RelatedEpisodes({
+  uuid,
+  relatedEpisodes,
+}: {
+  uuid: string;
+  relatedEpisodes?: any;
+}) {
   const episodes = [
     {
       id: 1,

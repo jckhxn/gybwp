@@ -104,6 +104,12 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   const uuid = episode?.youtube?.uuid || episode?.uuid;
   const duration = episode?.youtube?.duration || "";
 
+  // Get sponsors from either direct sponsors or from season
+  const episodeSponsors = episode?.season.sponsors || [];
+  const seasonSponsors = episode?.season?.sponsors || [];
+  const sponsors =
+    episodeSponsors.length > 0 ? episodeSponsors : seasonSponsors;
+
   // Create a ref to the player component
   const playerRef = useRef<PlayerHandle>(null);
   // Track playing state
@@ -255,7 +261,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
       </div>
     );
   };
-  console.log(data);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -503,7 +509,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 )}
 
                 {/* Featured Guest section */}
-                {data.guests && data.guests.length > 0 && (
+                {data?.guests && data.guests?.length > 0 && (
                   <Button
                     variant="outline"
                     size="sm"
@@ -833,53 +839,74 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
               </CardContent>
             </Card>
 
-            {/* Sponsors */}
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Our Sponsors</h3>
-                <div className="space-y-4">
-                  <div className="p-4 border rounded-lg flex flex-col items-center text-center">
-                    <Image
-                      src="/placeholder.svg?height=60&width=120"
-                      alt="Sponsor Logo"
-                      width={120}
-                      height={60}
-                      className="mb-2"
-                    />
-                    <p className="text-sm text-muted-foreground">
-                      Sponsor description goes here. Support our sponsors who
-                      make this podcast possible.
-                    </p>
-                    <Button variant="link" size="sm" className="mt-2">
-                      Learn More
-                    </Button>
+            {/* Sponsors Card - only shown if sponsors exist */}
+            {sponsors && sponsors.length > 0 && (
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">Our Sponsors</h3>
+                  <div className="space-y-4">
+                    {sponsors.map((sponsor, index) => (
+                      <div
+                        key={index}
+                        className="p-4 border rounded-lg flex flex-col items-center text-center"
+                      >
+                        {sponsor.image ? (
+                          <div
+                            className={`w-[120px] h-[120px] relative mb-3 rounded-full overflow-hidden flex items-center justify-center ${
+                              sponsor.bgColor || "bg-white"
+                            }`}
+                          >
+                            <Image
+                              src={sponsor.image}
+                              alt={sponsor.name || "Sponsor Logo"}
+                              fill
+                              className="object-contain p-2"
+                            />
+                          </div>
+                        ) : (
+                          <div
+                            className={`w-[120px] h-[120px] relative mb-3 rounded-full flex items-center justify-center ${
+                              sponsor.bgColor || "bg-gray-100"
+                            }`}
+                          >
+                            <span className="text-gray-400 text-sm font-medium">
+                              {sponsor.name || "Sponsor"}
+                            </span>
+                          </div>
+                        )}
+                        {/* Too wordy */}
+                        {/* <p className="text-sm text-muted-foreground">
+                          {sponsor.description ||
+                            "Support our sponsors who make this podcast possible."}
+                        </p> */}
+                        <Link
+                          href={sponsor.url || `/sponsors/${sponsor.uuid}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3"
+                        >
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="flex items-center gap-1"
+                          >
+                            <ExternalLink size={16} />
+                            Learn More
+                          </Button>
+                        </Link>
+                      </div>
+                    ))}
                   </div>
-                  <div className="p-4 border rounded-lg flex flex-col items-center text-center">
-                    <Image
-                      src="/placeholder.svg?height=60&width=120"
-                      alt="Sponsor Logo"
-                      width={120}
-                      height={60}
-                      className="mb-2"
-                    />
-                    <p className="text-sm text-muted-foreground">
-                      Sponsor description goes here. Support our sponsors who
-                      make this podcast possible.
-                    </p>
-                    <Button variant="link" size="sm" className="mt-2">
-                      Learn More
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Related Episodes */}
             <Card>
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold mb-4">Related Episodes</h3>
-                {/* @ts-ignore - this is a server component being used in a client component */}
-                <RelatedEpisodes currentEpisodeUuid={uuid} />
+
+                <RelatedEpisodes uuid={uuid} />
               </CardContent>
             </Card>
           </div>
