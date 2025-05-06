@@ -121,3 +121,9 @@ export const FEATURED_ARTICLES_QUERY = groq`*[_type == "featuredArticle"] `;
 
 // Other Articles Query
 export const OTHER_ARTICLES_QUERY = groq`*[_type == "article"]`;
+
+/**
+ * Query to fetch episode documents for specific UUIDs
+ * Returns episodes ordered by UUID
+ */
+export const RANDOM_RELATED_EPISODES = groq`*[_type == "episode" && coalesce(uuid,youtube.uuid) in $uuids] | order(coalesce(uuid,youtube.uuid) asc) [0...3]`;

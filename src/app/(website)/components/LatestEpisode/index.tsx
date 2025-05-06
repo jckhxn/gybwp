@@ -82,7 +82,6 @@ export const LatestEpisode = () => {
           <div className="w-full overflow-hidden rounded-xl border bg-background shadow-lg transition-all hover:shadow-xl">
             <div className="grid gap-6 md:grid-cols-[1fr_1fr] md:gap-8">
               <div className="relative group aspect-video overflow-hidden rounded-l-xl">
-                {/* react-youtube here */}
                 <Image
                   src={
                     latestEpisode.thumbnail ||
