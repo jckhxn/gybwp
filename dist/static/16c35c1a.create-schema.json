@@ -246,6 +246,16 @@
             "name": "hashtags",
             "type": "array",
             "title": "Episode Hashtags"
+          },
+          {
+            "description": "Main points from the episode, displayed as bullet points",
+            "of": [
+              {
+                "type": "string"
+              }
+            ],
+            "name": "keyTakeaways",
+            "type": "array"
           }
         ],
         "name": "details",

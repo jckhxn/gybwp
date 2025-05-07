@@ -8,10 +8,33 @@ import { client } from "../../sanity/sanity-utils";
 import { LATEST_EPISODE, PODCAST_DETAILS_QUERY } from "../../lib/queries";
 import { formatDate } from "../../lib/utils";
 
+// Define interface for the episode data
+interface Episode {
+  _id?: string;
+  title?: string;
+  episodeName?: string;
+  episodeNumber?: number;
+  seasonNumber?: number;
+  thumbnail?: string;
+  uuid?: string;
+  publishedAt?: string;
+  blurb?: string;
+  youtube?: {
+    title?: string;
+    episodeName?: string;
+    episodeNumber?: number;
+    seasonNumber?: number;
+    thumbnail?: string;
+    uuid?: string;
+    publishedAt?: string;
+    blurb?: string;
+  };
+}
+
 export const LatestEpisode = () => {
-  const [latestEpisode, setLatestEpisode] = useState(null);
+  const [latestEpisode, setLatestEpisode] = useState<Episode | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const fetchLatestEpisode = async () => {
@@ -36,7 +59,7 @@ export const LatestEpisode = () => {
         setIsLoading(false);
       } catch (err) {
         console.error("Error fetching latest episode:", err);
-        setError(err);
+        setError(err instanceof Error ? err : new Error(String(err)));
         setIsLoading(false);
       }
     };
@@ -81,7 +104,7 @@ export const LatestEpisode = () => {
           </div>
           <div className="w-full overflow-hidden rounded-xl border bg-background shadow-lg transition-all hover:shadow-xl">
             <div className="grid gap-6 md:grid-cols-[1fr_1fr] md:gap-8">
-              <div className="relative group aspect-video overflow-hidden rounded-l-xl">
+              <div className="relative group aspect-video w-full overflow-hidden rounded-l-xl flex items-center justify-center">
                 <Image
                   src={
                     latestEpisode.thumbnail ||
@@ -91,6 +114,9 @@ export const LatestEpisode = () => {
                   height={400}
                   alt={`${latestEpisode.episodeName || "Latest Episode"} Cover`}
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  style={{
+                    objectPosition: "center",
+                  }}
                 />
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="rounded-full bg-primary/90 p-4 transform -translate-y-2 group-hover:translate-y-0 transition-transform duration-300">

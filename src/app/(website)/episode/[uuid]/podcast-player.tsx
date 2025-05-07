@@ -116,15 +116,16 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
       return () => {
         window.onYouTubeIframeAPIReady = null;
       };
-    }, []);
+    });
 
     // Initialize YouTube player when API is ready
     const initializeYouTubePlayer = () => {
       if (!playerRef.current) return;
 
       // Clear any existing player
-      if (playerRef.current.querySelector("#youtube-player")) {
-        playerRef.current.querySelector("#youtube-player").innerHTML = "";
+      const existingPlayer = playerRef.current.querySelector("#youtube-player");
+      if (existingPlayer) {
+        existingPlayer.innerHTML = "";
       }
 
       // Initialize player

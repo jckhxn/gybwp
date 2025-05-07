@@ -235,9 +235,7 @@ export default function Consulting() {
                     </div>
                   )}
                   <div className="bg-gray-200">
-                    <Button className="w-full" type="submit">
-                      Contact Jeff
-                    </Button>
+                    <Button className="w-full">Contact Jeff</Button>
                   </div>
                 </form>
               )}
