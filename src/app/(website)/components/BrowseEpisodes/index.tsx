@@ -8,10 +8,28 @@ import { client } from "@/src/app/(website)/sanity/sanity-utils";
 import { ALL_SEASONS_QUERY, EPISODES_BY_SEASON_QUERY } from "../../lib/queries";
 import { formatDate } from "../../lib/utils";
 
+// Define interface for episode object based on the schema
+interface Episode {
+  _id: string;
+  youtube?: {
+    title?: string;
+    episodeNumber?: number;
+    seasonNumber?: number;
+    thumbnail?: string;
+    uuid?: string;
+    publishedAt?: string;
+    blurb?: string;
+  };
+  details?: {
+    keyTakeaways?: string[];
+    hashtags?: string[];
+  };
+}
+
 export const BrowseEpisodes = () => {
-  const [activeSeason, setActiveSeason] = useState(null);
-  const [episodes, setEpisodes] = useState([]);
-  const [seasons, setSeasons] = useState([]);
+  const [activeSeason, setActiveSeason] = useState<string | null>(null);
+  const [episodes, setEpisodes] = useState<Episode[]>([]);
+  const [seasons, setSeasons] = useState<any[]>([]);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
   const [activeEpisodeIndex, setActiveEpisodeIndex] = useState(0);
@@ -112,7 +130,7 @@ export const BrowseEpisodes = () => {
   };
 
   // Scroll to a specific episode
-  const scrollToEpisode = (index) => {
+  const scrollToEpisode = (index: number) => {
     if (scrollContainerRef.current && episodes.length > 0) {
       const container = scrollContainerRef.current;
       const cardWidth = container.scrollWidth / episodes.length;
@@ -254,7 +272,9 @@ export const BrowseEpisodes = () => {
                           {episode.youtube?.episodeNumber}
                         </p> */}
                         <p className="text-sm text-gray-500">
-                          {formatDate(episode.youtube?.publishedAt)}
+                          {episode.youtube?.publishedAt
+                            ? formatDate(episode.youtube.publishedAt)
+                            : ""}
                         </p>
                       </div>
                       <p className="text-gray-600 flex-1 line-clamp-3">

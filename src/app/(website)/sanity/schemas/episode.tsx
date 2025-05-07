@@ -163,6 +163,14 @@ const episode = {
           type: "array",
           of: [{ type: "string" }],
         },
+        {
+          name: "keyTakeaways",
+          type: "array",
+          title: "Key Takeaways",
+          description:
+            "Main points from the episode, displayed as bullet points",
+          of: [{ type: "string" }],
+        },
       ],
     },
   ],

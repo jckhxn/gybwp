@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import routes from "@/src/app/(website)/routes";
+import { SanityDocument } from "sanity";
 
 import {
   Play,
@@ -38,6 +39,26 @@ import {
   formatDuration,
   urlFor,
 } from "../../lib/utils";
+
+// Add at the top of the file after existing imports
+interface DiscussionTopic {
+  title?: string;
+  description?: string;
+}
+
+interface Highlight {
+  title?: string;
+  timestamp?: string;
+}
+
+interface Sponsor {
+  name?: string;
+  logo?: any;
+  image?: any;
+  description?: string;
+  url?: string;
+  bgColor?: string;
+}
 
 // Simple SubscribeForm component
 const SubscribeForm = () => (
@@ -509,30 +530,33 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 )}
 
                 {/* Featured Guest section */}
-                {data?.guests && data.guests?.length > 0 && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-xs"
-                    onClick={() => {
-                      const element = document.getElementById("featured-guest");
-                      if (element) {
-                        const headerOffset = 80;
-                        const elementPosition =
-                          element.getBoundingClientRect().top +
-                          window.pageYOffset;
-                        const offsetPosition = elementPosition - headerOffset;
+                {data.guests &&
+                  Array.isArray(data.guests) &&
+                  data.guests.length > 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-xs"
+                      onClick={() => {
+                        const element =
+                          document.getElementById("featured-guest");
+                        if (element) {
+                          const headerOffset = 80;
+                          const elementPosition =
+                            element.getBoundingClientRect().top +
+                            window.pageYOffset;
+                          const offsetPosition = elementPosition - headerOffset;
 
-                        window.scrollTo({
-                          top: offsetPosition,
-                          behavior: "smooth",
-                        });
-                      }
-                    }}
-                  >
-                    Featured Guest{data.guests.length > 1 ? "s" : ""}
-                  </Button>
-                )}
+                          window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth",
+                          });
+                        }
+                      }}
+                    >
+                      Featured Guest
+                    </Button>
+                  )}
               </div>
             </div>
 
@@ -567,7 +591,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 >
                   <h2 className="text-xl font-semibold mb-3">Key Takeaways</h2>
                   <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                    {takeaways.map((takeaway, index) => (
+                    {takeaways.map((takeaway: string, index: number) => (
                       <li key={index}>{takeaway}</li>
                     ))}
                   </ul>
@@ -584,16 +608,18 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     Discussion Topics
                   </h2>
                   <div className="space-y-4">
-                    {discussionTopics.map((topic, index) => (
-                      <div key={index}>
-                        <h3 className="font-medium text-base">
-                          {topic.title || `Topic ${index + 1}`}
-                        </h3>
-                        <p className="text-muted-foreground mt-1">
-                          {topic.description || ""}
-                        </p>
-                      </div>
-                    ))}
+                    {discussionTopics.map(
+                      (topic: DiscussionTopic, index: number) => (
+                        <div key={index}>
+                          <h3 className="font-medium text-base">
+                            {topic.title || `Topic ${index + 1}`}
+                          </h3>
+                          <p className="text-muted-foreground">
+                            {topic.description || ""}
+                          </p>
+                        </div>
+                      )
+                    )}
                   </div>
                 </div>
               )}
@@ -608,26 +634,48 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     Episode Highlights
                   </h2>
                   <div className="space-y-3">
-                    {highlights.map((highlight, index) => (
+                    {highlights.map((highlight: Highlight, index: number) => (
                       <div key={index} className="flex gap-3">
                         <button
                           onClick={() => {
-                            // Parse timestamp format to seconds
-                            if (highlight.timestamp) {
-                              const [mins, secs] = highlight.timestamp
-                                .split(":")
-                                .map(Number);
-                              const timeInSeconds = mins * 60 + secs;
-                              playerRef.current?.seekTo(timeInSeconds);
+                            if (
+                              playerRef.current &&
+                              highlight.timestamp &&
+                              typeof highlight.timestamp === "string"
+                            ) {
+                              // Convert timestamp to seconds
+                              const parts = highlight.timestamp.split(":");
+                              let seconds = 0;
+                              if (parts.length === 3) {
+                                // HH:MM:SS
+                                seconds =
+                                  parseInt(parts[0]) * 3600 +
+                                  parseInt(parts[1]) * 60 +
+                                  parseInt(parts[2]);
+                              } else if (parts.length === 2) {
+                                // MM:SS
+                                seconds =
+                                  parseInt(parts[0]) * 60 + parseInt(parts[1]);
+                              } else if (parts.length === 1) {
+                                // SS
+                                seconds = parseInt(parts[0]);
+                              }
+                              playerRef.current.seekTo(seconds);
+                              setIsPlaying(true);
                             }
                           }}
-                          className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs hover:bg-primary/20 transition-colors cursor-pointer"
+                          className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
                         >
-                          {highlight.timestamp || "00:00"}
+                          <Play className="h-4 w-4" />
                         </button>
-                        <p className="text-muted-foreground flex-1">
-                          {highlight.text || ""}
-                        </p>
+                        <div>
+                          <p className="font-medium">
+                            {highlight.title || `Highlight ${index + 1}`}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {highlight.timestamp || "00:00"}
+                          </p>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -667,74 +715,76 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
             <Separator />
 
             {/* Featured Guest */}
-            {data.guests?.length > 0 && (
-              <div
-                id="featured-guest"
-                className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
-              >
-                <h2 className="text-xl font-semibold mb-4">
-                  Featured Guest{data.guests.length > 1 ? "s" : ""}
-                </h2>
-                <div className="space-y-8">
-                  {data.guests.map((guest, index) => (
-                    <div
-                      key={guest._id || index}
-                      className="flex flex-col sm:flex-row gap-4 items-start sm:items-center"
-                    >
-                      <Avatar className="h-20 w-20">
-                        {guest.image ? (
-                          <AvatarImage
-                            src={urlFor(guest.image)
-                              .width(160)
-                              .height(160)
-                              .url()}
-                            alt={guest.name || "Guest"}
-                          />
-                        ) : (
-                          <AvatarImage
-                            src="/placeholder.svg?height=80&width=80"
-                            alt={guest.name || "Guest"}
-                          />
-                        )}
-                        <AvatarFallback>
-                          {guest.name
-                            ? guest.name.substring(0, 2).toUpperCase()
-                            : "GU"}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <h3 className="text-lg font-semibold">
-                          {guest.name || "Guest Name"}
-                        </h3>
-                        {guest.title && (
-                          <p className="text-sm text-muted-foreground mb-2">
-                            {guest.title}
-                          </p>
-                        )}
-                        {guest.about && (
-                          <p className="text-sm text-muted-foreground mb-4">
-                            {guest.about}
-                          </p>
-                        )}
-                        <div className="flex gap-2">
-                          {guest.slug && guest.slug.current && (
-                            <Link href={`/guest/${guest.slug.current}`}>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="flex items-center gap-1"
-                              >
-                                More Details
-                              </Button>
-                            </Link>
+            {data.guests &&
+              Array.isArray(data.guests) &&
+              data.guests.length > 0 && (
+                <div
+                  id="featured-guest"
+                  className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                >
+                  <h2 className="text-xl font-semibold mb-4">
+                    Featured Guest{data.guests.length > 1 ? "s" : ""}
+                  </h2>
+                  <div className="space-y-8">
+                    {data.guests.map((guest, index) => (
+                      <div
+                        key={guest._id || index}
+                        className="flex flex-col sm:flex-row gap-4 items-start sm:items-center"
+                      >
+                        <Avatar className="h-20 w-20">
+                          {guest.image ? (
+                            <AvatarImage
+                              src={urlFor(guest.image)
+                                .width(160)
+                                .height(160)
+                                .url()}
+                              alt={guest.name || "Guest"}
+                            />
+                          ) : (
+                            <AvatarImage
+                              src="/placeholder.svg?height=80&width=80"
+                              alt={guest.name || "Guest"}
+                            />
                           )}
+                          <AvatarFallback>
+                            {guest.name
+                              ? guest.name.substring(0, 2).toUpperCase()
+                              : "GU"}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <h3 className="text-lg font-semibold">
+                            {guest.name || "Guest Name"}
+                          </h3>
+                          {guest.title && (
+                            <p className="text-sm text-muted-foreground mb-2">
+                              {guest.title}
+                            </p>
+                          )}
+                          {guest.about && (
+                            <p className="text-sm text-muted-foreground mb-4">
+                              {guest.about}
+                            </p>
+                          )}
+                          <div className="flex gap-2">
+                            {guest.slug && guest.slug.current && (
+                              <Link href={`/guest/${guest.slug.current}`}>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="flex items-center gap-1"
+                                >
+                                  More Details
+                                </Button>
+                              </Link>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
             <Separator />
 
@@ -845,7 +895,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 <CardContent className="p-6">
                   <h3 className="text-lg font-semibold mb-4">Our Sponsors</h3>
                   <div className="space-y-4">
-                    {sponsors.map((sponsor, index) => (
+                    {sponsors.map((sponsor: Sponsor, index: number) => (
                       <div
                         key={index}
                         className="p-4 border rounded-lg flex flex-col items-center text-center"

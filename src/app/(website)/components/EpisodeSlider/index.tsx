@@ -6,9 +6,27 @@ import { client } from "@/src/app/(website)/sanity/sanity-utils";
 import { ALL_SEASONS_QUERY, EPISODES_BY_SEASON_QUERY } from "../../lib/queries";
 import EpisodeCard from "@/src/app/(website)/components/EpisodeCard";
 
+// Define interfaces for the types we're using
+interface Season {
+  _id: string;
+  title: string;
+}
+
+interface Episode {
+  _id: string;
+  youtube?: {
+    title?: string;
+    episodeNumber?: number;
+    seasonNumber?: number;
+    thumbnail?: string;
+    uuid?: string;
+    publishedAt?: string;
+  };
+}
+
 export default function EpisodeSlider() {
-  const [activeSeason, setActiveSeason] = useState(null);
-  const [seasons, setSeasons] = useState([]);
+  const [activeSeason, setActiveSeason] = useState<string | null>(null);
+  const [seasons, setSeasons] = useState<Season[]>([]);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
 
