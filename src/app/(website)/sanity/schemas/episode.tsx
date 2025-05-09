@@ -171,6 +171,115 @@ const episode = {
             "Main points from the episode, displayed as bullet points",
           of: [{ type: "string" }],
         },
+        {
+          name: "discussionTopics",
+          title: "Discussion Topics",
+          description: "Main topics covered in the episode",
+          type: "array",
+          of: [
+            {
+              type: "object",
+              fields: [
+                {
+                  name: "title",
+                  title: "Title",
+                  type: "string",
+                  description: "Brief title for this discussion topic",
+                  validation: (Rule) => Rule.required(),
+                },
+                {
+                  name: "description",
+                  title: "Description",
+                  type: "text",
+                  description: "Detailed explanation of this topic",
+                  validation: (Rule) => Rule.required(),
+                },
+              ],
+              preview: {
+                select: {
+                  title: "title",
+                  subtitle: "description",
+                },
+              },
+            },
+          ],
+        },
+        {
+          name: "highlights",
+          title: "Episode Highlights",
+          description: "Notable moments in the episode with timestamps",
+          type: "array",
+          of: [
+            {
+              type: "object",
+              fields: [
+                {
+                  name: "title",
+                  title: "Title",
+                  type: "string",
+                  description: "Brief title for this highlight moment",
+                  validation: (Rule) => Rule.required(),
+                },
+                {
+                  name: "timestamp",
+                  title: "Timestamp",
+                  type: "string",
+                  description: "Format: MM:SS or HH:MM:SS",
+                  validation: (Rule) =>
+                    Rule.regex(/^([0-9]+:)?[0-5]?[0-9]:[0-5][0-9]$/).error(
+                      "Please use a valid timestamp format (MM:SS or HH:MM:SS)"
+                    ),
+                },
+              ],
+              preview: {
+                select: {
+                  title: "title",
+                  subtitle: "timestamp",
+                },
+              },
+            },
+          ],
+        },
+        {
+          name: "transcript",
+          title: "Transcript",
+          type: "array",
+          description: "Full transcript of the podcast episode",
+          of: [
+            {
+              type: "block",
+              // Customize the toolbar options for transcript editing
+              styles: [
+                { title: "Normal", value: "normal" },
+                { title: "Speaker", value: "h4" },
+              ],
+              // Limit marks to only what's needed for transcripts
+              marks: {
+                decorators: [
+                  { title: "Strong", value: "strong" },
+                  { title: "Emphasis", value: "em" },
+                ],
+                annotations: [
+                  {
+                    name: "timestamp",
+                    title: "Timestamp",
+                    type: "object",
+                    fields: [
+                      {
+                        name: "time",
+                        title: "Time",
+                        type: "string",
+                        description: "Format: MM:SS or HH:MM:SS",
+                        validation: (Rule) =>
+                          Rule.regex(/^([0-9]+:)?[0-5]?[0-9]:[0-5][0-9]$/),
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          ],
+        },
       ],
     },
   ],
