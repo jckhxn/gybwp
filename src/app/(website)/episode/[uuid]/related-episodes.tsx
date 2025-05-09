@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Button from "@/src/app/(website)/components/ui/button";
 import Link from "next/link";
+// If not passed a relatedEpisodes, fetch random related episodes.
 
 export default function RelatedEpisodes({
   uuid,

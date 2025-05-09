@@ -5,6 +5,7 @@ import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import routes from "@/src/app/(website)/routes";
 import { SanityDocument } from "sanity";
+import { PortableText } from "@portabletext/react";
 
 import {
   Play,
@@ -117,10 +118,10 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
     episode?.youtube?.episodeNumber || episode?.episodeNumber || "";
   const publishedAt = episode?.youtube?.publishedAt || episode?.publishedAt;
   const description = episode?.youtube?.description || "";
-  const takeaways = episode?.youtube?.takeaways || [];
-  const discussionTopics = episode?.youtube?.discussionTopics || [];
-  const highlights = episode?.youtube?.highlights || [];
-  const transcript = episode?.youtube?.transcript || "";
+  const takeaways = episode?.details?.keyTakeaways || [];
+  const discussionTopics = episode?.details?.discussionTopics || [];
+  const highlights = episode?.details?.highlights || [];
+  const transcript = episode?.details?.transcript || "";
   const featuredGuests = episode?.details?.featuredGuests || [];
   const uuid = episode?.youtube?.uuid || episode?.uuid;
   const duration = episode?.youtube?.duration || "";
@@ -664,16 +665,15 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                               setIsPlaying(true);
                             }
                           }}
-                          className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
+                          className=""
                         >
-                          <Play className="h-4 w-4" />
+                          <span className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs">
+                            {highlight.timestamp || "00:00"}
+                          </span>
                         </button>
                         <div>
                           <p className="font-medium">
                             {highlight.title || `Highlight ${index + 1}`}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {highlight.timestamp || "00:00"}
                           </p>
                         </div>
                       </div>
@@ -697,16 +697,61 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     </Button>
                   </div>
                   <div className="max-h-64 overflow-y-auto space-y-4">
-                    {formatDescriptionText(transcript).map(
-                      (paragraph, index) => (
-                        <p
-                          key={index}
-                          className="text-muted-foreground text-sm leading-relaxed"
-                        >
-                          {paragraph}
-                        </p>
-                      )
-                    )}
+                    <PortableText
+                      value={transcript}
+                      components={{
+                        block: (props) => {
+                          const { value, children } = props;
+                          const style = value.style || "normal";
+
+                          if (style === "h4") {
+                            return (
+                              <h4 className="font-medium text-base mt-4 mb-2">
+                                {children}
+                              </h4>
+                            );
+                          }
+
+                          return (
+                            <p className="text-muted-foreground text-sm leading-relaxed mb-4">
+                              {children}
+                            </p>
+                          );
+                        },
+                        marks: {
+                          strong: ({ children }) => <strong>{children}</strong>,
+                          em: ({ children }) => <em>{children}</em>,
+                          timestamp: ({ value, children }) => (
+                            <button
+                              className="bg-primary/10 text-primary font-medium rounded-full px-2 py-1 text-xs ml-1 hover:bg-primary/20 transition-colors"
+                              onClick={() => {
+                                if (playerRef.current && value?.time) {
+                                  // Convert timestamp to seconds
+                                  const parts = value.time.split(":");
+                                  let seconds = 0;
+                                  if (parts.length === 3) {
+                                    // HH:MM:SS
+                                    seconds =
+                                      parseInt(parts[0]) * 3600 +
+                                      parseInt(parts[1]) * 60 +
+                                      parseInt(parts[2]);
+                                  } else if (parts.length === 2) {
+                                    // MM:SS
+                                    seconds =
+                                      parseInt(parts[0]) * 60 +
+                                      parseInt(parts[1]);
+                                  }
+                                  playerRef.current.seekTo(seconds);
+                                  setIsPlaying(true);
+                                }
+                              }}
+                            >
+                              {value?.time || "00:00"}
+                            </button>
+                          ),
+                        },
+                      }}
+                    />
                   </div>
                 </div>
               )}
@@ -785,33 +830,6 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   </div>
                 </div>
               )}
-
-            <Separator />
-
-            {/* Episode Transcript */}
-            {transcript && (
-              <div
-                id="transcript"
-                className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
-              >
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-semibold">Episode Transcript</h2>
-                  <Button variant="outline" size="sm">
-                    View Full Transcript
-                  </Button>
-                </div>
-                <div className="max-h-64 overflow-y-auto space-y-4">
-                  {formatDescriptionText(transcript).map((paragraph, index) => (
-                    <p
-                      key={index}
-                      className="text-muted-foreground text-sm leading-relaxed"
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Sidebar */}
