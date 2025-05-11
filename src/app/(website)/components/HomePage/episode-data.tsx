@@ -32,6 +32,11 @@ export type episodeType = {
     featuredGuests: guestsType[];
     description: string[];
     links?: linksType[];
+    hashtags?: string[];
+    highlights?: { title?: string; timestamp?: string }[];
+    keyTakeaways?: string[];
+    discussionTopics?: { title?: string; description?: string }[];
+    transcript?: any;
   };
 };
 
