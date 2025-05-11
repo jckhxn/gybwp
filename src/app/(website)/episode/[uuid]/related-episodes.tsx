@@ -86,7 +86,7 @@ export default function RelatedEpisodes({
         );
       })}
       <div className="pt-4 mt-2">
-        <Link href="/episodes">
+        <Link href="/episode">
           <Button variant="outline" size="sm" className="w-full">
             View All Episodes
           </Button>

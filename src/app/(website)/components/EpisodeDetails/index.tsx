@@ -18,6 +18,8 @@ import {
   ExternalLink,
   Pause,
   X,
+  Check,
+  Copy,
 } from "lucide-react";
 
 // Fix import paths to use @/src/app/(website)/components instead of full paths
@@ -169,10 +171,10 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
       name: "Twitter",
       icon: (
         <Image
-          src="/social-logos/twitter.svg"
+          src="/social-logos/twitter.png"
           alt="Twitter"
-          width={16}
-          height={16}
+          width={20}
+          height={20}
         />
       ),
       color: "bg-blue-500",
@@ -183,10 +185,10 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
       name: "Facebook",
       icon: (
         <Image
-          src="/social-logos/facebook.svg"
+          src="/social-logos/facebook.png"
           alt="Facebook"
-          width={16}
-          height={16}
+          width={20}
+          height={20}
         />
       ),
       color: "bg-blue-600",
@@ -197,10 +199,10 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
       name: "LinkedIn",
       icon: (
         <Image
-          src="/social-logos/linkedin.svg"
+          src="/social-logos/linkedin.png"
           alt="LinkedIn"
-          width={16}
-          height={16}
+          width={20}
+          height={20}
         />
       ),
       color: "bg-blue-700",
@@ -212,21 +214,44 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   // Share modal component
   const ShareModal = () => {
     const [currentUrl, setCurrentUrl] = useState("");
+    const [copySuccess, setCopySuccess] = useState(false);
 
     // Update the URL after component is mounted (client-side only)
     useEffect(() => {
       setCurrentUrl(window.location.href);
     }, []);
 
+    const handleCopyLink = async () => {
+      if (!currentUrl) return;
+
+      try {
+        await navigator.clipboard.writeText(currentUrl);
+        setCopySuccess(true);
+
+        // Reset the success message after 2 seconds
+        setTimeout(() => {
+          setCopySuccess(false);
+        }, 2000);
+      } catch (err) {
+        console.error("Failed to copy text: ", err);
+      }
+    };
+
     return (
       <div
-        className={`fixed inset-0 z-50 flex items-center justify-center ${
-          isShareModalOpen ? "bg-black/50 backdrop-blur-sm" : "hidden"
-        }`}
+        className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm ${
+          isShareModalOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        } transition-opacity duration-300 ease-in-out`}
         onClick={() => setIsShareModalOpen(false)}
       >
         <div
-          className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 max-w-md w-full mx-4 transform transition-all"
+          className={`bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 max-w-md w-full mx-4 transform transition-all duration-300 ${
+            isShareModalOpen
+              ? "scale-100 translate-y-0"
+              : "scale-95 translate-y-4"
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between mb-6">
@@ -244,17 +269,18 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
               Share this episode with your network:
             </p>
 
-            <div className="flex flex-wrap gap-3 justify-center">
+            <div className="flex flex-wrap gap-4 justify-center">
               {shareLinks.map((link) => (
                 <a
                   key={link.name}
                   href={currentUrl ? link.getShareUrl(currentUrl) : "#"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`${link.color} text-white p-3 rounded-full hover:opacity-90 transition-all transform hover:scale-105 shadow-md flex items-center justify-center`}
+                  className={`${link.color} text-white px-4 py-2 rounded-md hover:opacity-90 transition-all transform hover:scale-105 shadow-md flex items-center gap-2`}
                   aria-label={`Share on ${link.name}`}
                 >
                   {link.icon}
+                  <span className="text-sm font-medium">{link.name}</span>
                 </a>
               ))}
             </div>
@@ -264,23 +290,35 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
             <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
               Or copy the link:
             </p>
-            <div className="flex">
-              <input
-                type="text"
-                value={currentUrl}
-                readOnly
-                className="flex-1 p-2 text-sm border rounded-l-md bg-gray-50 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:outline-none"
-              />
-              <button
-                onClick={() => {
-                  if (currentUrl) {
-                    navigator.clipboard.writeText(currentUrl);
-                  }
-                }}
-                className="bg-primary text-white px-4 rounded-r-md hover:bg-primary-dark transition-colors"
-              >
-                Copy
-              </button>
+            <div className="flex flex-col">
+              <div className="flex">
+                <input
+                  type="text"
+                  value={currentUrl}
+                  readOnly
+                  className="flex-1 p-2 text-sm border rounded-l-md bg-gray-50 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:outline-none"
+                />
+                <button
+                  onClick={handleCopyLink}
+                  className={`px-4 rounded-r-md transition-colors flex items-center justify-center ${
+                    copySuccess
+                      ? "bg-green-500 text-white"
+                      : "bg-primary text-white hover:bg-primary-dark"
+                  }`}
+                >
+                  {copySuccess ? (
+                    <Check className="h-4 w-4 mr-1" />
+                  ) : (
+                    <Copy className="h-4 w-4 mr-1" />
+                  )}
+                  {copySuccess ? "Copied" : "Copy"}
+                </button>
+              </div>
+              {copySuccess && (
+                <p className="text-green-500 text-xs mt-2">
+                  Link copied to clipboard!
+                </p>
+              )}
             </div>
           </div>
         </div>
