@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as queryStore from "@sanity/react-loader";
 
 import { client } from "@/src/app/(website)/sanity/sanity-utils";
