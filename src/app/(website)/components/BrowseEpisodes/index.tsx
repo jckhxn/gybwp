@@ -22,7 +22,6 @@ interface Episode {
   };
   details?: {
     keyTakeaways?: string[];
-    hashtags?: string[];
   };
 }
 

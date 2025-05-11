@@ -196,12 +196,6 @@ export default function PodcastPreview({
                   </div>
                 </div>
               ) : null}
-
-              {episode?.details?.hashtags?.length ? (
-                <div className="mt-8 italic font-thin">
-                  {data.episodeDetails[0]?.hashtags.map((ht) => `#${ht} `)}
-                </div>
-              ) : null}
             </Section>
           ) : null}
         </Section>

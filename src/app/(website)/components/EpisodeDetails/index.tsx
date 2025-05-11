@@ -132,6 +132,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   const sponsors =
     episodeSponsors.length > 0 ? episodeSponsors : seasonSponsors;
 
+  const relatedEpisodes = episode?.relatedEpisodes;
+
   // Create a ref to the player component
   const playerRef = useRef<PlayerHandle>(null);
   // Track playing state
@@ -970,13 +972,20 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
             )}
 
             {/* Related Episodes */}
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Related Episodes</h3>
+            {data.relatedEpisodes && (
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">
+                    Related Episodes
+                  </h3>
 
-                <RelatedEpisodes uuid={uuid} />
-              </CardContent>
-            </Card>
+                  <RelatedEpisodes
+                    uuid={uuid}
+                    relatedEpisodes={data.relatedEpisodes}
+                  />
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </main>
