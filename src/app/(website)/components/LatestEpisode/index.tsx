@@ -157,7 +157,7 @@ export const LatestEpisode = () => {
                 <div className="pt-4">
                   <Link
                     href={`/episode/${latestEpisode.uuid}`}
-                    className="inline-flex items-center rounded-full bg-primary px-6 py-3 text-lg font-medium text-primary-foreground shadow-md transition-colors hover:bg-primary/90"
+                    className="inline-flex items-center rounded-full bg-primary text-white px-6 py-3 text-lg font-medium text-primary-foreground shadow-md transition-colors hover:bg-primary/90"
                   >
                     View Episode Details
                     <svg
