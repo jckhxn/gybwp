@@ -89,8 +89,11 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
 
     // Load YouTube API
     useEffect(() => {
-      // Only load the API once
-      if (window.YT) return;
+      // If YouTube API is already loaded, initialize the player
+      if (window.YT) {
+        initializeYouTubePlayer();
+        return;
+      }
 
       // Create script tag
       const tag = document.createElement("script");
@@ -99,10 +102,10 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
       // Add after the script tag is created
       const style = document.createElement("style");
       style.textContent = `
-  #youtube-player, #youtube-player iframe {
-    width: 100% !important;
-    height: 100% !important;
-  }
+#youtube-player, #youtube-player iframe {
+  width: 100% !important;
+  height: 100% !important;
+}
 `;
       document.head.appendChild(style);
 
@@ -116,11 +119,17 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
       return () => {
         window.onYouTubeIframeAPIReady = null;
       };
-    });
+    }, [videoId]);
 
     // Initialize YouTube player when API is ready
     const initializeYouTubePlayer = () => {
       if (!playerRef.current) return;
+
+      // Destroy any existing player instance first
+      if (youtubePlayerRef.current) {
+        youtubePlayerRef.current.destroy();
+        youtubePlayerRef.current = null;
+      }
 
       // Clear any existing player
       const existingPlayer = playerRef.current.querySelector("#youtube-player");
