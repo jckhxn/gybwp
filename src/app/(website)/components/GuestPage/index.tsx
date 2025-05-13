@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { Metadata } from "next";
 import { CalendarDays, Clock } from "lucide-react";
+import Link from "next/link";
 
 import Button from "@/src/app/(website)/components/ui/button";
 import {
@@ -15,6 +16,7 @@ import SocialShare from "./social-share";
 import RelatedEpisodes from "./related-episodes";
 import GuestBio from "./guest-bio";
 import ListenOnPlatforms from "./listen-on-platforms";
+import routes from "@/src/app/(website)/routes";
 
 // This would be replaced with actual data fetching in a real implementation
 async function getGuestData(slug: string) {
@@ -268,10 +270,19 @@ export default async function GuestPage({
           episode and get weekly insights on business growth.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
-          <Button size="lg">Subscribe on Apple Podcasts</Button>
-          <Button size="lg" variant="outline">
-            Subscribe on Spotify
-          </Button>
+          <Link
+            href="https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511"
+            passHref
+          >
+            <Button size="lg" className="cursor-pointer">
+              Subscribe on Apple Podcasts
+            </Button>
+          </Link>
+          <Link href={routes.external.listen} passHref>
+            <Button size="lg" variant="outline" className="cursor-pointer">
+              Listen on BuzzSprout
+            </Button>
+          </Link>
         </div>
       </section>
     </div>
