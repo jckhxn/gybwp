@@ -4,9 +4,11 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import useSWR from "swr";
+import { CalendarDays, Clock } from "lucide-react";
 import { client } from "@/src/app/(website)/sanity/sanity-utils";
 import { ALL_SEASONS_QUERY, EPISODES_BY_SEASON_QUERY } from "../../lib/queries";
 import { formatDate } from "../../lib/utils";
+import { Badge } from "@/src/app/(website)/components/ui/badge";
 
 // Define interface for episode object based on the schema
 interface Episode {
@@ -226,11 +228,12 @@ export const BrowseEpisodes = () => {
                 onScroll={handleScroll}
               >
                 {episodes.map((episode, idx) => (
-                  <div
+                  <Link
                     key={`episode-${idx}`}
-                    className="flex-shrink-0 w-[85vw] sm:w-[350px] md:w-[320px] snap-start overflow-hidden rounded-xl border bg-background shadow-md transition-all hover:shadow-lg hover:-translate-y-1 duration-300"
+                    href={`/episode/${episode.youtube?.uuid}`}
+                    className="flex-shrink-0 w-[85vw] sm:w-[350px] md:w-[320px] snap-start overflow-hidden rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300 block cursor-pointer"
                   >
-                    <div className="relative aspect-video group overflow-hidden">
+                    <div className="aspect-video bg-gray-100 relative">
                       <Image
                         src={
                           episode.youtube?.thumbnail ||
@@ -239,71 +242,72 @@ export const BrowseEpisodes = () => {
                         width={360}
                         height={200}
                         alt={`${episode.youtube?.title || `Episode ${episode.youtube?.episodeNumber}`} cover`}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="h-full w-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="rounded-full bg-primary/90 p-3 transform -translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="p-4 bg-primary/10 rounded-full">
+                          <div className="w-8 h-8 flex items-center justify-center text-primary">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <Badge variant="outline" className="mb-2">
+                        Episode {episode.youtube?.episodeNumber}
+                      </Badge>
+                      <h3 className="font-semibold text-lg mb-2">
+                        {episode.youtube?.title ||
+                          `Episode ${episode.youtube?.episodeNumber}`}
+                      </h3>
+                      <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
+                        {episode.youtube?.blurb ||
+                          "Watch this episode to learn more about business growth strategies."}
+                      </p>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <CalendarDays className="w-4 h-4" />
+                        <span>
+                          {episode.youtube?.publishedAt
+                            ? formatDate(episode.youtube.publishedAt)
+                            : ""}
+                        </span>
+                        <span className="mx-1">•</span>
+                        <Clock className="w-4 h-4" />
+                        <span>30 min</span>
+                      </div>
+                      <div className="mt-4">
+                        <div className="inline-flex items-center text-primary font-medium text-sm">
+                          View Episode
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
+                            width="16"
+                            height="16"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="2"
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            className="text-white h-6 w-6"
+                            className="ml-1"
                           >
-                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            <path d="m9 18 6-6-6-6" />
                           </svg>
                         </div>
                       </div>
                     </div>
-                    <div className="p-5 flex-1 flex flex-col">
-                      <div className="space-y-1 mb-3">
-                        <h3 className="font-bold text-lg line-clamp-1">
-                          {episode.youtube?.title ||
-                            `Episode ${episode.youtube?.episodeNumber}`}
-                        </h3>
-                        {/* <p className="text-sm text-gray-500">
-                          Season {episode.youtube?.seasonNumber} | Episode{" "}
-                          {episode.youtube?.episodeNumber}
-                        </p> */}
-                        <p className="text-sm text-gray-500">
-                          {episode.youtube?.publishedAt
-                            ? formatDate(episode.youtube.publishedAt)
-                            : ""}
-                        </p>
-                      </div>
-                      <p className="text-gray-600 flex-1 line-clamp-3">
-                        {episode.youtube?.blurb ||
-                          "Watch this episode to learn more about business growth strategies."}
-                      </p>
-                      <div className="pt-4 mt-auto">
-                        <Link
-                          href={`/episode/${episode.youtube?.uuid}`}
-                          className="text-primary font-medium hover:underline inline-flex items-center group"
-                        >
-                          View Details
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform"
-                          >
-                            <path d="m9 18 6-6-6-6"></path>
-                          </svg>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
 
