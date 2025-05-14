@@ -18,6 +18,34 @@ export const GUEST_QUERY = groq` *[_type == "guest" && slug.current == $slug] {
 }
 }`;
 
+// Detailed Guest query with latest episode and previous episodes
+export const GUEST_DETAIL_QUERY = groq`*[_type == "guest" && slug.current == $slug][0] {
+  _id,
+  name,
+  title,
+about, 
+  image,
+  socialLinks,
+  "latestEpisode": *[_type == "episode" && references(^._id)] | order(youtube.publishedAt desc)[0] {
+    "title": youtube.title,
+    "number": youtube.episodeNumber,
+    "date": youtube.publishedAt,
+    "duration": "45 minutes",
+    "description": youtube.blurb,
+    "uuid": youtube.uuid,
+    "audioUrl": youtube.url
+  },
+  "previousEpisodes": *[_type == "episode" && references(^._id) && _id != ^.latestEpisode._id] | order(youtube.publishedAt desc)[0..2] {
+    "title": youtube.title,
+    "number": youtube.episodeNumber,
+    "date": youtube.publishedAt,
+    "description": youtube.blurb,
+    "uuid": youtube.uuid,
+    "duration": "45 minutes",
+    "image": youtube.thumbnail
+  }
+}`;
+
 // Get all Episodes by UUID
 export const EPISODES = groq`*[_type == "episode"]| order(uuid asc){uuid}`;
 
