@@ -27,6 +27,8 @@ about,
   image,
   socialLinks,
   "latestEpisode": *[_type == "episode" && references(^._id)] | order(youtube.publishedAt desc)[0] {
+  youtube {
+  id},
     "title": youtube.title,
     "number": youtube.episodeNumber,
     "date": youtube.publishedAt,
