@@ -83,12 +83,12 @@ export default async function GuestPage({
       {/* Hero Section */}
       <div className="grid gap-8 md:grid-cols-2 md:gap-12">
         <div className="space-y-6">
-          <div className="overflow-hidden rounded-lg aspect-square md:aspect-auto md:h-[350px]">
+          <div className="overflow-hidden rounded-lg aspect-square md:aspect-auto md:h-[350px] shadow-lg">
             <PodcastPlayer videoId={guestData.latestEpisode?.youtube?.id} />
           </div>
 
-          <div className="flex items-center gap-4">
-            <Avatar className="w-16 h-16 border-2 border-primary/10">
+          <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg">
+            <Avatar className="w-16 h-16 border-2 border-primary/20 shadow-md">
               <AvatarImage
                 src={urlFor(guestData.image).url() || "/placeholder.svg"}
                 alt={guestData.name}
@@ -96,17 +96,19 @@ export default async function GuestPage({
               <AvatarFallback>
                 {guestData.name
                   .split(" ")
-                  .map((n) => n[0])
+                  .map((n: string) => n[0])
                   .join("")}
               </AvatarFallback>
             </Avatar>
             <div>
-              <h2 className="text-xl font-semibold">{guestData.name}</h2>
+              <h2 className="text-xl font-semibold text-primary">
+                {guestData.name}
+              </h2>
               <p className="text-muted-foreground">{guestData.title}</p>
             </div>
           </div>
 
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-gray-600 p-4 bg-gray-50 rounded-lg border border-gray-100">
             <p>{guestData.about}</p>
           </div>
 
@@ -120,31 +122,31 @@ export default async function GuestPage({
           {guestData.latestEpisode ? (
             <>
               <div className="space-y-2">
-                <Badge variant="outline" className="text-sm font-medium">
+                <Badge
+                  variant="outline"
+                  className="text-sm font-medium bg-primary/5 text-primary border-primary/20"
+                >
                   Episode {guestData.latestEpisode.number}
                 </Badge>
-                <h1 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
+                <h1 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
                   {guestData.latestEpisode.title}
                 </h1>
               </div>
 
               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <CalendarDays className="w-4 h-4" />
+                <div className="flex items-center gap-1 bg-gray-50 px-3 py-1 rounded-full">
+                  <CalendarDays className="w-4 h-4 text-primary" />
                   <span>{guestData.latestEpisode.date}</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Clock className="w-4 h-4" />
+                <div className="flex items-center gap-1 bg-gray-50 px-3 py-1 rounded-full">
+                  <Clock className="w-4 h-4 text-primary" />
                   <span>{guestData.latestEpisode.duration}</span>
                 </div>
               </div>
 
-              <p className="text-lg">{guestData.latestEpisode.description}</p>
-
-              {/* <PodcastPlayer
-                audioUrl={guestData.latestEpisode.audioUrl}
-                title={guestData.latestEpisode.title}
-              /> */}
+              <p className="text-lg leading-relaxed">
+                {guestData.latestEpisode.description}
+              </p>
             </>
           ) : (
             <div className="flex items-center justify-center h-full">
@@ -161,7 +163,7 @@ export default async function GuestPage({
       {/* Previous Episodes */}
       {guestData.previousEpisodes && guestData.previousEpisodes.length > 0 ? (
         <section className="space-y-6">
-          <h2 className="text-2xl font-bold">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
             Previous Episodes with {guestData.name}
           </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -169,19 +171,19 @@ export default async function GuestPage({
               <Link
                 href={`/episode/${episode.uuid}`}
                 key={episode.uuid || idx}
-                className="rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300 block"
+                className="rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 block bg-white hover:border-primary/20 group"
               >
-                <div className="aspect-video bg-gray-100 relative">
+                <div className="aspect-video bg-gray-100 relative overflow-hidden">
                   <Image
-                    src={episode.image || "/placeholder.svg"}
+                    src={episode.image ? episode.image : "/placeholder.svg"}
                     alt={episode.title}
                     width={400}
                     height={225}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="p-4 bg-primary/10 rounded-full">
-                      <div className="w-8 h-8 flex items-center justify-center text-primary">
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="p-4 bg-primary/90 rounded-full">
+                      <div className="w-8 h-8 flex items-center justify-center text-white">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -200,23 +202,26 @@ export default async function GuestPage({
                   </div>
                 </div>
                 <div className="p-4">
-                  <Badge variant="outline" className="mb-2">
+                  <Badge
+                    variant="outline"
+                    className="mb-2 bg-primary/5 text-primary border-primary/20"
+                  >
                     Episode {episode.number}
                   </Badge>
-                  <h3 className="font-semibold text-lg mb-2">
+                  <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors duration-300">
                     {episode.title}
                   </h3>
                   <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
                     {episode.description}
                   </p>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <CalendarDays className="w-4 h-4" />
+                    <CalendarDays className="w-4 h-4 text-primary" />
                     <span>{episode.date}</span>
                     <span className="mx-1">•</span>
-                    <Clock className="w-4 h-4" />
+                    <Clock className="w-4 h-4 text-primary" />
                     <span>{episode.duration}</span>
                   </div>
-                  <div className="mt-4 text-primary font-medium flex items-center">
+                  <div className="mt-4 text-primary font-medium flex items-center group-hover:translate-x-1 transition-transform duration-300">
                     View Episode <span className="ml-1">&gt;</span>
                   </div>
                 </div>
@@ -232,23 +237,32 @@ export default async function GuestPage({
       {/* <RelatedEpisodes episodes={guestData.relatedEpisodes} /> */}
 
       {/* Call to Action */}
-      <section className="p-8 text-center rounded-lg bg-primary/5">
-        <h2 className="mb-4 text-2xl font-bold">Enjoy this episode?</h2>
+      <section className="p-8 text-center rounded-lg bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/10">
+        <h2 className="mb-4 text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+          Enjoy this episode?
+        </h2>
         <p className="max-w-2xl mx-auto mb-6 text-lg">
-          Subscribe to "Growing Your Business With People" to never miss a new
-          episode and get weekly insights on business growth.
+          Subscribe to &quot;Growing Your Business With People&quot; to never
+          miss a new episode and get weekly insights on business growth.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
           <Link
             href="https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511"
             passHref
           >
-            <Button size="lg" className="cursor-pointer">
+            <Button
+              size="lg"
+              className="cursor-pointer bg-primary hover:bg-primary/90"
+            >
               Subscribe on Apple Podcasts
             </Button>
           </Link>
           <Link href={routes.external.listen} passHref>
-            <Button size="lg" variant="outline" className="cursor-pointer">
+            <Button
+              size="lg"
+              variant="outline"
+              className="cursor-pointer border-primary/20 hover:bg-primary/5"
+            >
               Listen on BuzzSprout
             </Button>
           </Link>
