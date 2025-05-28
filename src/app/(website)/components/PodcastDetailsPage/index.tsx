@@ -239,7 +239,6 @@ const PodcastDetailsPageComponent = () => {
               {episode.details?.description ? (
                 <div className="mt-8  ">
                   <div
-
                     key={`episode description `}
                     className="text-gray-500  whitespace-break-spaces   md:mt-4  "
                   >
@@ -247,40 +246,6 @@ const PodcastDetailsPageComponent = () => {
                   </div>
                 </div>
               ) : null}
-
-              {episode.details?.hashtags?.length ? (
-                <div className="mt-8 italic font-thin">
-                  {data.episodeDetails[0]?.hashtags?.map((ht) => `#${ht} `)}
-                </div>
-              ) : null}
-            </Section>
-          ) : null}
-        </Section>
-        <Section className="bg-light flex justify-center items-center   ">
-          {!isClip && episode.content?.files ? (
-            <Section className=" mx-6 md:mx-20 ">
-              <SectionHeading className="text-center">
-                {DATA.additionalContentHeader}
-              </SectionHeading>
-              {/* Creates a grid for Additional Content */}
-              <div className=" lg:grid place-items-center   auto-cols-auto text-center underline ">
-                {episode.content?.files?.map(
-                  ({ file, name, link, type, image }, idx) => {
-                    return (
-                      <>
-                        <Content
-                          key={`Content Item -${idx}`}
-                          file={file}
-                          name={name}
-                          link={link}
-                          type={type}
-                          image={image}
-                        />
-                      </>
-                    );
-                  }
-                )}
-              </div>
             </Section>
           ) : null}
         </Section>

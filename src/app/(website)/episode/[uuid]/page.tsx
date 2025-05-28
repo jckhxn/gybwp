@@ -1,37 +1,38 @@
 // @ts-nocheck
-
 import React from "react";
-import PodcastDetailsPageComponent from "@/src/app/(website)/components/PodcastDetailsPage";
-import PodcastPreview from "@/src/app/(website)/components/EpisodePreview";
-import EpisodeDetails from "@/src/app/(website)/components/EpisodeDetails";
-
-// Get Episode Data
-import { client } from "../../sanity/sanity-utils";
-import { Metadata } from "next";
-import { QueryParams, SanityDocument } from "next-sanity";
 import { draftMode } from "next/headers";
-import {
-  EPISODES_DETAILS_QUERY,
-  PODCAST_DETAILS_QUERY,
-} from "../../lib/queries";
-import EpisodePreview from "@/src/app/(website)/components/EpisodePreview";
-import { loadQuery } from "@/src/app/(website)/lib/store";
+import { SanityDocument } from "next-sanity";
 
+// Components
+import EpisodePreview from "@/src/app/(website)/components/EpisodePreview";
+import EpisodeDetails from "@/src/app/(website)/components/EpisodeDetails/";
+
+// Queries and utilities
+import { PODCAST_DETAILS_QUERY } from "../../lib/queries";
+import { loadQuery } from "@/src/app/(website)/lib/store";
 import processMetadata from "@/src/lib/processMetadata";
 
-export default async function Page({ params }: { params: QueryParams }) {
-  const { uuid } = params;
+type PageProps = {
+  params: Promise<{ uuid: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export default async function Page({ params, searchParams }: PageProps) {
+  const resolvedParams = await params;
+  const { uuid } = resolvedParams;
   const epID = uuid.split("-")[0];
 
   const initial = await loadQuery<SanityDocument>(
     PODCAST_DETAILS_QUERY,
     { uuid, epID },
     {
-      perspective: draftMode().isEnabled ? "previewDrafts" : "published",
+      perspective: (await draftMode()).isEnabled
+        ? "previewDrafts"
+        : "published",
     }
   );
 
-  return draftMode().isEnabled ? (
+  return (await draftMode()).isEnabled ? (
     <EpisodePreview initial={initial} params={{ uuid, epID }} />
   ) : (
     <>
@@ -40,21 +41,19 @@ export default async function Page({ params }: { params: QueryParams }) {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { path: string[] };
-}) {
-  const { uuid } = params;
-  const epID = uuid.split("-")[0];
+// export async function generateMetadata({ params }: { params: PageParams }) {
+//   const { uuid } = params;
+//   const epID = uuid.split("-")[0];
 
-  const initial = await loadQuery<SanityDocument>(
-    PODCAST_DETAILS_QUERY,
-    { uuid, epID },
-    {
-      perspective: draftMode().isEnabled ? "previewDrafts" : "published",
-    }
-  );
-  // if (!data) notFound();
-  return processMetadata(initial);
-}
+//   const initial = await loadQuery<SanityDocument>(
+//     PODCAST_DETAILS_QUERY,
+//     { uuid, epID },
+//     {
+//       perspective: (await draftMode()).isEnabled
+//         ? "previewDrafts"
+//         : "published",
+//     }
+//   );
+
+//   return processMetadata(initial);
+// }

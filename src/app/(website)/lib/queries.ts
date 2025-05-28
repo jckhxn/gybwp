@@ -13,18 +13,50 @@ export const GUEST_QUERY = groq` *[_type == "guest" && slug.current == $slug] {
   "uuid":coalesce(uuid,youtube.uuid),
   "image":coalesce(image,youtube.thumbnail),
   "seasonNumber":coalesce(seasonNumber,youtube.seasonNumber),
-  "episodeNumber":coalesce(seasonNumber,youtube.episodeNumber)
+  "episodeNumber":coalesce(seasonNumber,youtube.episodeNumber),
+  "publishedAt":youtube.publishedAt
 }
+}`;
+
+// Detailed Guest query with latest episode and previous episodes
+export const GUEST_DETAIL_QUERY = groq`*[_type == "guest" && slug.current == $slug][0] {
+  _id,
+  name,
+  title,
+about, 
+  image,
+  socialLinks,
+  "latestEpisode": *[_type == "episode" && references(^._id)] | order(youtube.publishedAt desc)[0] {
+  youtube {
+  id},
+    "title": youtube.title,
+    "number": youtube.episodeNumber,
+    "date": youtube.publishedAt,
+    "duration": "45 minutes",
+    "description": youtube.blurb,
+    "uuid": youtube.uuid,
+    "audioUrl": youtube.url
+  },
+  "previousEpisodes": *[_type == "episode" && references(^._id) && _id != ^.latestEpisode._id] | order(youtube.publishedAt desc)[0..2] {
+    "title": youtube.title,
+    "number": youtube.episodeNumber,
+    "date": youtube.publishedAt,
+    "description": youtube.blurb,
+    "uuid": youtube.uuid,
+    "duration": "45 minutes",
+    "image": youtube.thumbnail
+  }
 }`;
 
 // Get all Episodes by UUID
 export const EPISODES = groq`*[_type == "episode"]| order(uuid asc){uuid}`;
 
 // Get all Episodes for sitemap
-export const ALL_EPISODES = groq`*[_type == "episode"]{
-  uuid,
-  _createdAt
- }`;
+export const ALL_EPISODES = groq`*[_type == "episode"] | order(uuid desc)`;
+
+// Get the latest episode document
+export const LATEST_EPISODE = groq`*[_type == "episode"] | order(_createdAt desc)[0]`;
+
 // Get episode details
 export const EPISODES_DETAILS_QUERY = groq`*[_type == "episode" && uuid == $uuid]{
   episodeName,
@@ -49,15 +81,27 @@ export const SEASON_EPISODES_QUERY = groq`*[_type == "episode" && coalesce(seaso
   "uuid":coalesce(uuid,youtube.uuid),
   "image":coalesce(image,youtube.thumbnail),
   "seasonNumber":coalesce(seasonNumber,youtube.seasonNumber),
-  "episodeNumber":coalesce(seasonNumber,youtube.episodeNumber)
+  "episodeNumber":coalesce(seasonNumber,youtube.episodeNumber),
+  "publishedAt":youtube.publishedAt
 }`;
 
 //  Total Seasons with Episodes Query
 export const TOTAL_SEASONS_QUERY = groq`{"seasonName":array::unique(*[_type == "episode"].seasonName),"seasonNumber":array::unique(*[_type == "episode" ].seasonNumber)}`;
 
 // Get details for current Podcast.
-export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && coalesce(uuid,youtube.uuid) == $uuid] {
+export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && coalesce(uuid,youtube.uuid) == $uuid][0] {
     ...,
+  relatedEpisodes[]->
+    {
+      youtube{
+      title,
+      seasonNumber,
+      episodeNumber,
+      uuid,
+      thumbnail,
+    }
+    }
+   ,
     content {
       files[] {
         link,
@@ -74,6 +118,7 @@ export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && coalesce(uuid,
     "seasonNumber": coalesce(youtube.seasonNumber, seasonNumber),
     "url": coalesce("https://www.youtube.com/" + youtube.id, url),
     "uuid": coalesce(youtube.uuid, uuid),
+    "publishedAt": youtube.publishedAt,
     guests[]->,
     details {
     ...,
@@ -117,3 +162,9 @@ export const FEATURED_ARTICLES_QUERY = groq`*[_type == "featuredArticle"] `;
 
 // Other Articles Query
 export const OTHER_ARTICLES_QUERY = groq`*[_type == "article"]`;
+
+/**
+ * Query to fetch episode documents for specific UUIDs
+ * Returns episodes ordered by UUID
+ */
+export const RANDOM_RELATED_EPISODES = groq`*[_type == "episode" && coalesce(uuid,youtube.uuid) in $uuids] | order(coalesce(uuid,youtube.uuid) asc) [0...3]`;

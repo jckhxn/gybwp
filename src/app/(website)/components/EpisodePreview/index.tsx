@@ -3,7 +3,6 @@ import React from "react";
 import { PODCAST_DETAILS_QUERY } from "../../lib/queries";
 import { QueryResponseInitial, useQuery } from "@sanity/react-loader";
 import { QueryParams, SanityDocument } from "next-sanity";
-import EpisodeDetails from "../EpisodeDetails/indexOLD";
 
 const EpisodePreview = ({
   initial,
@@ -21,7 +20,7 @@ const EpisodePreview = ({
   );
 
   return data ? (
-    <EpisodeDetails data={data} draftMode={true} />
+    <h2>WIP</h2>
   ) : (
     <div className="bg-red-100">Episode not found</div>
   );

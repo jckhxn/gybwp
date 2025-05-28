@@ -32,13 +32,13 @@ const Slider: React.FC<{
 
   useEffect(() => {
     setIsMobileDevice(getDeviceValue());
-
-    const handleChange = () => setIsMobileDevice(getDeviceValue());
-    window.addEventListener("resize", handleChange);
-
-    return () => {
-      window.removeEventListener("resize", handleChange);
-    };
+    window.addEventListener("resize", () =>
+      setIsMobileDevice(getDeviceValue())
+    );
+    return () =>
+      window.removeEventListener("resize", () =>
+        setIsMobileDevice(getDeviceValue())
+      );
   }, []);
 
   const animateTransition = (next: number) => {
@@ -111,18 +111,18 @@ const Slider: React.FC<{
     <>
       <ScrollArea className="">
         <div
-          className="mt-8 overflow-x-visible w-full relative h-[400px]"
+          className="relative overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
           ref={wrapperRef}
         >
           <div
             id="slider"
-            className="flex absolute left-[8px] md:left-[50px]"
+            className="flex items-center gap-4 p-4 bg-gray-100 dark:bg-gray-800"
             ref={sliderRef}
           >
             {items.map(({ episodeName, episodeNumber, image, uuid }, idx) => (
               <div
                 key={`carousel-item-${idx}`}
-                className="bg-white border border-gray-200 w-[250px] mr-[40px] h-[400px]"
+                className="flex-shrink-0 w-64 h-40 bg-white rounded-md shadow-md hover:shadow-lg transition-shadow duration-300 dark:bg-gray-900"
               >
                 <Link href={`/episode/${uuid}`} className="bg-main group">
                   <Image

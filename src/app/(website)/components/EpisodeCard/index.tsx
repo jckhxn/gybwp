@@ -10,6 +10,7 @@ type YoutubeData = {
   seasonNumber?: number;
   episodeNumber: number;
   thumbnail?: string;
+  publishedAt?: string;
 };
 
 type Props = {
@@ -29,8 +30,20 @@ const EpisodeCard = ({
     seasonNumber: 0,
     episodeNumber: 0,
     thumbnail: "/api/placeholder/600/400",
+    publishedAt: "",
   },
 }: Props) => {
+  // Format the date to show as Month, Date (e.g., "April 22")
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "";
+
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+    });
+  };
+
   return (
     <div className="group relative overflow-hidden rounded-lg bg-[#293243] shadow-md transition-all duration-300 hover:shadow-xl h-[400px] flex flex-col">
       <Link className="flex flex-col h-full" href={`/episode/${youtube.uuid}`}>
@@ -43,7 +56,9 @@ const EpisodeCard = ({
             priority
           />
           <div className="absolute top-2 right-2 rounded-full bg-[#293243] bg-opacity-90 px-3 py-1 text-xs font-medium text-white">
-            {`S${youtube.seasonNumber}E${youtube.episodeNumber}`}
+            {youtube.publishedAt
+              ? formatDate(youtube.publishedAt)
+              : `S${youtube.seasonNumber}E${youtube.episodeNumber}`}
           </div>
         </div>
         <div className="flex flex-col justify-between flex-grow p-4 text-white">

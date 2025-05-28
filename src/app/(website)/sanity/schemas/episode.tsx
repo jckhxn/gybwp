@@ -60,6 +60,55 @@ const episode = {
       to: [{ type: "season" }],
     },
     {
+      name: "relatedEpisodes",
+      title: "Related Episodes",
+      description: "Select episodes that are related to this one",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "episode" }],
+          options: {
+            filter: ({ document }) => {
+              // Don't allow referencing the current episode
+              return {
+                filter: "_id != $id",
+                params: {
+                  id: document._id,
+                },
+              };
+            },
+          },
+          preview: {
+            select: {
+              title: "youtube.title",
+              subtitle: "youtube.description",
+              media: "youtube.thumbnail",
+              seasonNumber: "youtube.seasonNumber",
+              episodeNumber: "youtube.episodeNumber",
+            },
+            prepare(selection) {
+              const { title, subtitle, media, seasonNumber, episodeNumber } =
+                selection;
+              return {
+                title: title || "Untitled Episode",
+                subtitle: `Season ${seasonNumber || "?"} Episode ${episodeNumber || "?"}`,
+                media: e,
+              };
+            },
+          },
+        },
+      ],
+      validation: (Rule) =>
+        Rule.max(3).warning("Limit related episodes to 3 for optimal display"),
+      options: {
+        // Limit the number of items that can be selected
+        limit: 3,
+        // Allow manual ordering of the episodes
+        sortable: true,
+      },
+    },
+    {
       // Audio/Podcast Links of the Episode
       name: "podcastLinks",
       title: "Podcast Links",
@@ -85,72 +134,6 @@ const episode = {
       type: "array",
       of: [{ type: "string" }],
     },
-
-    {
-      // Additional Content
-
-      name: "content",
-      title: "Episode Content",
-      type: "object",
-      fields: [
-        {
-          name: "files",
-          title: "File",
-          type: "array",
-          of: [
-            {
-              type: "object",
-              fields: [
-                {
-                  name: "type",
-                  title: "Select the Type of File",
-                  description:
-                    "Please select which type of content you are uploading",
-                  type: "string",
-                  options: {
-                    list: [
-                      { title: "link", value: "link" },
-                      { title: "pdf", value: "pdf" },
-                      { title: "image", value: "image" },
-                    ],
-                    layout: "radio",
-                  },
-                },
-
-                {
-                  name: "name",
-                  title: "Name of Link/PDF/Image",
-                  type: "string",
-                },
-                {
-                  name: "image",
-                  title: "Upload File",
-                  type: "image",
-                  // Only render for image & specifies type
-                  // @ts-ignore
-                  hidden: ({ parent }): boolean => parent?.type !== "image",
-                },
-                {
-                  name: "pdf",
-                  title: "Upload File",
-                  type: "file",
-                  // Only render for PDF & specifies type
-                  // @ts-ignore
-                  hidden: ({ parent }) => parent?.type !== "pdf",
-                },
-                {
-                  name: "link",
-                  title: "Web Link",
-                  type: "string",
-                  // @ts-ignore
-                  hidden: ({ parent }) => parent?.type !== "link",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
     {
       // Details
       name: "details",
@@ -158,10 +141,121 @@ const episode = {
       type: "object",
       fields: [
         {
-          name: "hashtags",
-          title: "Episode Hashtags",
+          name: "keyTakeaways",
           type: "array",
+          title: "Key Takeaways",
+          description:
+            "Main points from the episode, displayed as bullet points",
           of: [{ type: "string" }],
+        },
+        {
+          name: "discussionTopics",
+          title: "Discussion Topics",
+          description: "Main topics covered in the episode",
+          type: "array",
+          of: [
+            {
+              type: "object",
+              fields: [
+                {
+                  name: "title",
+                  title: "Title",
+                  type: "string",
+                  description: "Brief title for this discussion topic",
+                  validation: (Rule) => Rule.required(),
+                },
+                {
+                  name: "description",
+                  title: "Description",
+                  type: "text",
+                  description: "Detailed explanation of this topic",
+                  validation: (Rule) => Rule.required(),
+                },
+              ],
+              preview: {
+                select: {
+                  title: "title",
+                  subtitle: "description",
+                },
+              },
+            },
+          ],
+        },
+        {
+          name: "highlights",
+          title: "Episode Highlights",
+          description: "Notable moments in the episode with timestamps",
+          type: "array",
+          of: [
+            {
+              type: "object",
+              fields: [
+                {
+                  name: "title",
+                  title: "Title",
+                  type: "string",
+                  description: "Brief title for this highlight moment",
+                  validation: (Rule) => Rule.required(),
+                },
+                {
+                  name: "timestamp",
+                  title: "Timestamp",
+                  type: "string",
+                  description: "Format: MM:SS or HH:MM:SS",
+                  validation: (Rule) =>
+                    Rule.regex(/^([0-9]+:)?[0-5]?[0-9]:[0-5][0-9]$/).error(
+                      "Please use a valid timestamp format (MM:SS or HH:MM:SS)"
+                    ),
+                },
+              ],
+              preview: {
+                select: {
+                  title: "title",
+                  subtitle: "timestamp",
+                },
+              },
+            },
+          ],
+        },
+        {
+          name: "transcript",
+          title: "Transcript",
+          type: "array",
+          description: "Full transcript of the podcast episode",
+          of: [
+            {
+              type: "block",
+              // Customize the toolbar options for transcript editing
+              styles: [
+                { title: "Normal", value: "normal" },
+                { title: "Speaker", value: "h4" },
+              ],
+              // Limit marks to only what's needed for transcripts
+              marks: {
+                decorators: [
+                  { title: "Strong", value: "strong" },
+                  { title: "Emphasis", value: "em" },
+                ],
+                annotations: [
+                  {
+                    name: "timestamp",
+                    title: "Timestamp",
+                    type: "object",
+                    fields: [
+                      {
+                        name: "time",
+                        title: "Time",
+                        type: "string",
+                        description: "Format: MM:SS or HH:MM:SS",
+                        validation: (Rule) =>
+                          Rule.regex(/^([0-9]+:)?[0-5]?[0-9]:[0-5][0-9]$/),
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          ],
         },
       ],
     },

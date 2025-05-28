@@ -7,10 +7,14 @@ export const locate: DocumentLocationResolver = (params, context) => {
   // Set up locations for episode documents
 
   if (params.type === "episode") {
+    // Extract the params we need and remove the version property
+    const { id, type } = params;
+    const queryParams = { id, type };
+
     // Subscribe to the latest uuid and title
     const doc$ = context.documentStore.listenQuery(
       `*[_id == $id][0]{youtube{uuid,title}}`,
-      params,
+      queryParams,
       { perspective: "previewDrafts" } // returns a draft article if it exists
     );
     // Return a streaming list of locations
