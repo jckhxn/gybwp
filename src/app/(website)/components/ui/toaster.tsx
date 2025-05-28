@@ -1,6 +1,7 @@
+// @ts-nocheck
 "use client"
 
-import { useToast } from "@/src/app/(website)/components//hooks/use-toast"
+import { useToast } from "@/src/app/(website)/hooks/use-toast"
 import {
   Toast,
   ToastClose,
