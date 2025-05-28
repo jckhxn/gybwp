@@ -14,7 +14,7 @@ import { Separator } from "@/src/app/(website)/components/ui/separator";
 import { Badge } from "@/src/app/(website)/components/ui/badge";
 import PodcastPlayer from "@/src/app/(website)/episode/[uuid]/podcast-player";
 import SocialShare from "./social-share";
-import RelatedEpisodes from "./related-episodes";
+// import RelatedEpisodes from "./related-episodes";
 import GuestBio from "./guest-bio";
 import ListenOnPlatforms from "./listen-on-platforms";
 import routes from "@/src/app/(website)/routes";
