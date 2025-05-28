@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Label } from "@/src/app/(website)/components/ui/label";
 import { Input } from "@/src/app/(website)/components/ui/input";
 import { Textarea } from "@/src/app/(website)/components/ui/textarea";
-import { Button } from "@/src/app/(website)/components/ui/button";
+import Button from "@/src/app/(website)/components/ui/button";
 
 // Static images
 import services from "@/public/images/consultingmain.webp";
@@ -235,9 +235,7 @@ export default function Consulting() {
                     </div>
                   )}
                   <div className="bg-gray-200">
-                    <Button className="w-full" type="submit">
-                      Contact Jeff
-                    </Button>
+                    <Button className="w-full">Contact Jeff</Button>
                   </div>
                 </form>
               )}

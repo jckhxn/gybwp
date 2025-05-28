@@ -31,8 +31,12 @@ export type episodeType = {
   details?: {
     featuredGuests: guestsType[];
     description: string[];
-    hashtags: string[];
     links?: linksType[];
+    hashtags?: string[];
+    highlights?: { title?: string; timestamp?: string }[];
+    keyTakeaways?: string[];
+    discussionTopics?: { title?: string; description?: string }[];
+    transcript?: any;
   };
 };
 
@@ -143,7 +147,6 @@ export const SEASON_ONE: seasonType = {
           "David is a Chief Inclusion and Social Impact Officer with a career that spans over three decades, along with being invited to the White House on more than one occasion. Tune in for David's tangible tactics to help you grow your business with people.",
           "This video is about Mastering DE&I, but it also covers Foster Inclusivity At Work, Diversity And Inclusion In The Workplace, and How To Create Inclusive Work Environments.",
         ],
-        hashtags: ["inclusivity", "impact", "diversity"],
         links: [],
       },
     },
@@ -194,7 +197,6 @@ export const SEASON_ONE: seasonType = {
           },
         ],
         description: [],
-        hashtags: ["recruiting", "hiring"],
       },
     },
 
@@ -671,7 +673,7 @@ export const SEASON_TWO: seasonType = {
           {
             name: "Mark Hoplamazian",
             about:
-              "Hyatt President & CEO since 2006, with a daily focus on realizing Hyatt’s purpose – to care for people so they can be their best. Steadfast champion of diversity, equity and inclusion, and passionate about connecting unemployed youth with careers in hospitality. Wellbeing advocate and keen believer in the power of mindfulness and empathy. Current board chair of the American Hotel & Lodging Association and Skills for Chicagoland's Future.",
+              "Hyatt President & CEO since 2006, with a daily focus on realizing Hyatt's purpose – to care for people so they can be their best. Steadfast champion of diversity, equity and inclusion, and passionate about connecting unemployed youth with careers in hospitality. Wellbeing advocate and keen believer in the power of mindfulness and empathy. Current board chair of the American Hotel & Lodging Association and Skills for Chicagoland's Future.",
             title: "CEO of Hyatt and chair of Skills for Chicagoland's Future",
             url: "https://www.linkedin.com/in/mark-hoplamazian-96446b43/",
             imageUrl:
@@ -702,7 +704,6 @@ export const SEASON_TWO: seasonType = {
           "The conversation focused on how CEOs and business leaders can access talent from low opportunity neighborhoods, how to access talent outside of the Chicago, Rhode Island and Phoenix markets, and how to get involved more broadly.",
           "Mark H., Pam T., and Daniel C. are all involved with Skills for Chicago Future, an organization dedicated to closing the opportunity gap and connecting those who are unemployed or underemployed to job opportunities. Through their efforts, they were able to impact over 20,000 people in 2021 and connect them to jobs. Their ultimate goal is to expand to 25 cities over the next 10 years and provide everyone with equitable access to a quality job. The podcast is a platform for them to share their mission and to spread awareness of their efforts.",
         ],
-        hashtags: ["talent", "growth", "hiring"],
         links: [
           {
             text: "For more information, visit:",
@@ -802,7 +803,6 @@ export const SEASON_TWO: seasonType = {
           "Ron Patrick had an unconventional career path, starting off as a Catholic priest before transitioning to a drug abuse counselor and eventually an intelligence officer for the government. He got the job after getting the right answer to a Trivial Pursuit question at a picnic with government employees. After that, the head of HR asked him to join the team.",
           "Ron Patrick also served as the former CHRO of Tendergrass, a small successful company where he was able to recruit and grow his own team. Once he joined, he quickly realized the strain the current employees were under, working 16-18 hours a day. He began assessing the company, understanding the business, and determining what needed to be done to grow sustainably. In 8 months, he more than doubled the company from 8 employees to 20, creating a mix of skills that was critical for the company's growth.",
         ],
-        hashtags: ["leadership", "growth", "recruiting"],
         links: [],
       },
     },
@@ -872,7 +872,6 @@ export const SEASON_TWO: seasonType = {
           "The book is based on insights from almost 50 Four-Star Admirals and generals who offer their perspectives on great leadership from a military perspective. Tom Collins is a voracious reader and has read over 130 books on leadership.",
           "In the conversation, Tom emphasizes the importance of knowing the mission and one's role in it for making effective decisions. The podcast is a must-listen for anyone who wants to grow their business with people.",
         ],
-        hashtags: ["leadership", "growth", "efficiency"],
         links: [
           {
             text: "Connect with Tom on LinkedIn:",
@@ -936,7 +935,6 @@ export const SEASON_TWO: seasonType = {
           "Today on the podcast, Jeff welcomes Andy Najjar, COO of FutureSolve.",
           "Andy and Jeff dive into How FutureSolve Helps Solve HR Problems for Small and Medium-Sized Businesses Impact of AI on Recruiting and Employee Engagement Unlocking Innovation and Inspiring People in the Workplace.",
         ],
-        hashtags: ["leadership", "growth", "findingPurpose"],
         links: [
           {
             text: "Connect with Andy on LinkedIn:",
@@ -1001,7 +999,6 @@ export const SEASON_TWO: seasonType = {
           "The conversation starts with Ken Carrig discussing the importance of bringing clarity and purpose to work in an organization to ensure leadership alignment.",
           "Carrig advises CEOs and founders to look ahead and prepare people in their organization for what's to come. He also emphasizes the importance of letting go and growing the business with other leaders. Jeff Lackey then asks Ken about his proudest moment in his career, to which Ken responds by encouraging people to take risks and have the courage to do something different.",
         ],
-        hashtags: ["leadership", "talent", "findingPurpose"],
         links: [
           {
             text: "Connect with Ken on LinkedIn:",
@@ -1065,7 +1062,6 @@ export const SEASON_TWO: seasonType = {
           "They discussed how to start changing how people think and work together by understanding how people process information. Bob also shared his insights and examples of how he has grown his organization with people. He and Jeff worked together at CVS, solving complex challenges in the hyper-competitive space of data engineering, analytics and science.",
           "Bob Darin discussed how data and analytics are essential to improving health care outcomes. He believes that with the right expertise, data can help address the foundational challenges that exist in the health care system.",
         ],
-        hashtags: ["leadership", "talent", "hiring"],
         links: [
           {
             text: "Connect with Bob on LinkedIn:",
@@ -1123,7 +1119,7 @@ export const SEASON_TWO: seasonType = {
           {
             name: "Tom Corbitt",
             about:
-              "Tom is a skilled facilitator, coach, and leader who acts as an extension of his client’s senior staff. In this capacity, he provides the expertise and incremental bandwidth to help them lead their organizations through major transformation. He understands how to align strategy, process, technology, talent and culture to help his clients achieve a sustainable step function increase in organizational capability.",
+              "Tom is a skilled facilitator, coach, and leader who acts as an extension of his client's senior staff. In this capacity, he provides the expertise and incremental bandwidth to help them lead their organizations through major transformation. He understands how to align strategy, process, technology, talent and culture to help his clients achieve a sustainable step function increase in organizational capability.",
             title: "Founder and Managing Partner of Top Line Growth Partners",
             url: "https://www.linkedin.com/in/tom-corbitt-0b4b546/",
             imageUrl:
@@ -1135,7 +1131,6 @@ export const SEASON_TWO: seasonType = {
           "Tom manages the Sales Consulting Practice, Talent Consulting Practice, and Coaching & Leadership Development Practice as well Top Line's Product Development, Business Development, and Operations functions.",
           "Jeff Lackey and Tom Corbitt continue their conversation as Tom emphasizes the importance of being strategic about talent optimization. He highlights the need to identify specific problems and understand the timetable for affecting change in skill level, human behavior, time to fill vacant roles, and path to proficiency.",
         ],
-        hashtags: ["leadership", "talent", "hiring"],
         links: [
           {
             text: "For more information, visit:",
@@ -1198,7 +1193,6 @@ export const SEASON_TWO: seasonType = {
           "The job market outlook for 2023 is positive, with twice as many job openings as candidates looking for jobs. However, there are still challenges in certain sectors and metro areas, such as the tech sector in San Francisco. College Recruiter primarily caters to Fortune 1000 companies, government agencies, and other high-growth employers. The company has expanded its services to more than 13 million candidates globally.",
           "Jeff and Steven's conversation continues with a discussion on the importance of speed in the recruitment process, with the prevailing wage being a crucial factor in attracting talent. They also touched on the issue of the company name, with some advocating for a change to reflect the focus on early career recruitment. The use of innovative technologies like AI and chatbots to create engaging and fast candidate experiences was also mentioned as a trend in the marketplace.",
         ],
-        hashtags: ["earlyCareer", "college", "hiring"],
         links: [
           {
             text: "For more information, visit:",
@@ -1264,7 +1258,6 @@ export const SEASON_TWO: seasonType = {
           "Mark shares his insights on the best recruiting strategies, which include hiring great leaders who come with a Rolodex and people who want to work for them. Jeff highlights Mark's extensive experience in leading urbanization through mergers, acquisitions, public offerings, and divestitures. Mark's natural likability and strong voice of the customer have helped him grow businesses from a national drug chain with sales of $18 billion to $884 billion. Jeff asks Mark to share how his experiences have prepared him to be the Chief ADR Officer for a 16 plus billion dollar publicly traded company.",
           "The conversation between Jeff Lackey and Mark Griffin continues as they discuss the importance of HR professionals delivering tough feedback to business leaders. Mark shares a story about a leader who was loyal to their team but blind to their lack of talent, emphasizing the responsibility of HR professionals to have tough discussions. They also discuss their hobbies, including Mark's love for boating and off-road motorcycle riding.",
         ],
-        hashtags: ["leadership", "recruiting", "growth"],
         links: [],
       },
     },
@@ -1322,7 +1315,6 @@ export const SEASON_TWO: seasonType = {
           "Amy shares her approach to passing through the mountains of data and using it to improve businesses. She emphasizes the need for having a framework around data analysis and personal growth in dealing with data. The two discuss major shifts in the market and the use of data in understanding retention rates, engagement scores, and time to fill. They note that averages can hide important outliers or subgroups that require specific attention and solutions.",
           "The conversation emphasizes the importance of using data to make informed decisions and take appropriate action, while also considering the satisfaction of employees and recruiters.",
         ],
-        hashtags: ["analytics", "hiring", "leadership"],
         links: [
           {
             text: "For more information about Sevenstep, visit:",
@@ -1383,7 +1375,6 @@ export const SEASON_TWO: seasonType = {
           "Sam shares examples that highlight the potential cost savings of up to £100,000 in six months and the positive impact on productivity and retention levels compared to other recruitment channels.",
           "They emphasize the need for engagement strategies to support referral and advocacy efforts, targeting specific areas for referrals, such as tech hiring, to maximize cost savings and engagement.",
         ],
-        hashtags: ["productivity", "referrals", "engagement"],
         links: [
           {
             text: "For more information, visit:",
@@ -1446,7 +1437,7 @@ export const SEASON_TWO: seasonType = {
           {
             name: "Helena Foulkes",
             about:
-              "Helena Foulkes is Executive Chair of Follett Higher Education Group. A former Democratic candidate for Governor of Rhode Island with decades of experience as a CEO and senior executive, spent 25 years at CVS Health, most recently as President of CVS Pharmacy and EVP of CVS Health, a position she held from January 2014 to January 2018. Known as a creative, purpose-driven leader, she was a critical part of CVS’s decision to exit the tobacco business and to rebrand the company CVS Health. Prior to running for Governor, Foulkes was CEO and a board member of Hudson’s Bay Company where she led a significant transformation of the business, ultimately creating a path to the successful privatization of the company.",
+              "Helena Foulkes is Executive Chair of Follett Higher Education Group. A former Democratic candidate for Governor of Rhode Island with decades of experience as a CEO and senior executive, spent 25 years at CVS Health, most recently as President of CVS Pharmacy and EVP of CVS Health, a position she held from January 2014 to January 2018. Known as a creative, purpose-driven leader, she was a critical part of CVS's decision to exit the tobacco business and to rebrand the company CVS Health. Prior to running for Governor, Foulkes was CEO and a board member of Hudson's Bay Company where she led a significant transformation of the business, ultimately creating a path to the successful privatization of the company.",
             title: "Executive Chair of Follett Higher Education Group",
             url: "https://www.linkedin.com/in/helena-foulkes-54316910/",
             imageUrl:
@@ -1458,7 +1449,6 @@ export const SEASON_TWO: seasonType = {
           "Helena Foulkes most recently sought the Democratic nomination for Governor of Rhode Island and is known as a purpose-driven leader who has led significant impact on organizations and industries. An experienced CEO with a track record of delivering results by building high performance teams, Helena now serves on several boards in the for-profit and not-for-profit sectors.",
           "In this conversation, Jeff and Helena dive into how Helena practices thoughtful leadership, what she's learned from managing multiple teams over the years, and how employees inspired organizational purpose.",
         ],
-        hashtags: ["leadership", "management", "purpose"],
         links: [
           {
             text: "Helena's Website | ",
@@ -1552,7 +1542,6 @@ export const SEASON_THREE: seasonType = {
           '"Tough conversations and bad news do not get better with age.""',
           '"Honest conversations about performance and career growth are crucial for individual development."',
         ],
-        hashtags: ["success", "leadership", "growth"],
         links: [],
       },
     },
@@ -1755,7 +1744,6 @@ export const SEASON_THREE: seasonType = {
           "Matt Alder, host of The Recruiting Future Podcast, discusses the future of talent acquisition and the role of AI in recruiting. He explores the concept of 'recruiter-less recruiting' and how AI can make the process more efficient. Alder emphasizes the importance of differentiation and human creativity in a world where everyone is using AI.",
           "He also highlights the potential of AI in analyzing HR data and its implications for talent management. Overall, Alder believes that AI will create new job opportunities and change the way organizations think about talent.",
         ],
-        hashtags: ["ai", "recruiting", "hr", "talentAcquisition", "business"],
         links: [
           {
             text: "For more about Matt, visit:",
@@ -1817,7 +1805,6 @@ export const SEASON_THREE: seasonType = {
           "Chris Cox, COO of ATI Physical Therapy, highlights the significance of connecting work to a purpose to enhance performance.",
           "He stresses leaders' role in motivating teams by explaining the rationale behind tasks. Drawing from his CVS Health and ATI Physical Therapy experiences, he illustrates how purpose-driven leadership boosts employee engagement and business results.",
         ],
-        hashtags: [],
         links: [
           {
             text: "",
@@ -1880,7 +1867,6 @@ export const SEASON_THREE: seasonType = {
           " He discusses the need for CEOs to understand the value of their employees and how to grow their business with people.",
           "Toby also highlights the role of automation, specifically robotic process automation (RPA), in enhancing efficiency and driving profits and revenue growth.",
         ],
-        hashtags: [],
         links: [
           {
             text: "LEGO® Rolls-Royce Trent 1000 Jet Engine - Bright Bricks Timelapse",
@@ -1943,7 +1929,6 @@ export const SEASON_THREE: seasonType = {
           "In this episode of the Growing Your Business with People, Mark Judd emphasizes the need for organizations to adapt to a global workforce and the benefits of integrating technology to create a more holistic approach to managing employees",
           "He also highlights the ethical considerations of AI and the challenges of finding the right balance between its positive and negative implications.",
         ],
-        hashtags: [],
         links: [
           {
             text: "Change At The Speed Of AI: The Latest Human Capital Disrupter.",
@@ -2012,7 +1997,6 @@ export const SEASON_THREE: seasonType = {
           "Rob recounts a story from his time at Deloitte, where he used data to challenge assumptions and gain credibility with the executive leadership team.",
           "He emphasizes the importance of understanding how talent acquisition can contribute to the company's bottom line and suggests using simple, actionable metrics to track progress and engage executives.",
         ],
-        hashtags: [],
         links: [
           {
             text: "Change At The Speed Of AI: The Latest Human Capital Disrupter.",
@@ -2083,7 +2067,6 @@ export const SEASON_THREE: seasonType = {
           "Jon shares examples of companies that have successfully curated their environments to get the most out of their teams.",
           "He emphasizes the need for leaders to invest in their people and create a culture of prototyping, testing, and scaling.",
         ],
-        hashtags: [],
         links: [
           {
             text: "Jon Brickner - LinkedIn.",
@@ -2151,7 +2134,6 @@ export const SEASON_THREE: seasonType = {
           "🔸Recognition and appreciation, such as saying hello in the morning and thank you in the evening, go a long way in motivating employees.",
           "🔸Happy coworkers lead to happy customers.",
         ],
-        hashtags: ["leadership", "FrontlineLeadership", ""],
         links: [
           {
             text: "Listen to your employees if you want to take care of them.",

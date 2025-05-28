@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 
 // components
-import { Section, SectionHeading } from "../shared";
+import { Section, SectionHeading } from "../shared/";
 import { usePagination, DOTS } from "./usePagination";
 
 // copy

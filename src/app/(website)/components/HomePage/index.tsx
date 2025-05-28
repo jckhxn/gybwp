@@ -27,6 +27,9 @@ import {
 
 import EpisodeSlider from "@/src/app/(website)/components/EpisodeSlider";
 import JSONLD from "../SEO/jsonld";
+import { Newsletter } from "../Newsletter";
+import { LatestEpisode, LatestEpisodes } from "../LatestEpisode";
+import { BrowseEpisodes } from "../BrowseEpisodes";
 
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState();
@@ -37,14 +40,15 @@ const HomePageComponent = () => {
 
   // SWR
   useEffect(() => {
-    if (!isLoading && data[0]?.title) {
-      setActiveSeason(data[0]?.title);
+    if (!isLoading && data?.[0]?.title) {
+      setActiveSeason(data[0].title);
     }
-  }, [data]);
+  }, [data, isLoading]);
 
   useEffect(() => {
     mutate(SEASON_EPISODES_QUERY);
   }, [activeSeason]);
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "PodcastSeries",
@@ -56,78 +60,137 @@ const HomePageComponent = () => {
     headline:
       "Listen to 'Growing Your Business with People!' – the podcast for CEOs and business leaders focusing on growth through investing in their teams.",
   };
+
   return (
     <>
       <JSONLD data={structuredData} />
-      {/* MAIN SECTION */}
-      <Section className="w-full py-12 md:py-24 lg:py-3 bg-main ">
-        <div className="container grid items-center gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-2 ">
-          <div className="space-y-4">
-            <h1 className="text-gray-200 text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-              {HERO.header}
-            </h1>
-            <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-              {HERO.body}
-            </p>
-            <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <Link
-                className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-gray-50 shadow transition-all duration-300 hover:bg-white-900/90 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 active:scale-95 disabled:pointer-events-none disabled:opacity-50 dark:bg-primary dark:text-white dark:hover:bg-primary-50/90 dark:focus-visible:ring-gray-300"
-                href={HERO.buttonUrl}
-              >
-                {HERO.buttonText}
-              </Link>
-              <Link
-                className="inline-flex h-10 items-center justify-center rounded-md 
-        text-gray-50 bg-primary px-8 text-sm font-medium shadow-sm transition-all duration-300 hover:bg-gray-100 hover:text-white hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 active:scale-95 disabled:pointer-events-none disabled:opacity-50 dark:bg-primary dark:hover:bg-primary dark:hover:text-white"
-                href={HERO.secondButtonUrl}
-              >
-                {HERO.secondButtonText}
-              </Link>
+
+      {/* REDESIGNED HERO SECTION */}
+      <Section className="w-full py-12 md:py-20 lg:py-24 bg-gradient-to-br from-main to-gray-900">
+        <div className="container mx-auto px-6 md:px-12">
+          <div className="flex flex-col lg:flex-row lg:items-center">
+            <div className="lg:w-1/2 space-y-8 mb-10 lg:mb-0">
+              <div>
+                <h2 className="text-primary font-semibold tracking-wide uppercase">
+                  Business Leadership Podcast
+                </h2>
+                <h1 className="text-gray-100 text-4xl md:text-5xl lg:text-6xl font-bold mt-2 leading-tight">
+                  {HERO.header}
+                </h1>
+              </div>
+
+              <p className="text-gray-300 text-lg md:text-xl max-w-[600px]">
+                {HERO.body}
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  className="inline-flex h-14 items-center justify-center rounded-md bg-primary px-8 text-base font-medium text-gray-50 shadow-lg transition-all duration-300 hover:bg-accent hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2"
+                  href={HERO.buttonUrl}
+                >
+                  {HERO.buttonText}
+                </Link>
+                <Link
+                  className="inline-flex h-14 items-center justify-center rounded-md border-2 border-gray-400 px-8 text-base font-medium text-gray-100 transition-all duration-300 hover:bg-gray-800 hover:border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2"
+                  href={HERO.secondButtonUrl}
+                >
+                  {HERO.secondButtonText}
+                </Link>
+              </div>
+
+              {/* PODCAST PLATFORMS */}
+              <div className="pt-6">
+                <p className="text-gray-400 mb-4 font-medium">Available on:</p>
+                <div className="flex flex-wrap gap-4">
+                  <Link
+                    href="https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 bg-black/30 hover:bg-black/50 transition-colors py-2 px-4 rounded-lg"
+                  >
+                    <Image
+                      src="/social-logos/apple.png"
+                      alt="Apple Podcasts"
+                      width={24}
+                      height={24}
+                    />
+                    <span className="text-white">Apple Podcasts</span>
+                  </Link>
+                  <Link
+                    href="https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 bg-black/30 hover:bg-black/50 transition-colors py-2 px-4 rounded-lg"
+                  >
+                    <Image
+                      src="/social-logos/spotify.png"
+                      alt="Spotify"
+                      width={24}
+                      height={24}
+                    />
+                    <span className="text-white">Spotify</span>
+                  </Link>
+                  <Link
+                    href="https://www.buzzsprout.com/2057493"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 bg-black/30 hover:bg-black/50 transition-colors py-2 px-4 rounded-lg"
+                  >
+                    <Image
+                      src="/social-logos/buzzsprout.png"
+                      alt="Buzzsprout"
+                      width={24}
+                      height={24}
+                    />
+                    <span className="text-white">Buzzsprout</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:w-1/2 flex justify-center lg:justify-end">
+              <div className="relative">
+                {/* Decorative element */}
+                <div className="absolute -top-6 -left-6 w-32 h-32 rounded-full bg-primary/20 blur-2xl"></div>
+                <div className="absolute -bottom-8 -right-8 w-40 h-40 rounded-full bg-accent/20 blur-2xl"></div>
+
+                {/* Host Badge - Professional Version */}
+                <div className="absolute bottom-6 right-6 z-20 bg-black/70 backdrop-blur-sm px-5 py-3 rounded-md shadow-xl border border-white/10">
+                  <div className="flex items-center gap-3">
+                    <div className="w-[3px] h-12 bg-primary"></div>
+                    <div>
+                      <p className="text-gray-400 text-xs uppercase tracking-wider font-medium">
+                        Host
+                      </p>
+                      <p className="text-white font-bold text-lg">
+                        Jeff Lackey
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <Image
+                  alt="Growing Your Business With People Podcast"
+                  className="relative z-10 rounded-2xl shadow-2xl object-cover border-4 border-gray-800/50"
+                  height={500}
+                  src={heroImage}
+                  width={500}
+                  priority={true}
+                />
+              </div>
             </div>
           </div>
-          <Image
-            alt="Hero"
-            className="lg:ml-64 mx-auto aspect-square   overflow-hidden rounded-xl object-cover"
-            height={550}
-            src={heroImage}
-            width={550}
-            priority={true}
-          />
         </div>
       </Section>
 
       {/* Episode Selector */}
-      <EpisodeSlider />
-      {/* Large Podcast Playa */}
-      <BuzzSproutPlayer lg />
+      <LatestEpisode />
+      <BrowseEpisodes />
 
-      {/* CTA */}
-      <Section className={`bg-secondary`}>
-        <div className="p-8 md:p-12 lg:px-16 lg:py-24">
-          <div className="mx-auto max-w-lg text-center">
-            <SectionHeading className="text-white text-3xl md:text-3xl">
-              {CTA.header}
-            </SectionHeading>
+      {/* Newsletter CTA */}
+      <Newsletter />
 
-            <p className="hidden font-extralight text-white sm:mt-4 sm:block">
-              {CTA.body}
-            </p>
-          </div>
-
-          <div className="mx-auto mt-8 max-w-xl text-center ">
-            <Button
-              as="a"
-              color={"bg-[#0A66C2]"}
-              href={CTA.buttonUrl}
-              className="px-12 py-3"
-            >
-              {CTA.buttonText}
-            </Button>
-          </div>
-        </div>
-      </Section>
-
-      {/* IN THE NEWS */}
+      {/* Featured News */}
       <FeaturedNews color="light" />
     </>
   );

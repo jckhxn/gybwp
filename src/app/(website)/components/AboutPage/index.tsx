@@ -12,7 +12,7 @@ import hero from "@/public/images/blueprint.webp";
 import host from "@/public/images/consulting1.webp";
 import { SVGProps } from "react";
 
-export default function Component() {
+export default function AboutPage() {
   return (
     <>
       <section className="bg-light w-full py-12 md:py-24 lg:py-32">

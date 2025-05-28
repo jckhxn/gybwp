@@ -8,7 +8,7 @@ import Header from "./components/Header";
 
 // styling
 import "tailwindcss/tailwind.css";
-import "/dist/output.css";
+
 import { Open_Sans } from "next/font/google";
 const openSans = Open_Sans({ subsets: ["latin"], weight: "variable" });
 
@@ -61,7 +61,7 @@ export type ApplicationProps = AppProps & {
   Component: Component;
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -78,7 +78,7 @@ export default function RootLayout({
           <main className={openSans.className}>
             <Header />
             {children}
-            {draftMode().isEnabled && <LiveVisualEditing />}
+            {(await draftMode()).isEnabled && <LiveVisualEditing />}
             <Footer />
           </main>
         </body>
