@@ -36,6 +36,7 @@ import { CTA } from "../HomePage/static-data";
 import PodcastPlayer, {
   PlayerHandle,
 } from "../../episode/[uuid]/podcast-player";
+import StickyVideoPlayer from "../StickyVideoPlayer";
 import RelatedEpisodes from "../../episode/[uuid]/related-episodes";
 import {
   formatDate,
@@ -404,9 +405,16 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
             </div>
 
             {/* Video Player */}
-            <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-              <PodcastPlayer ref={playerRef} videoId={episode?.youtube?.id} />
-            </div>
+            <StickyVideoPlayer 
+              videoId={episode?.youtube?.id}
+              title={title}
+              onPlayerRef={(ref) => {
+                if (ref?.current) {
+                  // @ts-expect-error - assigning ref for player controls
+                  playerRef.current = ref.current;
+                }
+              }}
+            />
 
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-3">
