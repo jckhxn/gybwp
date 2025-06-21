@@ -405,7 +405,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
             </div>
 
             {/* Video Player */}
-            <StickyVideoPlayer 
+            <StickyVideoPlayer
               videoId={episode?.youtube?.id}
               title={title}
               onPlayerRef={(ref) => {

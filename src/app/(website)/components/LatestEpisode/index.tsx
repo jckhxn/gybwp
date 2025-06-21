@@ -104,7 +104,10 @@ export const LatestEpisode = () => {
           </div>
           <div className="w-full overflow-hidden rounded-xl border bg-background shadow-lg transition-all hover:shadow-xl">
             <div className="grid gap-6 md:grid-cols-[1fr_1fr] md:gap-8">
-              <div className="relative group aspect-video w-full overflow-hidden rounded-l-xl flex items-center justify-center">
+              <Link
+                href={`/episode/${latestEpisode.uuid}`}
+                className="relative group aspect-video w-full overflow-hidden rounded-l-xl flex items-center justify-center"
+              >
                 <Image
                   src={
                     latestEpisode.thumbnail ||
@@ -136,7 +139,7 @@ export const LatestEpisode = () => {
                     </svg>
                   </div>
                 </div>
-              </div>
+              </Link>
               <div className="space-y-4 p-6">
                 <div className="space-y-2">
                   <h3 className="text-2xl font-bold">

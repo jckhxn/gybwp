@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { X, Maximize2 } from "lucide-react";
-import PodcastPlayer, { PlayerHandle } from "../../episode/[uuid]/podcast-player";
-import Button from "../ui/button";
+import PodcastPlayer, {
+  PlayerHandle,
+} from "../../episode/[uuid]/podcast-player";
 
 interface StickyVideoPlayerProps {
   videoId?: string;
@@ -11,17 +12,20 @@ interface StickyVideoPlayerProps {
   onPlayerRef?: (ref: React.RefObject<PlayerHandle>) => void;
 }
 
-export default function StickyVideoPlayer({ 
-  videoId, 
+export default function StickyVideoPlayer({
+  videoId,
   title,
-  onPlayerRef 
+  onPlayerRef,
 }: StickyVideoPlayerProps) {
   const [isSticky, setIsSticky] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  const [isPlayerReady, setIsPlayerReady] = useState(false);
-  
+  const [currentTime, setCurrentTime] = useState(0);
+  const [wasPlaying, setWasPlaying] = useState(false);
+  const [isChildPlayerReady, setIsChildPlayerReady] = useState(false);
+
   const playerRef = useRef<PlayerHandle>(null);
-  const originalContainerRef = useRef<HTMLDivElement>(null);
+  const placeholderRef = useRef<HTMLDivElement>(null); // Ref for the placeholder
+  const stickyContainerRef = useRef<HTMLDivElement>(null); // Ref for the sticky container
 
   // Pass the player ref to parent component
   useEffect(() => {
@@ -32,30 +36,39 @@ export default function StickyVideoPlayer({
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!originalContainerRef.current) return;
+      if (!placeholderRef.current) return;
 
-      const rect = originalContainerRef.current.getBoundingClientRect();
-      // Make sticky when the top of the original player is above viewport
-      const shouldBeSticky = rect.top < -100; // Add buffer for better UX
+      const rect = placeholderRef.current.getBoundingClientRect();
+      const shouldBeSticky = rect.top < 0 && rect.bottom < 0;
 
-      setIsSticky(shouldBeSticky);
+      if (isSticky !== shouldBeSticky) {
+        // Before changing state, get the current state
+        if (playerRef.current) {
+          const time = playerRef.current.getCurrentTime();
+          const playing = playerRef.current.isPlaying;
+          setCurrentTime(time);
+          setWasPlaying(playing);
+        }
+        setIsChildPlayerReady(false); // Reset readiness on transition
+        setIsSticky(shouldBeSticky);
+      }
     };
 
-    // Debounce scroll events for better performance
-    let ticking = false;
     const scrollHandler = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
+      requestAnimationFrame(handleScroll);
     };
 
     window.addEventListener("scroll", scrollHandler, { passive: true });
     return () => window.removeEventListener("scroll", scrollHandler);
-  }, []);
+  }, [isSticky]);
+
+  // Effect to seek to the correct time when the player's container changes
+  useEffect(() => {
+    // Only seek when the child player has signaled it is ready
+    if (playerRef.current && isChildPlayerReady) {
+      playerRef.current.seekTo(currentTime, wasPlaying);
+    }
+  }, [isChildPlayerReady, currentTime, wasPlaying]);
 
   const handleClose = () => {
     setIsVisible(false);
@@ -65,55 +78,51 @@ export default function StickyVideoPlayer({
   };
 
   const handleExpand = () => {
-    // Scroll back to the original player position
-    if (originalContainerRef.current) {
-      originalContainerRef.current.scrollIntoView({ 
-        behavior: "smooth", 
-        block: "center" 
+    if (placeholderRef.current) {
+      placeholderRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
       });
     }
   };
 
   if (!isVisible) return null;
 
+  const PlayerComponent = (
+    <PodcastPlayer
+      ref={playerRef}
+      videoId={videoId}
+      onPlayerReady={() => setIsChildPlayerReady(true)}
+    />
+  );
+
   return (
     <>
-      {/* Original player container */}
-      <div 
-        ref={originalContainerRef}
+      {/* Placeholder for the original player */}
+      <div
+        ref={placeholderRef}
         className="aspect-video bg-muted rounded-lg overflow-hidden relative"
       >
-        <div className={`w-full h-full ${isSticky ? 'invisible' : 'visible'}`}>
-          <PodcastPlayer 
-            ref={playerRef} 
-            videoId={videoId}
-          />
-        </div>
+        {!isSticky && PlayerComponent}
       </div>
 
       {/* Sticky minimized player */}
       <div
-        className={`fixed bottom-6 right-6 z-50 transition-all duration-500 ease-out ${
+        ref={stickyContainerRef}
+        className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ease-out ${
           isSticky
             ? "translate-y-0 opacity-100 visible scale-100"
             : "translate-y-full opacity-0 invisible scale-95"
         }`}
       >
         <div className="bg-black rounded-xl shadow-2xl overflow-hidden border border-gray-700 group hover:shadow-3xl transition-all duration-300 hover:scale-[1.02]">
-          {/* Sticky player container */}
-          <div 
+          <div
             className="w-80 h-48 relative cursor-pointer"
             onClick={handleExpand}
           >
-            {/* Render player only when sticky */}
-            {isSticky && (
-              <div className="w-full h-full">
-                <PodcastPlayer 
-                  videoId={videoId}
-                />
-              </div>
-            )}
-            
+            {/* The single player instance will be rendered here when sticky */}
+            <div className="w-full h-full">{isSticky && PlayerComponent}</div>
+
             {/* Controls overlay */}
             <div className="absolute top-3 right-3 z-10 flex gap-2">
               <button
@@ -137,7 +146,7 @@ export default function StickyVideoPlayer({
                 <X className="h-4 w-4" />
               </button>
             </div>
-            
+
             {/* Title overlay */}
             {title && (
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 pointer-events-none">
@@ -146,17 +155,6 @@ export default function StickyVideoPlayer({
                 </p>
               </div>
             )}
-
-            {/* Hover hint */}
-            <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-              <div className="bg-black/80 text-white px-4 py-2 rounded-full text-sm font-medium">
-                Click to expand
-              </div>
-            </div>
-
-            {/* Subtle glow effect */}
-            <div className="absolute inset-0 rounded-xl shadow-inner pointer-events-none opacity-0 group-hover:opacity-20 transition-opacity duration-300" 
-                 style={{boxShadow: 'inset 0 0 20px rgba(59, 130, 246, 0.5)'}}></div>
           </div>
         </div>
       </div>

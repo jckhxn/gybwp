@@ -1,7 +1,7 @@
 // @ts-nocheck
-"use client"
+"use client";
 
-import { useToast } from "@/src/app/(website)/hooks/use-toast"
+import { useToast } from "@/src/app/(website)/hooks/use-toast";
 import {
   Toast,
   ToastClose,
@@ -9,10 +9,10 @@ import {
   ToastProvider,
   ToastTitle,
   ToastViewport,
-} from "@/src/app/(website)/components//ui/toast"
+} from "@/src/app/(website)/components//ui/toast";
 
 export function Toaster() {
-  const { toasts } = useToast()
+  const { toasts } = useToast();
 
   return (
     <ToastProvider>
@@ -28,9 +28,9 @@ export function Toaster() {
             {action}
             <ToastClose />
           </Toast>
-        )
+        );
       })}
       <ToastViewport />
     </ToastProvider>
-  )
+  );
 }
