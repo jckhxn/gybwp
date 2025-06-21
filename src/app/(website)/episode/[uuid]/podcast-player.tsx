@@ -34,12 +34,14 @@ export interface PlayerHandle {
   pause: () => void;
   togglePlay: () => void;
   isPlaying: boolean;
-  seekTo: (timeInSeconds: number) => void;
+  seekTo: (timeInSeconds: number, playAfterSeek?: boolean) => void;
+  getCurrentTime: () => number;
 }
 
 // Define props interface for the component
 interface PodcastPlayerProps {
   videoId?: string;
+  onPlayerReady?: () => void;
 }
 
 const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
@@ -54,6 +56,7 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
     const [volume, setVolume] = useState(80);
     const [currentTime, setCurrentTime] = useState("0:00");
     const [duration, setDuration] = useState("0:00");
+    const [isPlayerReady, setIsPlayerReady] = useState(false);
 
     const playerRef = useRef<HTMLDivElement>(null);
     const youtubePlayerRef = useRef<YT.Player | null>(null);
@@ -61,29 +64,37 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
     // Expose methods to parent component via ref
     useImperativeHandle(ref, () => ({
       play: () => {
-        if (youtubePlayerRef.current) {
+        if (youtubePlayerRef.current && isPlayerReady) {
           youtubePlayerRef.current.playVideo();
           setIsPlaying(true);
         }
       },
       pause: () => {
-        if (youtubePlayerRef.current) {
+        if (youtubePlayerRef.current && isPlayerReady) {
           youtubePlayerRef.current.pauseVideo();
           setIsPlaying(false);
         }
       },
       togglePlay: () => {
-        togglePlay();
+        if (isPlayerReady) {
+          togglePlay();
+        }
       },
       isPlaying,
-      seekTo: (timeInSeconds: number) => {
-        if (youtubePlayerRef.current) {
+      seekTo: (timeInSeconds: number, playAfterSeek = false) => {
+        if (youtubePlayerRef.current && isPlayerReady) {
           youtubePlayerRef.current.seekTo(timeInSeconds, true);
-          if (!isPlaying) {
+          if (playAfterSeek || !isPlaying) {
             youtubePlayerRef.current.playVideo();
             setIsPlaying(true);
           }
         }
+      },
+      getCurrentTime: () => {
+        if (youtubePlayerRef.current && isPlayerReady) {
+          return youtubePlayerRef.current.getCurrentTime() || 0;
+        }
+        return 0;
       },
     }));
 
@@ -137,6 +148,8 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
         existingPlayer.innerHTML = "";
       }
 
+      setIsPlayerReady(false);
+
       // Initialize player
       youtubePlayerRef.current = new window.YT.Player("youtube-player", {
         videoId: videoId,
@@ -171,6 +184,10 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
 
       // Start progress tracking
       startProgressTracking();
+      setIsPlayerReady(true);
+      if (props.onPlayerReady) {
+        props.onPlayerReady();
+      }
     };
 
     // When player state changes

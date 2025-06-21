@@ -1,6 +1,14 @@
+# Fixes
+
+- Episodes out of order : Season 4.
+
 # Improvements
 
-Finish home page components
+TINY MINI YOUTUBE PLAYER YOU STARTED.
+
+Don't rely on UUIDs or episodeNumber field as it can be incorrectly applied from the title of the youtube video (two videos with the same episode number caused BIG bug lol)
+Redirect existing UUIDS to slug based on title, use title as pathname slug
+
 Move to site builder
 
 # Homepage

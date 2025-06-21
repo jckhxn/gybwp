@@ -51,8 +51,8 @@ export const BrowseEpisodes = () => {
   // Set episodes when data changes
   useEffect(() => {
     if (data && Array.isArray(data)) {
-      // Display up to 5 episodes
-      setEpisodes(data.slice(0, 5));
+      // Remove the slice to show all episodes
+      setEpisodes(data);
 
       // Reset scroll states when episodes change
       setShowLeftArrow(false); // Left arrow should be hidden initially
