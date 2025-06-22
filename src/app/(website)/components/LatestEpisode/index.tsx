@@ -88,9 +88,9 @@ export const LatestEpisode = () => {
   }
 
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50">
+    <section className="w-full py-6 md:py-10 lg:py-12 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50">
       <div className="container mx-auto px-4 md:px-6 max-w-6xl">
-        <div className="flex flex-col items-center gap-4 md:gap-8 text-center">
+        <div className="flex flex-col items-center gap-3 md:gap-6 text-center">
           <div className="space-y-2">
             <div className="inline-block rounded-lg bg-primary/10 px-3 py-1 text-sm text-primary">
               Featured
