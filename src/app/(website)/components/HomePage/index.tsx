@@ -68,7 +68,7 @@ const HomePageComponent = () => {
       <JSONLD data={structuredData} />
 
       {/* REDESIGNED HERO SECTION */}
-      <Section className="w-full py-16 md:py-28 lg:py-36 bg-gradient-to-br from-main to-gray-900 relative overflow-hidden">
+      <Section className="w-full py-10 md:py-16 lg:py-20 bg-gradient-to-br from-main to-gray-900 relative overflow-hidden">
         {/* Animated floating shapes */}
         <motion.div
           animate={{ y: [0, 20, 0] }}
@@ -81,21 +81,21 @@ const HomePageComponent = () => {
           transition={{ repeat: Infinity, duration: 12 }}
           className="absolute top-1/2 left-0 w-24 h-24 rounded-full bg-secondary/20 blur-2xl z-0"
         />
-        <div className="container mx-auto px-6 md:px-12 relative z-10">
-          <div className="flex flex-col lg:flex-row lg:items-center">
-            <div className="lg:w-1/2 space-y-10 mb-12 lg:mb-0">
-              <div>
-                <h2 className="text-primary font-semibold tracking-widest uppercase text-lg md:text-xl mb-2">
+        <div className="container mx-auto px-4 sm:px-6 md:px-12 relative z-10">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-12 lg:gap-20">
+            <div className="lg:w-1/2 flex flex-col gap-8 mb-10 lg:mb-0">
+              <div className="flex flex-col gap-2">
+                <h2 className="text-primary font-semibold tracking-widest uppercase text-lg md:text-xl">
                   Business Leadership Podcast
                 </h2>
-                <h1 className="text-gray-100 text-5xl md:text-6xl lg:text-7xl font-extrabold mt-2 leading-tight font-sans">
+                <h1 className="text-gray-100 text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight font-sans">
                   {HERO.header}
                 </h1>
               </div>
-              <p className="text-gray-300 text-xl md:text-2xl max-w-[600px] mt-4">
+              <p className="text-gray-300 text-xl md:text-2xl max-w-[600px]">
                 {HERO.body}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 mt-8">
+              <div className="flex flex-col sm:flex-row gap-4 mt-6">
                 <Button
                   as="a"
                   href={HERO.buttonUrl}
@@ -116,9 +116,9 @@ const HomePageComponent = () => {
                 </Button>
               </div>
               {/* PODCAST PLATFORMS */}
-              <div className="pt-8">
-                <p className="text-gray-400 mb-4 font-medium">Available on:</p>
-                <div className="flex flex-wrap gap-4">
+              <div className="pt-6">
+                <p className="text-gray-400 mb-3 font-medium">Available on:</p>
+                <div className="flex flex-wrap gap-3">
                   <Link
                     href="https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511"
                     target="_blank"
@@ -204,18 +204,20 @@ const HomePageComponent = () => {
       </Section>
 
       {/* Episode Selector */}
-      <Section className="pt-0 pb-8 md:pb-12 lg:pb-16">
+      <Section className="pt-2 pb-0 md:pb-0 lg:pb-0">
         <LatestEpisode />
-        <BrowseEpisodes />
+        <div className="mt-4">
+          <BrowseEpisodes />
+        </div>
       </Section>
 
       {/* Newsletter CTA */}
-      <Section className="relative w-full py-10 md:py-16 lg:py-20 flex items-center justify-center overflow-hidden bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-100 my-8">
+      <Section className="relative w-full py-6 md:py-10 lg:py-12 flex items-center justify-center overflow-hidden bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-100 mb-6">
         <Newsletter />
       </Section>
 
       {/* Featured News */}
-      <Section className="w-full py-10 md:py-16 lg:py-20 bg-white rounded-xl shadow-lg border border-gray-100 my-8">
+      <Section className="w-full py-6 md:py-10 lg:py-12 bg-white rounded-xl shadow-lg border border-gray-100 mt-8 mb-6">
         <FeaturedNews color="light" />
       </Section>
     </>

@@ -152,12 +152,12 @@ export const BrowseEpisodes = ({
       id="episodes"
       className={
         hideBackground
-          ? "w-full py-4"
-          : "w-full py-12 md:py-24 lg:py-32 bg-white"
+          ? "w-full py-2"
+          : "w-full py-6 md:py-10 lg:py-12 bg-white"
       }
     >
       <div className="container mx-auto px-4 md:px-6 max-w-6xl">
-        <div className="flex flex-col items-center gap-4 md:gap-8 text-center">
+        <div className="flex flex-col items-center gap-3 md:gap-6 text-center">
           {!hideHeading && (
             <div className="space-y-2">
               <div className="inline-block rounded-lg bg-secondary/10 px-3 py-1 text-sm text-secondary">
@@ -367,7 +367,7 @@ export const BrowseEpisodes = ({
             </div>
           )}
 
-          <div className="mt-12">
+          <div className="mt-2">
             <Link
               href="/episodes"
               className="inline-flex items-center rounded-lg bg-primary px-6 py-3 text-lg font-medium text-white shadow-md transition-colors hover:bg-primary/90"
