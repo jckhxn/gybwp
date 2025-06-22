@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
+import { Play } from "lucide-react";
 
 type YoutubeData = {
   title?: string;
@@ -45,46 +46,36 @@ const EpisodeCard = ({
   };
 
   return (
-    <div className="group relative overflow-hidden rounded-lg bg-[#293243] shadow-md transition-all duration-300 hover:shadow-xl h-[400px] flex flex-col">
+    <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-main/80 to-gray-900/80 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 h-[400px] flex flex-col border border-gray-800/40 backdrop-blur-md">
       <Link className="flex flex-col h-full" href={`/episode/${youtube.uuid}`}>
         <div className="relative overflow-hidden h-[200px] w-full">
           <Image
             alt={`Thumbnail for ${youtube.title}`}
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-300 group-hover:scale-110 rounded-t-2xl"
             src={`${youtube.thumbnail}`}
             fill
             priority
           />
-          <div className="absolute top-2 right-2 rounded-full bg-[#293243] bg-opacity-90 px-3 py-1 text-xs font-medium text-white">
+          <div className="absolute top-2 right-2 rounded-full bg-main/90 px-3 py-1 text-xs font-semibold text-white shadow-md">
             {youtube.publishedAt
               ? formatDate(youtube.publishedAt)
               : `S${youtube.seasonNumber}E${youtube.episodeNumber}`}
           </div>
         </div>
-        <div className="flex flex-col justify-between flex-grow p-4 text-white">
+        <div
+          className="flex flex-col justify-between flex-grow p-5 text-white font-sans"
+          style={{ fontFamily: "Open Sans, sans-serif" }}
+        >
           <div>
-            <h3 className="text-lg font-semibold tracking-tight group-hover:text-blue-300 transition-colors duration-300 line-clamp-2 h-[56px]">
+            <h3 className="text-xl font-bold tracking-tight group-hover:text-accent transition-colors duration-300 line-clamp-2 h-[56px]">
               {youtube.title}
             </h3>
-            <p className="mt-2 text-sm text-gray-300 line-clamp-3 h-[60px]">
+            <p className="mt-2 text-base text-gray-300 line-clamp-3 h-[60px]">
               {youtube.blurb}
             </p>
           </div>
-          <button className="mt-2  h-10 flex items-center text-sm text-gray-300 hover:text-blue-300 transition-colors duration-300 focus:outline-none">
-            <svg
-              className="mr-2 h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+          <button className="mt-4 h-11 flex items-center justify-center gap-2 text-base font-semibold text-white bg-primary hover:bg-accent transition-colors duration-300 rounded-lg shadow-md px-6 focus:outline-none focus:ring-2 focus:ring-accent">
+            <Play className="mr-2 h-4 w-4" />
             Watch now
           </button>
         </div>

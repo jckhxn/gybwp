@@ -27,7 +27,10 @@ interface Episode {
   };
 }
 
-export const BrowseEpisodes = () => {
+export const BrowseEpisodes = ({
+  hideHeading = false,
+  hideBackground = false,
+} = {}) => {
   const [activeSeason, setActiveSeason] = useState<string | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [seasons, setSeasons] = useState<any[]>([]);
@@ -145,21 +148,30 @@ export const BrowseEpisodes = () => {
   };
 
   return (
-    <section id="episodes" className="w-full py-12 md:py-24 lg:py-32 bg-white">
+    <section
+      id="episodes"
+      className={
+        hideBackground
+          ? "w-full py-4"
+          : "w-full py-12 md:py-24 lg:py-32 bg-white"
+      }
+    >
       <div className="container mx-auto px-4 md:px-6 max-w-6xl">
         <div className="flex flex-col items-center gap-4 md:gap-8 text-center">
-          <div className="space-y-2">
-            <div className="inline-block rounded-lg bg-secondary/10 px-3 py-1 text-sm text-secondary">
-              All Episodes
+          {!hideHeading && (
+            <div className="space-y-2">
+              <div className="inline-block rounded-lg bg-secondary/10 px-3 py-1 text-sm text-secondary">
+                All Episodes
+              </div>
+              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl lg:text-5xl">
+                Browse Our Episodes
+              </h2>
+              <p className="max-w-[700px] text-gray-600 md:text-lg">
+                Discover our library of conversations with industry leaders and
+                experts.
+              </p>
             </div>
-            <h2 className="text-3xl font-bold tracking-tighter md:text-4xl lg:text-5xl">
-              Browse Our Episodes
-            </h2>
-            <p className="max-w-[700px] text-gray-600 md:text-lg">
-              Discover our library of conversations with industry leaders and
-              experts.
-            </p>
-          </div>
+          )}
 
           {seasons.length > 0 && (
             <div className="flex justify-center w-full mb-6 overflow-x-auto px-2 py-2">

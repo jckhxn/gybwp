@@ -108,28 +108,26 @@ export default function EpisodeSlider() {
   return (
     <section className="w-full max-w-6xl mx-auto py-8 md:py-12">
       <div className="flex flex-col items-center mb-6">
-        <h2 className="text-2xl font-bold mb-4">Latest Episodes</h2>
-
+        <h2
+          className="text-2xl font-bold mb-4 font-sans"
+          style={{ fontFamily: "Open Sans, sans-serif" }}
+        >
+          Latest Episodes
+        </h2>
         {seasons.length > 0 && (
           <div className="flex justify-center w-full overflow-x-auto px-2 py-2">
-            <div className="inline-flex rounded-md shadow-sm flex-wrap justify-center">
+            <div className="inline-flex rounded-full shadow-md flex-wrap justify-center bg-white/80 backdrop-blur-md p-2 gap-2">
               {seasons.map((season) => (
                 <button
                   key={season._id}
                   type="button"
                   onClick={() => setActiveSeason(season.title)}
                   className={`
-                    px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium whitespace-nowrap
+                    px-5 py-2 text-sm font-semibold whitespace-nowrap rounded-full shadow-sm transition-all duration-200
                     ${
                       season.title === activeSeason
-                        ? "bg-primary text-white"
+                        ? "bg-primary text-white scale-105"
                         : "bg-white text-gray-700 hover:bg-gray-50"
-                    }
-                    ${seasons.indexOf(season) === 0 ? "rounded-l-lg" : ""}
-                    ${
-                      seasons.indexOf(season) === seasons.length - 1
-                        ? "rounded-r-lg"
-                        : ""
                     }
                     border border-gray-200
                     focus:z-10 focus:outline-none focus:ring-2 focus:ring-primary
@@ -142,8 +140,9 @@ export default function EpisodeSlider() {
           </div>
         )}
       </div>
-
-      <div className="px-4 md:px-0 relative">
+      <div className="px-2 md:px-0 relative">
+        <div className="absolute left-0 top-0 h-full w-8 bg-gradient-to-r from-white/90 to-transparent pointer-events-none z-10" />
+        <div className="absolute right-0 top-0 h-full w-8 bg-gradient-to-l from-white/90 to-transparent pointer-events-none z-10" />
         {!isLoading ? (
           <>
             {data && Array.isArray(data) && data.length > 0 ? (
@@ -152,13 +151,13 @@ export default function EpisodeSlider() {
                 {showLeftArrow && (
                   <button
                     onClick={scrollLeft}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-md hidden md:flex items-center justify-center"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-primary hover:text-white rounded-full p-3 shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
                     aria-label="Scroll left"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
+                      width="24"
+                      height="24"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -171,11 +170,11 @@ export default function EpisodeSlider() {
                     </svg>
                   </button>
                 )}
-
                 <div
                   ref={scrollContainerRef}
-                  className="flex overflow-x-auto pb-6 gap-6 snap-x scrollbar-hide"
+                  className="flex overflow-x-auto pb-6 gap-6 snap-x scrollbar-hide bg-white/80 rounded-xl shadow-lg px-4"
                   onScroll={handleScroll}
+                  style={{ fontFamily: "Open Sans, sans-serif" }}
                 >
                   {data.map((episode, idx) => (
                     <div
@@ -186,18 +185,17 @@ export default function EpisodeSlider() {
                     </div>
                   ))}
                 </div>
-
                 {/* Right arrow */}
                 {showRightArrow && (
                   <button
                     onClick={scrollRight}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-md hidden md:flex items-center justify-center"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-primary hover:text-white rounded-full p-3 shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
                     aria-label="Scroll right"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
+                      width="24"
+                      height="24"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -210,22 +208,15 @@ export default function EpisodeSlider() {
                     </svg>
                   </button>
                 )}
-
-                {/* Mobile scroll indicator dots */}
-                <div className="flex justify-center gap-1 mt-2 md:hidden">
-                  <div className="w-2 h-2 rounded-full bg-primary"></div>
-                  <div className="w-2 h-2 rounded-full bg-gray-300"></div>
-                  <div className="w-2 h-2 rounded-full bg-gray-300"></div>
-                </div>
               </div>
             ) : (
-              <div className="w-full text-center py-12">
-                No episodes found for this season.
+              <div className="text-center text-gray-500 py-12">
+                No episodes found.
               </div>
             )}
           </>
         ) : (
-          <div className="w-full text-center py-12">Loading episodes...</div>
+          <div className="text-center text-gray-500 py-12">Loading...</div>
         )}
       </div>
     </section>
