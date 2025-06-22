@@ -12,15 +12,24 @@ import { ARTICLES_INFO } from "./static-data";
 import Link from "next/link";
 
 // // SWR
-import useSWR from "swr";
+// import useSWR from "swr";
 import { client } from "../../sanity/sanity-utils";
 import { OTHER_ARTICLES_QUERY } from "../../lib/queries";
 
 const Articles = () => {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [articles, setArticles] = useState();
-  const { data, error, isLoading } = useSWR(OTHER_ARTICLES_QUERY, (query) =>
-    client.fetch(query)
-  );
+
+  useEffect(() => {
+    client
+      .fetch(OTHER_ARTICLES_QUERY)
+      .then((res) => setData(res))
+      .catch((err) => setError(err))
+      .finally(() => setIsLoading(false));
+  }, []);
+
   useEffect(() => {
     if (!isLoading) {
       setArticles(data);

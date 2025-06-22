@@ -67,7 +67,7 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-bold">Resources</h3>
             <nav className="flex flex-col space-y-2 text-sm">
-              <Link href="/episodes" className="hover:underline">
+              <Link href="/episode" className="hover:underline">
                 All Episodes
               </Link>
             </nav>

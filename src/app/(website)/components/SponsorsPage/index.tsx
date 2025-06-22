@@ -10,11 +10,10 @@ import { Section, SectionHeading } from "../shared";
 // copy
 import { SPONSORS, PARTNERS, SPONSORS_INFO } from "./static-data";
 
-// SWR
-import useSWR from "swr";
-
-import { ALL_SPONSORS_QUERY, SPONSOR_DETAILS_QUERY } from "../../lib/queries";
+// sanity
 import { client } from "../../sanity/sanity-utils";
+import { ALL_SPONSORS_QUERY } from "../../lib/queries";
+
 //
 //
 //
@@ -22,9 +21,16 @@ import { client } from "../../sanity/sanity-utils";
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 
 const SponsorsPageComponent = () => {
-  const { data, error, isLoading } = useSWR(ALL_SPONSORS_QUERY, (query) =>
-    client.fetch(query)
-  );
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    client
+      .fetch(ALL_SPONSORS_QUERY)
+      .then((res) => setData(res))
+      .catch((err) => setError(err))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   if (data) {
     return (

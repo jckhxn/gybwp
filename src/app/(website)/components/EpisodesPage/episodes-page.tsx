@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import useSWR from "swr";
+import { useState, useEffect } from "react";
 import { client } from "@/src/app/(website)/sanity/sanity-utils";
 import { EPISODES_BY_SEASON_QUERY } from "../../lib/queries";
 import SeasonDropdown from "@/src/app/(website)/components/SeasonDropdown";
@@ -9,11 +8,19 @@ import EpisodeCard from "../EpisodeCard";
 
 export function EpisodesPage() {
   const [activeSeason, setActiveSeason] = useState(null);
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const { data, error, isLoading } = useSWR(
-    activeSeason ? [EPISODES_BY_SEASON_QUERY, activeSeason] : null,
-    ([query, season]) => client.fetch(query, { name: season })
-  );
+  useEffect(() => {
+    if (activeSeason) {
+      client
+        .fetch(EPISODES_BY_SEASON_QUERY, { name: activeSeason })
+        .then((res) => setData(res))
+        .catch((err) => setError(err))
+        .finally(() => setIsLoading(false));
+    }
+  }, [activeSeason]);
 
   return (
     <div className="bg-light">

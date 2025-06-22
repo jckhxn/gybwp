@@ -15,10 +15,8 @@ import { FEATURED_ARTICLES } from "../News/static-data";
 import { ExternalLink } from "lucide-react";
 import Button from "../ui/button";
 // SWR
-import useSWR from "swr";
-
-import { FEATURED_ARTICLES_QUERY } from "../../lib/queries";
 import { client } from "../../sanity/sanity-utils";
+import { FEATURED_ARTICLES_QUERY } from "../../lib/queries";
 import {
   fetchOpenGraphImage,
   testImageLink,
@@ -37,17 +35,27 @@ const FeaturedNews = ({
   hideBadge = false,
 }: FeaturedNewsProps) => {
   const [featuredArticles, setFeaturedArticles] = useState([]);
-
-  const { data, error, isLoading } = useSWR(FEATURED_ARTICLES_QUERY, (query) =>
-    client.fetch(query)
-  );
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!isLoading && data) {
-      const articles = Object.keys(data).map((key) => data[key]);
-      setFeaturedArticles(articles);
-    }
-  }, [data, isLoading]);
+    client
+      .fetch(FEATURED_ARTICLES_QUERY)
+      .then((res) => {
+        if (res) {
+          const articles = Object.keys(res).map((key) => res[key]);
+          setFeaturedArticles(articles);
+        }
+      })
+      .catch((err) => {
+        console.error("Error loading featured articles:", err);
+        setError(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   // Image with fallback component
   const ImageWithFallback = ({ src, alt, ...props }) => {

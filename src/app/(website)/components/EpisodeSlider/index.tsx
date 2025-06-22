@@ -1,7 +1,6 @@
 "use client";
 
 import { SVGProps, useEffect, useState, useRef } from "react";
-import useSWR, { mutate } from "swr";
 import { client } from "@/src/app/(website)/sanity/sanity-utils";
 import { ALL_SEASONS_QUERY, EPISODES_BY_SEASON_QUERY } from "../../lib/queries";
 import EpisodeCard from "@/src/app/(website)/components/EpisodeCard";
@@ -32,16 +31,24 @@ export default function EpisodeSlider() {
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Fetch all seasons
-  const { data: seasonsData } = useSWR(ALL_SEASONS_QUERY, (query) =>
-    client.fetch(query)
-  );
+  const [seasonsData, setSeasonsData] = useState(null);
+  useEffect(() => {
+    client.fetch(ALL_SEASONS_QUERY).then(setSeasonsData);
+  }, []);
 
-  // Get latest season episodes by season name
-  const { data, error, isLoading } = useSWR(
-    activeSeason ? EPISODES_BY_SEASON_QUERY : null,
-    (query) => client.fetch(query, { name: activeSeason })
-  );
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    if (activeSeason) {
+      setIsLoading(true);
+      client
+        .fetch(EPISODES_BY_SEASON_QUERY, { name: activeSeason })
+        .then((res) => setData(res))
+        .catch((err) => setError(err))
+        .finally(() => setIsLoading(false));
+    }
+  }, [activeSeason]);
 
   // Set seasons and initial active season
   useEffect(() => {
@@ -52,12 +59,6 @@ export default function EpisodeSlider() {
       }
     }
   }, [seasonsData, activeSeason]);
-
-  useEffect(() => {
-    mutate(EPISODES_BY_SEASON_QUERY);
-    // Reset left arrow when changing seasons
-    setShowLeftArrow(false);
-  }, [activeSeason]);
 
   // Check if arrows should be shown
   useEffect(() => {

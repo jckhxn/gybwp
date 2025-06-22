@@ -9,7 +9,7 @@ import Button from "../Button";
 import { PODCAST } from "../HomePage/static-data";
 
 // SWR
-import useSWR from "swr";
+// import useSWR from "swr";
 import { client } from "../../sanity/sanity-utils";
 import { seasonType } from "../HomePage/episode-data";
 import { TOTAL_SEASONS_QUERY } from "../../lib/queries";
@@ -31,12 +31,9 @@ const Dropdown = ({
 }: {
   setActiveSeason: React.Dispatch<React.SetStateAction<number>>;
 }) => {
-  // This groq query returns all seasons, in order, that have episodes in them
-  // *[_type == "seasons" && count(episodes) > 0]  | order(seasonNumber asc)
-  const { data, error, isLoading } = useSWR(TOTAL_SEASONS_QUERY, (query) =>
-    client.fetch(query)
-  );
-
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [podcast, setPodcast] = useState();
 
@@ -47,6 +44,14 @@ const Dropdown = ({
 
     setIsOpen(!isOpen);
   };
+
+  useEffect(() => {
+    client
+      .fetch(TOTAL_SEASONS_QUERY)
+      .then((res) => setData(res))
+      .catch((err) => setError(err))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   useEffect(() => {
     if (!isLoading) {

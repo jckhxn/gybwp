@@ -17,7 +17,6 @@ import Slider from "../Slider";
 import { BuzzSproutPlayer } from "../BuzzSproutPlayer";
 
 // SWR
-import useSWR, { mutate } from "swr";
 import { client } from "../../sanity/sanity-utils";
 import {
   ALL_SEASONS_QUERY,
@@ -35,21 +34,23 @@ import { motion } from "framer-motion";
 
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState();
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const { data, error, isLoading } = useSWR(ALL_SEASONS_QUERY, (query) =>
-    client.fetch(query)
-  );
+  useEffect(() => {
+    client
+      .fetch(ALL_SEASONS_QUERY)
+      .then((res) => setData(res))
+      .catch((err) => setError(err))
+      .finally(() => setIsLoading(false));
+  }, []);
 
-  // SWR
   useEffect(() => {
     if (!isLoading && data?.[0]?.title) {
       setActiveSeason(data[0].title);
     }
   }, [data, isLoading]);
-
-  useEffect(() => {
-    mutate(SEASON_EPISODES_QUERY);
-  }, [activeSeason]);
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -167,6 +168,18 @@ const HomePageComponent = () => {
               </div>
             </div>
             <div className="lg:w-1/2 flex justify-center lg:justify-end relative">
+              {/* Host Badge - Stationary */}
+              <div className="absolute bottom-6 right-6 z-20 bg-black/80 backdrop-blur-md px-6 py-3 rounded-xl shadow-lg border border-white/20 ring-2 ring-accent/30">
+                <div className="flex items-center gap-3">
+                  <div className="w-[3px] h-12 bg-primary rounded-full"></div>
+                  <div>
+                    <p className="text-gray-300 text-xs uppercase tracking-wider font-medium">
+                      Host
+                    </p>
+                    <p className="text-white font-bold text-lg">Jeff Lackey</p>
+                  </div>
+                </div>
+              </div>
               <motion.div
                 animate={{ y: [0, -10, 0] }}
                 transition={{ repeat: Infinity, duration: 10 }}
@@ -175,20 +188,6 @@ const HomePageComponent = () => {
                 {/* Decorative element */}
                 <div className="absolute -top-6 -left-6 w-32 h-32 rounded-full bg-primary/20 blur-2xl"></div>
                 <div className="absolute -bottom-8 -right-8 w-40 h-40 rounded-full bg-accent/20 blur-2xl"></div>
-                {/* Host Badge - Professional Version */}
-                <div className="absolute bottom-6 right-6 z-20 bg-black/80 backdrop-blur-md px-6 py-3 rounded-xl shadow-lg border border-white/20 ring-2 ring-accent/30">
-                  <div className="flex items-center gap-3">
-                    <div className="w-[3px] h-12 bg-primary rounded-full"></div>
-                    <div>
-                      <p className="text-gray-300 text-xs uppercase tracking-wider font-medium">
-                        Host
-                      </p>
-                      <p className="text-white font-bold text-lg">
-                        Jeff Lackey
-                      </p>
-                    </div>
-                  </div>
-                </div>
                 <Image
                   alt="Growing Your Business With People Podcast"
                   className="relative z-10 rounded-2xl shadow-2xl object-cover border-2 border-accent/60"

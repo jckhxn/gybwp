@@ -19,7 +19,6 @@ import { episodeType } from "../HomePage/episode-data";
 import { DATA, CTA } from "./static-data";
 
 // SWR
-import useSWR, { mutate } from "swr";
 import { Content } from "../Content";
 import { client } from "../../sanity/sanity-utils";
 import { EPISODES, PODCAST_DETAILS_QUERY } from "../../lib/queries";
@@ -44,9 +43,16 @@ const PodcastDetailsPageComponent = () => {
   const uuid = pathname.split("/")[2];
   const epID = uuid.split("-")[0];
 
-  const { data, error, isLoading } = useSWR(PODCAST_DETAILS_QUERY, (query) =>
-    client.fetch(query, { uuid, epID })
-  );
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    client
+      .fetch(PODCAST_DETAILS_QUERY)
+      .then((res) => setData(res))
+      .catch((err) => setError(err))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   useEffect(() => {
     if (!isLoading) {
@@ -59,7 +65,6 @@ const PodcastDetailsPageComponent = () => {
         setPrevEpisode(data.episodeDetails[0].prevEpisode);
       }
     }
-    mutate(PODCAST_DETAILS_QUERY);
   }, [isLoading, data, episode, router]);
 
   const isClip = episode?.uuid?.includes("_");
