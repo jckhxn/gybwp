@@ -27,9 +27,15 @@ import {
 import { SanityImage } from "../../lib/utils";
 interface FeaturedNewsProps {
   color: "light" | "secondary";
+  hideHeading: boolean;
+  hideBadge: boolean;
 }
 
-const FeaturedNews = ({ color = "light" }: FeaturedNewsProps) => {
+const FeaturedNews = ({
+  color = "light",
+  hideHeading = false,
+  hideBadge = false,
+}: FeaturedNewsProps) => {
   const [featuredArticles, setFeaturedArticles] = useState([]);
 
   const { data, error, isLoading } = useSWR(FEATURED_ARTICLES_QUERY, (query) =>
@@ -76,28 +82,32 @@ const FeaturedNews = ({ color = "light" }: FeaturedNewsProps) => {
       }`}
     >
       <div className="container mx-auto px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
-          <div className="space-y-2">
-            <div
-              className={`inline-block rounded-lg px-3 py-1 text-sm ${
-                color === "light"
-                  ? "bg-primary text-white"
-                  : "bg-secondary text-secondary-foreground"
-              }`}
-            >
-              In The News
+        {!hideHeading && (
+          <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="space-y-2">
+              {!hideBadge && (
+                <div
+                  className={`inline-block rounded-lg px-3 py-1 text-sm ${
+                    color === "light"
+                      ? "bg-primary text-white"
+                      : "bg-secondary text-secondary-foreground"
+                  }`}
+                >
+                  In The News
+                </div>
+              )}
+              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
+                Featured In
+              </h2>
+              <p className="max-w-[700px] text-muted-foreground md:text-lg">
+                GYBWP has been recognized by leading publications and media
+                outlets.
+              </p>
             </div>
-            <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
-              Featured In
-            </h2>
-            <p className="max-w-[700px] text-muted-foreground md:text-lg">
-              GYBWP has been recognized by leading publications and media
-              outlets.
-            </p>
+            {/* Decorative separator */}
+            <div className="w-16 h-1 bg-primary rounded-full my-4"></div>
           </div>
-          {/* Decorative separator */}
-          <div className="w-16 h-1 bg-primary rounded-full my-4"></div>
-        </div>
+        )}
 
         <div className="mx-auto max-w-4xl py-12">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">

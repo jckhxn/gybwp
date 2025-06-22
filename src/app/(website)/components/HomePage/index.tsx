@@ -30,6 +30,8 @@ import JSONLD from "../SEO/jsonld";
 import { Newsletter } from "../Newsletter";
 import { LatestEpisode, LatestEpisodes } from "../LatestEpisode";
 import { BrowseEpisodes } from "../BrowseEpisodes";
+import { Play, Headphones } from "lucide-react";
+import { motion } from "framer-motion";
 
 const HomePageComponent = () => {
   const [activeSeason, setActiveSeason] = useState();
@@ -66,47 +68,62 @@ const HomePageComponent = () => {
       <JSONLD data={structuredData} />
 
       {/* REDESIGNED HERO SECTION */}
-      <Section className="w-full py-12 md:py-20 lg:py-24 bg-gradient-to-br from-main to-gray-900">
-        <div className="container mx-auto px-6 md:px-12">
+      <Section className="w-full py-16 md:py-28 lg:py-36 bg-gradient-to-br from-main to-gray-900 relative overflow-hidden">
+        {/* Animated floating shapes */}
+        <motion.div
+          animate={{ y: [0, 20, 0] }}
+          transition={{ repeat: Infinity, duration: 8 }}
+          className="absolute -top-10 left-1/4 w-40 h-40 rounded-full bg-primary/20 blur-3xl z-0"
+        />
+        {/* Removed orange (accent) floating shape */}
+        <motion.div
+          animate={{ y: [0, -15, 0] }}
+          transition={{ repeat: Infinity, duration: 12 }}
+          className="absolute top-1/2 left-0 w-24 h-24 rounded-full bg-secondary/20 blur-2xl z-0"
+        />
+        <div className="container mx-auto px-6 md:px-12 relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-center">
-            <div className="lg:w-1/2 space-y-8 mb-10 lg:mb-0">
+            <div className="lg:w-1/2 space-y-10 mb-12 lg:mb-0">
               <div>
-                <h2 className="text-primary font-semibold tracking-wide uppercase">
+                <h2 className="text-primary font-semibold tracking-widest uppercase text-lg md:text-xl mb-2">
                   Business Leadership Podcast
                 </h2>
-                <h1 className="text-gray-100 text-4xl md:text-5xl lg:text-6xl font-bold mt-2 leading-tight">
+                <h1 className="text-gray-100 text-5xl md:text-6xl lg:text-7xl font-extrabold mt-2 leading-tight font-sans">
                   {HERO.header}
                 </h1>
               </div>
-
-              <p className="text-gray-300 text-lg md:text-xl max-w-[600px]">
+              <p className="text-gray-300 text-xl md:text-2xl max-w-[600px] mt-4">
                 {HERO.body}
               </p>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  className="inline-flex h-14 items-center justify-center rounded-md bg-primary px-8 text-base font-medium text-gray-50 shadow-lg transition-all duration-300 hover:bg-accent hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2"
+              <div className="flex flex-col sm:flex-row gap-4 mt-8">
+                <Button
+                  as="a"
                   href={HERO.buttonUrl}
+                  color="primary"
+                  className="h-14 px-8 text-base font-medium text-gray-50 shadow-lg transition-all duration-300 hover:bg-accent hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 flex items-center gap-2"
                 >
+                  <Play className="inline-block w-5 h-5" />
                   {HERO.buttonText}
-                </Link>
-                <Link
-                  className="inline-flex h-14 items-center justify-center rounded-md border-2 border-gray-400 px-8 text-base font-medium text-gray-100 transition-all duration-300 hover:bg-gray-800 hover:border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2"
+                </Button>
+                <Button
+                  as="a"
                   href={HERO.secondButtonUrl}
+                  color="accent"
+                  className="h-14 px-8 text-base font-medium text-gray-100 border-2 border-gray-400 transition-all duration-300 hover:bg-gray-800 hover:border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 flex items-center gap-2"
                 >
+                  <Headphones className="inline-block w-5 h-5" />
                   {HERO.secondButtonText}
-                </Link>
+                </Button>
               </div>
-
               {/* PODCAST PLATFORMS */}
-              <div className="pt-6">
+              <div className="pt-8">
                 <p className="text-gray-400 mb-4 font-medium">Available on:</p>
                 <div className="flex flex-wrap gap-4">
                   <Link
                     href="https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 bg-black/30 hover:bg-black/50 transition-colors py-2 px-4 rounded-lg"
+                    className="flex items-center gap-2 bg-black/30 hover:bg-black/50 transition-all py-2 px-5 rounded-full shadow-md hover:scale-105 focus-visible:ring-2 focus-visible:ring-primary"
                   >
                     <Image
                       src="/social-logos/apple.png"
@@ -114,13 +131,15 @@ const HomePageComponent = () => {
                       width={24}
                       height={24}
                     />
-                    <span className="text-white">Apple Podcasts</span>
+                    <span className="text-white font-medium">
+                      Apple Podcasts
+                    </span>
                   </Link>
                   <Link
                     href="https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 bg-black/30 hover:bg-black/50 transition-colors py-2 px-4 rounded-lg"
+                    className="flex items-center gap-2 bg-black/30 hover:bg-black/50 transition-all py-2 px-5 rounded-full shadow-md hover:scale-105 focus-visible:ring-2 focus-visible:ring-primary"
                   >
                     <Image
                       src="/social-logos/spotify.png"
@@ -128,13 +147,13 @@ const HomePageComponent = () => {
                       width={24}
                       height={24}
                     />
-                    <span className="text-white">Spotify</span>
+                    <span className="text-white font-medium">Spotify</span>
                   </Link>
                   <Link
                     href="https://www.buzzsprout.com/2057493"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 bg-black/30 hover:bg-black/50 transition-colors py-2 px-4 rounded-lg"
+                    className="flex items-center gap-2 bg-black/30 hover:bg-black/50 transition-all py-2 px-5 rounded-full shadow-md hover:scale-105 focus-visible:ring-2 focus-visible:ring-primary"
                   >
                     <Image
                       src="/social-logos/buzzsprout.png"
@@ -142,24 +161,26 @@ const HomePageComponent = () => {
                       width={24}
                       height={24}
                     />
-                    <span className="text-white">Buzzsprout</span>
+                    <span className="text-white font-medium">Buzzsprout</span>
                   </Link>
                 </div>
               </div>
             </div>
-
-            <div className="lg:w-1/2 flex justify-center lg:justify-end">
-              <div className="relative">
+            <div className="lg:w-1/2 flex justify-center lg:justify-end relative">
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ repeat: Infinity, duration: 10 }}
+                className="relative"
+              >
                 {/* Decorative element */}
                 <div className="absolute -top-6 -left-6 w-32 h-32 rounded-full bg-primary/20 blur-2xl"></div>
                 <div className="absolute -bottom-8 -right-8 w-40 h-40 rounded-full bg-accent/20 blur-2xl"></div>
-
                 {/* Host Badge - Professional Version */}
-                <div className="absolute bottom-6 right-6 z-20 bg-black/70 backdrop-blur-sm px-5 py-3 rounded-md shadow-xl border border-white/10">
+                <div className="absolute bottom-6 right-6 z-20 bg-black/80 backdrop-blur-md px-6 py-3 rounded-xl shadow-lg border border-white/20 ring-2 ring-accent/30">
                   <div className="flex items-center gap-3">
-                    <div className="w-[3px] h-12 bg-primary"></div>
+                    <div className="w-[3px] h-12 bg-primary rounded-full"></div>
                     <div>
-                      <p className="text-gray-400 text-xs uppercase tracking-wider font-medium">
+                      <p className="text-gray-300 text-xs uppercase tracking-wider font-medium">
                         Host
                       </p>
                       <p className="text-white font-bold text-lg">
@@ -168,30 +189,35 @@ const HomePageComponent = () => {
                     </div>
                   </div>
                 </div>
-
                 <Image
                   alt="Growing Your Business With People Podcast"
-                  className="relative z-10 rounded-2xl shadow-2xl object-cover border-4 border-gray-800/50"
+                  className="relative z-10 rounded-2xl shadow-2xl object-cover border-2 border-accent/60"
                   height={500}
                   src={heroImage}
                   width={500}
                   priority={true}
                 />
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
       </Section>
 
       {/* Episode Selector */}
-      <LatestEpisode />
-      <BrowseEpisodes />
+      <Section className="pt-0 pb-8 md:pb-12 lg:pb-16">
+        <LatestEpisode />
+        <BrowseEpisodes />
+      </Section>
 
       {/* Newsletter CTA */}
-      <Newsletter />
+      <Section className="relative w-full py-10 md:py-16 lg:py-20 flex items-center justify-center overflow-hidden bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-100 my-8">
+        <Newsletter />
+      </Section>
 
       {/* Featured News */}
-      <FeaturedNews color="light" />
+      <Section className="w-full py-10 md:py-16 lg:py-20 bg-white rounded-xl shadow-lg border border-gray-100 my-8">
+        <FeaturedNews color="light" />
+      </Section>
     </>
   );
 };
