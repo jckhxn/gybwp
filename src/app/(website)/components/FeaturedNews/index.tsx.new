@@ -21,8 +21,6 @@ import {
   fetchOpenGraphImage,
   testImageLink,
   validateAndFetchImage,
-  urlFor,
-  formatDate,
 } from "../../lib/utils";
 import { SanityImage } from "../../lib/utils";
 import { motion } from "framer-motion";
@@ -49,21 +47,7 @@ const FeaturedNews = ({
       .then((res) => {
         if (res) {
           const articles = Object.keys(res).map((key) => res[key]);
-          // Add default excerpt if missing and process dates
-          const articlesWithDefaults = articles.map((article) => {
-            // Process excerpt
-            const excerpt =
-              article.excerpt ||
-              article.description ||
-              `Read more about this featured article from ${article.publication || article.company || "our media partners"}`;
-
-            return {
-              ...article,
-              excerpt,
-            };
-          });
-
-          setFeaturedArticles(articlesWithDefaults);
+          setFeaturedArticles(articles);
         }
       })
       .catch((err) => setError(err))
@@ -96,62 +80,30 @@ const FeaturedNews = ({
   const bgColor = color === "secondary" ? "bg-gray-50" : "bg-off-white";
   const textColor = color === "light" ? "text-gray-800" : "text-gray-100";
 
-  // Helper function to get image URL from a Sanity image object
-  const getImageUrl = (article) => {
-    // If the image is a Sanity image object
-    if (article.image && article.image.asset) {
-      return urlFor(article.image).url();
-    }
-    // If the image is a URL string (from older data)
-    else if (article.image && typeof article.image === "string") {
-      return article.image;
-    }
-    // Fallback to default image
-    return defaultImageSrc;
-  };
-
-  // Helper function to format dates properly - just use the string directly
-  const formatArticleDate = (dateString) => {
-    if (!dateString) return "Recent";
-
-    try {
-      // Just pass the string directly to formatDate
-      return formatDate(dateString);
-    } catch (e) {
-      console.error("Error formatting article date:", e);
-      return "Recent";
-    }
-  };
-
-  // Helper to get publication name
-  const getPublicationName = (article) => {
-    return article.publication || article.company || "Featured";
-  };
-
   return (
     <div className="container mx-auto px-4 md:px-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="flex flex-col items-center justify-center space-y-3 sm:space-y-4 text-center mb-8 sm:mb-12"
+        className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
       >
         <div className="space-y-2">
           {!hideBadge && (
-            <div className="inline-flex items-center rounded-full bg-primary/20 px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-medium text-primary">
+            <div className="inline-flex items-center rounded-full bg-primary/20 px-4 py-1.5 text-sm font-medium text-primary">
               Industry Recognition
             </div>
           )}
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
             Featured In
           </h2>
-          <p className="max-w-[800px] text-gray-600 text-sm sm:text-base md:text-lg mt-1 sm:mt-2">
+          <p className="max-w-[800px] text-gray-600 md:text-lg mt-2">
             GYBWP has been recognized by leading publications and media outlets.
           </p>
         </div>
-
+        
         {/* Decorative separator */}
-        <div className="w-16 sm:w-20 h-1 bg-gradient-to-r from-primary to-secondary rounded-full my-1 sm:my-2"></div>
+        <div className="w-20 h-1 bg-gradient-to-r from-primary to-secondary rounded-full my-2"></div>
       </motion.div>
 
       {featuredArticles.length > 0 ? (
@@ -159,7 +111,7 @@ const FeaturedNews = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 md:gap-8"
+          className="grid grid-cols-1 md:grid-cols-12 gap-8"
         >
           {/* Featured article (spans 7 columns) */}
           {featuredArticles[0] && (
@@ -170,46 +122,44 @@ const FeaturedNews = ({
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="relative h-full overflow-hidden rounded-2xl shadow-lg border border-gray-100 bg-white hover:shadow-xl transition-shadow duration-300"
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20 group-hover:via-black/60 transition-opacity duration-300 z-10"></div>
-
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/5 group-hover:via-black/40 transition-opacity duration-300"></div>
+                
                 <div className="relative aspect-[16/9] md:aspect-[16/11] overflow-hidden">
                   <Image
-                    src={getImageUrl(featuredArticles[0])}
+                    src={featuredArticles[0].image?.asset.url || defaultImageSrc}
                     alt={featuredArticles[0].title || "Featured article"}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    priority
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 50vw"
                   />
                 </div>
-
-                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 text-white z-20">
-                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                    <div className="bg-primary/90 px-2 sm:px-3 py-1 text-xs font-medium rounded-full">
-                      {getPublicationName(featuredArticles[0])}
+                
+                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white z-10">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="bg-primary/90 px-3 py-1 text-xs font-medium rounded-full">
+                      {featuredArticles[0].publication || "Featured"}
                     </div>
-                    <div className="text-xs flex items-center opacity-90 text-white">
+                    <div className="text-xs flex items-center opacity-80">
                       <Calendar className="h-3 w-3 mr-1" />
-                      {formatArticleDate(featuredArticles[0].date)}
+                      {new Date(featuredArticles[0].date).toLocaleDateString()}
                     </div>
                   </div>
-
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-3 text-white group-hover:text-primary-light transition-colors duration-300 line-clamp-3 sm:line-clamp-2">
+                  
+                  <h3 className="text-2xl md:text-3xl font-bold mb-3 group-hover:text-primary-light transition-colors duration-300">
                     {featuredArticles[0].title}
                   </h3>
-
-                  <p className="text-gray-50 text-sm sm:text-base line-clamp-2 mb-4 sm:mb-6 hidden sm:block">
+                  
+                  <p className="text-gray-100 line-clamp-2 mb-6">
                     {featuredArticles[0].excerpt}
                   </p>
-
+                  
                   <Link
                     href={featuredArticles[0].link || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-white bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base"
+                    className="inline-flex items-center gap-2 text-white bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 rounded-lg px-4 py-2"
                   >
                     Read Article
-                    <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <ExternalLink className="h-4 w-4" />
                   </Link>
                 </div>
               </motion.div>
@@ -217,10 +167,10 @@ const FeaturedNews = ({
           )}
 
           {/* Secondary articles (spans 5 columns) */}
-          <div className="md:col-span-5 flex flex-col gap-4 sm:gap-8">
+          <div className="md:col-span-5 flex flex-col gap-8">
             {featuredArticles.slice(1, 3).map((article, idx) => (
               <motion.div
-                key={article._id || `article-${idx}`}
+                key={article._id}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 + idx * 0.2 }}
@@ -232,39 +182,36 @@ const FeaturedNews = ({
                   rel="noopener noreferrer"
                   className="block h-full"
                 >
-                  <div className="flex flex-col sm:flex-row h-full">
-                    <div className="relative w-full sm:w-2/5 md:w-1/3 aspect-[16/9] sm:aspect-auto">
+                  <div className="flex flex-col md:flex-row h-full">
+                    <div className="relative w-full md:w-1/3 aspect-[16/9] md:aspect-auto">
                       <Image
-                        src={getImageUrl(article)}
+                        src={article.image?.asset.url || defaultImageSrc}
                         alt={article.title || "Article thumbnail"}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 40vw, 33vw"
                       />
                     </div>
-
-                    <div className="p-4 sm:p-5 flex flex-col flex-grow">
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="text-xs text-primary font-medium">
-                          {getPublicationName(article)}
-                        </div>
-                        
-                        <div className="flex items-center text-xs text-gray-500">
-                          <Calendar className="h-3 w-3 mr-1" />
-                          {formatArticleDate(article.date)}
-                        </div>
+                    
+                    <div className="p-5 flex flex-col flex-grow">
+                      <div className="text-xs text-primary font-medium mb-1">
+                        {article.publication || "News"}
                       </div>
-
-                      <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-1 sm:mb-2 group-hover:text-primary transition-colors duration-300 line-clamp-2">
+                      
+                      <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-primary transition-colors duration-300">
                         {article.title}
                       </h3>
-
-                      <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 mb-2 sm:mb-3 flex-grow hidden sm:block">
+                      
+                      <p className="text-sm text-gray-600 line-clamp-2 mb-3 flex-grow">
                         {article.excerpt}
                       </p>
-
-                      <div className="flex items-center justify-end mt-auto pt-1 sm:pt-2">
-                        <span className="flex items-center text-xs sm:text-sm text-primary group-hover:underline">
+                      
+                      <div className="flex items-center justify-between mt-auto pt-2 text-xs text-gray-500">
+                        <div className="flex items-center">
+                          <Calendar className="h-3 w-3 mr-1" />
+                          {new Date(article.date).toLocaleDateString()}
+                        </div>
+                        
+                        <span className="flex items-center text-primary group-hover:underline">
                           Read more <ArrowRight className="ml-1 h-3 w-3" />
                         </span>
                       </div>
@@ -276,20 +223,18 @@ const FeaturedNews = ({
           </div>
         </motion.div>
       ) : (
-        <div className="text-center py-6 sm:py-10">
-          <p className="text-muted-foreground text-sm sm:text-base">
-            No featured articles available at this time.
-          </p>
+        <div className="text-center py-10">
+          <p className="text-muted-foreground">No featured articles available at this time.</p>
         </div>
       )}
 
-      <div className="flex justify-center mt-8 sm:mt-12">
+      <div className="flex justify-center mt-12">
         <Link
           href="/news"
-          className="group inline-flex items-center gap-1 sm:gap-2 text-sm sm:text-base text-primary hover:text-primary-light transition-colors duration-300"
+          className="group inline-flex items-center gap-2 text-primary hover:text-primary-light transition-colors duration-300"
         >
           View all news and articles
-          <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
+          <ArrowRight className="h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
         </Link>
       </div>
     </div>

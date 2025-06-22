@@ -6,13 +6,38 @@ import type { SanityImageProps } from "@tinloof/sanity-web";
 
 import { SanityImage as SanityImageBase } from "@tinloof/sanity-web";
 
-// Format UTC data string
+// Format UTC data string with robust error handling
 export function formatDate(dateString: string) {
-  return Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(new Date(dateString));
+  try {
+    // Check if dateString is null, undefined or empty
+    if (!dateString) {
+      return "Recent";
+    }
+
+    // Try to parse the date - handles both ISO dates and other string formats
+    const date = new Date(dateString);
+
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+      // If can't parse as date, just return the string if it has content
+      return dateString &&
+        typeof dateString === "string" &&
+        dateString.trim() !== ""
+        ? dateString
+        : "Recent";
+    }
+
+    // Format the date if it's valid
+    return Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }).format(date);
+  } catch (error) {
+    // Return a fallback value if any error occurs
+    console.error("Error formatting date:", error);
+    return dateString || "Recent";
+  }
 }
 
 // Sanity Data Blob -> Image URL
