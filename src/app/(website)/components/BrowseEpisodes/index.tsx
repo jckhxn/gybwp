@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import useSWR from "swr";
 import { CalendarDays, Clock } from "lucide-react";
 import { client } from "@/src/app/(website)/sanity/sanity-utils";
 import { ALL_SEASONS_QUERY, EPISODES_BY_SEASON_QUERY } from "../../lib/queries";
@@ -40,16 +39,24 @@ export const BrowseEpisodes = ({
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Fetch all seasons
-  const { data: seasonsData } = useSWR(ALL_SEASONS_QUERY, (query) =>
-    client.fetch(query)
-  );
+  const [seasonsData, setSeasonsData] = useState(null);
+  useEffect(() => {
+    client.fetch(ALL_SEASONS_QUERY).then(setSeasonsData);
+  }, []);
 
-  // Get episodes by season
-  const { data, error, isLoading } = useSWR(
-    activeSeason ? [EPISODES_BY_SEASON_QUERY, activeSeason] : null,
-    ([query, season]) => client.fetch(query, { name: season })
-  );
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    if (activeSeason) {
+      setIsLoading(true);
+      client
+        .fetch(EPISODES_BY_SEASON_QUERY, { name: activeSeason })
+        .then((res) => setData(res))
+        .catch((err) => setError(err))
+        .finally(() => setIsLoading(false));
+    }
+  }, [activeSeason]);
 
   // Set episodes when data changes
   useEffect(() => {

@@ -18,7 +18,6 @@ import Socials from "../Socials";
 import routes from "routes";
 
 // SWR
-import useSWR from "swr";
 import { client } from "../../sanity/sanity-utils";
 
 import { SPONSOR_DETAILS_QUERY } from "../../lib/queries";
@@ -35,6 +34,9 @@ export interface compiledSponsorType extends sponsorType {
 
 const SponsorsDetailPageComponent = () => {
   const [sponsor, setSponsor] = useState<compiledSponsorType>();
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const pathname = usePathname();
   const id = pathname.split("/sponsors/")[1];
@@ -44,14 +46,18 @@ const SponsorsDetailPageComponent = () => {
   //  episodes where sponsors[] = id
   // setSponsor is an object with {...foundSponsor (details),episodes:(sponsored episodes)}
 
-  const { data, error, isLoading } = useSWR(SPONSOR_DETAILS_QUERY, (query) =>
-    client.fetch(query, { id })
-  );
+  useEffect(() => {
+    if (!id) return;
+    client
+      .fetch(SPONSOR_DETAILS_QUERY, { id })
+      .then((res) => setData(res))
+      .catch((err) => setError(err))
+      .finally(() => setIsLoading(false));
+  }, [id]);
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && data) {
       const { sponsors, episodes } = data;
-
       setSponsor({
         ...sponsors,
         episodes,

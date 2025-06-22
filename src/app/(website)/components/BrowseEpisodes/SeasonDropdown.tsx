@@ -1,6 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
-import useSWR from "swr";
+import React, { useEffect, useState } from "react";
 import { client } from "@/src/app/(website)/sanity/sanity-utils";
 import { ALL_SEASONS_QUERY } from "../../lib/queries";
 
@@ -19,9 +18,16 @@ export const SeasonDropdown = ({
 }: {
   setActiveSeason: React.Dispatch<React.SetStateAction<any>>;
 }) => {
-  const { data, error, isLoading } = useSWR(ALL_SEASONS_QUERY, (query) =>
-    client.fetch(query)
-  );
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    client
+      .fetch(ALL_SEASONS_QUERY)
+      .then((res) => setData(res))
+      .catch((err) => setError(err))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   // Immediately set active season so episodes can be fetched
   useEffect(() => {
