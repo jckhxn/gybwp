@@ -48,8 +48,25 @@ const featuredArticle = {
     {
       // Date of the Article
       name: "date",
-      title: "Date of Article ",
+      title: "Date of Article",
+      type: "date",
+      options: {
+        dateFormat: "YYYY-MM-DD",
+      },
+    },
+    {
+      // Publication name
+      name: "publication",
+      title: "Publication Name",
       type: "string",
+      description: "The name of the publication (e.g. CNN, Forbes, etc.)",
+    },
+    {
+      // Excerpt for display in cards
+      name: "excerpt",
+      title: "Excerpt",
+      type: "text",
+      description: "A short excerpt to display in the article card",
     },
   ],
 };

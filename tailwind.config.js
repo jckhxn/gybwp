@@ -10,10 +10,15 @@ module.exports = {
     extend: {
       colors: {
         main: "#293243",
-        primary: "#A48256",
-        secondary: "#575658",
+        "main-dark": "#1e2734",
+        "main-light": "#374962",
+        primary: "#CBA052",
+        "primary-light": "#E3C989",
+        secondary: "#2A6B74",
+        "secondary-light": "#3C8D98",
         dark: "#181818",
         light: "#F4EDE8",
+        "off-white": "#F8F9FB",
 
         // ALERT COLORS
         alerts: {
@@ -44,16 +49,38 @@ module.exports = {
           text: colors.white,
         },
 
-        accent: "#FF6F61", // Adding an accent color for hover effects
+        accent: "#FF6F61", // Coral accent color for CTAs and highlights
+        "accent-light": "#FF8D82", // Lighter variant for hover effects
       },
       animation: {
         bounce: "bounce 1s infinite",
         fadeIn: "fadeIn 0.5s ease-in-out",
+        shimmer: "shimmer 2s infinite",
+        slideUp: "slideUp 0.6s ease-out",
+        scaleIn: "scaleIn 0.5s ease-out",
+        pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "pulse-slow": "pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        float: "float 6s ease-in-out infinite",
       },
       keyframes: {
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
+        },
+        shimmer: {
+          "100%": { transform: "translateX(100%)" },
+        },
+        slideUp: {
+          "0%": { transform: "translateY(10px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        scaleIn: {
+          "0%": { transform: "scale(0.95)", opacity: "0" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
         },
       },
     },
