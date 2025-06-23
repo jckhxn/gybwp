@@ -18,9 +18,16 @@ export const SeasonDropdown = ({
 }: {
   setActiveSeason: React.Dispatch<React.SetStateAction<any>>;
 }) => {
-  const [data, setData] = useState(null);
+  // Define Season type for proper typing
+  interface Season {
+    title: string;
+    number: number;
+    _id: string;
+  }
+
+  const [data, setData] = useState<Season[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
   useEffect(() => {
     client
       .fetch(ALL_SEASONS_QUERY)
@@ -32,14 +39,14 @@ export const SeasonDropdown = ({
   // Immediately set active season so episodes can be fetched
   useEffect(() => {
     // Only fire once when data is loaded
-    if (data && data.length > 0) {
+    if (data.length > 0) {
       setActiveSeason(data[0].title);
     }
   }, [data, setActiveSeason]);
 
   if (isLoading) return <div className="text-gray-500">Loading seasons...</div>;
   if (error) return <div className="text-red-500">Error loading seasons</div>;
-  if (!data || data.length === 0) return null;
+  if (data.length === 0) return null;
 
   return (
     <Select
@@ -52,9 +59,9 @@ export const SeasonDropdown = ({
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Seasons</SelectLabel>
-          {data.map(({ title }: { title: string }, idx: number) => (
-            <SelectItem key={idx} value={title}>
-              {title}
+          {data.map((season, idx: number) => (
+            <SelectItem key={idx} value={season.title}>
+              {season.title}
             </SelectItem>
           ))}
         </SelectGroup>

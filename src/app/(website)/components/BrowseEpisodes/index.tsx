@@ -6,12 +6,13 @@ import Image from "next/image";
 import { CalendarDays, Clock } from "lucide-react";
 import { client } from "@/src/app/(website)/sanity/sanity-utils";
 import { ALL_SEASONS_QUERY, EPISODES_BY_SEASON_QUERY } from "../../lib/queries";
-import { formatDate } from "../../lib/utils";
+import { formatDate, formatDuration } from "../../lib/utils";
 import { Badge } from "@/src/app/(website)/components/ui/badge";
 
 // Define interface for episode object based on the schema
 interface Episode {
   _id: string;
+  duration?: string;
   youtube?: {
     title?: string;
     episodeNumber?: number;
@@ -20,6 +21,7 @@ interface Episode {
     uuid?: string;
     publishedAt?: string;
     blurb?: string;
+    duration?: string;
   };
   details?: {
     keyTakeaways?: string[];
@@ -37,9 +39,15 @@ export const BrowseEpisodes = ({
   const [showRightArrow, setShowRightArrow] = useState(false);
   const [activeEpisodeIndex, setActiveEpisodeIndex] = useState(0);
 
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  // Define Season interface
+  interface Season {
+    title: string;
+    number: number;
+    _id: string;
+  }
 
-  const [seasonsData, setSeasonsData] = useState(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [seasonsData, setSeasonsData] = useState<Season[]>([]);
   useEffect(() => {
     client.fetch(ALL_SEASONS_QUERY).then(setSeasonsData);
   }, []);
@@ -304,7 +312,12 @@ export const BrowseEpisodes = ({
                         </span>
                         <span className="mx-1">•</span>
                         <Clock className="w-4 h-4" />
-                        <span>30 min</span>
+                        <span>
+                          {formatDuration(
+                            episode.youtube?.duration || episode.duration,
+                            "30 min"
+                          )}
+                        </span>
                       </div>
                       <div className="mt-4">
                         <div className="inline-flex items-center text-primary font-medium text-sm">

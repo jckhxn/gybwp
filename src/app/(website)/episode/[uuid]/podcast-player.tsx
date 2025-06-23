@@ -6,6 +6,7 @@ import {
   useEffect,
   forwardRef,
   useImperativeHandle,
+  useCallback,
 } from "react";
 import {
   Play,
@@ -46,8 +47,8 @@ interface PodcastPlayerProps {
 
 const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
   (props, ref) => {
-    // Use the provided videoId or fallback to a default
-    const videoId = props.videoId || "aR5N2Jl8k14";
+    // Extract props to avoid deps issues
+    const { videoId = "aR5N2Jl8k14", onPlayerReady } = props;
 
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
@@ -60,6 +61,23 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
 
     const playerRef = useRef<HTMLDivElement>(null);
     const youtubePlayerRef = useRef<YT.Player | null>(null);
+    const volumeRef = useRef(volume);
+    const onPlayerReadyRef = useRef(onPlayerReady);
+
+    // Simple pending seek - only store the latest one
+    const pendingSeekRef = useRef<{
+      timeInSeconds: number;
+      playAfterSeek: boolean;
+    } | null>(null);
+
+    // Update refs when values change
+    useEffect(() => {
+      volumeRef.current = volume;
+    }, [volume]);
+
+    useEffect(() => {
+      onPlayerReadyRef.current = onPlayerReady;
+    }, [onPlayerReady]);
 
     // Expose methods to parent component via ref
     useImperativeHandle(ref, () => ({
@@ -82,21 +100,193 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
       },
       isPlaying,
       seekTo: (timeInSeconds: number, playAfterSeek = false) => {
-        if (youtubePlayerRef.current && isPlayerReady) {
+        console.log(
+          `Seek request: ${timeInSeconds}s, playAfterSeek: ${playAfterSeek}, ready: ${isPlayerReady}`
+        );
+
+        if (!youtubePlayerRef.current || !isPlayerReady) {
+          console.log("Player not ready - storing pending seek request");
+          pendingSeekRef.current = { timeInSeconds, playAfterSeek };
+          return;
+        }
+
+        // Player is ready, execute immediately
+        try {
           youtubePlayerRef.current.seekTo(timeInSeconds, true);
-          if (playAfterSeek || !isPlaying) {
+          if (playAfterSeek) {
             youtubePlayerRef.current.playVideo();
             setIsPlaying(true);
           }
+        } catch (error) {
+          console.error("Error seeking:", error);
         }
       },
       getCurrentTime: () => {
-        if (youtubePlayerRef.current && isPlayerReady) {
-          return youtubePlayerRef.current.getCurrentTime() || 0;
+        if (
+          youtubePlayerRef.current &&
+          isPlayerReady &&
+          typeof youtubePlayerRef.current.getCurrentTime === "function"
+        ) {
+          try {
+            return youtubePlayerRef.current.getCurrentTime() || 0;
+          } catch (error) {
+            console.error("Error getting current time:", error);
+            return 0;
+          }
         }
         return 0;
       },
     }));
+
+    // Format seconds to MM:SS
+    // Format seconds to MM:SS - Memoized to avoid dependency changes
+    const formatTime = useCallback((seconds: number): string => {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs < 10 ? "0" + secs : secs}`;
+    }, []);
+
+    // Track progress - Memoized with the stable formatTime function as dependency
+    const startProgressTracking = useCallback(() => {
+      const interval = setInterval(() => {
+        if (!youtubePlayerRef.current) return;
+
+        try {
+          if (
+            typeof youtubePlayerRef.current.getCurrentTime === "function" &&
+            typeof youtubePlayerRef.current.getDuration === "function"
+          ) {
+            const currentTimeSec = youtubePlayerRef.current.getCurrentTime();
+            const durationSec = youtubePlayerRef.current.getDuration();
+
+            if (currentTimeSec && durationSec) {
+              const progressPercent = (currentTimeSec / durationSec) * 100;
+              setCurrentTime(formatTime(currentTimeSec));
+              setProgress(progressPercent);
+            }
+          }
+        } catch (error) {
+          console.error("Error updating progress:", error);
+        }
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }, [formatTime]);
+
+    // Define initializeYouTubePlayer with useCallback
+    const initializeYouTubePlayer = useCallback(() => {
+      if (!playerRef.current) return;
+
+      // Destroy any existing player instance first
+      if (youtubePlayerRef.current) {
+        youtubePlayerRef.current.destroy();
+        youtubePlayerRef.current = null;
+      }
+
+      // Clear any existing player
+      const existingPlayer = playerRef.current.querySelector("#youtube-player");
+      if (existingPlayer) {
+        existingPlayer.innerHTML = "";
+      }
+
+      setIsPlayerReady(false);
+
+      // Player event handlers defined inside useCallback
+      const handlePlayerReady = (event: YT.PlayerEvent) => {
+        try {
+          console.log("YouTube player ready!");
+          // Verify the player methods are available
+          if (typeof event.target.getDuration === "function") {
+            const durationSec = event.target.getDuration();
+            setDuration(formatTime(durationSec));
+          }
+
+          // Set initial volume
+          if (typeof event.target.setVolume === "function") {
+            event.target.setVolume(volumeRef.current);
+          }
+
+          // Start progress tracking
+          startProgressTracking();
+          setIsPlayerReady(true);
+
+          // Execute any pending seek request
+          if (pendingSeekRef.current) {
+            const { timeInSeconds, playAfterSeek } = pendingSeekRef.current;
+            console.log(`Executing pending seek to ${timeInSeconds}s`);
+
+            setTimeout(() => {
+              if (youtubePlayerRef.current) {
+                try {
+                  youtubePlayerRef.current.seekTo(timeInSeconds, true);
+                  if (playAfterSeek) {
+                    youtubePlayerRef.current.playVideo();
+                    setIsPlaying(true);
+                  }
+                } catch (error) {
+                  console.error("Error executing pending seek:", error);
+                }
+              }
+              pendingSeekRef.current = null; // Clear the pending seek
+            }, 500);
+          }
+
+          if (onPlayerReadyRef.current) {
+            onPlayerReadyRef.current();
+          }
+        } catch (error) {
+          console.error("Error in player ready handler:", error);
+        }
+      };
+
+      const onPlayerStateChange = (event: YT.OnStateChangeEvent) => {
+        try {
+          setIsPlaying(event.data === YT.PlayerState.PLAYING);
+
+          // Handle video end to prevent looping
+          if (event.data === YT.PlayerState.ENDED) {
+            setIsPlaying(false);
+            setProgress(100);
+          }
+
+          // Prevent autoplay on ready
+          if (
+            event.data === YT.PlayerState.CUED ||
+            event.data === YT.PlayerState.BUFFERING
+          ) {
+            setIsPlaying(false);
+          }
+        } catch (error) {
+          console.error("Error in player state change:", error);
+        }
+      };
+
+      // Initialize player
+      youtubePlayerRef.current = new window.YT.Player("youtube-player", {
+        videoId: videoId,
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          disablekb: 1,
+          enablejsapi: 1,
+          iv_load_policy: 3,
+          modestbranding: 1,
+          rel: 0,
+          showinfo: 0,
+          playsinline: 1,
+          loop: 0,
+          fs: 1,
+          cc_load_policy: 0,
+          start: 0,
+        },
+        events: {
+          onReady: handlePlayerReady,
+          onStateChange: onPlayerStateChange,
+        },
+        width: "100%",
+        height: "100%",
+      });
+    }, [videoId, startProgressTracking, formatTime]);
 
     // Load YouTube API
     useEffect(() => {
@@ -130,171 +320,148 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
       return () => {
         window.onYouTubeIframeAPIReady = null;
       };
-    }, [videoId]);
-
-    // Initialize YouTube player when API is ready
-    const initializeYouTubePlayer = () => {
-      if (!playerRef.current) return;
-
-      // Destroy any existing player instance first
-      if (youtubePlayerRef.current) {
-        youtubePlayerRef.current.destroy();
-        youtubePlayerRef.current = null;
-      }
-
-      // Clear any existing player
-      const existingPlayer = playerRef.current.querySelector("#youtube-player");
-      if (existingPlayer) {
-        existingPlayer.innerHTML = "";
-      }
-
-      setIsPlayerReady(false);
-
-      // Initialize player
-      youtubePlayerRef.current = new window.YT.Player("youtube-player", {
-        videoId: videoId,
-        playerVars: {
-          autoplay: 0,
-          controls: 0,
-          disablekb: 1,
-          enablejsapi: 1,
-          iv_load_policy: 3,
-          modestbranding: 1,
-          rel: 0,
-          showinfo: 0,
-          playsinline: 1,
-        },
-        events: {
-          onReady: onPlayerReady,
-          onStateChange: onPlayerStateChange,
-        },
-        width: "100%",
-        height: "100%",
-      });
-    };
-
-    // When player is ready
-    const onPlayerReady = (event: YT.PlayerEvent) => {
-      // Set initial duration
-      const durationSec = event.target.getDuration();
-      setDuration(formatTime(durationSec));
-
-      // Set initial volume
-      event.target.setVolume(volume);
-
-      // Start progress tracking
-      startProgressTracking();
-      setIsPlayerReady(true);
-      if (props.onPlayerReady) {
-        props.onPlayerReady();
-      }
-    };
-
-    // When player state changes
-    const onPlayerStateChange = (event: YT.OnStateChangeEvent) => {
-      setIsPlaying(event.data === YT.PlayerState.PLAYING);
-    };
-
-    // Format seconds to MM:SS
-    const formatTime = (seconds: number): string => {
-      const mins = Math.floor(seconds / 60);
-      const secs = Math.floor(seconds % 60);
-      return `${mins}:${secs < 10 ? "0" + secs : secs}`;
-    };
-
-    // Track progress
-    const startProgressTracking = () => {
-      const interval = setInterval(() => {
-        if (!youtubePlayerRef.current) return;
-
-        try {
-          const currentTimeSec = youtubePlayerRef.current.getCurrentTime();
-          const durationSec = youtubePlayerRef.current.getDuration();
-          const progressPercent = (currentTimeSec / durationSec) * 100;
-
-          setCurrentTime(formatTime(currentTimeSec));
-          setProgress(progressPercent);
-        } catch (error) {
-          console.error("Error updating progress:", error);
-        }
-      }, 1000);
-
-      return () => clearInterval(interval);
-    };
-    // Seek to a specific time
-    const seekTo = (time: number) => {
-      if (!youtubePlayerRef.current) return;
-
-      youtubePlayerRef.current.seekTo(time, true);
-    };
+    }, [initializeYouTubePlayer]);
 
     // Player controls
     const togglePlay = () => {
-      if (!youtubePlayerRef.current) return;
+      if (!youtubePlayerRef.current || !isPlayerReady) return;
 
-      if (isPlaying) {
-        youtubePlayerRef.current.pauseVideo();
-      } else {
-        youtubePlayerRef.current.playVideo();
+      try {
+        if (isPlaying) {
+          if (typeof youtubePlayerRef.current.pauseVideo === "function") {
+            youtubePlayerRef.current.pauseVideo();
+          }
+        } else {
+          if (typeof youtubePlayerRef.current.playVideo === "function") {
+            youtubePlayerRef.current.playVideo();
+          }
+        }
+        setIsPlaying(!isPlaying);
+      } catch (error) {
+        console.error("Error toggling play:", error);
       }
-      setIsPlaying(!isPlaying);
     };
 
     const toggleMute = () => {
       if (!youtubePlayerRef.current) return;
 
-      if (isMuted) {
-        youtubePlayerRef.current.unMute();
-        youtubePlayerRef.current.setVolume(volume);
-      } else {
-        youtubePlayerRef.current.mute();
+      try {
+        if (isMuted) {
+          if (
+            typeof youtubePlayerRef.current.unMute === "function" &&
+            typeof youtubePlayerRef.current.setVolume === "function"
+          ) {
+            youtubePlayerRef.current.unMute();
+            youtubePlayerRef.current.setVolume(volume);
+          }
+        } else {
+          if (typeof youtubePlayerRef.current.mute === "function") {
+            youtubePlayerRef.current.mute();
+          }
+        }
+        setIsMuted(!isMuted);
+      } catch (error) {
+        console.error("Error toggling mute:", error);
       }
-      setIsMuted(!isMuted);
     };
 
     const handleVolumeChange = (value: number[]) => {
       if (!youtubePlayerRef.current) return;
 
-      const newVolume = value[0];
-      youtubePlayerRef.current.setVolume(newVolume);
-      setVolume(newVolume);
+      try {
+        const newVolume = value[0];
 
-      // If changing from 0, unmute
-      if (isMuted && newVolume > 0) {
-        youtubePlayerRef.current.unMute();
-        setIsMuted(false);
-      }
+        if (typeof youtubePlayerRef.current.setVolume === "function") {
+          youtubePlayerRef.current.setVolume(newVolume);
+          setVolume(newVolume);
 
-      // If changing to 0, mute
-      if (newVolume === 0 && !isMuted) {
-        youtubePlayerRef.current.mute();
-        setIsMuted(true);
+          // If changing from 0, unmute
+          if (isMuted && newVolume > 0) {
+            if (typeof youtubePlayerRef.current.unMute === "function") {
+              youtubePlayerRef.current.unMute();
+              setIsMuted(false);
+            }
+          }
+
+          // If changing to 0, mute
+          if (newVolume === 0 && !isMuted) {
+            if (typeof youtubePlayerRef.current.mute === "function") {
+              youtubePlayerRef.current.mute();
+              setIsMuted(true);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error changing volume:", error);
       }
     };
 
     const handleProgressChange = (value: number[]) => {
       if (!youtubePlayerRef.current) return;
 
-      const newProgress = value[0];
-      const durationSec = youtubePlayerRef.current.getDuration();
-      const seekToSec = (newProgress / 100) * durationSec;
+      try {
+        if (
+          typeof youtubePlayerRef.current.getDuration === "function" &&
+          typeof youtubePlayerRef.current.seekTo === "function"
+        ) {
+          const newProgress = value[0];
+          const durationSec = youtubePlayerRef.current.getDuration();
 
-      youtubePlayerRef.current.seekTo(seekToSec, true);
-      setProgress(newProgress);
+          // Check if duration is valid before seeking
+          if (durationSec && durationSec > 0) {
+            const seekToSec = (newProgress / 100) * durationSec;
+            youtubePlayerRef.current.seekTo(seekToSec, true);
+            setProgress(newProgress);
+          }
+        }
+      } catch (error) {
+        console.error("Error changing progress:", error);
+      }
     };
 
     const skipForward = () => {
       if (!youtubePlayerRef.current) return;
 
-      const currentTime = youtubePlayerRef.current.getCurrentTime();
-      youtubePlayerRef.current.seekTo(currentTime + 10, true);
+      try {
+        if (
+          typeof youtubePlayerRef.current.getCurrentTime === "function" &&
+          typeof youtubePlayerRef.current.seekTo === "function"
+        ) {
+          const currentTime = youtubePlayerRef.current.getCurrentTime();
+          const duration = youtubePlayerRef.current.getDuration();
+
+          // Check if we have valid time values before seeking
+          if (currentTime !== undefined && duration && duration > 0) {
+            youtubePlayerRef.current.seekTo(currentTime + 10, true);
+          }
+        }
+      } catch (error) {
+        console.error("Error skipping forward:", error);
+      }
     };
 
     const skipBackward = () => {
       if (!youtubePlayerRef.current) return;
 
-      const currentTime = youtubePlayerRef.current.getCurrentTime();
-      youtubePlayerRef.current.seekTo(Math.max(0, currentTime - 10), true);
+      try {
+        if (
+          typeof youtubePlayerRef.current.getCurrentTime === "function" &&
+          typeof youtubePlayerRef.current.seekTo === "function"
+        ) {
+          const currentTime = youtubePlayerRef.current.getCurrentTime();
+          const duration = youtubePlayerRef.current.getDuration();
+
+          // Check if we have valid time values before seeking
+          if (currentTime !== undefined && duration && duration > 0) {
+            youtubePlayerRef.current.seekTo(
+              Math.max(0, currentTime - 10),
+              true
+            );
+          }
+        }
+      } catch (error) {
+        console.error("Error skipping backward:", error);
+      }
     };
 
     const toggleFullscreen = () => {

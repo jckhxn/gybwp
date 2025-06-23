@@ -31,13 +31,13 @@ export default function EpisodeSlider() {
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const [seasonsData, setSeasonsData] = useState(null);
+  const [seasonsData, setSeasonsData] = useState<Season[]>([]);
   useEffect(() => {
     client.fetch(ALL_SEASONS_QUERY).then(setSeasonsData);
   }, []);
 
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
+  const [data, setData] = useState<Episode[]>([]);
+  const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     if (activeSeason) {
@@ -52,7 +52,7 @@ export default function EpisodeSlider() {
 
   // Set seasons and initial active season
   useEffect(() => {
-    if (seasonsData && Array.isArray(seasonsData) && seasonsData.length > 0) {
+    if (seasonsData.length > 0) {
       setSeasons(seasonsData);
       if (!activeSeason) {
         setActiveSeason(seasonsData[0].title);
@@ -146,7 +146,7 @@ export default function EpisodeSlider() {
         <div className="absolute right-0 top-0 h-full w-8 bg-gradient-to-l from-white/90 to-transparent pointer-events-none z-10" />
         {!isLoading ? (
           <>
-            {data && Array.isArray(data) && data.length > 0 ? (
+            {data.length > 0 ? (
               <div className="relative">
                 {/* Left arrow */}
                 {showLeftArrow && (
@@ -177,7 +177,7 @@ export default function EpisodeSlider() {
                   onScroll={handleScroll}
                   style={{ fontFamily: "Open Sans, sans-serif" }}
                 >
-                  {data.map((episode, idx) => (
+                  {data.map((episode: Episode, idx: number) => (
                     <div
                       key={idx}
                       className="flex-shrink-0 w-[85vw] sm:w-[350px] md:w-[320px] snap-start"
