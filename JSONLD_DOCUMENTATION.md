@@ -484,6 +484,7 @@ If Google Rich Results Test shows "no items detected" even when pasting JSON-LD 
 ### 🚨 Emergency Debugging Steps
 
 #### Step 1: Test Basic JSON Structure
+
 First, test if Google's tool is working at all. Try this ultra-minimal structure:
 
 ```json
@@ -498,9 +499,11 @@ First, test if Google's tool is working at all. Try this ultra-minimal structure
 **If this doesn't work**: Google's tool might be having issues, or there's a broader problem.
 
 #### Step 2: Test Known Working Schemas
+
 Google Rich Results Test definitely supports these schema types:
 
 **Article (always works)**:
+
 ```json
 {
   "@context": "https://schema.org",
@@ -516,6 +519,7 @@ Google Rich Results Test definitely supports these schema types:
 ```
 
 **VideoObject (well supported)**:
+
 ```json
 {
   "@context": "https://schema.org",
@@ -531,6 +535,7 @@ Google Rich Results Test definitely supports these schema types:
 #### Step 3: Test Podcast Schema Step-by-Step
 
 **Minimal PodcastEpisode**:
+
 ```json
 {
   "@context": "https://schema.org",
@@ -541,6 +546,7 @@ Google Rich Results Test definitely supports these schema types:
 ```
 
 **Add partOfSeries**:
+
 ```json
 {
   "@context": "https://schema.org",
@@ -558,22 +564,26 @@ Google Rich Results Test definitely supports these schema types:
 ### 🔍 Common "No Items Detected" Causes
 
 #### 1. **Google Doesn't Support PodcastEpisode Well**
+
 Google's Rich Results Test has limited support for podcast schemas. They may not show up even if valid.
 
 **Solution**: Test with Article or VideoObject schemas instead.
 
 #### 2. **JSON Formatting Issues**
+
 - Extra commas
 - Wrong quote types (`"` vs `'` vs `"`)
 - Invalid escape characters
 - Hidden Unicode characters
 
 #### 3. **Testing Method Issues**
+
 - Don't paste HTML `<script>` tags, only the JSON content
 - Ensure no extra spaces or line breaks
 - Use the "Code Snippet" tab, not "URL" tab
 
 #### 4. **Schema.org Context Issues**
+
 - Must be exactly `"https://schema.org"` (not `http://` or `schema.org`)
 - Case sensitive
 - No trailing slashes
@@ -583,17 +593,20 @@ Google's Rich Results Test has limited support for podcast schemas. They may not
 If Google Rich Results Test continues to fail:
 
 #### 1. **Schema.org Validator** (Most Reliable)
+
 - URL: https://validator.schema.org/
 - Paste your JSON-LD
 - More detailed error messages
 - Better podcast schema support
 
 #### 2. **JSON-LD Playground**
+
 - URL: https://json-ld.org/playground/
 - Shows if JSON-LD is syntactically valid
 - Expands the structured data
 
 #### 3. **Yandex Structured Data Testing Tool**
+
 - Often more forgiving than Google
 - Good for validating schema structure
 
@@ -608,6 +621,7 @@ If Google Rich Results Test continues to fail:
 ### 🚨 If Nothing Works
 
 **Possible issues**:
+
 1. **Google's tool is temporarily broken** (happens occasionally)
 2. **Your browser is blocking something** (try incognito mode)
 3. **Clipboard encoding issues** (try typing the JSON manually)
@@ -616,6 +630,7 @@ If Google Rich Results Test continues to fail:
 ### 💡 Workaround Solutions
 
 #### Option 1: Use Article Schema for Episodes
+
 ```json
 {
   "@context": "https://schema.org",
@@ -636,6 +651,7 @@ If Google Rich Results Test continues to fail:
 ```
 
 #### Option 2: Use VideoObject for YouTube Episodes
+
 ```json
 {
   "@context": "https://schema.org",
@@ -707,6 +723,7 @@ Since Google's Rich Results Test works with Article but not PodcastEpisode, here
 ### Strategy 1: Dual Schema Implementation
 
 Implement **both** Article AND PodcastEpisode schemas on each episode page. This gives you:
+
 - **Article schema**: Recognized by Rich Results Test, shows rich snippets
 - **PodcastEpisode schema**: Proper semantic markup for podcast platforms and future Google support
 
@@ -799,6 +816,7 @@ For episodes with YouTube videos, use VideoObject (well-supported by Google):
 ### Strategy 3: Enhanced Homepage with Multiple Schemas
 
 Homepage should include:
+
 - **PodcastSeries** for podcast platforms
 - **Organization** for brand recognition
 - **WebSite** for sitelinks search box
@@ -814,7 +832,7 @@ Homepage should include:
   "url": "https://gybwp.com",
   "webFeed": "https://feeds.buzzsprout.com/2057493.rss",
   "author": {
-    "@type": "Person", 
+    "@type": "Person",
     "name": "Jeffrey Lackey"
   }
 }
@@ -865,6 +883,7 @@ Homepage should include:
 ### Expected Rich Results
 
 With this approach, you should see:
+
 - **Article rich snippets**: Title, description, author, date, image
 - **Video rich results**: Thumbnails, duration, upload date
 - **Organization knowledge panel**: Brand information, social links
