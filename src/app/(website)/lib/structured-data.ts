@@ -751,13 +751,13 @@ export function generateTestPodcastEpisode(): Record<string, any> {
   return {
     "@context": "https://schema.org",
     "@type": "PodcastEpisode",
-    "name": "Test Episode",
-    "url": "https://gybwp.com/test",
-    "partOfSeries": {
+    name: "Test Episode",
+    url: "https://gybwp.com/test",
+    partOfSeries: {
       "@type": "PodcastSeries",
-      "name": "Test Podcast",
-      "url": "https://gybwp.com"
-    }
+      name: "Test Podcast",
+      url: "https://gybwp.com",
+    },
   };
 }
 
@@ -765,13 +765,13 @@ export function generateTestArticle(): Record<string, any> {
   return {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Test Article",
-    "url": "https://gybwp.com/test",
-    "author": {
+    headline: "Test Article",
+    url: "https://gybwp.com/test",
+    author: {
       "@type": "Person",
-      "name": "Test Author"
+      name: "Test Author",
     },
-    "datePublished": "2024-01-01"
+    datePublished: "2024-01-01",
   };
 }
 
@@ -779,11 +779,11 @@ export function generateTestVideoObject(): Record<string, any> {
   return {
     "@context": "https://schema.org",
     "@type": "VideoObject",
-    "name": "Test Video",
-    "description": "Test description",
-    "url": "https://gybwp.com/test",
-    "contentUrl": "https://www.youtube.com/watch?v=test123",
-    "uploadDate": "2024-01-01"
+    name: "Test Video",
+    description: "Test description",
+    url: "https://gybwp.com/test",
+    contentUrl: "https://www.youtube.com/watch?v=test123",
+    uploadDate: "2024-01-01",
   };
 }
 
@@ -816,41 +816,44 @@ export function generateEpisodeArticleStructuredData(episodeData: {
   return {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": episodeData.title,
-    "description": episodeData.description || episodeData.blurb || `Podcast episode: ${episodeData.title}`,
-    "url": episodeUrl,
-    "image": thumbnailUrl,
-    "author": {
+    headline: episodeData.title,
+    description:
+      episodeData.description ||
+      episodeData.blurb ||
+      `Podcast episode: ${episodeData.title}`,
+    url: episodeUrl,
+    image: thumbnailUrl,
+    author: {
       "@type": "Person",
-      "name": "Jeffrey Lackey",
-      "url": "https://gybwp.com/about"
+      name: "Jeffrey Lackey",
+      url: "https://gybwp.com/about",
     },
-    "publisher": {
+    publisher: {
       "@type": "Organization",
-      "name": "Growing Your Business With People",
-      "url": "https://gybwp.com",
-      "logo": {
+      name: "Growing Your Business With People",
+      url: "https://gybwp.com",
+      logo: {
         "@type": "ImageObject",
-        "url": "https://gybwp.com/images/logo.webp"
-      }
+        url: "https://gybwp.com/images/logo.webp",
+      },
     },
-    "datePublished": episodeData.publishedAt,
-    "dateModified": episodeData.publishedAt,
-    "mainEntityOfPage": {
+    datePublished: episodeData.publishedAt,
+    dateModified: episodeData.publishedAt,
+    mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": episodeUrl
+      "@id": episodeUrl,
     },
-    "articleSection": "Business Podcast",
-    "keywords": [
+    articleSection: "Business Podcast",
+    keywords: [
       "business podcast",
       "leadership",
       "entrepreneurship",
       "business growth",
-      ...(episodeData.keywords || [])
+      ...(episodeData.keywords || []),
     ],
-    "wordCount": episodeData.wordCount || 2000,
-    "isAccessibleForFree": true,
-    "inLanguage": "en-US"
+    wordCount: episodeData.wordCount || 2000,
+    isAccessibleForFree: true,
+    inLanguage: "en-US",
   };
 }
 
@@ -859,22 +862,23 @@ export function generateOrganizationStructuredData(): Record<string, any> {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Growing Your Business With People",
-    "url": "https://gybwp.com",
-    "logo": "https://gybwp.com/images/logo.webp",
-    "description": "Podcast and consulting focused on business growth through people-first leadership strategies.",
-    "founder": {
+    name: "Growing Your Business With People",
+    url: "https://gybwp.com",
+    logo: "https://gybwp.com/images/logo.webp",
+    description:
+      "Podcast and consulting focused on business growth through people-first leadership strategies.",
+    founder: {
       "@type": "Person",
-      "name": "Jeffrey Lackey"
+      name: "Jeffrey Lackey",
     },
-    "sameAs": [
+    sameAs: [
       "https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511",
       "https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH",
       "https://www.youtube.com/@jkladvisors",
       "https://www.linkedin.com/company/growing-your-business-with-people",
       "https://twitter.com/gybwp_podcast",
-      "https://www.facebook.com/gybwpodcast"
-    ]
+      "https://www.facebook.com/gybwpodcast",
+    ],
   };
 }
 
@@ -883,21 +887,22 @@ export function generateWebSiteStructuredData(): Record<string, any> {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Growing Your Business With People",
-    "url": "https://gybwp.com",
-    "description": "The podcast for CEOs and business leaders focusing on growth through investing in their teams.",
-    "publisher": {
+    name: "Growing Your Business With People",
+    url: "https://gybwp.com",
+    description:
+      "The podcast for CEOs and business leaders focusing on growth through investing in their teams.",
+    publisher: {
       "@type": "Organization",
-      "name": "Growing Your Business With People"
+      name: "Growing Your Business With People",
     },
-    "potentialAction": {
+    potentialAction: {
       "@type": "SearchAction",
-      "target": {
+      target: {
         "@type": "EntryPoint",
-        "urlTemplate": "https://gybwp.com/search?q={search_term_string}"
+        urlTemplate: "https://gybwp.com/search?q={search_term_string}",
       },
-      "query-input": "required name=search_term_string"
-    }
+      "query-input": "required name=search_term_string",
+    },
   };
 }
 
@@ -915,45 +920,48 @@ export function generateEnhancedVideoObjectStructuredData(episodeData: {
   const baseUrl = "https://gybwp.com";
   const episodeUrl = `${baseUrl}/episode/${episodeData.uuid}`;
   const youtubeUrl = `https://www.youtube.com/watch?v=${episodeData.youtubeId}`;
-  
+
   // Format duration to ISO 8601 if available
   const isoDuration = formatDurationToISO(episodeData.duration);
 
   const video: Record<string, any> = {
     "@context": "https://schema.org",
     "@type": "VideoObject",
-    "name": episodeData.title,
-    "description": episodeData.description || episodeData.blurb || `Podcast episode: ${episodeData.title}`,
-    "url": episodeUrl,
-    "contentUrl": youtubeUrl,
-    "embedUrl": `https://www.youtube.com/embed/${episodeData.youtubeId}`,
-    "thumbnailUrl": `https://i.ytimg.com/vi/${episodeData.youtubeId}/maxresdefault.jpg`,
-    "uploadDate": episodeData.publishedAt,
-    "duration": isoDuration || episodeData.duration,
-    "author": {
+    name: episodeData.title,
+    description:
+      episodeData.description ||
+      episodeData.blurb ||
+      `Podcast episode: ${episodeData.title}`,
+    url: episodeUrl,
+    contentUrl: youtubeUrl,
+    embedUrl: `https://www.youtube.com/embed/${episodeData.youtubeId}`,
+    thumbnailUrl: `https://i.ytimg.com/vi/${episodeData.youtubeId}/maxresdefault.jpg`,
+    uploadDate: episodeData.publishedAt,
+    duration: isoDuration || episodeData.duration,
+    author: {
       "@type": "Person",
-      "name": "Jeffrey Lackey",
-      "url": "https://gybwp.com/about"
+      name: "Jeffrey Lackey",
+      url: "https://gybwp.com/about",
     },
-    "publisher": {
+    publisher: {
       "@type": "Organization",
-      "name": "Growing Your Business With People",
-      "url": "https://gybwp.com",
-      "logo": {
+      name: "Growing Your Business With People",
+      url: "https://gybwp.com",
+      logo: {
         "@type": "ImageObject",
-        "url": "https://gybwp.com/images/logo.webp"
-      }
+        url: "https://gybwp.com/images/logo.webp",
+      },
     },
-    "isAccessibleForFree": true,
-    "inLanguage": "en-US"
+    isAccessibleForFree: true,
+    inLanguage: "en-US",
   };
 
   // Add interaction statistics if available
   if (episodeData.viewCount) {
     video.interactionStatistic = {
       "@type": "InteractionCounter",
-      "interactionType": "https://schema.org/WatchAction",
-      "userInteractionCount": episodeData.viewCount
+      interactionType: "https://schema.org/WatchAction",
+      userInteractionCount: episodeData.viewCount,
     };
   }
 

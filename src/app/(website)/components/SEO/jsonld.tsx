@@ -1,5 +1,4 @@
 import React from "react";
-import Script from "next/script";
 
 // Define comprehensive types for podcast structured data
 export interface Person {
@@ -194,11 +193,29 @@ type Props = {
 };
 
 const JSONLD = ({ data, id = "jsonld-data" }: Props) => {
+  // Enhanced logging to show exactly what's being rendered
+  console.log(`\n=== ${id} ===`);
+  console.log("Schema Type:", data["@type"]);
+  console.log("Schema Name/Title:", (data as any).name || (data as any).headline);
+  console.log("Full JSON-LD Data:");
+  console.log(JSON.stringify(data, null, 2));
+  console.log(`=== End ${id} ===\n`);
+  
+  // Ensure data is valid before rendering
+  if (!data || typeof data !== 'object') {
+    console.error("JSONLD: Invalid data provided", data);
+    return null;
+  }
+
+  // Use regular script tag instead of Next.js Script component
+  // This ensures it renders in the DOM immediately
   return (
-    <Script
-      type="application/ld+json"
+    <script
       id={id}
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data, null, 2) }}
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ 
+        __html: JSON.stringify(data, null, 2) 
+      }}
     />
   );
 };

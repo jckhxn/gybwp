@@ -149,7 +149,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   const relatedEpisodes = episode?.relatedEpisodes;
 
   // Generate hybrid structured data for maximum rich results compatibility
-  
+
   // 1. Article schema (Google Rich Results compatible)
   const articleStructuredData = generateEpisodeArticleStructuredData({
     title,
@@ -403,13 +403,13 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   return (
     <>
       {/* Hybrid structured data approach for maximum rich results */}
-      
+
       {/* 1. Article schema - Google Rich Results compatible */}
       <JSONLD data={articleStructuredData} id="episode-article-jsonld" />
-      
+
       {/* 2. PodcastEpisode schema - semantic correctness */}
       <JSONLD data={episodeStructuredData} id="podcast-episode-jsonld" />
-      
+
       {/* 3. VideoObject schema - for YouTube episodes */}
       {videoStructuredData && (
         <JSONLD data={videoStructuredData} id="video-object-jsonld" />
