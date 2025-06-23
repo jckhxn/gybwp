@@ -26,6 +26,10 @@ import {
 
 import EpisodeSlider from "@/src/app/(website)/components/EpisodeSlider";
 import JSONLD from "../SEO/jsonld";
+import {
+  generatePodcastSeriesStructuredData,
+  generateSimplifiedPodcastSeriesStructuredData,
+} from "../../lib/structured-data";
 import { Newsletter } from "../Newsletter";
 import { LatestEpisode, LatestEpisodes } from "../LatestEpisode";
 import { BrowseEpisodes } from "../BrowseEpisodes";
@@ -52,21 +56,12 @@ const HomePageComponent = () => {
     }
   }, [data, isLoading]);
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "PodcastSeries",
-    "@id": "gybwp",
-    name: "Growing Your Business With People Podcast",
-    url: "https://gybwp.com",
-    thumbnailUrl: "https://gybwp/images/logo.webp",
-    image: "https://gybwp.com/images/logo.webp",
-    headline:
-      "Listen to 'Growing Your Business with People!' – the podcast for CEOs and business leaders focusing on growth through investing in their teams.",
-  };
+  // Generate simplified podcast series structured data for better compatibility
+  const structuredData = generateSimplifiedPodcastSeriesStructuredData();
 
   return (
     <>
-      <JSONLD data={structuredData} />
+      <JSONLD data={structuredData} id="podcast-series-jsonld" />
 
       {/* ENHANCED HERO SECTION */}
       <Section className="w-full py-16 md:py-24 lg:py-28 bg-gradient-to-br from-main-dark via-main to-main-light relative overflow-hidden">

@@ -11,10 +11,15 @@ import logo from "@/public/images/logo.webp";
 import hero from "@/public/images/blueprint.webp";
 import host from "@/public/images/consulting1.webp";
 import { SVGProps } from "react";
+import JSONLD from "../SEO/jsonld";
+import { generateAboutPageStructuredData } from "../../lib/structured-data";
 
 export default function AboutPage() {
+  const aboutStructuredData = generateAboutPageStructuredData();
+
   return (
     <>
+      <JSONLD data={aboutStructuredData} id="organization-jsonld" />
       <section className="bg-light w-full py-12 md:py-24 lg:py-32">
         <div className="container grid items-center justify-center gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-12">
           <div className="flex flex-col items-center justify-center space-y-4 text-center lg:items-start lg:text-left">

@@ -44,6 +44,13 @@ import {
   formatDuration,
   urlFor,
 } from "../../lib/utils";
+import JSONLD from "../SEO/jsonld";
+import {
+  generatePodcastEpisodeStructuredData,
+  generateSimplifiedPodcastEpisodeStructuredData,
+  generateVideoObjectStructuredData,
+  formatDurationToISO,
+} from "../../lib/structured-data";
 
 // Add at the top of the file after existing imports
 interface DiscussionTopic {
@@ -138,6 +145,44 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
     episodeSponsors.length > 0 ? episodeSponsors : seasonSponsors;
 
   const relatedEpisodes = episode?.relatedEpisodes;
+
+  // Generate structured data for this episode (use simplified version for better compatibility)
+  const episodeStructuredData = generateSimplifiedPodcastEpisodeStructuredData({
+    title,
+    description: description || blurb,
+    url: `https://gybwp.com/episode/${uuid}`,
+    episodeNumber: episodeNumber ? Number(episodeNumber) : undefined,
+    seasonNumber: seasonNumber ? Number(seasonNumber) : undefined,
+    publishedAt,
+    duration,
+    youtubeId: episode?.youtube?.id,
+    uuid,
+    blurb,
+    guests:
+      episode?.guests?.map((guest: any) => ({
+        name: guest.name,
+        title: guest.title,
+        about: guest.about,
+      })) || [],
+    keywords: [
+      ...(takeaways || []),
+      ...(discussionTopics?.map((topic: any) => topic.title).filter(Boolean) ||
+        []),
+    ],
+  });
+
+  // Also generate video object structured data for YouTube
+  const videoStructuredData = episode?.youtube?.id
+    ? generateVideoObjectStructuredData({
+        title,
+        description: description || blurb,
+        youtubeId: episode.youtube.id,
+        publishedAt,
+        duration: formatDurationToISO(duration),
+        uuid,
+        blurb,
+      })
+    : null;
 
   // Create a ref to the player component
   const playerRef = useRef<PlayerHandle>(null);
@@ -328,269 +373,141 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Episode Navigation */}
-            <div className="flex justify-between items-center">
-              {episode?.prevEpisode ? (
-                <Link href={`${episode.prevEpisode}`}>
+    <>
+      {/* Add structured data for SEO */}
+      <JSONLD data={episodeStructuredData} id="podcast-episode-jsonld" />
+      {videoStructuredData && (
+        <JSONLD data={videoStructuredData} id="video-object-jsonld" />
+      )}
+
+      <div className="min-h-screen bg-background text-foreground">
+        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Episode Navigation */}
+              <div className="flex justify-between items-center">
+                {episode?.prevEpisode ? (
+                  <Link href={`${episode.prevEpisode}`}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center gap-1"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                      Previous Episode
+                    </Button>
+                  </Link>
+                ) : (
                   <Button
                     variant="outline"
                     size="sm"
-                    className="flex items-center gap-1"
+                    className="flex items-center gap-1 opacity-50"
+                    disabled
                   >
                     <ChevronLeft className="h-4 w-4" />
                     Previous Episode
                   </Button>
-                </Link>
-              ) : (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-1 opacity-50"
-                  disabled
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                  Previous Episode
-                </Button>
-              )}
+                )}
 
-              {episode?.nextEpisode ? (
-                <Link href={`${episode.nextEpisode}`}>
+                {episode?.nextEpisode ? (
+                  <Link href={`${episode.nextEpisode}`}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center gap-1"
+                    >
+                      Next Episode
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                ) : (
                   <Button
                     variant="outline"
                     size="sm"
-                    className="flex items-center gap-1"
+                    className="flex items-center gap-1 opacity-50"
+                    disabled
                   >
                     Next Episode
                     <ChevronRight className="h-4 w-4" />
                   </Button>
-                </Link>
-              ) : (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-1 opacity-50"
-                  disabled
-                >
-                  Next Episode
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              )}
-            </div>
-
-            {/* Episode Header */}
-            <div>
-              <Badge variant="outline" className="mb-2">
-                Season {seasonNumber} • Episode {episodeNumber}
-              </Badge>
-              <h1 className="text-3xl font-bold tracking-tight mb-4">
-                {title}
-              </h1>
-              <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
-                {publishedAt && (
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-4 w-4" />
-                    <span>{formatDate(publishedAt)}</span>
-                  </div>
                 )}
-                <div className="flex items-center gap-1">
-                  <Clock className="h-4 w-4" />
-                  <span>{formatDuration(duration)}</span>
+              </div>
+
+              {/* Episode Header */}
+              <div>
+                <Badge variant="outline" className="mb-2">
+                  Season {seasonNumber} • Episode {episodeNumber}
+                </Badge>
+                <h1 className="text-3xl font-bold tracking-tight mb-4">
+                  {title}
+                </h1>
+                <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
+                  {publishedAt && (
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-4 w-4" />
+                      <span>{formatDate(publishedAt)}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-1">
+                    <Clock className="h-4 w-4" />
+                    <span>{formatDuration(duration)}</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Video Player */}
-            <StickyVideoPlayer
-              videoId={episode?.youtube?.id}
-              title={title}
-              onPlayerRef={(ref) => {
-                if (ref?.current) {
-                  // @ts-expect-error - assigning ref for player controls
-                  playerRef.current = ref.current;
-                }
-              }}
-            />
+              {/* Video Player */}
+              <StickyVideoPlayer
+                videoId={episode?.youtube?.id}
+                title={title}
+                onPlayerRef={(ref) => {
+                  if (ref?.current) {
+                    // @ts-expect-error - assigning ref for player controls
+                    playerRef.current = ref.current;
+                  }
+                }}
+              />
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap gap-3">
-              <Button
-                className="flex items-center gap-2"
-                onClick={handlePlayClick}
-              >
-                {isPlaying ? (
-                  <>
-                    <Pause className="h-4 w-4" />
-                    Pause Episode
-                  </>
-                ) : (
-                  <>
-                    <Play className="h-4 w-4" />
-                    Play Episode
-                  </>
-                )}
-              </Button>
-              <Button
-                variant="outline"
-                className="flex items-center gap-2"
-                onClick={() => setIsShareModalOpen(true)}
-              >
-                <Share2 className="h-4 w-4" />
-                Share Episode
-              </Button>
-            </div>
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-3">
+                <Button
+                  className="flex items-center gap-2"
+                  onClick={handlePlayClick}
+                >
+                  {isPlaying ? (
+                    <>
+                      <Pause className="h-4 w-4" />
+                      Pause Episode
+                    </>
+                  ) : (
+                    <>
+                      <Play className="h-4 w-4" />
+                      Play Episode
+                    </>
+                  )}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="flex items-center gap-2"
+                  onClick={() => setIsShareModalOpen(true)}
+                >
+                  <Share2 className="h-4 w-4" />
+                  Share Episode
+                </Button>
+              </div>
 
-            {/* Jump to Section */}
-            <div className="bg-muted/30 dark:bg-muted/10 rounded-lg p-4">
-              <h3 className="text-sm font-medium mb-3">Jump to Section:</h3>
-              <div className="flex flex-wrap gap-2">
-                {/* Overview is always shown if there's a description */}
-                {description && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-xs"
-                    onClick={() => {
-                      const element = document.getElementById("overview");
-                      if (element) {
-                        const headerOffset = 80;
-                        const elementPosition =
-                          element.getBoundingClientRect().top +
-                          window.pageYOffset;
-                        const offsetPosition = elementPosition - headerOffset;
-
-                        window.scrollTo({
-                          top: offsetPosition,
-                          behavior: "smooth",
-                        });
-                      }
-                    }}
-                  >
-                    Overview
-                  </Button>
-                )}
-
-                {/* Key Takeaways section */}
-                {takeaways && takeaways.length > 0 && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-xs"
-                    onClick={() => {
-                      const element = document.getElementById("key-takeaways");
-                      if (element) {
-                        const headerOffset = 80;
-                        const elementPosition =
-                          element.getBoundingClientRect().top +
-                          window.pageYOffset;
-                        const offsetPosition = elementPosition - headerOffset;
-
-                        window.scrollTo({
-                          top: offsetPosition,
-                          behavior: "smooth",
-                        });
-                      }
-                    }}
-                  >
-                    Key Takeaways
-                  </Button>
-                )}
-
-                {/* Discussion Topics section */}
-                {discussionTopics && discussionTopics.length > 0 && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-xs"
-                    onClick={() => {
-                      const element =
-                        document.getElementById("discussion-topics");
-                      if (element) {
-                        const headerOffset = 80;
-                        const elementPosition =
-                          element.getBoundingClientRect().top +
-                          window.pageYOffset;
-                        const offsetPosition = elementPosition - headerOffset;
-
-                        window.scrollTo({
-                          top: offsetPosition,
-                          behavior: "smooth",
-                        });
-                      }
-                    }}
-                  >
-                    Discussion Topics
-                  </Button>
-                )}
-
-                {/* Episode Highlights section */}
-                {highlights && highlights.length > 0 && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-xs"
-                    onClick={() => {
-                      const element =
-                        document.getElementById("episode-highlights");
-                      if (element) {
-                        const headerOffset = 80;
-                        const elementPosition =
-                          element.getBoundingClientRect().top +
-                          window.pageYOffset;
-                        const offsetPosition = elementPosition - headerOffset;
-
-                        window.scrollTo({
-                          top: offsetPosition,
-                          behavior: "smooth",
-                        });
-                      }
-                    }}
-                  >
-                    Episode Highlights
-                  </Button>
-                )}
-
-                {/* Transcript section */}
-                {transcript && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-xs"
-                    onClick={() => {
-                      const element = document.getElementById("transcript");
-                      if (element) {
-                        const headerOffset = 80;
-                        const elementPosition =
-                          element.getBoundingClientRect().top +
-                          window.pageYOffset;
-                        const offsetPosition = elementPosition - headerOffset;
-
-                        window.scrollTo({
-                          top: offsetPosition,
-                          behavior: "smooth",
-                        });
-                      }
-                    }}
-                  >
-                    Transcript
-                  </Button>
-                )}
-
-                {/* Featured Guest section */}
-                {data.guests &&
-                  Array.isArray(data.guests) &&
-                  data.guests.length > 0 && (
+              {/* Jump to Section */}
+              <div className="bg-muted/30 dark:bg-muted/10 rounded-lg p-4">
+                <h3 className="text-sm font-medium mb-3">Jump to Section:</h3>
+                <div className="flex flex-wrap gap-2">
+                  {/* Overview is always shown if there's a description */}
+                  {description && (
                     <Button
                       variant="outline"
                       size="sm"
                       className="text-xs"
                       onClick={() => {
-                        const element =
-                          document.getElementById("featured-guest");
+                        const element = document.getElementById("overview");
                         if (element) {
                           const headerOffset = 80;
                           const elementPosition =
@@ -605,454 +522,599 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                         }
                       }}
                     >
-                      Featured Guest
+                      Overview
                     </Button>
                   )}
-              </div>
-            </div>
 
-            <Separator />
+                  {/* Key Takeaways section */}
+                  {takeaways && takeaways.length > 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-xs"
+                      onClick={() => {
+                        const element =
+                          document.getElementById("key-takeaways");
+                        if (element) {
+                          const headerOffset = 80;
+                          const elementPosition =
+                            element.getBoundingClientRect().top +
+                            window.pageYOffset;
+                          const offsetPosition = elementPosition - headerOffset;
 
-            {/* Episode Content Sections */}
-            <div className="space-y-8">
-              {/* Overview Section - always shown if there's a description */}
-              {description && (
-                <div
-                  id="overview"
-                  className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
-                >
-                  <h2 className="text-xl font-semibold mb-3">
-                    Episode Overview
-                  </h2>
-                  <div className="space-y-4 text-muted-foreground leading-relaxed">
-                    {formatDescriptionText(description).map(
-                      (paragraph, index) => (
-                        <p key={index}>{paragraph}</p>
-                      )
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Key Takeaways Section */}
-              {takeaways && takeaways.length > 0 && (
-                <div
-                  id="key-takeaways"
-                  className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
-                >
-                  <h2 className="text-xl font-semibold mb-3">Key Takeaways</h2>
-                  <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                    {takeaways.map((takeaway: string, index: number) => (
-                      <li key={index}>{takeaway}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* Discussion Topics Section */}
-              {discussionTopics && discussionTopics.length > 0 && (
-                <div
-                  id="discussion-topics"
-                  className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
-                >
-                  <h2 className="text-xl font-semibold mb-3">
-                    Discussion Topics
-                  </h2>
-                  <div className="space-y-4">
-                    {discussionTopics.map(
-                      (topic: DiscussionTopic, index: number) => (
-                        <div key={index}>
-                          <h3 className="font-medium text-base">
-                            {topic.title || `Topic ${index + 1}`}
-                          </h3>
-                          <p className="text-muted-foreground">
-                            {topic.description || ""}
-                          </p>
-                        </div>
-                      )
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Episode Highlights Section */}
-              {highlights && highlights.length > 0 && (
-                <div
-                  id="episode-highlights"
-                  className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
-                >
-                  <h2 className="text-xl font-semibold mb-3">
-                    Episode Highlights
-                  </h2>
-                  <div className="space-y-3">
-                    {highlights.map((highlight: Highlight, index: number) => (
-                      <div key={index} className="flex gap-3">
-                        <button
-                          onClick={() => {
-                            if (
-                              playerRef.current &&
-                              highlight.timestamp &&
-                              typeof highlight.timestamp === "string"
-                            ) {
-                              // Convert timestamp to seconds
-                              const parts = highlight.timestamp.split(":");
-                              let seconds = 0;
-                              if (parts.length === 3) {
-                                // HH:MM:SS
-                                seconds =
-                                  parseInt(parts[0]) * 3600 +
-                                  parseInt(parts[1]) * 60 +
-                                  parseInt(parts[2]);
-                              } else if (parts.length === 2) {
-                                // MM:SS
-                                seconds =
-                                  parseInt(parts[0]) * 60 + parseInt(parts[1]);
-                              } else if (parts.length === 1) {
-                                // SS
-                                seconds = parseInt(parts[0]);
-                              }
-
-                              console.log(
-                                `Timestamp clicked: ${highlight.timestamp} -> ${seconds} seconds`
-                              );
-                              playerRef.current.seekTo(seconds, true); // Pass true to play after seek
-                            }
-                          }}
-                          className=""
-                        >
-                          <span className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs">
-                            {highlight.timestamp || "00:00"}
-                          </span>
-                        </button>
-                        <div>
-                          <p className="font-medium">
-                            {highlight.title || `Highlight ${index + 1}`}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Transcript Section */}
-              {transcript && (
-                <div
-                  id="transcript"
-                  className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
-                >
-                  <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-semibold">
-                      Episode Transcript
-                    </h2>
-                    <Button variant="outline" size="sm">
-                      View Full Transcript
-                    </Button>
-                  </div>
-                  <div className="max-h-64 overflow-y-auto space-y-4">
-                    <PortableText
-                      value={transcript}
-                      components={{
-                        block: (props) => {
-                          const { value, children } = props;
-                          const style = value.style || "normal";
-
-                          if (style === "h4") {
-                            return (
-                              <h4 className="font-medium text-base mt-4 mb-2">
-                                {children}
-                              </h4>
-                            );
-                          }
-
-                          return (
-                            <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                              {children}
-                            </p>
-                          );
-                        },
-                        marks: {
-                          strong: ({ children }) => <strong>{children}</strong>,
-                          em: ({ children }) => <em>{children}</em>,
-                          timestamp: ({ value, children }) => (
-                            <button
-                              className="bg-primary/10 text-primary font-medium rounded-full px-2 py-1 text-xs ml-1 hover:bg-primary/20 transition-colors"
-                              onClick={() => {
-                                if (playerRef.current && value?.time) {
-                                  // Convert timestamp to seconds
-                                  const parts = value.time.split(":");
-                                  let seconds = 0;
-                                  if (parts.length === 3) {
-                                    // HH:MM:SS
-                                    seconds =
-                                      parseInt(parts[0]) * 3600 +
-                                      parseInt(parts[1]) * 60 +
-                                      parseInt(parts[2]);
-                                  } else if (parts.length === 2) {
-                                    // MM:SS
-                                    seconds =
-                                      parseInt(parts[0]) * 60 +
-                                      parseInt(parts[1]);
-                                  }
-
-                                  console.log(
-                                    `Inline timestamp clicked: ${value.time} -> ${seconds} seconds`
-                                  );
-                                  playerRef.current.seekTo(seconds, true); // Pass true to play after seek
-                                }
-                              }}
-                            >
-                              {value?.time || "00:00"}
-                            </button>
-                          ),
-                        },
+                          window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth",
+                          });
+                        }
                       }}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
+                    >
+                      Key Takeaways
+                    </Button>
+                  )}
 
-            <Separator />
+                  {/* Discussion Topics section */}
+                  {discussionTopics && discussionTopics.length > 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-xs"
+                      onClick={() => {
+                        const element =
+                          document.getElementById("discussion-topics");
+                        if (element) {
+                          const headerOffset = 80;
+                          const elementPosition =
+                            element.getBoundingClientRect().top +
+                            window.pageYOffset;
+                          const offsetPosition = elementPosition - headerOffset;
 
-            {/* Featured Guest */}
-            {data.guests &&
-              Array.isArray(data.guests) &&
-              data.guests.length > 0 && (
-                <div
-                  id="featured-guest"
-                  className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
-                >
-                  <h2 className="text-xl font-semibold mb-4">
-                    Featured Guest{data.guests.length > 1 ? "s" : ""}
-                  </h2>
-                  <div className="space-y-8">
-                    {data.guests.map((guest, index) => (
-                      <div
-                        key={guest._id || index}
-                        className="flex flex-col sm:flex-row gap-4 items-start sm:items-center"
+                          window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth",
+                          });
+                        }
+                      }}
+                    >
+                      Discussion Topics
+                    </Button>
+                  )}
+
+                  {/* Episode Highlights section */}
+                  {highlights && highlights.length > 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-xs"
+                      onClick={() => {
+                        const element =
+                          document.getElementById("episode-highlights");
+                        if (element) {
+                          const headerOffset = 80;
+                          const elementPosition =
+                            element.getBoundingClientRect().top +
+                            window.pageYOffset;
+                          const offsetPosition = elementPosition - headerOffset;
+
+                          window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth",
+                          });
+                        }
+                      }}
+                    >
+                      Episode Highlights
+                    </Button>
+                  )}
+
+                  {/* Transcript section */}
+                  {transcript && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-xs"
+                      onClick={() => {
+                        const element = document.getElementById("transcript");
+                        if (element) {
+                          const headerOffset = 80;
+                          const elementPosition =
+                            element.getBoundingClientRect().top +
+                            window.pageYOffset;
+                          const offsetPosition = elementPosition - headerOffset;
+
+                          window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth",
+                          });
+                        }
+                      }}
+                    >
+                      Transcript
+                    </Button>
+                  )}
+
+                  {/* Featured Guest section */}
+                  {data.guests &&
+                    Array.isArray(data.guests) &&
+                    data.guests.length > 0 && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs"
+                        onClick={() => {
+                          const element =
+                            document.getElementById("featured-guest");
+                          if (element) {
+                            const headerOffset = 80;
+                            const elementPosition =
+                              element.getBoundingClientRect().top +
+                              window.pageYOffset;
+                            const offsetPosition =
+                              elementPosition - headerOffset;
+
+                            window.scrollTo({
+                              top: offsetPosition,
+                              behavior: "smooth",
+                            });
+                          }
+                        }}
                       >
-                        <Avatar className="h-20 w-20">
-                          {guest.image ? (
-                            <AvatarImage
-                              src={urlFor(guest.image)
-                                .width(160)
-                                .height(160)
-                                .url()}
-                              alt={guest.name || "Guest"}
-                            />
-                          ) : (
-                            <AvatarImage
-                              src="/placeholder.svg?height=80&width=80"
-                              alt={guest.name || "Guest"}
-                            />
-                          )}
-                          <AvatarFallback>
-                            {guest.name
-                              ? guest.name.substring(0, 2).toUpperCase()
-                              : "GU"}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <h3 className="text-lg font-semibold">
-                            {guest.name || "Guest Name"}
-                          </h3>
-                          {guest.title && (
-                            <p className="text-sm text-muted-foreground mb-2">
-                              {guest.title}
+                        Featured Guest
+                      </Button>
+                    )}
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Episode Content Sections */}
+              <div className="space-y-8">
+                {/* Overview Section - always shown if there's a description */}
+                {description && (
+                  <div
+                    id="overview"
+                    className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                  >
+                    <h2 className="text-xl font-semibold mb-3">
+                      Episode Overview
+                    </h2>
+                    <div className="space-y-4 text-muted-foreground leading-relaxed">
+                      {formatDescriptionText(description).map(
+                        (paragraph, index) => (
+                          <p key={index}>{paragraph}</p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Key Takeaways Section */}
+                {takeaways && takeaways.length > 0 && (
+                  <div
+                    id="key-takeaways"
+                    className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                  >
+                    <h2 className="text-xl font-semibold mb-3">
+                      Key Takeaways
+                    </h2>
+                    <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                      {takeaways.map((takeaway: string, index: number) => (
+                        <li key={index}>{takeaway}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Discussion Topics Section */}
+                {discussionTopics && discussionTopics.length > 0 && (
+                  <div
+                    id="discussion-topics"
+                    className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                  >
+                    <h2 className="text-xl font-semibold mb-3">
+                      Discussion Topics
+                    </h2>
+                    <div className="space-y-4">
+                      {discussionTopics.map(
+                        (topic: DiscussionTopic, index: number) => (
+                          <div key={index}>
+                            <h3 className="font-medium text-base">
+                              {topic.title || `Topic ${index + 1}`}
+                            </h3>
+                            <p className="text-muted-foreground">
+                              {topic.description || ""}
                             </p>
-                          )}
-                          {guest.about && (
-                            <p className="text-sm text-muted-foreground mb-4">
-                              {guest.about}
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Episode Highlights Section */}
+                {highlights && highlights.length > 0 && (
+                  <div
+                    id="episode-highlights"
+                    className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                  >
+                    <h2 className="text-xl font-semibold mb-3">
+                      Episode Highlights
+                    </h2>
+                    <div className="space-y-3">
+                      {highlights.map((highlight: Highlight, index: number) => (
+                        <div key={index} className="flex gap-3">
+                          <button
+                            onClick={() => {
+                              if (
+                                playerRef.current &&
+                                highlight.timestamp &&
+                                typeof highlight.timestamp === "string"
+                              ) {
+                                // Convert timestamp to seconds
+                                const parts = highlight.timestamp.split(":");
+                                let seconds = 0;
+                                if (parts.length === 3) {
+                                  // HH:MM:SS
+                                  seconds =
+                                    parseInt(parts[0]) * 3600 +
+                                    parseInt(parts[1]) * 60 +
+                                    parseInt(parts[2]);
+                                } else if (parts.length === 2) {
+                                  // MM:SS
+                                  seconds =
+                                    parseInt(parts[0]) * 60 +
+                                    parseInt(parts[1]);
+                                } else if (parts.length === 1) {
+                                  // SS
+                                  seconds = parseInt(parts[0]);
+                                }
+
+                                console.log(
+                                  `Timestamp clicked: ${highlight.timestamp} -> ${seconds} seconds`
+                                );
+                                playerRef.current.seekTo(seconds, true); // Pass true to play after seek
+                              }
+                            }}
+                            className=""
+                          >
+                            <span className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs">
+                              {highlight.timestamp || "00:00"}
+                            </span>
+                          </button>
+                          <div>
+                            <p className="font-medium">
+                              {highlight.title || `Highlight ${index + 1}`}
                             </p>
-                          )}
-                          <div className="flex gap-2">
-                            {guest.slug && guest.slug.current && (
-                              <Link href={`/guest/${guest.slug.current}`}>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="flex items-center gap-1"
-                                >
-                                  More Details
-                                </Button>
-                              </Link>
-                            )}
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-          </div>
+                )}
 
-          {/* Sidebar */}
-          <div className="space-y-8">
-            {/* Subscribe Card */}
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4">
-                  Subscribe to our Podcast
-                </h3>
+                {/* Transcript Section */}
+                {transcript && (
+                  <div
+                    id="transcript"
+                    className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                  >
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-xl font-semibold">
+                        Episode Transcript
+                      </h2>
+                      <Button variant="outline" size="sm">
+                        View Full Transcript
+                      </Button>
+                    </div>
+                    <div className="max-h-64 overflow-y-auto space-y-4">
+                      <PortableText
+                        value={transcript}
+                        components={{
+                          block: (props) => {
+                            const { value, children } = props;
+                            const style = value.style || "normal";
 
-                <SubscribeForm />
-                <div className="mt-4">
-                  <p className="text-sm font-medium mb-2">Also available on:</p>
-                  <div className="flex flex-wrap gap-2">
-                    <Link
-                      href="https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center gap-1"
-                      >
-                        <Image
-                          src="/social-logos/apple.png"
-                          alt="Apple Podcasts"
-                          width={16}
-                          height={16}
-                        />
-                        Apple Podcasts
-                      </Button>
-                    </Link>
-                    <Link
-                      href="https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center gap-1"
-                      >
-                        <Image
-                          src="/social-logos/spotify.png"
-                          alt="Spotify"
-                          width={16}
-                          height={16}
-                        />
-                        Spotify
-                      </Button>
-                    </Link>
-                    <Link
-                      href={routes.external.listen}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center gap-1"
-                      >
-                        <Image
-                          src="/social-logos/buzzsprout.png"
-                          alt="Buzzsprout"
-                          width={16}
-                          height={16}
-                        />
-                        Buzzsprout
-                      </Button>
-                    </Link>
+                            if (style === "h4") {
+                              return (
+                                <h4 className="font-medium text-base mt-4 mb-2">
+                                  {children}
+                                </h4>
+                              );
+                            }
+
+                            return (
+                              <p className="text-muted-foreground text-sm leading-relaxed mb-4">
+                                {children}
+                              </p>
+                            );
+                          },
+                          marks: {
+                            strong: ({ children }) => (
+                              <strong>{children}</strong>
+                            ),
+                            em: ({ children }) => <em>{children}</em>,
+                            timestamp: ({ value, children }) => (
+                              <button
+                                className="bg-primary/10 text-primary font-medium rounded-full px-2 py-1 text-xs ml-1 hover:bg-primary/20 transition-colors"
+                                onClick={() => {
+                                  if (playerRef.current && value?.time) {
+                                    // Convert timestamp to seconds
+                                    const parts = value.time.split(":");
+                                    let seconds = 0;
+                                    if (parts.length === 3) {
+                                      // HH:MM:SS
+                                      seconds =
+                                        parseInt(parts[0]) * 3600 +
+                                        parseInt(parts[1]) * 60 +
+                                        parseInt(parts[2]);
+                                    } else if (parts.length === 2) {
+                                      // MM:SS
+                                      seconds =
+                                        parseInt(parts[0]) * 60 +
+                                        parseInt(parts[1]);
+                                    }
+
+                                    console.log(
+                                      `Inline timestamp clicked: ${value.time} -> ${seconds} seconds`
+                                    );
+                                    playerRef.current.seekTo(seconds, true); // Pass true to play after seek
+                                  }
+                                }}
+                              >
+                                {value?.time || "00:00"}
+                              </button>
+                            ),
+                          },
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                )}
+              </div>
 
-            {/* Sponsors Card - only shown if sponsors exist */}
-            {sponsors && sponsors.length > 0 && (
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">Our Sponsors</h3>
-                  <div className="space-y-4">
-                    {sponsors.map((sponsor: Sponsor, index: number) => (
-                      <div
-                        key={index}
-                        className="p-4 border rounded-lg flex flex-col items-center text-center"
-                      >
-                        {sponsor.image ? (
-                          <div
-                            className={`w-[120px] h-[120px] relative mb-3 rounded-full overflow-hidden flex items-center justify-center ${
-                              sponsor.bgColor || "bg-white"
-                            }`}
-                          >
-                            <Image
-                              src={sponsor.image}
-                              alt={sponsor.name || "Sponsor Logo"}
-                              fill
-                              className="object-contain p-2"
-                            />
-                          </div>
-                        ) : (
-                          <div
-                            className={`w-[120px] h-[120px] relative mb-3 rounded-full flex items-center justify-center ${
-                              sponsor.bgColor || "bg-gray-100"
-                            }`}
-                          >
-                            <span className="text-gray-400 text-sm font-medium">
-                              {sponsor.name || "Sponsor"}
-                            </span>
-                          </div>
-                        )}
-                        {/* Too wordy */}
-                        {/* <p className="text-sm text-muted-foreground">
-                          {sponsor.description ||
-                            "Support our sponsors who make this podcast possible."}
-                        </p> */}
-                        <Link
-                          href={
-                            sponsor.url ||
-                            (sponsor.uuid ? `/sponsors/${sponsor.uuid}` : "#")
-                          }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-3"
+              <Separator />
+
+              {/* Featured Guest */}
+              {data.guests &&
+                Array.isArray(data.guests) &&
+                data.guests.length > 0 && (
+                  <div
+                    id="featured-guest"
+                    className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                  >
+                    <h2 className="text-xl font-semibold mb-4">
+                      Featured Guest{data.guests.length > 1 ? "s" : ""}
+                    </h2>
+                    <div className="space-y-8">
+                      {data.guests.map((guest, index) => (
+                        <div
+                          key={guest._id || index}
+                          className="flex flex-col sm:flex-row gap-4 items-start sm:items-center"
                         >
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="flex items-center gap-1"
-                          >
-                            <ExternalLink size={16} />
-                            Learn More
-                          </Button>
-                        </Link>
-                      </div>
-                    ))}
+                          <Avatar className="h-20 w-20">
+                            {guest.image ? (
+                              <AvatarImage
+                                src={urlFor(guest.image)
+                                  .width(160)
+                                  .height(160)
+                                  .url()}
+                                alt={guest.name || "Guest"}
+                              />
+                            ) : (
+                              <AvatarImage
+                                src="/placeholder.svg?height=80&width=80"
+                                alt={guest.name || "Guest"}
+                              />
+                            )}
+                            <AvatarFallback>
+                              {guest.name
+                                ? guest.name.substring(0, 2).toUpperCase()
+                                : "GU"}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <h3 className="text-lg font-semibold">
+                              {guest.name || "Guest Name"}
+                            </h3>
+                            {guest.title && (
+                              <p className="text-sm text-muted-foreground mb-2">
+                                {guest.title}
+                              </p>
+                            )}
+                            {guest.about && (
+                              <p className="text-sm text-muted-foreground mb-4">
+                                {guest.about}
+                              </p>
+                            )}
+                            <div className="flex gap-2">
+                              {guest.slug && guest.slug.current && (
+                                <Link href={`/guest/${guest.slug.current}`}>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="flex items-center gap-1"
+                                  >
+                                    More Details
+                                  </Button>
+                                </Link>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                )}
+            </div>
 
-            {/* Related Episodes */}
-            {data.relatedEpisodes && (
+            {/* Sidebar */}
+            <div className="space-y-8">
+              {/* Subscribe Card */}
               <Card>
                 <CardContent className="p-6">
                   <h3 className="text-lg font-semibold mb-4">
-                    Related Episodes
+                    Subscribe to our Podcast
                   </h3>
 
-                  <RelatedEpisodes
-                    uuid={uuid}
-                    relatedEpisodes={
-                      Array.isArray(data.relatedEpisodes)
-                        ? data.relatedEpisodes
-                        : []
-                    }
-                  />
+                  <SubscribeForm />
+                  <div className="mt-4">
+                    <p className="text-sm font-medium mb-2">
+                      Also available on:
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <Link
+                        href="https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex items-center gap-1"
+                        >
+                          <Image
+                            src="/social-logos/apple.png"
+                            alt="Apple Podcasts"
+                            width={16}
+                            height={16}
+                          />
+                          Apple Podcasts
+                        </Button>
+                      </Link>
+                      <Link
+                        href="https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex items-center gap-1"
+                        >
+                          <Image
+                            src="/social-logos/spotify.png"
+                            alt="Spotify"
+                            width={16}
+                            height={16}
+                          />
+                          Spotify
+                        </Button>
+                      </Link>
+                      <Link
+                        href={routes.external.listen}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex items-center gap-1"
+                        >
+                          <Image
+                            src="/social-logos/buzzsprout.png"
+                            alt="Buzzsprout"
+                            width={16}
+                            height={16}
+                          />
+                          Buzzsprout
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
-            )}
-          </div>
-        </div>
-      </main>
 
-      {/* Share Modal */}
-      <ShareModal />
-    </div>
+              {/* Sponsors Card - only shown if sponsors exist */}
+              {sponsors && sponsors.length > 0 && (
+                <Card>
+                  <CardContent className="p-6">
+                    <h3 className="text-lg font-semibold mb-4">Our Sponsors</h3>
+                    <div className="space-y-4">
+                      {sponsors.map((sponsor: Sponsor, index: number) => (
+                        <div
+                          key={index}
+                          className="p-4 border rounded-lg flex flex-col items-center text-center"
+                        >
+                          {sponsor.image ? (
+                            <div
+                              className={`w-[120px] h-[120px] relative mb-3 rounded-full overflow-hidden flex items-center justify-center ${
+                                sponsor.bgColor || "bg-white"
+                              }`}
+                            >
+                              <Image
+                                src={sponsor.image}
+                                alt={sponsor.name || "Sponsor Logo"}
+                                fill
+                                className="object-contain p-2"
+                              />
+                            </div>
+                          ) : (
+                            <div
+                              className={`w-[120px] h-[120px] relative mb-3 rounded-full flex items-center justify-center ${
+                                sponsor.bgColor || "bg-gray-100"
+                              }`}
+                            >
+                              <span className="text-gray-400 text-sm font-medium">
+                                {sponsor.name || "Sponsor"}
+                              </span>
+                            </div>
+                          )}
+                          {/* Too wordy */}
+                          {/* <p className="text-sm text-muted-foreground">
+                          {sponsor.description ||
+                            "Support our sponsors who make this podcast possible."}
+                        </p> */}
+                          <Link
+                            href={
+                              sponsor.url ||
+                              (sponsor.uuid ? `/sponsors/${sponsor.uuid}` : "#")
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-3"
+                          >
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex items-center gap-1"
+                            >
+                              <ExternalLink size={16} />
+                              Learn More
+                            </Button>
+                          </Link>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Related Episodes */}
+              {data.relatedEpisodes && (
+                <Card>
+                  <CardContent className="p-6">
+                    <h3 className="text-lg font-semibold mb-4">
+                      Related Episodes
+                    </h3>
+
+                    <RelatedEpisodes
+                      uuid={uuid}
+                      relatedEpisodes={
+                        Array.isArray(data.relatedEpisodes)
+                          ? data.relatedEpisodes
+                          : []
+                      }
+                    />
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </div>
+        </main>
+
+        {/* Share Modal */}
+        <ShareModal />
+      </div>
+    </>
   );
 }
