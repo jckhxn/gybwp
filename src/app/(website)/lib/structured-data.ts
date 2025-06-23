@@ -786,3 +786,176 @@ export function generateTestVideoObject(): Record<string, any> {
     "uploadDate": "2024-01-01"
   };
 }
+
+// Generate Article schema for episodes (Google Rich Results compatible)
+export function generateEpisodeArticleStructuredData(episodeData: {
+  title: string;
+  description?: string;
+  url: string;
+  publishedAt?: string;
+  youtubeId?: string;
+  uuid?: string;
+  blurb?: string;
+  guests?: Array<{
+    name: string;
+    title?: string;
+  }>;
+  keywords?: string[];
+  wordCount?: number;
+}): Record<string, any> {
+  const baseUrl = "https://gybwp.com";
+  const episodeUrl = episodeData.url.startsWith("http")
+    ? episodeData.url
+    : `${baseUrl}/episode/${episodeData.uuid}`;
+
+  // Get thumbnail from YouTube if available
+  const thumbnailUrl = episodeData.youtubeId
+    ? `https://i.ytimg.com/vi/${episodeData.youtubeId}/maxresdefault.jpg`
+    : "https://gybwp.com/images/logo.webp";
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": episodeData.title,
+    "description": episodeData.description || episodeData.blurb || `Podcast episode: ${episodeData.title}`,
+    "url": episodeUrl,
+    "image": thumbnailUrl,
+    "author": {
+      "@type": "Person",
+      "name": "Jeffrey Lackey",
+      "url": "https://gybwp.com/about"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Growing Your Business With People",
+      "url": "https://gybwp.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://gybwp.com/images/logo.webp"
+      }
+    },
+    "datePublished": episodeData.publishedAt,
+    "dateModified": episodeData.publishedAt,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": episodeUrl
+    },
+    "articleSection": "Business Podcast",
+    "keywords": [
+      "business podcast",
+      "leadership",
+      "entrepreneurship",
+      "business growth",
+      ...(episodeData.keywords || [])
+    ],
+    "wordCount": episodeData.wordCount || 2000,
+    "isAccessibleForFree": true,
+    "inLanguage": "en-US"
+  };
+}
+
+// Generate Organization schema for homepage
+export function generateOrganizationStructuredData(): Record<string, any> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Growing Your Business With People",
+    "url": "https://gybwp.com",
+    "logo": "https://gybwp.com/images/logo.webp",
+    "description": "Podcast and consulting focused on business growth through people-first leadership strategies.",
+    "founder": {
+      "@type": "Person",
+      "name": "Jeffrey Lackey"
+    },
+    "sameAs": [
+      "https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511",
+      "https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH",
+      "https://www.youtube.com/@jkladvisors",
+      "https://www.linkedin.com/company/growing-your-business-with-people",
+      "https://twitter.com/gybwp_podcast",
+      "https://www.facebook.com/gybwpodcast"
+    ]
+  };
+}
+
+// Generate WebSite schema for homepage (enables sitelinks search box)
+export function generateWebSiteStructuredData(): Record<string, any> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Growing Your Business With People",
+    "url": "https://gybwp.com",
+    "description": "The podcast for CEOs and business leaders focusing on growth through investing in their teams.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Growing Your Business With People"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://gybwp.com/search?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  };
+}
+
+// Enhanced VideoObject for YouTube episodes (Google Rich Results compatible)
+export function generateEnhancedVideoObjectStructuredData(episodeData: {
+  title: string;
+  description?: string;
+  youtubeId: string;
+  publishedAt?: string;
+  duration?: string;
+  uuid?: string;
+  blurb?: string;
+  viewCount?: number;
+}): Record<string, any> {
+  const baseUrl = "https://gybwp.com";
+  const episodeUrl = `${baseUrl}/episode/${episodeData.uuid}`;
+  const youtubeUrl = `https://www.youtube.com/watch?v=${episodeData.youtubeId}`;
+  
+  // Format duration to ISO 8601 if available
+  const isoDuration = formatDurationToISO(episodeData.duration);
+
+  const video: Record<string, any> = {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": episodeData.title,
+    "description": episodeData.description || episodeData.blurb || `Podcast episode: ${episodeData.title}`,
+    "url": episodeUrl,
+    "contentUrl": youtubeUrl,
+    "embedUrl": `https://www.youtube.com/embed/${episodeData.youtubeId}`,
+    "thumbnailUrl": `https://i.ytimg.com/vi/${episodeData.youtubeId}/maxresdefault.jpg`,
+    "uploadDate": episodeData.publishedAt,
+    "duration": isoDuration || episodeData.duration,
+    "author": {
+      "@type": "Person",
+      "name": "Jeffrey Lackey",
+      "url": "https://gybwp.com/about"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Growing Your Business With People",
+      "url": "https://gybwp.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://gybwp.com/images/logo.webp"
+      }
+    },
+    "isAccessibleForFree": true,
+    "inLanguage": "en-US"
+  };
+
+  // Add interaction statistics if available
+  if (episodeData.viewCount) {
+    video.interactionStatistic = {
+      "@type": "InteractionCounter",
+      "interactionType": "https://schema.org/WatchAction",
+      "userInteractionCount": episodeData.viewCount
+    };
+  }
+
+  return video;
+}

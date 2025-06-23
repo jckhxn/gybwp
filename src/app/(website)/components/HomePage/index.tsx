@@ -29,6 +29,8 @@ import JSONLD from "../SEO/jsonld";
 import {
   generatePodcastSeriesStructuredData,
   generateSimplifiedPodcastSeriesStructuredData,
+  generateOrganizationStructuredData,
+  generateWebSiteStructuredData,
 } from "../../lib/structured-data";
 import { Newsletter } from "../Newsletter";
 import { LatestEpisode, LatestEpisodes } from "../LatestEpisode";
@@ -56,12 +58,17 @@ const HomePageComponent = () => {
     }
   }, [data, isLoading]);
 
-  // Generate simplified podcast series structured data for better compatibility
-  const structuredData = generateSimplifiedPodcastSeriesStructuredData();
+  // Generate multiple structured data schemas for maximum rich results
+  const podcastSeriesData = generateSimplifiedPodcastSeriesStructuredData();
+  const organizationData = generateOrganizationStructuredData();
+  const websiteData = generateWebSiteStructuredData();
 
   return (
     <>
-      <JSONLD data={structuredData} id="podcast-series-jsonld" />
+      {/* Multiple schemas for comprehensive rich results */}
+      <JSONLD data={podcastSeriesData} id="podcast-series-jsonld" />
+      <JSONLD data={organizationData} id="organization-jsonld" />
+      <JSONLD data={websiteData} id="website-jsonld" />
 
       {/* ENHANCED HERO SECTION */}
       <Section className="w-full py-16 md:py-24 lg:py-28 bg-gradient-to-br from-main-dark via-main to-main-light relative overflow-hidden">
