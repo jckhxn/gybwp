@@ -7,10 +7,29 @@ import SeasonDropdown from "@/src/app/(website)/components/SeasonDropdown";
 import EpisodeCard from "../EpisodeCard";
 
 export function EpisodesPage() {
-  const [activeSeason, setActiveSeason] = useState(null);
-  const [data, setData] = useState(null);
+  // Define the Episode type based on what EpisodeCard expects
+  type YoutubeData = {
+    title?: string;
+    blurb?: string;
+    description?: string;
+    uuid?: string;
+    seasonNumber?: number;
+    episodeNumber: number;
+    thumbnail?: string;
+    publishedAt?: string;
+  };
+
+  type Episode = {
+    _id?: string;
+    youtube?: YoutubeData;
+    seasonNumber?: number;
+    episodeNumber?: number;
+  };
+
+  const [activeSeason, setActiveSeason] = useState<string | null>(null);
+  const [data, setData] = useState<Episode[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     if (activeSeason) {
@@ -45,8 +64,7 @@ export function EpisodesPage() {
             <p className="col-span-full text-center text-red-500">
               Error loading episodes. Please try again.
             </p>
-          ) : data && data.length > 0 ? (
-            // @ts-ignore
+          ) : data.length > 0 ? (
             data.map((episode, idx) => (
               <EpisodeCard key={episode._id || idx} {...episode} />
             ))

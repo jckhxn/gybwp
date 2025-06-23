@@ -711,8 +711,11 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                                 // SS
                                 seconds = parseInt(parts[0]);
                               }
-                              playerRef.current.seekTo(seconds);
-                              setIsPlaying(true);
+
+                              console.log(
+                                `Timestamp clicked: ${highlight.timestamp} -> ${seconds} seconds`
+                              );
+                              playerRef.current.seekTo(seconds, true); // Pass true to play after seek
                             }
                           }}
                           className=""
@@ -791,8 +794,11 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                                       parseInt(parts[0]) * 60 +
                                       parseInt(parts[1]);
                                   }
-                                  playerRef.current.seekTo(seconds);
-                                  setIsPlaying(true);
+
+                                  console.log(
+                                    `Inline timestamp clicked: ${value.time} -> ${seconds} seconds`
+                                  );
+                                  playerRef.current.seekTo(seconds, true); // Pass true to play after seek
                                 }
                               }}
                             >

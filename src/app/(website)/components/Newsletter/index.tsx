@@ -11,21 +11,15 @@ export const Newsletter = () => {
         <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
         <div className="absolute bottom-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
 
-        {/* Enhanced decorative elements with glow effects */}
-        <div className="absolute -left-8 top-1/4 w-32 h-32 bg-primary/5 rounded-full blur-3xl"></div>
-        <div className="absolute -right-8 bottom-1/4 w-40 h-40 bg-secondary/5 rounded-full blur-3xl"></div>
-        
-        {/* Hero image glow effect - more pronounced */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] rounded-full bg-gradient-to-tr from-primary/30 via-secondary/20 to-blue-500/15 blur-3xl opacity-80 animate-pulse-slow"></div>
-        
-        {/* Additional radiating glow rings */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full border-4 border-primary/10 blur-xl"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] rounded-full border-2 border-secondary/15 blur-lg"></div>
+        {/* Simplified decorative elements */}
+        <div className="absolute -left-8 top-1/4 w-32 h-32 bg-primary/5 rounded-full blur-xl"></div>
+        <div className="absolute -right-8 bottom-1/4 w-40 h-40 bg-secondary/5 rounded-full blur-xl"></div>
+
+        {/* Simple background glow effect */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] rounded-full bg-primary/10 blur-xl opacity-30"></div>
 
         <div className="container relative px-4 md:px-6 max-w-6xl mx-auto z-10">
-          <div className="grid gap-12 lg:grid-cols-2 p-8 md:p-10 bg-white/90 backdrop-blur-sm rounded-xl shadow-xl border border-gray-100/80 relative">
-            {/* Enhanced inner glow */}
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-primary/15 to-secondary/15 opacity-70 pointer-events-none"></div>
+          <div className="grid gap-12 lg:grid-cols-2 p-8 md:p-10 bg-white rounded-xl shadow-lg border border-gray-100 relative z-10">
             {/* Left column with improved styling */}
             <div className="space-y-6">
               <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary font-medium text-sm">
@@ -36,9 +30,9 @@ export const Newsletter = () => {
               </h2>
               <div className="w-16 h-1 bg-gradient-to-r from-primary to-secondary rounded-full my-4"></div>
               <p className="max-w-[600px] text-gray-600 text-lg leading-relaxed">
-                Be first to know when new episodes drop! Get notified about our latest
-                podcast releases, exclusive guest interviews, and behind-the-scenes content
-                delivered straight to your inbox.
+                Be first to know when new episodes drop! Get notified about our
+                latest podcast releases, exclusive guest interviews, and
+                behind-the-scenes content delivered straight to your inbox.
               </p>
 
               {/* Testimonial/Social proof */}
@@ -80,15 +74,8 @@ export const Newsletter = () => {
                 href={CTA.buttonUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-light px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-light px-8 py-4 text-base font-medium text-white shadow-lg transition-colors duration-300 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
-                {/* Shimmer effect */}
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out"></span>
-                
-                {/* Enhanced glow effect on hover */}
-                <span className="absolute -inset-1 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 bg-primary/40 blur-lg -z-10 group-hover:scale-110"></span>
-                <span className="absolute -inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 bg-gradient-to-r from-primary via-secondary to-primary/80 blur-xl -z-20 animate-pulse-slow group-hover:scale-105"></span>
-
                 <span className="relative z-10 flex items-center gap-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
