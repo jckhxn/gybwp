@@ -48,6 +48,8 @@ import JSONLD from "../SEO/jsonld";
 import {
   generatePodcastEpisodeStructuredData,
   generateSimplifiedPodcastEpisodeStructuredData,
+  generateEpisodeArticleStructuredData,
+  generateEnhancedVideoObjectStructuredData,
   generateVideoObjectStructuredData,
   formatDurationToISO,
 } from "../../lib/structured-data";
@@ -146,7 +148,31 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
 
   const relatedEpisodes = episode?.relatedEpisodes;
 
-  // Generate structured data for this episode (use simplified version for better compatibility)
+  // Generate hybrid structured data for maximum rich results compatibility
+  
+  // 1. Article schema (Google Rich Results compatible)
+  const articleStructuredData = generateEpisodeArticleStructuredData({
+    title,
+    description: description || blurb,
+    url: `https://gybwp.com/episode/${uuid}`,
+    publishedAt,
+    youtubeId: episode?.youtube?.id,
+    uuid,
+    blurb,
+    guests:
+      episode?.guests?.map((guest: any) => ({
+        name: guest.name,
+        title: guest.title,
+      })) || [],
+    keywords: [
+      ...(takeaways || []),
+      ...(discussionTopics?.map((topic: any) => topic.title).filter(Boolean) ||
+        []),
+    ],
+    wordCount: transcript ? transcript.length / 5 : 2000, // Estimate word count
+  });
+
+  // 2. PodcastEpisode schema (semantic correctness)
   const episodeStructuredData = generateSimplifiedPodcastEpisodeStructuredData({
     title,
     description: description || blurb,
@@ -171,16 +197,18 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
     ],
   });
 
-  // Also generate video object structured data for YouTube
+  // 3. VideoObject schema for YouTube episodes (Google Rich Results compatible)
   const videoStructuredData = episode?.youtube?.id
-    ? generateVideoObjectStructuredData({
+    ? generateEnhancedVideoObjectStructuredData({
         title,
         description: description || blurb,
         youtubeId: episode.youtube.id,
         publishedAt,
-        duration: formatDurationToISO(duration),
+        duration,
         uuid,
         blurb,
+        // Add view count if available from your data
+        // viewCount: episode?.youtube?.viewCount,
       })
     : null;
 
@@ -374,8 +402,15 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
 
   return (
     <>
-      {/* Add structured data for SEO */}
+      {/* Hybrid structured data approach for maximum rich results */}
+      
+      {/* 1. Article schema - Google Rich Results compatible */}
+      <JSONLD data={articleStructuredData} id="episode-article-jsonld" />
+      
+      {/* 2. PodcastEpisode schema - semantic correctness */}
       <JSONLD data={episodeStructuredData} id="podcast-episode-jsonld" />
+      
+      {/* 3. VideoObject schema - for YouTube episodes */}
       {videoStructuredData && (
         <JSONLD data={videoStructuredData} id="video-object-jsonld" />
       )}

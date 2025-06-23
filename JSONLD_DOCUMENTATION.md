@@ -477,6 +477,184 @@ For testing, here's a minimal PodcastEpisode structure that should always work:
 3. **Test minimal version** - try the basic structure above first
 4. **Add fields incrementally** - add one field at a time to isolate issues
 
+## Critical Issue: "No Items Detected"
+
+If Google Rich Results Test shows "no items detected" even when pasting JSON-LD directly, this indicates a fundamental problem. Here's the systematic debugging approach:
+
+### 🚨 Emergency Debugging Steps
+
+#### Step 1: Test Basic JSON Structure
+First, test if Google's tool is working at all. Try this ultra-minimal structure:
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Test Article",
+  "url": "https://example.com/test"
+}
+```
+
+**If this doesn't work**: Google's tool might be having issues, or there's a broader problem.
+
+#### Step 2: Test Known Working Schemas
+Google Rich Results Test definitely supports these schema types:
+
+**Article (always works)**:
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Test Article",
+  "url": "https://gybwp.com/test",
+  "author": {
+    "@type": "Person",
+    "name": "Jeffrey Lackey"
+  },
+  "datePublished": "2024-01-01"
+}
+```
+
+**VideoObject (well supported)**:
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "Test Video",
+  "description": "Test description",
+  "url": "https://gybwp.com/test",
+  "contentUrl": "https://www.youtube.com/watch?v=test123",
+  "uploadDate": "2024-01-01"
+}
+```
+
+#### Step 3: Test Podcast Schema Step-by-Step
+
+**Minimal PodcastEpisode**:
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "PodcastEpisode",
+  "name": "Test Episode",
+  "url": "https://gybwp.com/test"
+}
+```
+
+**Add partOfSeries**:
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "PodcastEpisode",
+  "name": "Test Episode",
+  "url": "https://gybwp.com/test",
+  "partOfSeries": {
+    "@type": "PodcastSeries",
+    "name": "Test Podcast",
+    "url": "https://gybwp.com"
+  }
+}
+```
+
+### 🔍 Common "No Items Detected" Causes
+
+#### 1. **Google Doesn't Support PodcastEpisode Well**
+Google's Rich Results Test has limited support for podcast schemas. They may not show up even if valid.
+
+**Solution**: Test with Article or VideoObject schemas instead.
+
+#### 2. **JSON Formatting Issues**
+- Extra commas
+- Wrong quote types (`"` vs `'` vs `"`)
+- Invalid escape characters
+- Hidden Unicode characters
+
+#### 3. **Testing Method Issues**
+- Don't paste HTML `<script>` tags, only the JSON content
+- Ensure no extra spaces or line breaks
+- Use the "Code Snippet" tab, not "URL" tab
+
+#### 4. **Schema.org Context Issues**
+- Must be exactly `"https://schema.org"` (not `http://` or `schema.org`)
+- Case sensitive
+- No trailing slashes
+
+### 🛠️ Alternative Testing Tools
+
+If Google Rich Results Test continues to fail:
+
+#### 1. **Schema.org Validator** (Most Reliable)
+- URL: https://validator.schema.org/
+- Paste your JSON-LD
+- More detailed error messages
+- Better podcast schema support
+
+#### 2. **JSON-LD Playground**
+- URL: https://json-ld.org/playground/
+- Shows if JSON-LD is syntactically valid
+- Expands the structured data
+
+#### 3. **Yandex Structured Data Testing Tool**
+- Often more forgiving than Google
+- Good for validating schema structure
+
+### 🎯 Recommended Testing Sequence
+
+1. **Test Article schema** - if this fails, Google's tool is broken
+2. **Test VideoObject** - well supported by Google
+3. **Test minimal PodcastEpisode** - see if podcasts work at all
+4. **Use Schema.org validator** - more reliable for podcasts
+5. **Check actual implementation** - view source on your live page
+
+### 🚨 If Nothing Works
+
+**Possible issues**:
+1. **Google's tool is temporarily broken** (happens occasionally)
+2. **Your browser is blocking something** (try incognito mode)
+3. **Clipboard encoding issues** (try typing the JSON manually)
+4. **Google doesn't support podcast schemas well** (use Article or VideoObject instead)
+
+### 💡 Workaround Solutions
+
+#### Option 1: Use Article Schema for Episodes
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Episode 123: Leadership Tips",
+  "description": "In this episode we discuss...",
+  "url": "https://gybwp.com/episode/123",
+  "author": {
+    "@type": "Person",
+    "name": "Jeffrey Lackey"
+  },
+  "datePublished": "2024-01-15",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Growing Your Business With People"
+  }
+}
+```
+
+#### Option 2: Use VideoObject for YouTube Episodes
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "Episode 123: Leadership Tips",
+  "description": "In this episode we discuss...",
+  "url": "https://gybwp.com/episode/123",
+  "contentUrl": "https://www.youtube.com/watch?v=abc123",
+  "uploadDate": "2024-01-15",
+  "duration": "PT45M",
+  "author": {
+    "@type": "Person",
+    "name": "Jeffrey Lackey"
+  }
+}
+```
+
+These schemas are better supported by Google's Rich Results Test and will likely show rich snippets in search results.
+
 ## Best Practices
 
 ### 1. Consistent Data
@@ -521,3 +699,173 @@ Edit the constants in `/lib/structured-data.ts`:
 - **About Page**: Organization schema with contact and social information
 
 This implementation provides comprehensive SEO benefits while maintaining clean, maintainable code that integrates seamlessly with your existing Sanity CMS data structure.
+
+## 🎯 Hybrid Approach for Maximum Podcast Rich Results
+
+Since Google's Rich Results Test works with Article but not PodcastEpisode, here's the strategy for getting your podcast to show up in Google Rich Results:
+
+### Strategy 1: Dual Schema Implementation
+
+Implement **both** Article AND PodcastEpisode schemas on each episode page. This gives you:
+- **Article schema**: Recognized by Rich Results Test, shows rich snippets
+- **PodcastEpisode schema**: Proper semantic markup for podcast platforms and future Google support
+
+```json
+<!-- Episode page with dual schemas -->
+<script type="application/ld+json" id="article-schema">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Episode 42: Building Resilient Teams in Remote Work",
+  "description": "Learn how to build strong, resilient teams in remote work environments with expert insights on communication, culture, and leadership strategies.",
+  "url": "https://gybwp.com/episode/42",
+  "image": "https://i.ytimg.com/vi/abc123/maxresdefault.jpg",
+  "author": {
+    "@type": "Person",
+    "name": "Jeffrey Lackey",
+    "url": "https://gybwp.com/about"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Growing Your Business With People",
+    "url": "https://gybwp.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://gybwp.com/images/logo.webp"
+    }
+  },
+  "datePublished": "2024-06-15T10:00:00Z",
+  "dateModified": "2024-06-15T10:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://gybwp.com/episode/42"
+  },
+  "articleSection": "Business Podcast",
+  "keywords": ["leadership", "remote work", "team building", "business growth"],
+  "wordCount": 3000
+}
+</script>
+
+<script type="application/ld+json" id="podcast-episode-schema">
+{
+  "@context": "https://schema.org",
+  "@type": "PodcastEpisode",
+  "name": "Episode 42: Building Resilient Teams in Remote Work",
+  "description": "Learn how to build strong, resilient teams in remote work environments.",
+  "url": "https://gybwp.com/episode/42",
+  "episodeNumber": 42,
+  "datePublished": "2024-06-15T10:00:00Z",
+  "duration": "PT45M30S",
+  "partOfSeries": {
+    "@type": "PodcastSeries",
+    "name": "Growing Your Business With People",
+    "url": "https://gybwp.com"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Jeffrey Lackey"
+  }
+}
+</script>
+```
+
+### Strategy 2: VideoObject for YouTube Episodes
+
+For episodes with YouTube videos, use VideoObject (well-supported by Google):
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "Episode 42: Building Resilient Teams in Remote Work",
+  "description": "Learn how to build strong, resilient teams in remote work environments.",
+  "url": "https://gybwp.com/episode/42",
+  "contentUrl": "https://www.youtube.com/watch?v=abc123",
+  "embedUrl": "https://www.youtube.com/embed/abc123",
+  "thumbnailUrl": "https://i.ytimg.com/vi/abc123/maxresdefault.jpg",
+  "uploadDate": "2024-06-15T10:00:00Z",
+  "duration": "PT45M30S",
+  "author": {
+    "@type": "Person",
+    "name": "Jeffrey Lackey"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Growing Your Business With People"
+  }
+}
+```
+
+### Strategy 3: Enhanced Homepage with Multiple Schemas
+
+Homepage should include:
+- **PodcastSeries** for podcast platforms
+- **Organization** for brand recognition
+- **WebSite** for sitelinks search box
+
+```json
+<!-- Homepage schemas -->
+<script type="application/ld+json" id="podcast-series">
+{
+  "@context": "https://schema.org",
+  "@type": "PodcastSeries",
+  "name": "Growing Your Business With People",
+  "description": "The podcast for CEOs and business leaders focusing on growth through investing in their teams.",
+  "url": "https://gybwp.com",
+  "webFeed": "https://feeds.buzzsprout.com/2057493.rss",
+  "author": {
+    "@type": "Person", 
+    "name": "Jeffrey Lackey"
+  }
+}
+</script>
+
+<script type="application/ld+json" id="organization">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Growing Your Business With People",
+  "url": "https://gybwp.com",
+  "logo": "https://gybwp.com/images/logo.webp",
+  "description": "Podcast and consulting focused on business growth through people-first leadership.",
+  "sameAs": [
+    "https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511",
+    "https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH",
+    "https://www.youtube.com/@jkladvisors",
+    "https://www.linkedin.com/company/growing-your-business-with-people"
+  ]
+}
+</script>
+
+<script type="application/ld+json" id="website">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Growing Your Business With People",
+  "url": "https://gybwp.com",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://gybwp.com/search?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+```
+
+### Why This Approach Works
+
+1. **Article Schema**: Google recognizes and shows rich snippets immediately
+2. **VideoObject**: Excellent support for YouTube episodes
+3. **PodcastEpisode**: Semantic correctness for podcast platforms
+4. **Multiple schemas**: No conflicts, each serves different purposes
+
+### Expected Rich Results
+
+With this approach, you should see:
+- **Article rich snippets**: Title, description, author, date, image
+- **Video rich results**: Thumbnails, duration, upload date
+- **Organization knowledge panel**: Brand information, social links
+- **Sitelinks**: Additional site navigation in search results
