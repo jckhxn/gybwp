@@ -60,4 +60,25 @@
   .image-hover:hover img {
     @apply scale-105;
   }
+  
+  /* Scrollbar utilities */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+  
+  /* Enhanced snap scrolling */
+  .snap-x-enhanced {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .snap-start-enhanced {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
 }

@@ -193,16 +193,8 @@ type Props = {
 };
 
 const JSONLD = ({ data, id = "jsonld-data" }: Props) => {
-  // Enhanced logging to show exactly what's being rendered
-  console.log(`\n=== ${id} ===`);
-  console.log("Schema Type:", data["@type"]);
-  console.log("Schema Name/Title:", (data as any).name || (data as any).headline);
-  console.log("Full JSON-LD Data:");
-  console.log(JSON.stringify(data, null, 2));
-  console.log(`=== End ${id} ===\n`);
-  
   // Ensure data is valid before rendering
-  if (!data || typeof data !== 'object') {
+  if (!data || typeof data !== "object") {
     console.error("JSONLD: Invalid data provided", data);
     return null;
   }
@@ -213,8 +205,8 @@ const JSONLD = ({ data, id = "jsonld-data" }: Props) => {
     <script
       id={id}
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ 
-        __html: JSON.stringify(data, null, 2) 
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(data, null, 2),
       }}
     />
   );
