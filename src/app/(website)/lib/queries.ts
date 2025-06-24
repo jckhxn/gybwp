@@ -120,6 +120,19 @@ export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && coalesce(uuid,
     "uuid": coalesce(youtube.uuid, uuid),
     "publishedAt": youtube.publishedAt,
     guests[]->,
+    sponsors[]-> {
+      _id,
+      name,
+      uuid,
+      slug,
+      logo,
+      image,
+      description,
+      website,
+      tier,
+      bgColor,
+      isActive
+    },
     details {
     ...,
       featuredGuests[] {
@@ -140,13 +153,38 @@ export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && coalesce(uuid,
     "prevEpisode": *[_type == "episode" && _createdAt < ^._createdAt && uuid != ^._id] | order(_createdAt desc, uuid desc)[0].pathname.current,uuid,
     season-> {
       ...,
-       sponsors[]->
+       sponsors[]-> {
+         _id,
+         name,
+         uuid,
+         slug,
+         logo,
+         image,
+         description,
+         website,
+         tier,
+         bgColor,
+         isActive
+       }
     }
 }
 `;
 
 // Get specific Sponsor
-export const SPONSOR_DETAILS_QUERY = groq`{"sponsors":*[_type == "sponsor" && uuid == $id] ,"episodes":*[_type == "episode" &&  $id in sponsors]| order(uuid desc ){
+export const SPONSOR_DETAILS_QUERY = groq`{"sponsors":*[_type == "sponsor" && uuid == $id] {
+  _id,
+  name,
+  uuid,
+  slug,
+  logo,
+  image,
+  description,
+  website,
+  tier,
+  bgColor,
+  isActive,
+  social
+} ,"episodes":*[_type == "episode" &&  $id in sponsors]| order(uuid desc ){
   "uuid":coalesce(uuid,youtube.uuid),
     "image":coalesce(image,youtube.thumbnail),
     "seasonNumber":coalesce(seasonNumber,youtube.seasonNumber),
@@ -154,7 +192,20 @@ export const SPONSOR_DETAILS_QUERY = groq`{"sponsors":*[_type == "sponsor" && uu
   }}`;
 
 // Get all Sponsors
-export const ALL_SPONSORS_QUERY = groq`*[_type == "sponsor"]`;
+export const ALL_SPONSORS_QUERY = groq`*[_type == "sponsor"] {
+  _id,
+  name,
+  uuid,
+  slug,
+  logo,
+  image,
+  description,
+  website,
+  tier,
+  bgColor,
+  isActive,
+  social
+}`;
 
 // Featured News Articles
 export const FEATURED_ARTICLES_QUERY = groq`*[_type == "featuredArticle"] {

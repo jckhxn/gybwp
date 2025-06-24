@@ -1,11 +1,10 @@
 import React from "react";
-import ConsultingPageComponent from "../components/ConsultingPage/old";
-import Consulting from "@/src/app/(website)/components/ConsultingPage";
+import ModernConsultingPage from "../components/ConsultingPage/modern";
 
 type Props = {};
 
 const page = (props: Props) => {
-  return <Consulting />;
+  return <ModernConsultingPage />;
 };
 
 export default page;

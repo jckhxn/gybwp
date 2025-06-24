@@ -1,10 +1,39 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { client } from "@/src/app/(website)/sanity/sanity-utils";
-import { EPISODES_BY_SEASON_QUERY } from "../../lib/queries";
+import {
+  EPISODES_BY_SEASON_QUERY,
+  ALL_SEASONS_QUERY,
+  ALL_EPISODES,
+} from "../../lib/queries";
 import SeasonDropdown from "@/src/app/(website)/components/SeasonDropdown";
 import EpisodeCard from "../EpisodeCard";
+import {
+  Search,
+  Filter,
+  Grid,
+  List,
+  Play,
+  Calendar,
+  Users,
+  LayoutGrid,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+
+// Utility function for safe data access
+const safeguardEpisodeData = (episode: any) => {
+  return {
+    ...episode,
+    guests: episode.guests?.filter((guest: any) => guest && guest.name) || [],
+    youtube: {
+      ...episode.youtube,
+      title: episode.youtube?.title || "Untitled Episode",
+      blurb: episode.youtube?.blurb || "No description available",
+      uuid: episode.youtube?.uuid || episode._id || "unknown",
+    },
+  };
+};
 
 export function EpisodesPage() {
   // Define the Episode type based on what EpisodeCard expects
@@ -24,56 +53,345 @@ export function EpisodesPage() {
     youtube?: YoutubeData;
     seasonNumber?: number;
     episodeNumber?: number;
+    guests?: Array<{ name?: string }>; // Made name optional to match real data
   };
 
   const [activeSeason, setActiveSeason] = useState<string | null>(null);
+  const [allSeasons, setAllSeasons] = useState<any[]>([]);
   const [data, setData] = useState<Episode[]>([]);
+  const [allEpisodes, setAllEpisodes] = useState<Episode[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "episode">(
+    "newest"
+  );
+  const [showFilters, setShowFilters] = useState(false);
 
+  // Load all seasons and episodes on mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        const [seasonsData, episodesData] = await Promise.all([
+          client.fetch(ALL_SEASONS_QUERY),
+          client.fetch(ALL_EPISODES),
+        ]);
+
+        setAllSeasons(seasonsData);
+        setAllEpisodes(episodesData);
+
+        // Set first season as active by default
+        if (seasonsData && seasonsData.length > 0) {
+          setActiveSeason(seasonsData[0].title);
+        }
+      } catch (err) {
+        setError(err as Error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  // Load episodes for active season
   useEffect(() => {
     if (activeSeason) {
       client
         .fetch(EPISODES_BY_SEASON_QUERY, { name: activeSeason })
-        .then((res) => setData(res))
-        .catch((err) => setError(err))
-        .finally(() => setIsLoading(false));
+        .then((res) => {
+          // Safeguard the data before setting it
+          const safeguardedData = res.map(safeguardEpisodeData);
+          setData(safeguardedData);
+        })
+        .catch((err) => setError(err));
     }
   }, [activeSeason]);
 
+  // Filter and sort episodes
+  const filteredAndSortedEpisodes = useMemo(() => {
+    let episodes = [...data];
+
+    // Filter by search term with robust error handling
+    if (searchTerm) {
+      const searchTermLower = searchTerm.toLowerCase();
+      episodes = episodes.filter((episode) => {
+        try {
+          const titleMatch = episode.youtube?.title
+            ?.toLowerCase()
+            .includes(searchTermLower);
+          const blurbMatch = episode.youtube?.blurb
+            ?.toLowerCase()
+            .includes(searchTermLower);
+          const guestMatch = episode.guests?.some((guest) => {
+            return guest?.name?.toLowerCase()?.includes(searchTermLower);
+          });
+
+          return titleMatch || blurbMatch || guestMatch;
+        } catch (error) {
+          console.warn("Error filtering episode:", episode, error);
+          return false; // Skip episodes that cause errors
+        }
+      });
+    }
+
+    // Sort episodes
+    episodes.sort((a, b) => {
+      switch (sortBy) {
+        case "newest":
+          return (
+            new Date(b.youtube?.publishedAt || 0).getTime() -
+            new Date(a.youtube?.publishedAt || 0).getTime()
+          );
+        case "oldest":
+          return (
+            new Date(a.youtube?.publishedAt || 0).getTime() -
+            new Date(b.youtube?.publishedAt || 0).getTime()
+          );
+        case "episode":
+          return (
+            (b.youtube?.episodeNumber || 0) - (a.youtube?.episodeNumber || 0)
+          );
+        default:
+          return 0;
+      }
+    });
+
+    return episodes;
+  }, [data, searchTerm, sortBy]);
+
+  const totalEpisodes = allEpisodes.length;
+  const currentSeasonEpisodes = data.length;
+
   return (
-    <div className="bg-light">
-      <main className="container mx-auto py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-            Growing Your Business With People Podcast!
-          </h1>
-          <p className="max-w-[600px] mx-auto text-gray-400 md:text-xl">
-            Catch up on the latest episodes.
-          </p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 to-slate-800">
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 to-slate-800/90"></div>
+        <div className="relative container mx-auto px-6 py-20 lg:py-32">
+          <div className="text-center max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="flex justify-center mb-6"
+            >
+              <div className="p-3 bg-blue-600 rounded-full">
+                <Play className="h-8 w-8 text-white" />
+              </div>
+            </motion.div>
 
-        <div className="mb-8 flex justify-end">
-          <SeasonDropdown setActiveSeason={setActiveSeason} />
-        </div>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
+            >
+              All Episodes
+            </motion.h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {isLoading ? (
-            <p className="col-span-full text-center">Loading episodes...</p>
-          ) : error ? (
-            <p className="col-span-full text-center text-red-500">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-xl md:text-2xl text-slate-300 mb-8 leading-relaxed"
+            >
+              Explore our complete library of business insights, leadership
+              strategies, and growth tactics
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-wrap justify-center gap-6 text-sm text-slate-400"
+            >
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                <span>{totalEpisodes} Total Episodes</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <LayoutGrid className="h-4 w-4" />
+                <span>{allSeasons.length} Seasons</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                <span>Expert Guests</span>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      {/* Controls Section */}
+      <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+            {/* Left side - Season and Search */}
+            <div className="flex flex-col sm:flex-row gap-4 items-center flex-1">
+              <SeasonDropdown setActiveSeason={setActiveSeason} />
+
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search episodes, topics, or guests..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            {/* Right side - View controls */}
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                  showFilters
+                    ? "bg-blue-100 text-blue-700"
+                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                }`}
+              >
+                <Filter className="h-4 w-4" />
+                <span className="hidden sm:inline">Filters</span>
+              </button>
+
+              <div className="flex border border-slate-300 rounded-lg overflow-hidden">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`p-2 transition-colors ${
+                    viewMode === "grid"
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-slate-600 hover:bg-slate-50"
+                  }`}
+                >
+                  <Grid className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode("list")}
+                  className={`p-2 transition-colors ${
+                    viewMode === "list"
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-slate-600 hover:bg-slate-50"
+                  }`}
+                >
+                  <List className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Filters Panel */}
+          <AnimatePresence>
+            {showFilters && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mt-4 pt-4 border-t border-slate-200"
+              >
+                <div className="flex flex-wrap gap-4 items-center">
+                  <div className="flex items-center gap-2">
+                    <label className="text-sm font-medium text-slate-700">
+                      Sort by:
+                    </label>
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value as any)}
+                      className="px-3 py-1 border border-slate-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="newest">Newest First</option>
+                      <option value="oldest">Oldest First</option>
+                      <option value="episode">Episode Number</option>
+                    </select>
+                  </div>
+
+                  <div className="text-sm text-slate-600">
+                    {filteredAndSortedEpisodes.length} of{" "}
+                    {currentSeasonEpisodes} episodes
+                    {searchTerm && ` matching "${searchTerm}"`}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* Episodes Grid/List */}
+      <main className="container mx-auto px-6 py-12">
+        {isLoading ? (
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p className="text-slate-600">Loading episodes...</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-20">
+            <p className="text-red-600 mb-4">
               Error loading episodes. Please try again.
             </p>
-          ) : data.length > 0 ? (
-            data.map((episode, idx) => (
-              <EpisodeCard key={episode._id || idx} {...episode} />
-            ))
-          ) : (
-            <p className="col-span-full text-center">
-              No episodes found for this season.
-            </p>
-          )}
-        </div>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        ) : filteredAndSortedEpisodes.length > 0 ? (
+          <motion.div
+            layout
+            className={
+              viewMode === "grid"
+                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+                : "space-y-6"
+            }
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredAndSortedEpisodes.map((episode, idx) => {
+                // Final safeguard before rendering
+                const safeEpisode = safeguardEpisodeData(episode);
+                return (
+                  <motion.div
+                    key={safeEpisode._id || safeEpisode.youtube?.uuid || idx}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3, delay: idx * 0.05 }}
+                    className={viewMode === "list" ? "max-w-4xl mx-auto" : ""}
+                  >
+                    <EpisodeCard {...safeEpisode} viewMode={viewMode} />
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </motion.div>
+        ) : (
+          <div className="text-center py-20">
+            <div className="mb-4">
+              <Search className="h-16 w-16 text-slate-300 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-slate-700 mb-2">
+                No episodes found
+              </h3>
+              <p className="text-slate-600">
+                {searchTerm
+                  ? `No episodes match "${searchTerm}". Try a different search term.`
+                  : "No episodes found for this season."}
+              </p>
+            </div>
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm("")}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+              >
+                Clear Search
+              </button>
+            )}
+          </div>
+        )}
       </main>
     </div>
   );
