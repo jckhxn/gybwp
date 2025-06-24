@@ -32,6 +32,8 @@ import {
 } from "@/src/app/(website)/components/ui/avatar";
 import { Card, CardContent } from "@/src/app/(website)/components/ui/card";
 import { Badge } from "@/src/app/(website)/components/ui/badge";
+import { SponsorsList } from "../sponsors";
+import { urlForImage } from "../../lib/sanity-image";
 import { CTA } from "../HomePage/static-data";
 import PodcastPlayer, {
   PlayerHandle,
@@ -1063,62 +1065,153 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
               {sponsors && sponsors.length > 0 && (
                 <Card>
                   <CardContent className="p-6">
-                    <h3 className="text-lg font-semibold mb-4">Our Sponsors</h3>
-                    <div className="space-y-4">
-                      {sponsors.map((sponsor: Sponsor, index: number) => (
+                    <h3 className="text-lg font-semibold mb-6 text-center">
+                      Our Sponsors
+                    </h3>
+                    <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+                      {sponsors.map((sponsor: any, index: number) => (
                         <div
-                          key={index}
-                          className="p-4 border rounded-lg flex flex-col items-center text-center"
+                          key={
+                            sponsor._id || sponsor.uuid || sponsor.name || index
+                          }
+                          className="group relative flex-shrink-0"
                         >
-                          {sponsor.image ? (
-                            <div
-                              className={`w-[120px] h-[120px] relative mb-3 rounded-full overflow-hidden flex items-center justify-center ${
-                                sponsor.bgColor || "bg-white"
-                              }`}
+                          {/* Sponsor Link Wrapper */}
+                          {sponsor.slug?.current ||
+                          sponsor.uuid ||
+                          sponsor.website ? (
+                            <Link
+                              href={
+                                sponsor.slug?.current
+                                  ? `/sponsors/${sponsor.slug.current}`
+                                  : sponsor.uuid
+                                    ? `/sponsors/${sponsor.uuid}`
+                                    : sponsor.website
+                              }
+                              target={sponsor.website ? "_blank" : undefined}
+                              rel={
+                                sponsor.website
+                                  ? "noopener noreferrer"
+                                  : undefined
+                              }
+                              className="block transition-all duration-300 hover:scale-105 relative"
                             >
-                              <Image
-                                src={sponsor.image}
-                                alt={sponsor.name || "Sponsor Logo"}
-                                fill
-                                className="object-contain p-2"
-                              />
-                            </div>
+                              {/* External Link Indicator */}
+                              {sponsor.website && (
+                                <div className="absolute -top-1 -right-1 z-10 w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                  <ExternalLink
+                                    size={10}
+                                    className="text-white"
+                                  />
+                                </div>
+                              )}
+                              <div className="flex flex-col items-center text-center">
+                                {/* Logo Container */}
+                                <div className="w-28 h-20 sm:w-36 sm:h-24 relative rounded-lg overflow-hidden border border-gray-200 bg-white flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow duration-300">
+                                  <Image
+                                    src={
+                                      sponsor.logo
+                                        ? urlForImage(sponsor.logo)
+                                            ?.width(250)
+                                            .height(150)
+                                            .url()
+                                        : sponsor.image ||
+                                          "/placeholder-logo.png"
+                                    }
+                                    alt={`${sponsor.name} logo`}
+                                    width={120}
+                                    height={80}
+                                    className="object-contain p-3 max-w-full max-h-full"
+                                    sizes="(max-width: 640px) 112px, 144px"
+                                  />
+                                </div>
+
+                                {/* Sponsor Name - Always Visible */}
+                                <h4 className="mt-2 sm:mt-3 text-xs sm:text-sm font-medium text-gray-900 transition-colors duration-300 max-w-[112px] sm:max-w-[144px] truncate">
+                                  {sponsor.name}
+                                </h4>
+
+                                {/* Tier Badge */}
+                                {sponsor.tier && (
+                                  <span
+                                    className={`mt-1 inline-block px-1.5 py-0.5 sm:px-2 sm:py-1 text-xs font-medium rounded-full ${
+                                      sponsor.tier === "platinum"
+                                        ? "bg-gray-800 text-white"
+                                        : sponsor.tier === "gold"
+                                          ? "bg-yellow-500 text-white"
+                                          : sponsor.tier === "silver"
+                                            ? "bg-gray-400 text-white"
+                                            : sponsor.tier === "bronze"
+                                              ? "bg-orange-600 text-white"
+                                              : "bg-gray-200 text-gray-700"
+                                    }`}
+                                  >
+                                    {sponsor.tier}
+                                  </span>
+                                )}
+                              </div>
+                            </Link>
                           ) : (
-                            <div
-                              className={`w-[120px] h-[120px] relative mb-3 rounded-full flex items-center justify-center ${
-                                sponsor.bgColor || "bg-gray-100"
-                              }`}
-                            >
-                              <span className="text-gray-400 text-sm font-medium">
-                                {sponsor.name || "Sponsor"}
-                              </span>
+                            /* Non-clickable sponsor */
+                            <div className="flex flex-col items-center text-center">
+                              <div className="w-28 h-20 sm:w-36 sm:h-24 relative rounded-lg overflow-hidden border border-gray-200 bg-white flex items-center justify-center shadow-sm">
+                                <Image
+                                  src={
+                                    sponsor.logo
+                                      ? urlForImage(sponsor.logo)
+                                          ?.width(250)
+                                          .height(150)
+                                          .url()
+                                      : sponsor.image || "/placeholder-logo.png"
+                                  }
+                                  alt={`${sponsor.name} logo`}
+                                  width={120}
+                                  height={80}
+                                  className="object-contain p-3 max-w-full max-h-full"
+                                  sizes="(max-width: 640px) 112px, 144px"
+                                />
+                              </div>
+
+                              <h4 className="mt-2 sm:mt-3 text-xs sm:text-sm font-medium text-gray-900 max-w-[112px] sm:max-w-[144px] truncate">
+                                {sponsor.name}
+                              </h4>
+
+                              {sponsor.tier && (
+                                <span
+                                  className={`mt-1 inline-block px-1.5 py-0.5 sm:px-2 sm:py-1 text-xs font-medium rounded-full ${
+                                    sponsor.tier === "platinum"
+                                      ? "bg-gray-800 text-white"
+                                      : sponsor.tier === "gold"
+                                        ? "bg-yellow-500 text-white"
+                                        : sponsor.tier === "silver"
+                                          ? "bg-gray-400 text-white"
+                                          : sponsor.tier === "bronze"
+                                            ? "bg-orange-600 text-white"
+                                            : "bg-gray-200 text-gray-700"
+                                  }`}
+                                >
+                                  {sponsor.tier}
+                                </span>
+                              )}
                             </div>
                           )}
-                          {/* Too wordy */}
-                          {/* <p className="text-sm text-muted-foreground">
-                          {sponsor.description ||
-                            "Support our sponsors who make this podcast possible."}
-                        </p> */}
-                          <Link
-                            href={
-                              sponsor.url ||
-                              (sponsor.uuid ? `/sponsors/${sponsor.uuid}` : "#")
-                            }
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-3"
-                          >
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="flex items-center gap-1"
-                            >
-                              <ExternalLink size={16} />
-                              Learn More
-                            </Button>
-                          </Link>
                         </div>
                       ))}
+                    </div>
+
+                    {/* Support Message */}
+                    <div className="mt-6 pt-4 border-t border-gray-100 text-center">
+                      <p className="text-sm text-gray-600">
+                        Special thanks to our sponsors who help make this
+                        podcast possible
+                      </p>
+                      {sponsors.some(
+                        (s) => s.website || s.slug?.current || s.uuid
+                      ) && (
+                        <p className="text-xs text-gray-500 mt-1">
+                          Click on sponsor logos to learn more about them
+                        </p>
+                      )}
                     </div>
                   </CardContent>
                 </Card>

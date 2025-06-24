@@ -130,9 +130,23 @@ const episode = {
     {
       // Sponsors of the Episode
       name: "sponsors",
-      title: "List of Sponsors (Lowercase, one word)",
+      title: "Episode Sponsors",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "sponsor" }],
+        },
+      ],
+    },
+    {
+      // Legacy sponsors field for backward compatibility
+      name: "legacySponsors",
+      title: "Legacy Sponsors (Deprecated)",
       type: "array",
       of: [{ type: "string" }],
+      description: "Old sponsor field - use Episode Sponsors instead",
+      hidden: true,
     },
     {
       // Details

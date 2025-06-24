@@ -1,0 +1,7 @@
+<!-- SVG placeholder that can be used as PNG fallback -->
+<svg xmlns="http://www.w3.org/2000/svg" width="250" height="150" viewBox="0 0 250 150">
+  <rect width="250" height="150" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+  <text x="125" y="75" text-anchor="middle" dominant-baseline="central" font-family="system-ui, sans-serif" font-size="16" fill="#6b7280">
+    Sponsor Logo
+  </text>
+</svg>

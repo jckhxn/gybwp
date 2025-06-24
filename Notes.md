@@ -2,12 +2,11 @@
 
 - Episodes out of order : (401-2,3 come after 402,403 because of \_createdAt)
   Episode SeekTo Broke
-  EpisodeCard Formatting
   Episode Page Style
   sponsors sanity img upload
   Fix JSON-LD
   Fix OpenGraph/Metadata for Episodes/homepage
-
+ Figure out Resend (New email?)
 # Improvements
 
 TINY MINI YOUTUBE PLAYER YOU STARTED.

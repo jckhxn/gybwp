@@ -8,6 +8,7 @@ import Button from "../Button";
 import { Section, SectionHeading } from "../shared";
 import Collection from "../Collection";
 import Image from "next/image";
+import { urlForImage } from "../../lib/sanity-image";
 
 // copy
 import { SPONSORS_DETAILS_INFO, getSponsor } from "./static-data";
@@ -107,11 +108,19 @@ const SponsorsDetailPageComponent = () => {
                 className={`${
                   sponsor[0].bgColor || ""
                 } w-[80vw] h-[80vw] max-h-[25rem] max-w-[25rem] md:w-[25rem] md:h-[25rem] flex-shrink-0 overflow-hidden rounded-full`}
+                style={{ backgroundColor: sponsor[0].bgColor }}
               >
                 <Image
-                  className="m-auto px-4 h-[80vw] max-h-[25rem]"
-                  src={sponsor[0]?.image}
-                  alt=""
+                  className="m-auto px-4 h-[80vw] max-h-[25rem] object-contain"
+                  src={
+                    sponsor[0]?.logo
+                      ? urlForImage(sponsor[0].logo)
+                          ?.width(400)
+                          .height(400)
+                          .url()
+                      : sponsor[0]?.image || "/placeholder-logo.png"
+                  }
+                  alt={`${sponsor[0]?.name} logo`}
                   height={400}
                   width={400}
                 />
