@@ -75,10 +75,29 @@
   .snap-x-enhanced {
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
   
   .snap-start-enhanced {
     scroll-snap-align: start;
     scroll-snap-stop: always;
+  }
+  
+  /* Mobile-optimized snap scrolling */
+  @media (max-width: 768px) {
+    .snap-x-enhanced {
+      scroll-padding-left: 1rem;
+      scroll-padding-right: 1rem;
+    }
+    
+    .snap-start-enhanced {
+      scroll-snap-align: center;
+    }
+  }
+  
+  /* Ensure smooth momentum scrolling on iOS */
+  .snap-x-enhanced {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
   }
 }
