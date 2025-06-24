@@ -135,8 +135,13 @@ export const formatDescriptionText = (text: string) => {
 };
 
 /**
- * Formats a YouTube duration string (like "1H 45m") into a readable format
- * @param durationString - Duration string from YouTube data or similar format
+ * Formats a duration string into a readable format
+ * Handles multiple input formats:
+ * - YouTube format: "1H 45m", "45m", "2H"
+ * - ISO 8601 format: "PT1H45M", "PT45M", "PT2H"
+ * - Time format: "1:45:30", "45:30"
+ * - Already formatted: "1 hour 45 minutes"
+ * @param durationString - Duration string from various sources
  * @param defaultDuration - Default duration to return if parsing fails
  * @returns Formatted duration string like "1 hour 45 minutes" or "45 minutes"
  */
@@ -146,51 +151,179 @@ export function formatDuration(
 ): string {
   if (!durationString) return defaultDuration;
 
-  // Parse hours and minutes from the format like "1H 45m"
-  const hoursMatch = durationString.match(/(\d+)H/i);
-  const minutesMatch = durationString.match(/(\d+)m/i);
+  // If already formatted (contains "hour" or "minute"), return as-is
+  if (durationString.includes("hour") || durationString.includes("minute")) {
+    return durationString;
+  }
 
-  const hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
-  const minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+  let hours = 0;
+  let minutes = 0;
+  let seconds = 0;
 
-  // If we couldn't parse any values, return the default
+  // Handle ISO 8601 format (PT1H45M30S, PT45M, etc.)
+  if (durationString.startsWith("PT")) {
+    const iso8601Match = durationString.match(
+      /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/i
+    );
+    if (iso8601Match) {
+      hours = iso8601Match[1] ? parseInt(iso8601Match[1], 10) : 0;
+      minutes = iso8601Match[2] ? parseInt(iso8601Match[2], 10) : 0;
+      seconds = iso8601Match[3] ? parseInt(iso8601Match[3], 10) : 0;
+    }
+  }
+  // Handle YouTube format (1H 45m, 45m, etc.)
+  else if (durationString.includes("H") || durationString.includes("m")) {
+    const hoursMatch = durationString.match(/(\d+)H/i);
+    const minutesMatch = durationString.match(/(\d+)m/i);
+
+    hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
+    minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+  }
+  // Handle full text format (1 hour 45 minutes)
+  else if (
+    durationString.includes("hour") ||
+    durationString.includes("minute")
+  ) {
+    const hoursMatch = durationString.match(/(\d+)\s+hours?/i);
+    const minutesMatch = durationString.match(/(\d+)\s+minutes?/i);
+
+    hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
+    minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+  }
+  // Handle time format (1:45:30, 45:30, etc.)
+  else if (durationString.includes(":")) {
+    const timeParts = durationString.split(":");
+    if (timeParts.length === 3) {
+      // HH:MM:SS format
+      hours = parseInt(timeParts[0], 10) || 0;
+      minutes = parseInt(timeParts[1], 10) || 0;
+      seconds = parseInt(timeParts[2], 10) || 0;
+    } else if (timeParts.length === 2) {
+      // MM:SS format (assume no hours)
+      minutes = parseInt(timeParts[0], 10) || 0;
+      seconds = parseInt(timeParts[1], 10) || 0;
+    }
+  }
+  // Handle plain numbers (assume minutes)
+  else if (/^\d+$/.test(durationString)) {
+    minutes = parseInt(durationString, 10);
+  }
+
+  // Round up seconds to next minute if 30+ seconds
+  if (seconds >= 30) {
+    minutes += 1;
+  }
+
+  // If we couldn't parse any meaningful values, return the default
   if (hours === 0 && minutes === 0) return defaultDuration;
 
   // Build the readable string
-  if (hours > 0 && minutes > 0) {
-    return `${hours} hour${hours > 1 ? "s" : ""} ${minutes} minute${minutes > 1 ? "s" : ""}`;
-  } else if (hours > 0) {
-    return `${hours} hour${hours > 1 ? "s" : ""}`;
-  } else {
-    return `${minutes} minute${minutes > 1 ? "s" : ""}`;
+  const parts = [];
+
+  if (hours > 0) {
+    parts.push(`${hours} hour${hours > 1 ? "s" : ""}`);
   }
+
+  if (minutes > 0) {
+    parts.push(`${minutes} minute${minutes > 1 ? "s" : ""}`);
+  }
+
+  // If we only have hours with no minutes, still show it
+  if (parts.length === 0 && hours > 0) {
+    parts.push(`${hours} hour${hours > 1 ? "s" : ""}`);
+  }
+
+  return parts.join(" ");
 }
 
 /**
- * Generates three random numbers between min and max (inclusive)
- * Ensures that no number ends with 0 as no episode UUIDs end with 0
- * @param min - Minimum value for random numbers (defaults to 101)
- * @param max - Maximum value for random numbers (defaults to 807)
- * @returns An array containing three random integers within the specified range, none ending with 0
+ * Formats a duration string into a compact readable format for cards/lists
+ * @param durationString - Duration string from various sources
+ * @param defaultDuration - Default duration to return if parsing fails
+ * @returns Compact formatted duration string like "1h 45m" or "45m"
  */
-export function generateRandomNumbers(
-  min: number = 101,
-  max: number = 807
-): [number, number, number] {
-  // Helper function to generate a single valid random number
-  const generateValidNumber = (): number => {
-    let num;
-    do {
-      num = Math.floor(Math.random() * (max - min + 1)) + min;
-    } while (num % 10 === 0); // Ensure number doesn't end with 0
+export function formatDurationCompact(
+  durationString?: string,
+  defaultDuration = "45m"
+): string {
+  if (!durationString) return defaultDuration;
 
-    return num;
-  };
+  // If already compact (contains "h" or "m" without "hour"/"minute"), return as-is
+  if (
+    (durationString.includes("h") || durationString.includes("m")) &&
+    !durationString.includes("hour") &&
+    !durationString.includes("minute")
+  ) {
+    return durationString;
+  }
 
-  // Generate three random numbers, ensuring none end with 0
-  const firstNumber = generateValidNumber();
-  const secondNumber = generateValidNumber();
-  const thirdNumber = generateValidNumber();
+  let hours = 0;
+  let minutes = 0;
+  let seconds = 0;
 
-  return [firstNumber, secondNumber, thirdNumber];
+  // Handle ISO 8601 format (PT1H45M30S, PT45M, etc.)
+  if (durationString.startsWith("PT")) {
+    const iso8601Match = durationString.match(
+      /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/i
+    );
+    if (iso8601Match) {
+      hours = iso8601Match[1] ? parseInt(iso8601Match[1], 10) : 0;
+      minutes = iso8601Match[2] ? parseInt(iso8601Match[2], 10) : 0;
+      seconds = iso8601Match[3] ? parseInt(iso8601Match[3], 10) : 0;
+    }
+  }
+  // Handle YouTube format (1H 45m, 45m, etc.)
+  else if (durationString.includes("H") || durationString.includes("m")) {
+    const hoursMatch = durationString.match(/(\d+)H/i);
+    const minutesMatch = durationString.match(/(\d+)m/i);
+
+    hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
+    minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+  }
+  // Handle full text format (1 hour 45 minutes)
+  else if (
+    durationString.includes("hour") ||
+    durationString.includes("minute")
+  ) {
+    const hoursMatch = durationString.match(/(\d+)\s+hours?/i);
+    const minutesMatch = durationString.match(/(\d+)\s+minutes?/i);
+
+    hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
+    minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+  }
+  // Handle time format (1:45:30, 45:30, etc.)
+  else if (durationString.includes(":")) {
+    const timeParts = durationString.split(":");
+    if (timeParts.length === 3) {
+      // HH:MM:SS format
+      hours = parseInt(timeParts[0], 10) || 0;
+      minutes = parseInt(timeParts[1], 10) || 0;
+      seconds = parseInt(timeParts[2], 10) || 0;
+    } else if (timeParts.length === 2) {
+      // MM:SS format (assume no hours)
+      minutes = parseInt(timeParts[0], 10) || 0;
+      seconds = parseInt(timeParts[1], 10) || 0;
+    }
+  }
+  // Handle plain numbers (assume minutes)
+  else if (/^\d+$/.test(durationString)) {
+    minutes = parseInt(durationString, 10);
+  }
+
+  // Round up seconds to next minute if 30+ seconds
+  if (seconds >= 30) {
+    minutes += 1;
+  }
+
+  // If we couldn't parse any meaningful values, return the default
+  if (hours === 0 && minutes === 0) return defaultDuration;
+
+  // Build the compact string
+  if (hours > 0 && minutes > 0) {
+    return `${hours}h ${minutes}m`;
+  } else if (hours > 0) {
+    return `${hours}h`;
+  } else {
+    return `${minutes}m`;
+  }
 }

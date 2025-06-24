@@ -63,19 +63,8 @@ const HomePageComponent = () => {
   const organizationData = generateOrganizationStructuredData();
   const websiteData = generateWebSiteStructuredData();
 
-  // Debug: Simple test data to verify JSONLD component works
-  const testData = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Test Organization",
-    "url": "https://gybwp.com"
-  };
-
   return (
     <>
-      {/* DEBUG: Simple test to verify JSONLD renders */}
-      <JSONLD data={testData} id="debug-test-jsonld" />
-      
       {/* Multiple schemas for comprehensive rich results */}
       <JSONLD data={podcastSeriesData} id="podcast-series-jsonld" />
       <JSONLD data={organizationData} id="organization-jsonld" />
