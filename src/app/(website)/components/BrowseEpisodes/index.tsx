@@ -99,6 +99,17 @@ export const BrowseEpisodes = ({
     }
   }, [seasonsData, activeSeason]);
 
+  // Ensure snap behavior is properly applied
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container && episodes.length > 0) {
+      // Force snap behavior
+      container.style.scrollSnapType = "x mandatory";
+      (container.style as any).WebkitOverflowScrolling = "touch";
+      container.style.overscrollBehaviorX = "contain";
+    }
+  }, [episodes]);
+
   // Check if arrows should be shown
   useEffect(() => {
     const checkForScrollbar = () => {
@@ -144,7 +155,7 @@ export const BrowseEpisodes = ({
     if (scrollContainerRef.current && episodes.length > 0) {
       const container = scrollContainerRef.current;
       const cardWidth = container.scrollWidth / episodes.length;
-      const scrollAmount = Math.max(cardWidth, 340); // Use card width or minimum 340px
+      const scrollAmount = Math.max(cardWidth, 320); // Use card width or minimum 320px
       container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
     }
   };
@@ -153,7 +164,7 @@ export const BrowseEpisodes = ({
     if (scrollContainerRef.current && episodes.length > 0) {
       const container = scrollContainerRef.current;
       const cardWidth = container.scrollWidth / episodes.length;
-      const scrollAmount = Math.max(cardWidth, 340); // Use card width or minimum 340px
+      const scrollAmount = Math.max(cardWidth, 320); // Use card width or minimum 320px
       container.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
@@ -218,19 +229,19 @@ export const BrowseEpisodes = ({
           )}
 
           {seasons.length > 0 && (
-            <div className="flex justify-center w-full mb-8">
-              <div className="inline-flex rounded-xl bg-white shadow-lg border border-gray-400/70 p-1 backdrop-blur-sm">
+            <div className="flex justify-center w-full mb-8 px-4">
+              <div className="flex flex-wrap justify-center gap-2 p-1 max-w-4xl">
                 {seasons.map((season, index) => (
                   <button
                     key={season._id}
                     type="button"
                     onClick={() => setActiveSeason(season.title)}
                     className={`
-                      relative px-4 py-2.5 text-sm font-medium whitespace-nowrap rounded-lg transition-all duration-200 ease-in-out
+                      relative px-3 py-2.5 text-sm font-medium whitespace-nowrap rounded-xl transition-all duration-200 ease-in-out flex-shrink-0 shadow-lg border backdrop-blur-sm
                       ${
                         season.title === activeSeason
-                          ? "bg-primary text-white shadow-lg shadow-primary/30 scale-105"
-                          : "text-gray-700 hover:text-gray-900 hover:bg-gray-100/80"
+                          ? "bg-primary text-white shadow-lg shadow-primary/30 scale-105 border-primary/30"
+                          : "bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100/80 border-gray-400/70"
                       }
                       focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2
                     `}
@@ -281,7 +292,7 @@ export const BrowseEpisodes = ({
               {showLeftArrow && (
                 <button
                   onClick={scrollLeft}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-gray-50 rounded-full p-3 shadow-xl border border-gray-300/80 hidden md:flex items-center justify-center transition-all duration-200 hover:scale-105 hover:shadow-2xl group"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-gray-50 rounded-full p-3 shadow-xl border border-gray-300/80 hidden md:flex items-center justify-center transition-all duration-200 hover:scale-105 hover:shadow-2xl group"
                   aria-label="Scroll left"
                 >
                   <svg
@@ -304,14 +315,23 @@ export const BrowseEpisodes = ({
               {/* Episodes container */}
               <div
                 ref={scrollContainerRef}
-                className="flex overflow-x-auto pb-8 gap-6 snap-x-enhanced scrollbar-hide px-4 md:px-20"
+                className="flex overflow-x-auto pb-8 gap-6 snap-x-enhanced scrollbar-hide px-4 md:px-16"
                 onScroll={handleScroll}
+                style={{
+                  scrollSnapType: "x mandatory",
+                  WebkitOverflowScrolling: "touch",
+                  overscrollBehaviorX: "contain",
+                }}
               >
                 {episodes.map((episode, idx) => (
                   <Link
                     key={`episode-${idx}`}
                     href={`/episode/${episode.youtube?.uuid}`}
-                    className="group flex-shrink-0 w-[85vw] sm:w-[380px] md:w-[340px] snap-start-enhanced block cursor-pointer"
+                    className="group flex-shrink-0 w-[85vw] sm:w-[360px] md:w-[320px] snap-start-enhanced block cursor-pointer"
+                    style={{
+                      scrollSnapAlign: "start",
+                      scrollSnapStop: "always",
+                    }}
                   >
                     <div className="bg-white rounded-2xl shadow-lg border border-gray-400/70 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-gray-900/20 hover:-translate-y-1 group-hover:border-primary/40 ring-1 ring-gray-300/60">
                       <div className="aspect-video bg-gradient-to-br from-gray-300 to-gray-400 relative overflow-hidden">
@@ -407,7 +427,7 @@ export const BrowseEpisodes = ({
               {showRightArrow && (
                 <button
                   onClick={scrollRight}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-gray-50 rounded-full p-3 shadow-xl border border-gray-300/80 hidden md:flex items-center justify-center transition-all duration-200 hover:scale-105 hover:shadow-2xl group"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-gray-50 rounded-full p-3 shadow-xl border border-gray-300/80 hidden md:flex items-center justify-center transition-all duration-200 hover:scale-105 hover:shadow-2xl group"
                   aria-label="Scroll right"
                 >
                   <svg
