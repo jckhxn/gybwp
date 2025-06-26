@@ -166,11 +166,10 @@ export function EpisodesPage() {
   const currentSeasonEpisodes = data.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50/70 to-white">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 to-slate-800">
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 to-slate-800/90"></div>
-        <div className="relative container mx-auto px-6 py-20 lg:py-32">
+      <div className="relative overflow-hidden bg-gradient-to-b from-gray-50/70 to-white py-16 md:py-20 lg:py-24">
+        <div className="container mx-auto px-6">
           <div className="text-center max-w-4xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -178,8 +177,9 @@ export function EpisodesPage() {
               transition={{ duration: 0.6 }}
               className="flex justify-center mb-6"
             >
-              <div className="p-3 bg-blue-600 rounded-full">
-                <Play className="h-8 w-8 text-white" />
+              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 px-4 py-2 text-sm font-medium text-primary border border-primary/30">
+                <Play className="h-4 w-4" />
+                All Episodes
               </div>
             </motion.div>
 
@@ -187,7 +187,7 @@ export function EpisodesPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-6 leading-[1.1]"
             >
               All Episodes
             </motion.h1>
@@ -196,7 +196,7 @@ export function EpisodesPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl md:text-2xl text-slate-300 mb-8 leading-relaxed"
+              className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed max-w-3xl mx-auto"
             >
               Explore our complete library of business insights, leadership
               strategies, and growth tactics
@@ -206,7 +206,7 @@ export function EpisodesPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-wrap justify-center gap-6 text-sm text-slate-400"
+              className="flex flex-wrap justify-center gap-6 text-sm text-gray-500"
             >
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
@@ -226,7 +226,7 @@ export function EpisodesPage() {
       </div>
 
       {/* Controls Section */}
-      <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
+      <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
         <div className="container mx-auto px-6 py-4">
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             {/* Left side - Season and Search */}
@@ -234,13 +234,13 @@ export function EpisodesPage() {
               <SeasonDropdown setActiveSeason={setActiveSeason} />
 
               <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search episodes, topics, or guests..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
                 />
               </div>
             </div>
@@ -251,21 +251,21 @@ export function EpisodesPage() {
                 onClick={() => setShowFilters(!showFilters)}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
                   showFilters
-                    ? "bg-blue-100 text-blue-700"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    ? "bg-primary/10 text-primary"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 }`}
               >
                 <Filter className="h-4 w-4" />
                 <span className="hidden sm:inline">Filters</span>
               </button>
 
-              <div className="flex border border-slate-300 rounded-lg overflow-hidden">
+              <div className="flex border border-gray-300 rounded-lg overflow-hidden">
                 <button
                   onClick={() => setViewMode("grid")}
                   className={`p-2 transition-colors ${
                     viewMode === "grid"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-slate-600 hover:bg-slate-50"
+                      ? "bg-primary text-white"
+                      : "bg-white text-gray-600 hover:bg-gray-50"
                   }`}
                 >
                   <Grid className="h-4 w-4" />
@@ -274,8 +274,8 @@ export function EpisodesPage() {
                   onClick={() => setViewMode("list")}
                   className={`p-2 transition-colors ${
                     viewMode === "list"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-slate-600 hover:bg-slate-50"
+                      ? "bg-primary text-white"
+                      : "bg-white text-gray-600 hover:bg-gray-50"
                   }`}
                 >
                   <List className="h-4 w-4" />

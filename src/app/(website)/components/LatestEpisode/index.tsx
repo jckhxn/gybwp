@@ -7,6 +7,7 @@ import { ScrollToSection } from "../shared/ScrollToSection";
 import { client } from "../../sanity/sanity-utils";
 import { LATEST_EPISODE, PODCAST_DETAILS_QUERY } from "../../lib/queries";
 import { formatDate } from "../../lib/utils";
+import { formatEpisodeTitle } from "../../../../lib/formatTitle";
 import { motion } from "framer-motion";
 import { Calendar, Clock, ArrowRight, Play } from "lucide-react";
 
@@ -107,7 +108,7 @@ export const LatestEpisode = () => {
   };
 
   return (
-    <section className="w-full py-12 md:py-16 lg:py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+    <section className="w-full py-12 md:py-16 lg:py-20 bg-gradient-to-b from-gray-50/70 to-white relative overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         <div className="flex flex-col items-center gap-8 md:gap-10 text-center">
           <div className="space-y-6 max-w-4xl w-full">
@@ -146,82 +147,79 @@ export const LatestEpisode = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative overflow-hidden rounded-2xl shadow-xl border border-gray-100 bg-white"
+            className="relative overflow-hidden rounded-2xl shadow-xl border border-gray-200/80 bg-white ring-1 ring-gray-100/80"
           >
-            {/* Improved gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900"></div>
+            {/* Light gradient background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-100/50"></div>
 
             {/* Subtle overlay pattern */}
-            <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIyIi8+PC9nPjwvZz48L3N2Zz4=')]"></div>
+            <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIyIi8+PC9nPjwvZz48L3N2Zz4=')]"></div>
 
-            {/* Color accent gradients */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-primary/20 via-transparent to-transparent blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-secondary/15 via-transparent to-transparent blur-3xl"></div>
+            {/* Light color accent gradients */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-primary/5 via-transparent to-transparent blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-secondary/5 via-transparent to-transparent blur-3xl"></div>
 
-            <div className="relative grid md:grid-cols-2 gap-8 p-8 md:p-12">
+            <div className="relative grid md:grid-cols-2 gap-8 md:gap-12 p-8 md:p-12">
               {/* Left column - Image */}
               <div className="relative group">
-                {/* Enhanced glow effect */}
-                <div className="absolute -inset-2 bg-gradient-to-r from-primary/30 via-secondary/20 to-primary/30 rounded-xl blur-xl opacity-40 group-hover:opacity-60 transition-all duration-700"></div>
-                <div className="relative aspect-video overflow-hidden rounded-xl bg-black/20 backdrop-blur-sm border border-white/10">
-                  <Image
-                    src={latestEpisode.thumbnail || "/images/placeholder.svg"}
-                    alt={latestEpisode.title || "Latest episode thumbnail"}
-                    width={640}
-                    height={360}
-                    className="object-cover w-full h-full transform transition-all duration-700 group-hover:scale-105"
-                  />
-                  {/* Improved image overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500"></div>
-
-                  {/* Play button overlay */}
-                  <Link
-                    href={`/episode/${latestEpisode.uuid}`}
-                    className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500"
-                  >
-                    <div className="bg-gradient-to-r from-primary to-primary-light backdrop-blur-sm rounded-full p-5 transform transition-all duration-500 hover:scale-110 shadow-2xl border border-white/20">
-                      <Play className="h-8 w-8 text-white" fill="white" />
-                    </div>
-                  </Link>
-                </div>
-
-                {/* Episode info badges */}
-                <div className="absolute top-4 left-4 flex flex-col gap-2">
-                  <div className="bg-black/80 backdrop-blur-md text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center border border-white/20">
-                    <Calendar className="h-3 w-3 mr-1.5" />
-                    {formatEpisodeDate(latestEpisode.publishedAt)}
+                {/* Subtle glow effect */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary/10 via-secondary/5 to-primary/10 rounded-xl blur-lg opacity-30 group-hover:opacity-50 transition-all duration-700"></div>
+                <Link href={`/episode/${latestEpisode.uuid}`} className="block">
+                  <div className="relative aspect-video overflow-hidden rounded-xl bg-gradient-to-br from-gray-300 to-gray-400 backdrop-blur-sm border border-gray-200/50 cursor-pointer">
+                    <Image
+                      src={latestEpisode.thumbnail || "/images/placeholder.svg"}
+                      alt={latestEpisode.title || "Latest episode thumbnail"}
+                      width={640}
+                      height={360}
+                      className="object-cover w-full h-full transform transition-all duration-500 group-hover:scale-105"
+                    />
+                    {/* Subtle hover overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
-                  {latestEpisode.seasonNumber &&
-                    latestEpisode.episodeNumber && (
-                      <div className="bg-gradient-to-r from-primary to-primary-light backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-full border border-white/30">
-                        S{latestEpisode.seasonNumber} · E
-                        {latestEpisode.episodeNumber}
-                      </div>
-                    )}
-                </div>
+                </Link>
               </div>
 
               {/* Right column - Content */}
-              <div className="flex flex-col justify-center text-white">
-                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">
-                  {(latestEpisode.title || "Latest Episode").replace(/\.$/, "")}
+              <div className="flex flex-col justify-center text-gray-900">
+                {/* Episode metadata */}
+                <div className="flex flex-wrap items-center gap-3 mb-4">
+                  {latestEpisode.seasonNumber && latestEpisode.episodeNumber && (
+                    <div className="inline-flex items-center bg-gradient-to-r from-primary/10 to-secondary/10 text-primary text-sm font-semibold px-3 py-1.5 rounded-full border border-primary/20">
+                      Season {latestEpisode.seasonNumber}, Episode {latestEpisode.episodeNumber}
+                    </div>
+                  )}
+                  <div className="flex items-center text-gray-500 text-sm">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    {formatEpisodeDate(latestEpisode.publishedAt)}
+                  </div>
+                </div>
+
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-gray-900 leading-tight">
+                  {formatEpisodeTitle(latestEpisode.title || "Latest Episode").replace(/\.$/, "")}
                 </h3>
 
-                <div className="space-y-4">
-                  <p className="text-gray-100 leading-relaxed">
+                <div className="space-y-6">
+                  <p className="text-gray-600 leading-relaxed text-lg">
                     {latestEpisode.blurb ||
                       "Tune in to our latest episode where we discuss important topics and insights with industry experts."}
                   </p>
 
-                  <div className="pt-6">
+                  <div className="flex flex-col sm:flex-row gap-4">
                     <Link
                       href={`/episode/${latestEpisode.uuid}`}
-                      className="group relative inline-flex items-center rounded-xl bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/20 text-white px-8 py-4 text-base font-semibold shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent"
+                      className="group relative inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-primary to-primary/90 hover:from-primary-light hover:to-primary text-white px-6 py-3 text-base font-semibold shadow-lg shadow-primary/25 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
                     >
-                      <span className="relative z-10 flex items-center gap-2">
-                        View Episode Details
-                        <ArrowRight className="ml-1 h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
-                      </span>
+                      <Play className="h-4 w-4 mr-2" fill="currentColor" />
+                      Listen Now
+                      <ArrowRight className="ml-2 h-4 w-4 transform transition-transform duration-200 group-hover:translate-x-1" />
+                    </Link>
+                    
+                    <Link
+                      href={`/episode/${latestEpisode.uuid}`}
+                      className="group inline-flex items-center justify-center rounded-xl bg-white hover:bg-gray-50 text-gray-700 hover:text-gray-900 px-6 py-3 text-base font-medium border border-gray-300 hover:border-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500/20 focus:ring-offset-2"
+                    >
+                      View Details
+                      <ArrowRight className="ml-2 h-4 w-4 transform transition-transform duration-200 group-hover:translate-x-1" />
                     </Link>
                   </div>
                 </div>
