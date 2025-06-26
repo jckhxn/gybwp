@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Button from '../ui/button';
+import { useState } from "react";
+import Button from "../ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,11 +9,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../ui/dialog';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Textarea } from '../ui/textarea';
-import { Mail, Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+} from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
+import { Mail, Send, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 
 interface ContactModalProps {
   trigger?: React.ReactNode;
@@ -29,26 +29,26 @@ interface FormData {
 }
 
 interface FormStatus {
-  type: 'idle' | 'loading' | 'success' | 'error';
+  type: "idle" | "loading" | "success" | "error";
   message?: string;
 }
 
 const ContactModal = ({ trigger, className }: ContactModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    company: '',
-    message: '',
-    subject: 'Sponsorship Inquiry',
+    name: "",
+    email: "",
+    company: "",
+    message: "",
+    subject: "Sponsorship Inquiry",
   });
-  const [status, setStatus] = useState<FormStatus>({ type: 'idle' });
+  const [status, setStatus] = useState<FormStatus>({ type: "idle" });
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -56,13 +56,14 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus({ type: 'loading' });
+    setStatus({ type: "loading" });
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
+      const response = await fetch("https://formspree.io/f/mrbkoojk", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -71,31 +72,34 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
 
       if (response.ok) {
         setStatus({
-          type: 'success',
-          message: 'Thank you! Your message has been sent successfully. We\'ll get back to you soon.',
+          type: "success",
+          message:
+            "Thank you! Your message has been sent successfully. We'll get back to you soon.",
         });
-        // Reset form after successful submission
+
         setTimeout(() => {
           setFormData({
-            name: '',
-            email: '',
-            company: '',
-            message: '',
-            subject: 'Sponsorship Inquiry',
+            name: "",
+            email: "",
+            company: "",
+            message: "",
+            subject: "Sponsorship Inquiry",
           });
-          setStatus({ type: 'idle' });
+          setStatus({ type: "idle" });
           setIsOpen(false);
         }, 2000);
       } else {
         setStatus({
-          type: 'error',
-          message: result.error || 'Something went wrong. Please try again.',
+          type: "error",
+          message:
+            result?.errors?.[0]?.message ||
+            "Something went wrong. Please try again.",
         });
       }
     } catch (error) {
       setStatus({
-        type: 'error',
-        message: 'Network error. Please check your connection and try again.',
+        type: "error",
+        message: "Network error. Please check your connection and try again.",
       });
     }
   };
@@ -119,7 +123,8 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
             Contact Us
           </DialogTitle>
           <DialogDescription>
-            Interested in sponsoring our podcast? Send us a message and we&apos;ll get back to you soon.
+            Interested in sponsoring our podcast? Send us a message and
+            we&apos;ll get back to you soon.
           </DialogDescription>
         </DialogHeader>
 
@@ -136,7 +141,7 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
                 onChange={handleInputChange}
                 placeholder="Your full name"
                 required
-                disabled={status.type === 'loading'}
+                disabled={status.type === "loading"}
               />
             </div>
             <div className="space-y-2">
@@ -151,7 +156,7 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
                 onChange={handleInputChange}
                 placeholder="your@email.com"
                 required
-                disabled={status.type === 'loading'}
+                disabled={status.type === "loading"}
               />
             </div>
           </div>
@@ -164,7 +169,7 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
               value={formData.company}
               onChange={handleInputChange}
               placeholder="Your company name (optional)"
-              disabled={status.type === 'loading'}
+              disabled={status.type === "loading"}
             />
           </div>
 
@@ -176,7 +181,7 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
               value={formData.subject}
               onChange={handleInputChange}
               placeholder="What is this regarding?"
-              disabled={status.type === 'loading'}
+              disabled={status.type === "loading"}
             />
           </div>
 
@@ -192,19 +197,19 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
               placeholder="Tell us about your sponsorship interests, budget, timeline, and any specific requirements..."
               rows={4}
               required
-              disabled={status.type === 'loading'}
+              disabled={status.type === "loading"}
             />
           </div>
 
           {/* Status Messages */}
-          {status.type === 'success' && (
+          {status.type === "success" && (
             <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg text-green-800">
               <CheckCircle className="w-4 h-4" />
               <span className="text-sm">{status.message}</span>
             </div>
           )}
 
-          {status.type === 'error' && (
+          {status.type === "error" && (
             <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-800">
               <AlertCircle className="w-4 h-4" />
               <span className="text-sm">{status.message}</span>
@@ -216,17 +221,17 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
               type="button"
               variant="outline"
               onClick={() => setIsOpen(false)}
-              disabled={status.type === 'loading'}
+              disabled={status.type === "loading"}
               className="flex-1"
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              disabled={!isFormValid || status.type === 'loading'}
+              disabled={!isFormValid || status.type === "loading"}
               className="flex-1"
             >
-              {status.type === 'loading' ? (
+              {status.type === "loading" ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Sending...

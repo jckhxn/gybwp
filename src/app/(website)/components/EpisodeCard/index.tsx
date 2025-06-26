@@ -127,7 +127,7 @@ const EpisodeCard = ({
                 <span className="text-xs text-slate-700">
                   {guests
                     .slice(0, 2)
-                    .filter(guest => guest?.name) // Filter out guests without names
+                    .filter((guest) => guest?.name) // Filter out guests without names
                     .map((guest) => guest.name)
                     .join(", ")}
                   {guests.length > 2 && ` +${guests.length - 2} more`}

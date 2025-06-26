@@ -42,9 +42,10 @@ export default function ConsultingContactForm() {
     setError("");
 
     try {
-      const response = await fetch("/api/consulting-contact", {
+      const response = await fetch("https://formspree.io/f/mrbkoojk", {
         method: "POST",
         headers: {
+          Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
@@ -55,9 +56,12 @@ export default function ConsultingContactForm() {
         setFormData(initialFormData);
       } else {
         const errorData = await response.json();
-        setError(errorData.error || "Something went wrong. Please try again.");
+        setError(
+          errorData?.errors?.[0]?.message ||
+            "Something went wrong. Please try again."
+        );
       }
-    } catch (err) {
+    } catch {
       setError("Failed to send message. Please try again later.");
     } finally {
       setIsSubmitting(false);
@@ -74,7 +78,8 @@ export default function ConsultingContactForm() {
           Message Sent Successfully!
         </h3>
         <p className="text-green-700 mb-4">
-          Thank you for your interest in our consulting services. Jeff will get back to you within 24 hours.
+          Thank you for your interest in our consulting services. Jeff will get
+          back to you within 24 hours.
         </p>
         <Button
           onClick={() => setSubmitted(false)}
@@ -94,14 +99,18 @@ export default function ConsultingContactForm() {
           Ready to Transform Your Business?
         </h3>
         <p className="text-gray-300">
-          Let&apos;s discuss how we can help you achieve your talent and growth objectives.
+          Let&apos;s discuss how we can help you achieve your talent and growth
+          objectives.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-gray-200 flex items-center gap-2">
+            <Label
+              htmlFor="name"
+              className="text-gray-200 flex items-center gap-2"
+            >
               <User className="w-4 h-4" />
               Name *
             </Label>
@@ -117,7 +126,10 @@ export default function ConsultingContactForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-200 flex items-center gap-2">
+            <Label
+              htmlFor="email"
+              className="text-gray-200 flex items-center gap-2"
+            >
               <Mail className="w-4 h-4" />
               Email *
             </Label>
@@ -136,7 +148,10 @@ export default function ConsultingContactForm() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="company" className="text-gray-200 flex items-center gap-2">
+            <Label
+              htmlFor="company"
+              className="text-gray-200 flex items-center gap-2"
+            >
               <Building2 className="w-4 h-4" />
               Company
             </Label>
@@ -151,7 +166,10 @@ export default function ConsultingContactForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phone" className="text-gray-200 flex items-center gap-2">
+            <Label
+              htmlFor="phone"
+              className="text-gray-200 flex items-center gap-2"
+            >
               <Phone className="w-4 h-4" />
               Phone
             </Label>
@@ -205,7 +223,8 @@ export default function ConsultingContactForm() {
         </Button>
 
         <p className="text-xs text-gray-400 text-center">
-          * Required fields. We respect your privacy and will never share your information.
+          * Required fields. We respect your privacy and will never share your
+          information.
         </p>
       </form>
     </div>
