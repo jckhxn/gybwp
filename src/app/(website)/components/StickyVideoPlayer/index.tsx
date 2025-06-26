@@ -10,18 +10,23 @@ interface StickyVideoPlayerProps {
   videoId?: string;
   title?: string;
   onPlayerRef?: (ref: React.RefObject<PlayerHandle>) => void;
+  onPlayStateChange?: (isPlaying: boolean) => void;
 }
 
 export default function StickyVideoPlayer({
   videoId,
   title,
   onPlayerRef,
+  onPlayStateChange,
 }: StickyVideoPlayerProps) {
   const [isSticky, setIsSticky] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
   const [wasPlaying, setWasPlaying] = useState(false);
   const [isChildPlayerReady, setIsChildPlayerReady] = useState(false);
+  const [hasTransitioned, setHasTransitioned] = useState(false);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const [transitionId, setTransitionId] = useState(0);
 
   const playerRef = useRef<PlayerHandle>(null);
   const placeholderRef = useRef<HTMLDivElement>(null); // Ref for the placeholder
@@ -34,6 +39,18 @@ export default function StickyVideoPlayer({
     }
   }, [onPlayerRef]);
 
+  // Effect to track and notify parent of play state changes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (playerRef.current && onPlayStateChange) {
+        const playing = playerRef.current.isPlaying;
+        onPlayStateChange(playing);
+      }
+    }, 500); // Check every 500ms
+
+    return () => clearInterval(interval);
+  }, [onPlayStateChange]);
+
   useEffect(() => {
     const handleScroll = () => {
       if (!placeholderRef.current) return;
@@ -42,15 +59,29 @@ export default function StickyVideoPlayer({
       const shouldBeSticky = rect.top < 0 && rect.bottom < 0;
 
       if (isSticky !== shouldBeSticky) {
-        // Before changing state, get the current state
+        console.log(
+          `Transitioning to ${shouldBeSticky ? "sticky" : "normal"} mode`
+        );
+
+        // Capture current state before transition - always try to get current state
         if (playerRef.current) {
-          const time = playerRef.current.getCurrentTime();
-          const playing = playerRef.current.isPlaying;
-          setCurrentTime(time);
-          setWasPlaying(playing);
+          try {
+            const time = playerRef.current.getCurrentTime();
+            const playing = playerRef.current.isPlaying;
+            console.log(
+              `Capturing state before transition: time=${time}, playing=${playing}`
+            );
+            setCurrentTime(time);
+            setWasPlaying(playing);
+          } catch (error) {
+            console.log("Error capturing state:", error);
+          }
         }
-        setIsChildPlayerReady(false); // Reset readiness on transition
+
         setIsSticky(shouldBeSticky);
+        setHasTransitioned(true);
+        setIsChildPlayerReady(false); // Reset for the new player instance
+        setTransitionId((prev) => prev + 1); // Increment transition ID to track each transition
       }
     };
 
@@ -60,15 +91,52 @@ export default function StickyVideoPlayer({
 
     window.addEventListener("scroll", scrollHandler, { passive: true });
     return () => window.removeEventListener("scroll", scrollHandler);
-  }, [isSticky]);
+  }, [isSticky, isChildPlayerReady]);
 
-  // Effect to seek to the correct time when the player's container changes
+  // Effect to restore playback state after transition
   useEffect(() => {
-    // Only seek when the child player has signaled it is ready
-    if (playerRef.current && isChildPlayerReady) {
-      playerRef.current.seekTo(currentTime, wasPlaying);
+    if (isChildPlayerReady && playerRef.current) {
+      if (isFirstLoad) {
+        // On first load, don't do anything - just let the player load paused
+        console.log("First load - keeping player paused");
+        setIsFirstLoad(false);
+        return;
+      }
+
+      if (hasTransitioned) {
+        console.log(
+          `Restoring state (transition ${transitionId}): time=${currentTime}, wasPlaying=${wasPlaying}`
+        );
+
+        // Wait a bit for the YouTube player to be fully ready
+        setTimeout(() => {
+          if (playerRef.current) {
+            console.log("Seeking to", currentTime);
+
+            if (wasPlaying) {
+              // If it was playing, seek and play immediately
+              playerRef.current.seekTo(currentTime, true); // true = play after seek
+              console.log("Seeking with autoplay");
+            } else {
+              // If it was paused, just seek without playing
+              playerRef.current.seekTo(currentTime, false);
+              console.log("Seeking without autoplay");
+            }
+          }
+        }, 1000); // Give YouTube player more time to initialize
+
+        // Reset the transition flag
+        setHasTransitioned(false);
+      }
     }
-  }, [isChildPlayerReady, currentTime, wasPlaying]);
+  }, [
+    hasTransitioned,
+    isChildPlayerReady,
+    currentTime,
+    wasPlaying,
+    isFirstLoad,
+    transitionId,
+  ]);
 
   const handleClose = () => {
     setIsVisible(false);
@@ -90,9 +158,15 @@ export default function StickyVideoPlayer({
 
   const PlayerComponent = (
     <PodcastPlayer
+      key={`player-${videoId}-${transitionId}-${isSticky ? "sticky" : "normal"}`}
       ref={playerRef}
       videoId={videoId}
-      onPlayerReady={() => setIsChildPlayerReady(true)}
+      onPlayerReady={() => {
+        console.log(
+          `Player ready in ${isSticky ? "sticky" : "normal"} mode (transition ${transitionId})`
+        );
+        setIsChildPlayerReady(true);
+      }}
     />
   );
 

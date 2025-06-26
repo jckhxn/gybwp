@@ -222,21 +222,18 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   // Handle play button click
   const handlePlayClick = () => {
     if (playerRef.current) {
-      playerRef.current.togglePlay();
-      setIsPlaying(!isPlaying);
+      if (isPlaying) {
+        playerRef.current.pause();
+      } else {
+        playerRef.current.play();
+      }
     }
   };
 
-  // Update playing state from the player
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (playerRef.current) {
-        setIsPlaying(playerRef.current.isPlaying);
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
+  // Handle play state changes from the sticky player
+  const handlePlayStateChange = (playing: boolean) => {
+    setIsPlaying(playing);
+  };
 
   // Share modal state
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -503,6 +500,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     playerRef.current = ref.current;
                   }
                 }}
+                onPlayStateChange={handlePlayStateChange}
               />
 
               {/* Action Buttons */}
