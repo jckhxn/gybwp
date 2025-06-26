@@ -2,6 +2,7 @@ import Image from "next/image";
 import Button from "@/src/app/(website)/components/ui/button";
 import Link from "next/link";
 import { urlFor } from "@/src/app/(website)/lib/utils";
+import { formatEpisodeTitle } from "@/src/lib/formatTitle";
 
 export default function RelatedEpisodes({
   uuid,
@@ -34,7 +35,8 @@ export default function RelatedEpisodes({
         const youtube = episode?.youtube || {};
 
         // Extract necessary data from the referenced episode
-        const title = youtube.title || episode.title || "Untitled Episode";
+        const rawTitle = youtube.title || episode.title || "Untitled Episode";
+        const title = formatEpisodeTitle(rawTitle);
         const seasonNumber =
           youtube.seasonNumber || episode.seasonNumber || "?";
         const episodeNumber =
