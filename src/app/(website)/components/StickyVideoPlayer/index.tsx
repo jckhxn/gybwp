@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { X, Maximize2 } from "lucide-react";
+import { X, Maximize2, Play, Pause } from "lucide-react";
 import PodcastPlayer, {
   PlayerHandle,
 } from "../../episode/[uuid]/podcast-player";
@@ -27,26 +27,28 @@ export default function StickyVideoPlayer({
   const [hasTransitioned, setHasTransitioned] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [transitionId, setTransitionId] = useState(0);
+  const [isCurrentlyPlaying, setIsCurrentlyPlaying] = useState(false);
 
   const playerRef = useRef<PlayerHandle>(null);
-  const placeholderRef = useRef<HTMLDivElement>(null); // Ref for the placeholder
-  const stickyContainerRef = useRef<HTMLDivElement>(null); // Ref for the sticky container
+  const placeholderRef = useRef<HTMLDivElement>(null);
+  const stickyContainerRef = useRef<HTMLDivElement>(null);
 
-  // Pass the player ref to parent component
+  // Pass player ref to parent component
   useEffect(() => {
     if (onPlayerRef) {
       onPlayerRef(playerRef);
     }
   }, [onPlayerRef]);
 
-  // Effect to track and notify parent of play state changes
+  // Track and notify parent of play state changes
   useEffect(() => {
     const interval = setInterval(() => {
       if (playerRef.current && onPlayStateChange) {
         const playing = playerRef.current.isPlaying;
+        setIsCurrentlyPlaying(playing);
         onPlayStateChange(playing);
       }
-    }, 500); // Check every 500ms
+    }, 500);
 
     return () => clearInterval(interval);
   }, [onPlayStateChange]);
@@ -63,25 +65,33 @@ export default function StickyVideoPlayer({
           `Transitioning to ${shouldBeSticky ? "sticky" : "normal"} mode`
         );
 
-        // Capture current state before transition - always try to get current state
+        // Capture current state before transition
         if (playerRef.current) {
           try {
             const time = playerRef.current.getCurrentTime();
             const playing = playerRef.current.isPlaying;
-            console.log(
-              `Capturing state before transition: time=${time}, playing=${playing}`
-            );
+            console.log(`Capturing state: time=${time}, playing=${playing}`);
+            console.log(`Player state details:`, {
+              time,
+              playing,
+              playerExists: !!playerRef.current,
+            });
             setCurrentTime(time);
             setWasPlaying(playing);
           } catch (error) {
             console.log("Error capturing state:", error);
+            // Ensure we don't accidentally resume if there's an error
+            setWasPlaying(false);
           }
+        } else {
+          console.log("No player ref available, setting wasPlaying to false");
+          setWasPlaying(false);
         }
 
         setIsSticky(shouldBeSticky);
         setHasTransitioned(true);
-        setIsChildPlayerReady(false); // Reset for the new player instance
-        setTransitionId((prev) => prev + 1); // Increment transition ID to track each transition
+        setIsChildPlayerReady(false);
+        setTransitionId((prev) => prev + 1);
       }
     };
 
@@ -93,11 +103,10 @@ export default function StickyVideoPlayer({
     return () => window.removeEventListener("scroll", scrollHandler);
   }, [isSticky, isChildPlayerReady]);
 
-  // Effect to restore playback state after transition
+  // Restore playback state after transition
   useEffect(() => {
     if (isChildPlayerReady && playerRef.current) {
       if (isFirstLoad) {
-        // On first load, don't do anything - just let the player load paused
         console.log("First load - keeping player paused");
         setIsFirstLoad(false);
         return;
@@ -105,27 +114,53 @@ export default function StickyVideoPlayer({
 
       if (hasTransitioned) {
         console.log(
-          `Restoring state (transition ${transitionId}): time=${currentTime}, wasPlaying=${wasPlaying}`
+          `Restoring state: time=${currentTime}, wasPlaying=${wasPlaying}`
         );
 
-        // Wait a bit for the YouTube player to be fully ready
         setTimeout(() => {
           if (playerRef.current) {
             console.log("Seeking to", currentTime);
+            console.log(`Restoration details:`, {
+              currentTime,
+              wasPlaying,
+              playerExists: !!playerRef.current,
+            });
 
-            if (wasPlaying) {
-              // If it was playing, seek and play immediately
-              playerRef.current.seekTo(currentTime, true); // true = play after seek
-              console.log("Seeking with autoplay");
+            // Always seek without auto-play first
+            playerRef.current.seekTo(currentTime, false);
+
+            // Add extra safety check - only play if it was DEFINITELY playing before
+            if (wasPlaying === true) {
+              console.log("wasPlaying is TRUE - will resume playback");
+              setTimeout(() => {
+                if (playerRef.current) {
+                  playerRef.current.play();
+                  setIsCurrentlyPlaying(true);
+                  console.log("Resuming playback");
+                  // Notify parent of play state change immediately
+                  if (onPlayStateChange) {
+                    onPlayStateChange(true);
+                  }
+                }
+              }, 100);
             } else {
-              // If it was paused, just seek without playing
-              playerRef.current.seekTo(currentTime, false);
-              console.log("Seeking without autoplay");
+              console.log("wasPlaying is FALSE or undefined - staying paused");
+              // Explicitly pause to ensure it stays paused
+              setTimeout(() => {
+                if (playerRef.current) {
+                  playerRef.current.pause();
+                  setIsCurrentlyPlaying(false);
+                  console.log("Explicitly paused player");
+                }
+              }, 200);
+              // Ensure parent knows we're paused
+              if (onPlayStateChange) {
+                onPlayStateChange(false);
+              }
             }
           }
-        }, 1000); // Give YouTube player more time to initialize
+        }, 1000);
 
-        // Reset the transition flag
         setHasTransitioned(false);
       }
     }
@@ -136,12 +171,31 @@ export default function StickyVideoPlayer({
     wasPlaying,
     isFirstLoad,
     transitionId,
+    onPlayStateChange,
   ]);
 
   const handleClose = () => {
     setIsVisible(false);
     if (playerRef.current) {
       playerRef.current.pause();
+    }
+  };
+
+  const handlePlayPause = () => {
+    if (playerRef.current) {
+      if (isCurrentlyPlaying) {
+        playerRef.current.pause();
+        setIsCurrentlyPlaying(false);
+        if (onPlayStateChange) {
+          onPlayStateChange(false);
+        }
+      } else {
+        playerRef.current.play();
+        setIsCurrentlyPlaying(true);
+        if (onPlayStateChange) {
+          onPlayStateChange(true);
+        }
+      }
     }
   };
 
@@ -162,17 +216,30 @@ export default function StickyVideoPlayer({
       ref={playerRef}
       videoId={videoId}
       onPlayerReady={() => {
-        console.log(
-          `Player ready in ${isSticky ? "sticky" : "normal"} mode (transition ${transitionId})`
-        );
+        console.log(`Player ready in ${isSticky ? "sticky" : "normal"} mode`);
         setIsChildPlayerReady(true);
+
+        // Update parent component with new player ref
+        if (onPlayerRef) {
+          onPlayerRef(playerRef);
+        }
+
+        // Immediately sync play state with parent after player is ready
+        setTimeout(() => {
+          if (playerRef.current && onPlayStateChange) {
+            const currentlyPlaying = playerRef.current.isPlaying;
+            setIsCurrentlyPlaying(currentlyPlaying);
+            onPlayStateChange(currentlyPlaying);
+            console.log(`Initial state sync: playing=${currentlyPlaying}`);
+          }
+        }, 100);
       }}
     />
   );
 
   return (
     <>
-      {/* Placeholder for the original player */}
+      {/* Main player placeholder */}
       <div
         ref={placeholderRef}
         className="aspect-video bg-muted rounded-lg overflow-hidden relative"
@@ -180,7 +247,7 @@ export default function StickyVideoPlayer({
         {!isSticky && PlayerComponent}
       </div>
 
-      {/* Sticky minimized player */}
+      {/* Sticky mini player */}
       <div
         ref={stickyContainerRef}
         className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ease-out ${
@@ -190,15 +257,25 @@ export default function StickyVideoPlayer({
         }`}
       >
         <div className="bg-black rounded-xl shadow-2xl overflow-hidden border border-gray-700 group hover:shadow-3xl transition-all duration-300 hover:scale-[1.02]">
-          <div
-            className="w-80 h-48 relative cursor-pointer"
-            onClick={handleExpand}
-          >
-            {/* The single player instance will be rendered here when sticky */}
+          <div className="w-80 h-48 relative">
             <div className="w-full h-full">{isSticky && PlayerComponent}</div>
 
-            {/* Controls overlay */}
+            {/* Control buttons */}
             <div className="absolute top-3 right-3 z-10 flex gap-2">
+              <button
+                className="bg-black/70 hover:bg-black/90 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePlayPause();
+                }}
+                title={isCurrentlyPlaying ? "Pause" : "Play"}
+              >
+                {isCurrentlyPlaying ? (
+                  <Pause className="h-4 w-4" />
+                ) : (
+                  <Play className="h-4 w-4" />
+                )}
+              </button>
               <button
                 className="bg-black/70 hover:bg-black/90 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110"
                 onClick={(e) => {
