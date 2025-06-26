@@ -189,7 +189,7 @@ export const BrowseEpisodes = ({
       className={
         hideBackground
           ? "w-full py-2"
-          : "w-full py-12 md:py-16 lg:py-20 bg-gradient-to-b from-gray-200/90 to-gray-50 relative"
+          : "w-full py-12 md:py-16 lg:py-20 bg-gradient-to-b from-gray-50/70 to-white relative"
       }
     >
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
@@ -333,7 +333,7 @@ export const BrowseEpisodes = ({
                       scrollSnapStop: "always",
                     }}
                   >
-                    <div className="bg-white rounded-2xl shadow-lg border border-gray-400/70 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-gray-900/20 hover:-translate-y-1 group-hover:border-primary/40 ring-1 ring-gray-300/60">
+                    <div className="bg-white rounded-2xl shadow-lg border border-gray-200/70 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-gray-900/20 hover:-translate-y-1 group-hover:border-primary/40 ring-1 ring-gray-100/70">
                       <div className="aspect-video bg-gradient-to-br from-gray-300 to-gray-400 relative overflow-hidden">
                         <Image
                           src={
@@ -345,7 +345,7 @@ export const BrowseEpisodes = ({
                           alt={`${episode.youtube?.title || `Episode ${episode.youtube?.episodeNumber}`} cover`}
                           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent"></div>
                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
                           <div className="p-4 bg-white/95 backdrop-blur-sm rounded-full shadow-xl transform scale-90 group-hover:scale-100 transition-transform duration-300">
                             <svg

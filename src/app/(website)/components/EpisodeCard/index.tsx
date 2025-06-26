@@ -53,7 +53,7 @@ const EpisodeCard = ({
   // Grid view (default)
   if (viewMode === "grid") {
     return (
-      <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-main/80 to-gray-900/80 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 h-[400px] flex flex-col border border-gray-800/40 backdrop-blur-md">
+      <div className="group relative overflow-hidden rounded-2xl bg-white shadow-lg border border-gray-200/70 transition-all duration-300 hover:shadow-xl hover:shadow-gray-900/20 hover:-translate-y-1 ring-1 ring-gray-100/70 h-[400px] flex flex-col">
         <Link
           className="flex flex-col h-full"
           href={`/episode/${youtube.uuid}`}
@@ -61,33 +61,52 @@ const EpisodeCard = ({
           <div className="relative overflow-hidden h-[200px] w-full">
             <Image
               alt={`Thumbnail for ${formatEpisodeTitle(youtube.title)}`}
-              className="object-cover transition-transform duration-300 group-hover:scale-110 rounded-t-2xl"
+              className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-t-2xl"
               src={`${youtube.thumbnail}`}
               fill
               priority
             />
-            <div className="absolute top-2 right-2 rounded-full bg-main/90 px-3 py-1 text-xs font-semibold text-white shadow-md">
+            {/* Light overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent"></div>
+            
+            {/* Episode info badge */}
+            <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-gray-700 text-xs font-medium px-3 py-1.5 rounded-full border border-gray-200/50 shadow-sm">
               {youtube.publishedAt
                 ? formatDate(youtube.publishedAt)
                 : `S${youtube.seasonNumber}E${youtube.episodeNumber}`}
             </div>
           </div>
-          <div
-            className="flex flex-col justify-between flex-grow p-5 text-white font-sans"
-            style={{ fontFamily: "Open Sans, sans-serif" }}
-          >
-            <div>
-              <h3 className="text-xl font-bold tracking-tight group-hover:text-accent transition-colors duration-300 line-clamp-2 h-[56px]">
+          <div className="flex flex-col justify-between flex-grow p-6 text-gray-900">
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold leading-tight group-hover:text-primary transition-colors duration-200 line-clamp-2">
                 {formatEpisodeTitle(youtube.title)}
               </h3>
-              <p className="mt-2 text-base text-gray-300 line-clamp-3 h-[60px]">
+              <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
                 {youtube.blurb}
               </p>
             </div>
-            <button className="mt-4 h-11 flex items-center justify-center gap-2 text-base font-semibold text-white bg-primary hover:bg-accent transition-colors duration-300 rounded-lg shadow-md px-6 focus:outline-none focus:ring-2 focus:ring-accent">
-              <Play className="mr-2 h-4 w-4" />
-              Watch now
-            </button>
+            
+            {/* Button */}
+            <div className="mt-4 pt-2">
+              <div className="inline-flex items-center text-primary font-medium text-sm group-hover:text-primary/80 transition-colors duration-200">
+                <Play className="h-4 w-4 mr-2" fill="currentColor" />
+                Listen Now
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="ml-1 transition-transform duration-200 group-hover:translate-x-0.5"
+                >
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              </div>
+            </div>
           </div>
         </Link>
       </div>
@@ -96,7 +115,7 @@ const EpisodeCard = ({
 
   // List view
   return (
-    <div className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-slate-200 overflow-hidden">
+    <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl hover:shadow-gray-900/20 transition-all duration-300 border border-gray-200/70 overflow-hidden ring-1 ring-gray-100/70 hover:-translate-y-1">
       <Link href={`/episode/${youtube.uuid}`} className="flex">
         <div className="relative w-48 h-32 flex-shrink-0">
           <Image
@@ -106,26 +125,28 @@ const EpisodeCard = ({
             fill
             sizes="192px"
           />
+          {/* Light overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent"></div>
         </div>
         <div className="flex-1 p-6 flex flex-col justify-between">
-          <div>
-            <div className="flex items-start justify-between mb-2">
-              <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">
+          <div className="space-y-3">
+            <div className="flex items-start justify-between">
+              <h3 className="text-lg font-semibold text-gray-900 group-hover:text-primary transition-colors duration-200 line-clamp-2 flex-1 mr-4">
                 {formatEpisodeTitle(youtube.title)}
               </h3>
-              <span className="ml-4 px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full whitespace-nowrap">
+              <div className="bg-gray-50 text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full whitespace-nowrap border border-gray-200">
                 {youtube.publishedAt
                   ? formatDate(youtube.publishedAt)
                   : `S${youtube.seasonNumber}E${youtube.episodeNumber}`}
-              </span>
+              </div>
             </div>
-            <p className="text-slate-600 text-sm line-clamp-2 mb-3">
+            <p className="text-gray-600 text-sm line-clamp-2 leading-relaxed">
               {youtube.blurb}
             </p>
             {guests && guests.length > 0 && (
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs text-slate-500">Featuring:</span>
-                <span className="text-xs text-slate-700">
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-500 font-medium">Featuring:</span>
+                <span className="text-xs text-gray-700">
                   {guests
                     .slice(0, 2)
                     .filter((guest) => guest?.name) // Filter out guests without names
@@ -136,11 +157,25 @@ const EpisodeCard = ({
               </div>
             )}
           </div>
-          <div className="flex items-center justify-between">
-            <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-300">
-              <Play className="h-4 w-4" />
-              Watch Episode
-            </button>
+          <div className="flex items-center justify-between pt-2">
+            <div className="inline-flex items-center text-primary font-medium text-sm group-hover:text-primary/80 transition-colors duration-200">
+              <Play className="h-4 w-4 mr-2" fill="currentColor" />
+              Listen Now
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="ml-1 transition-transform duration-200 group-hover:translate-x-0.5"
+              >
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </div>
           </div>
         </div>
       </Link>
