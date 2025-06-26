@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { formatEpisodeTitle } from "./formatTitle";
 
 interface Episode {
   episodeName?: string;
@@ -78,13 +79,9 @@ export default async function processMetadata(data: Data): Promise<Metadata> {
     ? `https://www.youtube.com/watch?v=${youtubeId}`
     : episode.url;
 
-  // Format title with episode information
-  let fullTitle = episodeTitle;
-  if (seasonNumber && episodeNumber) {
-    fullTitle = `S${seasonNumber}E${episodeNumber}: ${episodeTitle}`;
-  } else if (episodeNumber) {
-    fullTitle = `Episode ${episodeNumber}: ${episodeTitle}`;
-  }
+  // Use clean episode title without episode/season prefix
+  const rawTitle = episodeTitle;
+  const fullTitle = formatEpisodeTitle(rawTitle);
 
   // Enhanced description with guest information
   let enhancedDescription = episodeDescription;

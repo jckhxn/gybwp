@@ -1,6 +1,7 @@
 // locate.ts
 import { DocumentLocationResolver } from "sanity/presentation";
 import { map } from "rxjs";
+import { formatEpisodeTitle } from "../../../lib/formatTitle";
 
 // Pass 'context' as the second argument
 export const locate: DocumentLocationResolver = (params, context) => {
@@ -29,7 +30,7 @@ export const locate: DocumentLocationResolver = (params, context) => {
         return {
           locations: [
             {
-              title: doc.youtube.title || "Untitled",
+              title: formatEpisodeTitle(doc.youtube.title) || "Untitled",
               href: `/episode/${doc.youtube.uuid}`,
             },
           ],

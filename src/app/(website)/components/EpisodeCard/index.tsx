@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import { Play } from "lucide-react";
+import { formatEpisodeTitle } from "../../../../lib/formatTitle";
 
 type YoutubeData = {
   title?: string;
@@ -59,7 +60,7 @@ const EpisodeCard = ({
         >
           <div className="relative overflow-hidden h-[200px] w-full">
             <Image
-              alt={`Thumbnail for ${youtube.title}`}
+              alt={`Thumbnail for ${formatEpisodeTitle(youtube.title)}`}
               className="object-cover transition-transform duration-300 group-hover:scale-110 rounded-t-2xl"
               src={`${youtube.thumbnail}`}
               fill
@@ -77,7 +78,7 @@ const EpisodeCard = ({
           >
             <div>
               <h3 className="text-xl font-bold tracking-tight group-hover:text-accent transition-colors duration-300 line-clamp-2 h-[56px]">
-                {youtube.title}
+                {formatEpisodeTitle(youtube.title)}
               </h3>
               <p className="mt-2 text-base text-gray-300 line-clamp-3 h-[60px]">
                 {youtube.blurb}
@@ -99,7 +100,7 @@ const EpisodeCard = ({
       <Link href={`/episode/${youtube.uuid}`} className="flex">
         <div className="relative w-48 h-32 flex-shrink-0">
           <Image
-            alt={`Thumbnail for ${youtube.title}`}
+            alt={`Thumbnail for ${formatEpisodeTitle(youtube.title)}`}
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             src={`${youtube.thumbnail}`}
             fill
@@ -110,7 +111,7 @@ const EpisodeCard = ({
           <div>
             <div className="flex items-start justify-between mb-2">
               <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">
-                {youtube.title}
+                {formatEpisodeTitle(youtube.title)}
               </h3>
               <span className="ml-4 px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full whitespace-nowrap">
                 {youtube.publishedAt

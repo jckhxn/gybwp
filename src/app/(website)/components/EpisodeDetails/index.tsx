@@ -25,6 +25,7 @@ import {
 // Fix import paths to use @/src/app/(website)/components instead of full paths
 import Button from "@/src/app/(website)/components/ui/button";
 import { Separator } from "@/src/app/(website)/components/ui/separator";
+import { formatEpisodeTitle } from "@/src/lib/formatTitle";
 import {
   Avatar,
   AvatarFallback,
@@ -125,8 +126,9 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   const episode = Array.isArray(data) ? data[0] : data;
 
   // Extract data from Sanity document
-  const title =
+  const rawTitle =
     episode?.youtube?.title || episode?.episodeName || "Untitled Episode";
+  const title = formatEpisodeTitle(rawTitle);
   const blurb = episode?.youtube?.blurb || episode?.blurb || "";
   const seasonNumber =
     episode?.youtube?.seasonNumber || episode?.seasonNumber || "";

@@ -12,6 +12,7 @@ import EpisodeDetails from "@/src/app/(website)/components/EpisodeDetails/";
 import { PODCAST_DETAILS_QUERY } from "../../lib/queries";
 import { loadQuery } from "@/src/app/(website)/lib/store";
 import processMetadata from "@/src/lib/processMetadata";
+import { formatEpisodeTitle } from "@/src/lib/formatTitle";
 
 type PageProps = {
   params: Promise<{ uuid: string }>;
@@ -94,13 +95,9 @@ export async function generateMetadata({
       ? `https://www.youtube.com/watch?v=${youtubeId}`
       : null;
 
-    // Format episode title with episode/season numbers
-    let fullTitle = title;
-    if (seasonNumber && episodeNumber) {
-      fullTitle = `S${seasonNumber}E${episodeNumber}: ${title}`;
-    } else if (episodeNumber) {
-      fullTitle = `Episode ${episodeNumber}: ${title}`;
-    }
+    // Use clean episode title without episode/season prefix
+    const rawTitle = title;
+    const fullTitle = formatEpisodeTitle(rawTitle);
 
     // Get guest names for description enhancement
     const guestNames =
