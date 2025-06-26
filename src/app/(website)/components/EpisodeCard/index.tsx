@@ -68,7 +68,7 @@ const EpisodeCard = ({
             />
             {/* Light overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent"></div>
-            
+
             {/* Episode info badge */}
             <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-gray-700 text-xs font-medium px-3 py-1.5 rounded-full border border-gray-200/50 shadow-sm">
               {youtube.publishedAt
@@ -85,7 +85,7 @@ const EpisodeCard = ({
                 {youtube.blurb}
               </p>
             </div>
-            
+
             {/* Button */}
             <div className="mt-4 pt-2">
               <div className="inline-flex items-center text-primary font-medium text-sm group-hover:text-primary/80 transition-colors duration-200">
@@ -145,7 +145,9 @@ const EpisodeCard = ({
             </p>
             {guests && guests.length > 0 && (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-500 font-medium">Featuring:</span>
+                <span className="text-xs text-gray-500 font-medium">
+                  Featuring:
+                </span>
                 <span className="text-xs text-gray-700">
                   {guests
                     .slice(0, 2)

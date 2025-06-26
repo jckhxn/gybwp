@@ -179,7 +179,7 @@ export function EpisodesPage() {
             >
               <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 px-4 py-2 text-sm font-medium text-primary border border-primary/30">
                 <Play className="h-4 w-4" />
-                All Episodes
+                Episode Library
               </div>
             </motion.div>
 
@@ -189,7 +189,7 @@ export function EpisodesPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-6 leading-[1.1]"
             >
-              All Episodes
+              Browse Our Episodes
             </motion.h1>
 
             <motion.p

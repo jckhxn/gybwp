@@ -65,7 +65,9 @@ export default function PodcastPreview({
         <div className="md:px-20 py-6 w-full"></div>
         <div className="flex flex-col-reverse xl:flex-row flex-wrap justify-around mx-10 mb-10 mt-4 xl:mt-0">
           <div className="flex flex-col mt-12 lg:max-w-[40vw]">
-            <h2 className="text-2xl font-bold">{formatEpisodeTitle(data.youtube.title)}</h2>
+            <h2 className="text-2xl font-bold">
+              {formatEpisodeTitle(data.youtube.title)}
+            </h2>
             <div className="mb-8 font-light">
               Season {data.youtube.seasonNumber} | Episode{" "}
               {data.youtube.episodeNumber}
