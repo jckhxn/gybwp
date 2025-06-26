@@ -183,11 +183,13 @@ export const LatestEpisode = () => {
               <div className="flex flex-col justify-center text-gray-900">
                 {/* Episode metadata */}
                 <div className="flex flex-wrap items-center gap-3 mb-4">
-                  {latestEpisode.seasonNumber && latestEpisode.episodeNumber && (
-                    <div className="inline-flex items-center bg-gradient-to-r from-primary/10 to-secondary/10 text-primary text-sm font-semibold px-3 py-1.5 rounded-full border border-primary/20">
-                      Season {latestEpisode.seasonNumber}, Episode {latestEpisode.episodeNumber}
-                    </div>
-                  )}
+                  {latestEpisode.seasonNumber &&
+                    latestEpisode.episodeNumber && (
+                      <div className="inline-flex items-center bg-gradient-to-r from-primary/10 to-secondary/10 text-primary text-sm font-semibold px-3 py-1.5 rounded-full border border-primary/20">
+                        Season {latestEpisode.seasonNumber}, Episode{" "}
+                        {latestEpisode.episodeNumber}
+                      </div>
+                    )}
                   <div className="flex items-center text-gray-500 text-sm">
                     <Calendar className="h-4 w-4 mr-2" />
                     {formatEpisodeDate(latestEpisode.publishedAt)}
@@ -195,7 +197,9 @@ export const LatestEpisode = () => {
                 </div>
 
                 <h3 className="text-2xl md:text-3xl font-bold mb-4 text-gray-900 leading-tight">
-                  {formatEpisodeTitle(latestEpisode.title || "Latest Episode").replace(/\.$/, "")}
+                  {formatEpisodeTitle(
+                    latestEpisode.title || "Latest Episode"
+                  ).replace(/\.$/, "")}
                 </h3>
 
                 <div className="space-y-6">
@@ -213,7 +217,7 @@ export const LatestEpisode = () => {
                       Listen Now
                       <ArrowRight className="ml-2 h-4 w-4 transform transition-transform duration-200 group-hover:translate-x-1" />
                     </Link>
-                    
+
                     <Link
                       href={`/episode/${latestEpisode.uuid}`}
                       className="group inline-flex items-center justify-center rounded-xl bg-white hover:bg-gray-50 text-gray-700 hover:text-gray-900 px-6 py-3 text-base font-medium border border-gray-300 hover:border-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500/20 focus:ring-offset-2"

@@ -4,10 +4,10 @@
  * @returns The clean title without the prefix
  */
 export function formatEpisodeTitle(title?: string): string {
-  if (!title) return title || '';
-  
+  if (!title) return title || "";
+
   // Remove "SxEx" prefix pattern (e.g., "S2E15: Episode Title" -> "Episode Title")
-  const cleanTitle = title.replace(/^S\d+E\d+:\s*/, '');
-  
+  const cleanTitle = title.replace(/^S\d+E\d+:\s*/, "");
+
   return cleanTitle;
 }
