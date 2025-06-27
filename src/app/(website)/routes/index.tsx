@@ -11,7 +11,7 @@ const routes = {
     episode: "/episode",
     podcastDetails: (podcastId: string) => `/${podcastId}`,
     sponsors: "/sponsors",
-    sponsorsDetails: (sponsorId: string) => `/sponsors/${sponsorId}`,
+    sponsorsDetails: (sponsorSlug: string) => `/sponsors/${sponsorSlug}`,
     consulting: "/consulting",
     news: "/news",
     tou: "/tou",

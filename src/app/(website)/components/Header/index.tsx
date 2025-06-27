@@ -19,7 +19,10 @@ const Navigation = () => {
       <header className="sticky top-0 z-50 w-full border-b border-white/20 bg-white/80 backdrop-blur-md">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
-            <Link href={routes.internal.home} className="flex items-center gap-2">
+            <Link
+              href={routes.internal.home}
+              className="flex items-center gap-2"
+            >
               <Image
                 src={logo}
                 alt="Growing Your Business With People Logo"
@@ -67,7 +70,7 @@ const Navigation = () => {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className={`h-6 w-6 transition-transform ${mobileNavOpen ? 'rotate-90' : ''}`}
+              className={`h-6 w-6 transition-transform ${mobileNavOpen ? "rotate-90" : ""}`}
             >
               {mobileNavOpen ? (
                 <>
@@ -89,7 +92,10 @@ const Navigation = () => {
       {/* Mobile Navigation Menu */}
       {mobileNavOpen && (
         <div className="fixed inset-0 top-16 z-40 md:hidden">
-          <div className="fixed inset-0 bg-black/20 backdrop-blur-sm" onClick={handleMobileHamburgerClick} />
+          <div
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm"
+            onClick={handleMobileHamburgerClick}
+          />
           <div className="relative bg-white border-b border-gray-200 shadow-lg">
             <nav className="container py-6">
               <div className="flex flex-col space-y-4">

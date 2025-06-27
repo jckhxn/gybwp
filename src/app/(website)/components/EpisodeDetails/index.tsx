@@ -94,23 +94,17 @@ const SubscribeForm = () => (
       href={CTA.buttonUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center justify-center gap-2 rounded-md bg-secondary px-8 py-3 text-base font-medium text-white shadow-md transition-all hover:bg-secondary/90 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+      className="inline-flex items-center justify-center gap-3 rounded-lg bg-gradient-to-r from-primary to-primary-light hover:from-primary-light hover:to-primary px-8 py-3 text-base font-medium text-white shadow-lg hover:shadow-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
+        width="20"
+        height="20"
         viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="h-5 w-5"
+        fill="white"
+        className="w-5 h-5"
       >
-        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-        <rect width="4" height="12" x="2" y="9"></rect>
-        <circle cx="4" cy="4" r="2"></circle>
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
       </svg>
       Subscribe on LinkedIn
     </Link>
@@ -125,7 +119,23 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   // For redesign just grab the document manually.
   const episode = Array.isArray(data) ? data[0] : data;
 
-  // Extract data from Sanity document
+  // Handle cases where episode data is missing or invalid
+  if (!episode) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            Episode Not Found
+          </h1>
+          <p className="text-gray-600">
+            The requested episode could not be loaded.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Extract data from Sanity document with proper fallbacks
   const rawTitle =
     episode?.youtube?.title || episode?.episodeName || "Untitled Episode";
   const title = formatEpisodeTitle(rawTitle);
@@ -145,7 +155,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   const duration = episode?.youtube?.duration || "";
 
   // Get sponsors from either direct sponsors or from season
-  const episodeSponsors = episode?.season.sponsors || [];
+  const episodeSponsors = episode?.season?.sponsors || [];
   const seasonSponsors = episode?.season?.sponsors || [];
   const sponsors =
     episodeSponsors.length > 0 ? episodeSponsors : seasonSponsors;
@@ -206,7 +216,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
     ? generateEnhancedVideoObjectStructuredData({
         title,
         description: description || blurb,
-        youtubeId: episode.youtube.id,
+        youtubeId: episode?.youtube?.id,
         publishedAt,
         duration,
         uuid,
@@ -416,116 +426,166 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
         <JSONLD data={videoStructuredData} id="video-object-jsonld" />
       )}
 
-      <div className="min-h-screen bg-background text-foreground">
-        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Main Content */}
-            <div className="lg:col-span-2 space-y-8">
-              {/* Episode Navigation */}
-              <div className="flex justify-between items-center">
-                {episode?.prevEpisode ? (
-                  <Link href={`${episode.prevEpisode}`}>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex items-center gap-1"
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                      Previous Episode
-                    </Button>
-                  </Link>
-                ) : (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex items-center gap-1 opacity-50"
-                    disabled
-                  >
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+        {/* Hero Section */}
+        <div className="relative bg-gradient-to-br from-primary/5 via-white to-secondary/5 border-b border-gray-100">
+          <div className="absolute inset-0 opacity-30">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]"></div>
+          </div>
+
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
+            {/* Episode Navigation */}
+            <div className="flex justify-between items-center mb-8">
+              {episode?.prevEpisode ? (
+                <Link href={`${episode.prevEpisode}`}>
+                  <button className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-gray-200 hover:bg-white hover:shadow-sm transition-all px-4 py-2 rounded-lg text-sm font-medium">
                     <ChevronLeft className="h-4 w-4" />
                     Previous Episode
-                  </Button>
-                )}
+                  </button>
+                </Link>
+              ) : (
+                <button
+                  className="flex items-center gap-2 bg-white/50 backdrop-blur-sm border border-gray-200 opacity-50 px-4 py-2 rounded-lg text-sm font-medium"
+                  disabled
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Previous Episode
+                </button>
+              )}
 
-                {episode?.nextEpisode ? (
-                  <Link href={`${episode.nextEpisode}`}>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex items-center gap-1"
-                    >
-                      Next Episode
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                ) : (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex items-center gap-1 opacity-50"
-                    disabled
-                  >
+              {episode?.nextEpisode ? (
+                <Link href={`${episode.nextEpisode}`}>
+                  <button className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-gray-200 hover:bg-white hover:shadow-sm transition-all px-4 py-2 rounded-lg text-sm font-medium">
                     Next Episode
                     <ChevronRight className="h-4 w-4" />
-                  </Button>
+                  </button>
+                </Link>
+              ) : (
+                <button
+                  className="flex items-center gap-2 bg-white/50 backdrop-blur-sm border border-gray-200 opacity-50 px-4 py-2 rounded-lg text-sm font-medium"
+                  disabled
+                >
+                  Next Episode
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+
+            {/* Episode Header */}
+            <div className="text-center max-w-4xl mx-auto">
+              {(seasonNumber || episodeNumber) && (
+                <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 px-4 py-2 text-sm font-medium text-primary border border-primary/20 mb-6">
+                  {seasonNumber && `Season ${seasonNumber}`}
+                  {seasonNumber && episodeNumber && " • "}
+                  {episodeNumber && `Episode ${episodeNumber}`}
+                </div>
+              )}
+
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                {title}
+              </h1>
+
+              {blurb && (
+                <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-8 max-w-3xl mx-auto">
+                  {blurb}
+                </p>
+              )}
+
+              <div className="flex flex-wrap justify-center gap-6 text-gray-600 mb-8">
+                {publishedAt && (
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 bg-white rounded-full shadow-sm">
+                      <Calendar className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="font-medium">
+                      {formatDate(publishedAt)}
+                    </span>
+                  </div>
+                )}
+                {duration && (
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 bg-white rounded-full shadow-sm">
+                      <Clock className="h-4 w-4 text-primary" />
+                    </div>
+                    <span className="font-medium">
+                      {formatDuration(duration)}
+                    </span>
+                  </div>
                 )}
               </div>
+            </div>
+          </div>
+        </div>
 
-              {/* Episode Header */}
-              <div>
-                <Badge variant="outline" className="mb-2">
-                  Season {seasonNumber} • Episode {episodeNumber}
-                </Badge>
-                <h1 className="text-3xl font-bold tracking-tight mb-4">
-                  {title}
-                </h1>
-                <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
-                  {publishedAt && (
-                    <div className="flex items-center gap-1">
-                      <Calendar className="h-4 w-4" />
-                      <span>{formatDate(publishedAt)}</span>
-                    </div>
-                  )}
-                  <div className="flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    <span>{formatDuration(duration)}</span>
+        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-10">
+              {/* Video Player - only show if video ID exists */}
+              {episode?.youtube?.id ? (
+                <div className="relative">
+                  <div className="absolute -inset-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl blur-xl opacity-50"></div>
+                  <div className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <StickyVideoPlayer
+                      videoId={episode.youtube.id}
+                      title={title}
+                      onPlayerRef={(ref) => {
+                        if (ref?.current) {
+                          // @ts-expect-error - assigning ref for player controls
+                          playerRef.current = ref.current;
+                        }
+                      }}
+                      onPlayStateChange={handlePlayStateChange}
+                    />
                   </div>
                 </div>
-              </div>
-
-              {/* Video Player */}
-              <StickyVideoPlayer
-                videoId={episode?.youtube?.id}
-                title={title}
-                onPlayerRef={(ref) => {
-                  if (ref?.current) {
-                    // @ts-expect-error - assigning ref for player controls
-                    playerRef.current = ref.current;
-                  }
-                }}
-                onPlayStateChange={handlePlayStateChange}
-              />
+              ) : (
+                <div className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-8 text-center">
+                  <div className="text-gray-500">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                      <svg
+                        className="w-8 h-8"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm3 2h6v4H7V5zm8 8v2h1v-2h-1zm-2-2H7v4h6v-4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                      Video Not Available
+                    </h3>
+                    <p className="text-gray-600">
+                      This episode doesn't have an associated video.
+                    </p>
+                  </div>
+                </div>
+              )}
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
                 <Button
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-3 px-8 py-4 text-base font-medium bg-gradient-to-r from-primary to-primary-light hover:from-primary-light hover:to-primary shadow-lg hover:shadow-xl transition-all duration-200"
                   onClick={handlePlayClick}
                 >
                   {isPlaying ? (
                     <>
-                      <Pause className="h-4 w-4" />
+                      <Pause className="h-5 w-5" />
                       Pause Episode
                     </>
                   ) : (
                     <>
-                      <Play className="h-4 w-4" />
+                      <Play className="h-5 w-5" />
                       Play Episode
                     </>
                   )}
                 </Button>
                 <Button
                   variant="outline"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-3 px-6 py-4 text-base font-medium bg-white border-gray-300 hover:bg-gray-50 hover:border-primary/30 hover:text-primary shadow-sm hover:shadow-md transition-all duration-200"
                   onClick={() => setIsShareModalOpen(true)}
                 >
                   <Share2 className="h-4 w-4" />
@@ -534,15 +594,35 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
               </div>
 
               {/* Jump to Section */}
-              <div className="bg-muted/30 dark:bg-muted/10 rounded-lg p-4">
-                <h3 className="text-sm font-medium mb-3">Jump to Section:</h3>
-                <div className="flex flex-wrap gap-2">
+              <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-primary"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 6h16M4 12h16M4 18h16"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Quick Navigation
+                  </h3>
+                </div>
+                <div className="flex flex-wrap gap-3">
                   {/* Overview is always shown if there's a description */}
                   {description && (
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-xs"
+                      className="text-sm font-medium bg-white border-gray-300 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200"
                       onClick={() => {
                         const element = document.getElementById("overview");
                         if (element) {
@@ -568,7 +648,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-xs"
+                      className="text-sm font-medium bg-white border-gray-300 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200"
                       onClick={() => {
                         const element =
                           document.getElementById("key-takeaways");
@@ -595,7 +675,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-xs"
+                      className="text-sm font-medium bg-white border-gray-300 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200"
                       onClick={() => {
                         const element =
                           document.getElementById("discussion-topics");
@@ -622,7 +702,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-xs"
+                      className="text-sm font-medium bg-white border-gray-300 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200"
                       onClick={() => {
                         const element =
                           document.getElementById("episode-highlights");
@@ -649,7 +729,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-xs"
+                      className="text-sm font-medium bg-white border-gray-300 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200"
                       onClick={() => {
                         const element = document.getElementById("transcript");
                         if (element) {
@@ -671,13 +751,13 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   )}
 
                   {/* Featured Guest section */}
-                  {data.guests &&
-                    Array.isArray(data.guests) &&
-                    data.guests.length > 0 && (
+                  {episode?.guests &&
+                    Array.isArray(episode.guests) &&
+                    episode.guests.length > 0 && (
                       <Button
                         variant="outline"
                         size="sm"
-                        className="text-xs"
+                        className="text-sm font-medium bg-white border-gray-300 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200"
                         onClick={() => {
                           const element =
                             document.getElementById("featured-guest");
@@ -696,31 +776,59 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                           }
                         }}
                       >
-                        Featured Guest
+                        Featured Guests
                       </Button>
                     )}
                 </div>
               </div>
 
-              <Separator />
+              {/* Decorative Separator */}
+              <div className="flex items-center justify-center py-8">
+                <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent w-full max-w-md"></div>
+                <div className="mx-4 p-2 bg-white rounded-full border border-gray-200 shadow-sm">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                </div>
+                <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent w-full max-w-md"></div>
+              </div>
 
               {/* Episode Content Sections */}
-              <div className="space-y-8">
+              <div className="space-y-12">
                 {/* Overview Section - always shown if there's a description */}
                 {description && (
                   <div
                     id="overview"
-                    className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                    className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
                   >
-                    <h2 className="text-xl font-semibold mb-3">
-                      Episode Overview
-                    </h2>
-                    <div className="space-y-4 text-muted-foreground leading-relaxed">
-                      {formatDescriptionText(description).map(
-                        (paragraph, index) => (
-                          <p key={index}>{paragraph}</p>
-                        )
-                      )}
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary"></div>
+                    <div className="p-8">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="p-3 bg-primary/10 rounded-xl">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 text-primary"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                            />
+                          </svg>
+                        </div>
+                        <h2 className="text-2xl font-bold text-gray-900">
+                          Episode Overview
+                        </h2>
+                      </div>
+                      <div className="space-y-4 text-gray-700 leading-relaxed text-lg">
+                        {formatDescriptionText(description).map(
+                          (paragraph, index) => (
+                            <p key={index}>{paragraph}</p>
+                          )
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -729,16 +837,46 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 {takeaways && takeaways.length > 0 && (
                   <div
                     id="key-takeaways"
-                    className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                    className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
                   >
-                    <h2 className="text-xl font-semibold mb-3">
-                      Key Takeaways
-                    </h2>
-                    <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                      {takeaways.map((takeaway: string, index: number) => (
-                        <li key={index}>{takeaway}</li>
-                      ))}
-                    </ul>
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500"></div>
+                    <div className="p-8">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="p-3 bg-yellow-100 rounded-xl">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 text-yellow-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                            />
+                          </svg>
+                        </div>
+                        <h2 className="text-2xl font-bold text-gray-900">
+                          Key Takeaways
+                        </h2>
+                      </div>
+                      <div className="space-y-4">
+                        {takeaways.map((takeaway: string, index: number) => (
+                          <div key={index} className="flex items-start gap-4">
+                            <div className="flex-shrink-0 w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center mt-1">
+                              <span className="text-sm font-bold text-yellow-600">
+                                {index + 1}
+                              </span>
+                            </div>
+                            <p className="text-gray-700 text-lg leading-relaxed">
+                              {takeaway}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
 
@@ -746,24 +884,48 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 {discussionTopics && discussionTopics.length > 0 && (
                   <div
                     id="discussion-topics"
-                    className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                    className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
                   >
-                    <h2 className="text-xl font-semibold mb-3">
-                      Discussion Topics
-                    </h2>
-                    <div className="space-y-4">
-                      {discussionTopics.map(
-                        (topic: DiscussionTopic, index: number) => (
-                          <div key={index}>
-                            <h3 className="font-medium text-base">
-                              {topic.title || `Topic ${index + 1}`}
-                            </h3>
-                            <p className="text-muted-foreground">
-                              {topic.description || ""}
-                            </p>
-                          </div>
-                        )
-                      )}
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500"></div>
+                    <div className="p-8">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="p-3 bg-blue-100 rounded-xl">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 text-blue-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                            />
+                          </svg>
+                        </div>
+                        <h2 className="text-2xl font-bold text-gray-900">
+                          Discussion Topics
+                        </h2>
+                      </div>
+                      <div className="grid gap-6">
+                        {discussionTopics.map(
+                          (topic: DiscussionTopic, index: number) => (
+                            <div
+                              key={index}
+                              className="border-l-4 border-blue-400 pl-6"
+                            >
+                              <h3 className="font-semibold text-xl text-gray-900 mb-2">
+                                {topic.title || `Topic ${index + 1}`}
+                              </h3>
+                              <p className="text-gray-700 text-lg leading-relaxed">
+                                {topic.description || ""}
+                              </p>
+                            </div>
+                          )
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -772,59 +934,101 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 {highlights && highlights.length > 0 && (
                   <div
                     id="episode-highlights"
-                    className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                    className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
                   >
-                    <h2 className="text-xl font-semibold mb-3">
-                      Episode Highlights
-                    </h2>
-                    <div className="space-y-3">
-                      {highlights.map((highlight: Highlight, index: number) => (
-                        <div key={index} className="flex gap-3">
-                          <button
-                            onClick={() => {
-                              if (
-                                playerRef.current &&
-                                highlight.timestamp &&
-                                typeof highlight.timestamp === "string"
-                              ) {
-                                // Convert timestamp to seconds
-                                const parts = highlight.timestamp.split(":");
-                                let seconds = 0;
-                                if (parts.length === 3) {
-                                  // HH:MM:SS
-                                  seconds =
-                                    parseInt(parts[0]) * 3600 +
-                                    parseInt(parts[1]) * 60 +
-                                    parseInt(parts[2]);
-                                } else if (parts.length === 2) {
-                                  // MM:SS
-                                  seconds =
-                                    parseInt(parts[0]) * 60 +
-                                    parseInt(parts[1]);
-                                } else if (parts.length === 1) {
-                                  // SS
-                                  seconds = parseInt(parts[0]);
-                                }
-
-                                console.log(
-                                  `Timestamp clicked: ${highlight.timestamp} -> ${seconds} seconds`
-                                );
-                                playerRef.current.seekTo(seconds, true); // Pass true to play after seek
-                              }
-                            }}
-                            className=""
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-teal-500"></div>
+                    <div className="p-8">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="p-3 bg-green-100 rounded-xl">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 text-green-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                           >
-                            <span className="bg-primary/10 text-primary font-medium rounded-full h-6 w-16 flex items-center justify-center text-xs">
-                              {highlight.timestamp || "00:00"}
-                            </span>
-                          </button>
-                          <div>
-                            <p className="font-medium">
-                              {highlight.title || `Highlight ${index + 1}`}
-                            </p>
-                          </div>
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                            />
+                          </svg>
                         </div>
-                      ))}
+                        <h2 className="text-2xl font-bold text-gray-900">
+                          Episode Highlights
+                        </h2>
+                      </div>
+                      <div className="space-y-6">
+                        {highlights.map(
+                          (highlight: Highlight, index: number) => (
+                            <div key={index} className="flex items-start gap-4">
+                              <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mt-1">
+                                <span className="text-sm font-bold text-green-600">
+                                  {index + 1}
+                                </span>
+                              </div>
+                              <div className="flex-grow">
+                                <div className="flex items-center gap-3 mb-2">
+                                  <h3 className="font-semibold text-xl text-gray-900">
+                                    {highlight.title ||
+                                      `Highlight ${index + 1}`}
+                                  </h3>
+                                  <button
+                                    onClick={() => {
+                                      if (
+                                        playerRef.current &&
+                                        highlight.timestamp &&
+                                        typeof highlight.timestamp === "string"
+                                      ) {
+                                        // Convert timestamp to seconds
+                                        const parts =
+                                          highlight.timestamp.split(":");
+                                        let seconds = 0;
+                                        if (parts.length === 3) {
+                                          // HH:MM:SS
+                                          seconds =
+                                            parseInt(parts[0]) * 3600 +
+                                            parseInt(parts[1]) * 60 +
+                                            parseInt(parts[2]);
+                                        } else if (parts.length === 2) {
+                                          // MM:SS
+                                          seconds =
+                                            parseInt(parts[0]) * 60 +
+                                            parseInt(parts[1]);
+                                        } else if (parts.length === 1) {
+                                          // SS
+                                          seconds = parseInt(parts[0]);
+                                        }
+
+                                        console.log(
+                                          `Timestamp clicked: ${highlight.timestamp} -> ${seconds} seconds`
+                                        );
+                                        playerRef.current.seekTo(seconds, true);
+                                      }
+                                    }}
+                                    className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-teal-500 text-white font-medium rounded-lg px-3 py-1.5 text-sm hover:from-green-600 hover:to-teal-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-3 w-3"
+                                      fill="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path d="M8 5v14l11-7z" />
+                                    </svg>
+                                    {highlight.timestamp || "00:00"}
+                                  </button>
+                                </div>
+                                <p className="text-gray-600 text-lg leading-relaxed">
+                                  Click the timestamp to jump to this moment in
+                                  the episode
+                                </p>
+                              </div>
+                            </div>
+                          )
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -833,77 +1037,155 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 {transcript && (
                   <div
                     id="transcript"
-                    className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                    className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
                   >
-                    <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-xl font-semibold">
-                        Episode Transcript
-                      </h2>
-                      <Button variant="outline" size="sm">
-                        View Full Transcript
-                      </Button>
-                    </div>
-                    <div className="max-h-64 overflow-y-auto space-y-4">
-                      <PortableText
-                        value={transcript}
-                        components={{
-                          block: (props) => {
-                            const { value, children } = props;
-                            const style = value.style || "normal";
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 to-indigo-500"></div>
+                    <div className="p-8">
+                      <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-3">
+                          <div className="p-3 bg-purple-100 rounded-xl">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-6 w-6 text-purple-600"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                              />
+                            </svg>
+                          </div>
+                          <h2 className="text-2xl font-bold text-gray-900">
+                            Episode Transcript
+                          </h2>
+                        </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="bg-white border-purple-300 text-purple-600 hover:bg-purple-50 hover:border-purple-400 hover:text-purple-700 transition-all duration-200"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 mr-2"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                            />
+                          </svg>
+                          View Full Transcript
+                        </Button>
+                      </div>
 
-                            if (style === "h4") {
-                              return (
-                                <h4 className="font-medium text-base mt-4 mb-2">
-                                  {children}
-                                </h4>
-                              );
-                            }
+                      <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                        <div className="max-h-80 overflow-y-scroll space-y-4 pr-2 transcript-scroll">
+                          <PortableText
+                            value={transcript}
+                            components={{
+                              block: (props) => {
+                                const { value, children } = props;
+                                const style = value.style || "normal";
 
-                            return (
-                              <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                                {children}
-                              </p>
-                            );
-                          },
-                          marks: {
-                            strong: ({ children }) => (
-                              <strong>{children}</strong>
-                            ),
-                            em: ({ children }) => <em>{children}</em>,
-                            timestamp: ({ value, children }) => (
-                              <button
-                                className="bg-primary/10 text-primary font-medium rounded-full px-2 py-1 text-xs ml-1 hover:bg-primary/20 transition-colors"
-                                onClick={() => {
-                                  if (playerRef.current && value?.time) {
-                                    // Convert timestamp to seconds
-                                    const parts = value.time.split(":");
-                                    let seconds = 0;
-                                    if (parts.length === 3) {
-                                      // HH:MM:SS
-                                      seconds =
-                                        parseInt(parts[0]) * 3600 +
-                                        parseInt(parts[1]) * 60 +
-                                        parseInt(parts[2]);
-                                    } else if (parts.length === 2) {
-                                      // MM:SS
-                                      seconds =
-                                        parseInt(parts[0]) * 60 +
-                                        parseInt(parts[1]);
-                                    }
+                                if (style === "h4") {
+                                  return (
+                                    <h4 className="font-semibold text-lg text-gray-900 mt-6 mb-3 border-l-4 border-purple-400 pl-4">
+                                      {children}
+                                    </h4>
+                                  );
+                                }
 
-                                    console.log(
-                                      `Inline timestamp clicked: ${value.time} -> ${seconds} seconds`
-                                    );
-                                    playerRef.current.seekTo(seconds, true); // Pass true to play after seek
-                                  }
-                                }}
-                              >
-                                {value?.time || "00:00"}
-                              </button>
-                            ),
-                          },
-                        }}
-                      />
+                                return (
+                                  <p className="text-gray-700 text-base leading-relaxed mb-4">
+                                    {children}
+                                  </p>
+                                );
+                              },
+                              marks: {
+                                strong: ({ children }) => (
+                                  <strong className="font-semibold text-gray-900">
+                                    {children}
+                                  </strong>
+                                ),
+                                em: ({ children }) => (
+                                  <em className="italic text-gray-800">
+                                    {children}
+                                  </em>
+                                ),
+                                timestamp: ({ value, children }) => (
+                                  <button
+                                    className="inline-flex items-center gap-1 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium rounded-md px-2 py-1 text-xs ml-1 hover:from-purple-600 hover:to-indigo-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-1"
+                                    onClick={() => {
+                                      if (playerRef.current && value?.time) {
+                                        // Convert timestamp to seconds
+                                        const parts = value.time.split(":");
+                                        let seconds = 0;
+                                        if (parts.length === 3) {
+                                          // HH:MM:SS
+                                          seconds =
+                                            parseInt(parts[0]) * 3600 +
+                                            parseInt(parts[1]) * 60 +
+                                            parseInt(parts[2]);
+                                        } else if (parts.length === 2) {
+                                          // MM:SS
+                                          seconds =
+                                            parseInt(parts[0]) * 60 +
+                                            parseInt(parts[1]);
+                                        }
+
+                                        console.log(
+                                          `Inline timestamp clicked: ${value.time} -> ${seconds} seconds`
+                                        );
+                                        playerRef.current.seekTo(seconds, true);
+                                      }
+                                    }}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-2.5 w-2.5"
+                                      fill="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path d="M8 5v14l11-7z" />
+                                    </svg>
+                                    {value?.time || "00:00"}
+                                  </button>
+                                ),
+                              },
+                            }}
+                          />
+                        </div>
+
+                        {/* Scroll indicator */}
+                        <div className="mt-4 text-center">
+                          <p className="text-xs text-gray-500 flex items-center justify-center gap-2">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-3 w-3"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                              />
+                            </svg>
+                            Scroll to read more • Click timestamps to jump to
+                            specific moments
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -912,18 +1194,18 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
               <Separator />
 
               {/* Featured Guest */}
-              {data.guests &&
-                Array.isArray(data.guests) &&
-                data.guests.length > 0 && (
+              {episode?.guests &&
+                Array.isArray(episode.guests) &&
+                episode.guests.length > 0 && (
                   <div
                     id="featured-guest"
                     className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
                   >
                     <h2 className="text-xl font-semibold mb-4">
-                      Featured Guest{data.guests.length > 1 ? "s" : ""}
+                      Featured Guest{episode.guests.length > 1 ? "s" : ""}
                     </h2>
                     <div className="space-y-8">
-                      {data.guests.map((guest, index) => (
+                      {episode.guests.map((guest, index) => (
                         <div
                           key={guest._id || index}
                           className="flex flex-col sm:flex-row gap-4 items-start sm:items-center"
@@ -987,18 +1269,42 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
             {/* Sidebar */}
             <div className="space-y-8">
               {/* Subscribe Card */}
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">
-                    Subscribe to our Podcast
-                  </h3>
+              <div className="relative bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary"></div>
+                <div className="p-8">
+                  <div className="text-center mb-6">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-2xl mb-4">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-8 w-8 text-primary"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15.536 7.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M9.879 9.879a3 3 0 000 4.242M6.343 6.343a7 7 0 000 10.314m8.485 0a7 7 0 000-10.314"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                      Subscribe to our Podcast
+                    </h3>
+                    <p className="text-gray-600">
+                      Never miss an episode and get insights directly from
+                      business leaders
+                    </p>
+                  </div>
 
                   <SubscribeForm />
-                  <div className="mt-4">
-                    <p className="text-sm font-medium mb-2">
+
+                  <div className="mt-8 pt-6 border-t border-gray-100">
+                    <p className="text-sm font-semibold text-gray-900 mb-4 text-center">
                       Also available on:
                     </p>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="grid grid-cols-1 gap-3">
                       <Link
                         href="https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511"
                         target="_blank"
@@ -1007,14 +1313,17 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="flex items-center gap-1"
+                          className="flex items-center justify-center gap-3 w-full bg-white border-gray-300 hover:bg-gray-50 hover:border-primary/30 hover:text-primary font-medium py-3"
                         >
-                          <Image
-                            src="/social-logos/apple.png"
-                            alt="Apple Podcasts"
-                            width={16}
-                            height={16}
-                          />
+                          <div className="w-5 h-5 bg-gray-900 rounded flex items-center justify-center">
+                            <Image
+                              src="/social-logos/apple.png"
+                              alt="Apple Podcasts"
+                              width={16}
+                              height={16}
+                              className="brightness-0 invert"
+                            />
+                          </div>
                           Apple Podcasts
                         </Button>
                       </Link>
@@ -1026,14 +1335,17 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="flex items-center gap-1"
+                          className="flex items-center justify-center gap-3 w-full bg-white border-gray-300 hover:bg-gray-50 hover:border-primary/30 hover:text-primary font-medium py-3"
                         >
-                          <Image
-                            src="/social-logos/spotify.png"
-                            alt="Spotify"
-                            width={16}
-                            height={16}
-                          />
+                          <div className="w-5 h-5 bg-green-500 rounded flex items-center justify-center">
+                            <Image
+                              src="/social-logos/spotify.png"
+                              alt="Spotify"
+                              width={16}
+                              height={16}
+                              className="brightness-0 invert"
+                            />
+                          </div>
                           Spotify
                         </Button>
                       </Link>
@@ -1045,29 +1357,54 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="flex items-center gap-1"
+                          className="flex items-center justify-center gap-3 w-full bg-white border-gray-300 hover:bg-gray-50 hover:border-primary/30 hover:text-primary font-medium py-3"
                         >
-                          <Image
-                            src="/social-logos/buzzsprout.png"
-                            alt="Buzzsprout"
-                            width={16}
-                            height={16}
-                          />
+                          <div className="w-5 h-5 bg-orange-500 rounded flex items-center justify-center">
+                            <Image
+                              src="/social-logos/buzzsprout.png"
+                              alt="Buzzsprout"
+                              width={16}
+                              height={16}
+                              className="brightness-0 invert"
+                            />
+                          </div>
                           Buzzsprout
                         </Button>
                       </Link>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
               {/* Sponsors Card - only shown if sponsors exist */}
               {sponsors && sponsors.length > 0 && (
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="text-lg font-semibold mb-6 text-center">
-                      Our Sponsors
-                    </h3>
+                <div className="relative bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-blue-500"></div>
+                  <div className="p-8">
+                    <div className="text-center mb-6">
+                      <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-green-100 to-blue-100 rounded-xl mb-4">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-7 w-7 text-green-600"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                          />
+                        </svg>
+                      </div>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                        Our Sponsors
+                      </h3>
+                      <p className="text-gray-600 text-sm">
+                        Supporting great content and community
+                      </p>
+                    </div>
                     <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
                       {sponsors.map((sponsor: any, index: number) => (
                         <div
@@ -1200,30 +1537,52 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     </div>
 
                     {/* Support Message */}
-                    <div className="mt-6 pt-4 border-t border-gray-100 text-center">
-                      <p className="text-sm text-gray-600">
+                    <div className="mt-8 pt-6 border-t border-gray-100 text-center">
+                      <p className="text-sm text-gray-600 mb-2">
                         Special thanks to our sponsors who help make this
                         podcast possible
                       </p>
                       {sponsors.some(
                         (s) => s.website || s.slug?.current || s.uuid
                       ) && (
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-gray-500">
                           Click on sponsor logos to learn more about them
                         </p>
                       )}
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               )}
 
               {/* Related Episodes */}
               {data.relatedEpisodes && (
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="text-lg font-semibold mb-4">
-                      Related Episodes
-                    </h3>
+                <div className="relative bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 to-pink-500"></div>
+                  <div className="p-8">
+                    <div className="text-center mb-6">
+                      <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl mb-4">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-7 w-7 text-purple-600"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                          />
+                        </svg>
+                      </div>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                        Related Episodes
+                      </h3>
+                      <p className="text-gray-600 text-sm">
+                        More episodes you might enjoy
+                      </p>
+                    </div>
 
                     <RelatedEpisodes
                       uuid={uuid}
@@ -1233,8 +1592,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                           : []
                       }
                     />
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               )}
             </div>
           </div>

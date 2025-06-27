@@ -43,22 +43,22 @@ export default function AboutPage() {
               </svg>
               About Us
             </div>
-            
+
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-6 leading-[1.1]">
               Growing Your Business With People
             </h1>
-            
+
             <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-6">
               Our Mission
             </h2>
-            
+
             <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
               Our aim is to explore a range of subjects, supporting CEOs and
-              leaders in advancing their businesses through their foremost
-              asset - their people. With interviews featuring Fortune 100
-              CEOs, startup trailblazers, bestselling authors, TEDx speakers,
-              and industry pioneers, we provide actionable insights for
-              optimizing Return on People in an engaging fireside chat format.
+              leaders in advancing their businesses through their foremost asset
+              - their people. With interviews featuring Fortune 100 CEOs,
+              startup trailblazers, bestselling authors, TEDx speakers, and
+              industry pioneers, we provide actionable insights for optimizing
+              Return on People in an engaging fireside chat format.
             </p>
           </div>
 
@@ -87,7 +87,7 @@ export default function AboutPage() {
                 Maximizing Return on People through Leadership Excellence
               </p>
             </div>
-            
+
             {/* Blueprint Image */}
             <div className="relative max-w-4xl w-full">
               <div className="absolute -inset-4 bg-gradient-to-r from-primary/10 via-secondary/5 to-primary/10 rounded-2xl blur-2xl opacity-30"></div>
@@ -131,8 +131,8 @@ export default function AboutPage() {
                 Meet the Host
               </h2>
               <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
-                Get to know the passionate host behind Growing Your Business With
-                People
+                Get to know the passionate host behind Growing Your Business
+                With People
               </p>
             </div>
             <div className="flex flex-col items-center text-center bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 border border-gray-200/70 shadow-lg">
@@ -152,7 +152,9 @@ export default function AboutPage() {
               </div>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900">Jeff Lackey</h3>
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    Jeff Lackey
+                  </h3>
                   <p className="text-primary font-medium">Host, GYBWP</p>
                 </div>
                 <p className="text-gray-600 leading-relaxed">
@@ -204,13 +206,17 @@ export default function AboutPage() {
                 </p>
               </div>
               <div className="bg-white rounded-2xl p-6 border border-gray-200/70 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Topics Covered</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                  Topics Covered
+                </h3>
                 <p className="text-gray-600">
                   Business Leadership, Talent Acquisition, and more.
                 </p>
               </div>
               <div className="bg-white rounded-2xl p-6 border border-gray-200/70 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Follow and Subscribe</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Follow and Subscribe
+                </h3>
                 <div className="flex flex-wrap gap-3">
                   <Link
                     className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-secondary/10 hover:from-primary/20 hover:to-secondary/20 text-primary hover:text-primary/80 rounded-lg border border-primary/20 hover:border-primary/30 transition-all duration-200"

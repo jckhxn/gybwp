@@ -4,7 +4,7 @@
 import { groq } from "next-sanity";
 
 // Guest Details query (by URL param -> slug)
-export const GUEST_QUERY = groq` *[_type == "guest" && slug.current == $slug] {
+export const GUEST_QUERY = groq`*[_type == "guest" && slug.current == $slug][0] {
   ...,
 
 "episodes": *[_type == "episode" && references('guests', ^._id)]
@@ -170,26 +170,46 @@ export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && coalesce(uuid,
 }
 `;
 
-// Get specific Sponsor
-export const SPONSOR_DETAILS_QUERY = groq`{"sponsors":*[_type == "sponsor" && uuid == $id] {
+// Get specific Sponsor by slug and episodes that reference the sponsor's UUID
+export const SPONSOR_DETAILS_QUERY = groq`{
+  "sponsors": *[_type == "sponsor" && slug.current == $slug] {
+    _id,
+    name,
+    uuid,
+    slug,
+    logo,
+    image,
+    description,
+    website,
+    tier,
+    bgColor,
+    isActive,
+    social
+  },
+  "episodes": *[_type == "episode" && (*[_type == "sponsor" && slug.current == $slug][0].uuid in sponsors)] | order(coalesce(youtube.publishedAt, _createdAt) desc) {
   _id,
-  name,
-  uuid,
-  slug,
-  logo,
-  image,
-  description,
-  website,
-  tier,
-  bgColor,
-  isActive,
-  social
-} ,"episodes":*[_type == "episode" &&  $id in sponsors]| order(uuid desc ){
-  "uuid":coalesce(uuid,youtube.uuid),
-    "image":coalesce(image,youtube.thumbnail),
-    "seasonNumber":coalesce(seasonNumber,youtube.seasonNumber),
-    "episodeNumber":coalesce(seasonNumber,youtube.episodeNumber)
-  }}`;
+  "uuid": coalesce(uuid, youtube.uuid),
+  "image": coalesce(image, youtube.thumbnail),
+  "seasonNumber": coalesce(seasonNumber, youtube.seasonNumber),
+  "episodeNumber": coalesce(episodeNumber, youtube.episodeNumber),
+  youtube {
+    title,
+    blurb,
+    description,
+    uuid,
+    seasonNumber,
+    episodeNumber,
+    thumbnail,
+    publishedAt
+  },
+  guests[] {
+    name
+  },
+  season-> {
+    title,
+    seasonNumber
+  }
+}}`;
 
 // Get all Sponsors
 export const ALL_SPONSORS_QUERY = groq`*[_type == "sponsor"] {

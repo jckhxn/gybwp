@@ -10,6 +10,7 @@ import { formatDate } from "../../lib/utils";
 import { formatEpisodeTitle } from "../../../../lib/formatTitle";
 import { motion } from "framer-motion";
 import { Calendar, Clock, ArrowRight, Play } from "lucide-react";
+import routes from "../../routes";
 
 // Define interface for the episode data
 interface Episode {
@@ -162,19 +163,34 @@ export const LatestEpisode = () => {
             <div className="relative grid md:grid-cols-2 gap-8 md:gap-12 p-8 md:p-12">
               {/* Left column - Image */}
               <div className="relative group">
-                {/* Subtle glow effect */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-primary/10 via-secondary/5 to-primary/10 rounded-xl blur-lg opacity-30 group-hover:opacity-50 transition-all duration-700"></div>
+                {/* Enhanced glow effect */}
+                <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 via-secondary/10 to-primary/20 rounded-2xl blur-xl opacity-20 group-hover:opacity-40 transition-all duration-700"></div>
+
                 <Link href={`/episode/${latestEpisode.uuid}`} className="block">
-                  <div className="relative aspect-video overflow-hidden rounded-xl bg-gradient-to-br from-gray-300 to-gray-400 backdrop-blur-sm border border-gray-200/50 cursor-pointer">
+                  <div className="relative aspect-video overflow-hidden rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 backdrop-blur-sm border border-gray-200/60 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ring-1 ring-gray-100/50">
                     <Image
                       src={latestEpisode.thumbnail || "/images/placeholder.svg"}
                       alt={latestEpisode.title || "Latest episode thumbnail"}
                       width={640}
                       height={360}
-                      className="object-cover w-full h-full transform transition-all duration-500 group-hover:scale-105"
+                      className="object-cover w-full h-full transform transition-all duration-700 group-hover:scale-110"
+                      priority
                     />
-                    {/* Subtle hover overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                    {/* Refined overlay with play button */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
+                      <div className="transform scale-75 group-hover:scale-100 transition-transform duration-300">
+                        <div className="w-16 h-16 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-xl">
+                          <Play
+                            className="h-6 w-6 text-gray-800 ml-1"
+                            fill="currentColor"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Subtle inner border */}
+                    <div className="absolute inset-0 rounded-xl ring-1 ring-inset ring-white/20"></div>
                   </div>
                 </Link>
               </div>
@@ -233,24 +249,11 @@ export const LatestEpisode = () => {
 
           <div className="flex justify-center w-full pt-10">
             <ScrollToSection
-              targetId="episode"
+              targetId="episodes"
               className="inline-flex items-center text-primary hover:text-primary-light transition-colors gap-1"
             >
               Browse all episodes
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-4 w-4"
-              >
-                <path d="m6 9 6 6 6-6" />
-              </svg>
+              <ArrowRight className="h-4 w-4 transform transition-transform duration-200 hover:translate-x-1" />
             </ScrollToSection>
           </div>
         </div>
