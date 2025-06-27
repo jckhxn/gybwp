@@ -45,25 +45,25 @@ export function SponsorCard({ sponsor, size = "medium" }: SponsorCardProps) {
   const getTierColor = (tier?: string) => {
     switch (tier?.toLowerCase()) {
       case "platinum":
-        return "bg-slate-800 text-white";
+        return "bg-gray-800 text-white";
       case "gold":
         return "bg-yellow-500 text-white";
       case "silver":
-        return "bg-slate-400 text-white";
+        return "bg-gray-400 text-white";
       case "bronze":
         return "bg-orange-600 text-white";
       default:
-        return "bg-slate-200 text-slate-700";
+        return "bg-gray-200 text-gray-700";
     }
   };
 
   const content = (
     <div
-      className={`group bg-white rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-300 ${cardClasses[size]} flex flex-col`}
+      className={`group bg-white rounded-xl border border-gray-100 hover:shadow-xl transition-shadow shadow-lg ${cardClasses[size]} flex flex-col`}
     >
       {/* Logo Container */}
       <div
-        className={`${sizeClasses[size]} relative overflow-hidden rounded-lg bg-white border border-slate-100 flex items-center justify-center mb-4`}
+        className={`${sizeClasses[size]} relative overflow-hidden rounded-lg bg-white border border-gray-100 flex items-center justify-center mb-4`}
       >
         <Image
           src={logoUrl || "/placeholder-logo.png"}
@@ -77,12 +77,12 @@ export function SponsorCard({ sponsor, size = "medium" }: SponsorCardProps) {
       {/* Content */}
       {size !== "small" && (
         <div className="flex-1 flex flex-col">
-          <h3 className="font-semibold text-slate-900 text-center text-sm md:text-base leading-tight mb-2">
+          <h3 className="font-semibold text-gray-900 text-center text-sm md:text-base leading-tight mb-2">
             {sponsor.name}
           </h3>
 
           {sponsor.description && size === "large" && (
-            <p className="text-xs md:text-sm text-slate-600 text-center line-clamp-2 mb-3 flex-1">
+            <p className="text-xs md:text-sm text-gray-600 text-center line-clamp-2 mb-3 flex-1">
               {sponsor.description}
             </p>
           )}

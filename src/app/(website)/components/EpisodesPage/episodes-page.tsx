@@ -9,6 +9,8 @@ import {
 } from "../../lib/queries";
 import SeasonDropdown from "@/src/app/(website)/components/SeasonDropdown";
 import EpisodeCard from "../EpisodeCard";
+import { PaginationControls } from "../PaginationControls";
+import { usePagination } from "../../hooks/usePagination";
 import {
   Search,
   Filter,
@@ -162,6 +164,18 @@ export function EpisodesPage() {
     return episodes;
   }, [data, searchTerm, sortBy]);
 
+  // Use pagination hook
+  const pagination = usePagination({
+    data: filteredAndSortedEpisodes,
+    itemsPerPage: viewMode === "grid" ? 12 : 8, // Fewer items for list view
+    initialPage: 1,
+  });
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    pagination.reset();
+  }, [searchTerm, sortBy, activeSeason, viewMode, pagination.reset]);
+
   const totalEpisodes = allEpisodes.length;
   const currentSeasonEpisodes = data.length;
 
@@ -310,9 +324,14 @@ export function EpisodesPage() {
                   </div>
 
                   <div className="text-sm text-slate-600">
-                    {filteredAndSortedEpisodes.length} of{" "}
-                    {currentSeasonEpisodes} episodes
+                    {pagination.totalItems} of {currentSeasonEpisodes} episodes
                     {searchTerm && ` matching "${searchTerm}"`}
+                    {pagination.totalPages > 1 && (
+                      <span className="ml-2">
+                        (Page {pagination.currentPage} of{" "}
+                        {pagination.totalPages})
+                      </span>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -340,35 +359,52 @@ export function EpisodesPage() {
               Retry
             </button>
           </div>
-        ) : filteredAndSortedEpisodes.length > 0 ? (
-          <motion.div
-            layout
-            className={
-              viewMode === "grid"
-                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
-                : "space-y-6"
-            }
-          >
-            <AnimatePresence mode="popLayout">
-              {filteredAndSortedEpisodes.map((episode, idx) => {
-                // Final safeguard before rendering
-                const safeEpisode = safeguardEpisodeData(episode);
-                return (
-                  <motion.div
-                    key={safeEpisode._id || safeEpisode.youtube?.uuid || idx}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3, delay: idx * 0.05 }}
-                    className={viewMode === "list" ? "max-w-4xl mx-auto" : ""}
-                  >
-                    <EpisodeCard {...safeEpisode} viewMode={viewMode} />
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
-          </motion.div>
+        ) : pagination.totalItems > 0 ? (
+          <>
+            <motion.div
+              layout
+              className={
+                viewMode === "grid"
+                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+                  : "space-y-6"
+              }
+            >
+              <AnimatePresence mode="popLayout">
+                {pagination.currentItems.map((episode, idx) => {
+                  // Final safeguard before rendering
+                  const safeEpisode = safeguardEpisodeData(episode);
+                  return (
+                    <motion.div
+                      key={safeEpisode._id || safeEpisode.youtube?.uuid || idx}
+                      layout
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3, delay: idx * 0.05 }}
+                      className={viewMode === "list" ? "max-w-4xl mx-auto" : ""}
+                    >
+                      <EpisodeCard {...safeEpisode} viewMode={viewMode} />
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </motion.div>
+
+            {/* Pagination Controls */}
+            {pagination.totalPages > 1 && (
+              <PaginationControls
+                currentPage={pagination.currentPage}
+                totalPages={pagination.totalPages}
+                onPageChange={pagination.goToPage}
+                hasNextPage={pagination.hasNextPage}
+                hasPreviousPage={pagination.hasPreviousPage}
+                totalItems={pagination.totalItems}
+                startIndex={pagination.startIndex}
+                endIndex={pagination.endIndex}
+                className="border-t border-gray-200 pt-8"
+              />
+            )}
+          </>
         ) : (
           <div className="text-center py-20">
             <div className="mb-4">

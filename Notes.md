@@ -1,8 +1,17 @@
 # Fixes
 
 - Episodes out of order : (401-2,3 come after 402,403 because of \_createdAt)
+- UUIDs -> Clean Slugs -> Redirect from old UUIDs
   Episode Page Style
-  Figure out Resend (New email?)
+
+  Why embed transcript no work on sanity dashboard
+
+  ✅ Figure out Resend (New email?) Formspre or Cal.com - COMPLETED (Added Cal.com booking)
+  ✅ Handle if data isnt provided to episode page with ? chaining - COMPLETED
+  ✅ Season dropdown in sponsors detail should only show sponsored seasons - COMPLETED
+  ✅ Browse Episodes Button links to /episodes it should link to episode - COMPLETED
+  ✅ Browse all episodes button scrolls to Browse Episodes section - COMPLETED
+  ✅ Explore all episodes button links to /episode - COMPLETED
 
 # Improvements
 

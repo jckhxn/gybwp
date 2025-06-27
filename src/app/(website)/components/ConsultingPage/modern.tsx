@@ -138,10 +138,29 @@ export default function ModernConsultingPage() {
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <a
-                  href="#contact"
-                  className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors"
+                  href="https://cal.com/jeffrey-lackey-sr/30min"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center bg-slate-700 hover:bg-slate-800 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl border border-slate-600 hover:border-slate-500"
                 >
-                  Start Your Transformation
+                  <svg
+                    className="mr-3 w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  Book Free Consultation
+                </a>
+                <a
+                  href="#contact"
+                  className="inline-flex items-center justify-center bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 px-8 py-4 rounded-lg font-semibold transition-colors"
+                >
+                  Send Message
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </a>
                 <a
@@ -356,17 +375,59 @@ export default function ModernConsultingPage() {
           <div className="text-center mb-16">
             <Badge
               variant="secondary"
-              className="bg-blue-100 text-blue-800 mb-4"
+              className="bg-slate-100 text-slate-700 mb-4"
             >
               Get Started
             </Badge>
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
               Ready to Transform Your Business?
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
               Let&apos;s discuss how we can help you achieve your talent and
-              growth objectives. Schedule a consultation with Jeff today.
+              growth objectives. Choose your preferred way to connect with Jeff.
             </p>
+
+            {/* Cal.com CTA */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <a
+                href="https://cal.com/jeffrey-lackey-sr/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center bg-slate-700 hover:bg-slate-600 text-white px-10 py-4 rounded-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl text-lg border border-slate-600 hover:border-slate-500"
+              >
+                <svg
+                  className="mr-3 w-6 h-6"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Schedule Your 30-Minute Strategy Call
+              </a>
+              <div className="text-center sm:text-left">
+                <div className="text-sm text-gray-300 font-medium">
+                  ✓ Free consultation
+                </div>
+                <div className="text-sm text-gray-300 font-medium">
+                  ✓ Instant booking
+                </div>
+                <div className="text-sm text-gray-300 font-medium">
+                  ✓ No commitment required
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-4 text-gray-400">
+                <div className="h-px bg-gray-600 flex-1 max-w-24"></div>
+                <span className="text-sm font-medium">OR SEND A MESSAGE</span>
+                <div className="h-px bg-gray-600 flex-1 max-w-24"></div>
+              </div>
+            </div>
           </div>
 
           <ConsultingContactForm />

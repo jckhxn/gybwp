@@ -116,13 +116,13 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] bg-gray-800 border-gray-700">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold flex items-center gap-2">
+          <DialogTitle className="text-xl font-semibold flex items-center gap-2 text-white">
             <Mail className="w-5 h-5" />
             Contact Us
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-gray-300">
             Interested in sponsoring our podcast? Send us a message and
             we&apos;ll get back to you soon.
           </DialogDescription>
@@ -131,8 +131,8 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">
-                Name <span className="text-red-500">*</span>
+              <Label htmlFor="name" className="text-gray-200">
+                Name <span className="text-red-400">*</span>
               </Label>
               <Input
                 id="name"
@@ -142,11 +142,12 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
                 placeholder="Your full name"
                 required
                 disabled={status.type === "loading"}
+                className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-400"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">
-                Email <span className="text-red-500">*</span>
+              <Label htmlFor="email" className="text-gray-200">
+                Email <span className="text-red-400">*</span>
               </Label>
               <Input
                 id="email"
@@ -157,12 +158,15 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
                 placeholder="your@email.com"
                 required
                 disabled={status.type === "loading"}
+                className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-400"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="company">Company</Label>
+            <Label htmlFor="company" className="text-gray-200">
+              Company
+            </Label>
             <Input
               id="company"
               name="company"
@@ -170,11 +174,14 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
               onChange={handleInputChange}
               placeholder="Your company name (optional)"
               disabled={status.type === "loading"}
+              className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-400"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="subject">Subject</Label>
+            <Label htmlFor="subject" className="text-gray-200">
+              Subject
+            </Label>
             <Input
               id="subject"
               name="subject"
@@ -182,12 +189,13 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
               onChange={handleInputChange}
               placeholder="What is this regarding?"
               disabled={status.type === "loading"}
+              className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-400"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="message">
-              Message <span className="text-red-500">*</span>
+            <Label htmlFor="message" className="text-gray-200">
+              Message <span className="text-red-400">*</span>
             </Label>
             <Textarea
               id="message"
@@ -198,6 +206,7 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
               rows={4}
               required
               disabled={status.type === "loading"}
+              className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-400 resize-none"
             />
           </div>
 
@@ -222,14 +231,14 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
               variant="outline"
               onClick={() => setIsOpen(false)}
               disabled={status.type === "loading"}
-              className="flex-1"
+              className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={!isFormValid || status.type === "loading"}
-              className="flex-1"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
             >
               {status.type === "loading" ? (
                 <>

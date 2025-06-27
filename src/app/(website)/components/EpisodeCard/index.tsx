@@ -23,6 +23,19 @@ type Props = {
   episodeNumber?: number;
   viewMode?: "grid" | "list";
   guests?: Array<{ name?: string }>; // Made name optional to match real data
+  sponsors?: Array<{
+    _id: string;
+    name: string;
+    uuid: string;
+    slug?: { current: string };
+    logo?: any;
+    image?: string;
+    description?: string;
+    website?: string;
+    tier?: string;
+    bgColor?: string;
+    isActive?: boolean;
+  }>;
 };
 
 const EpisodeCard = ({
@@ -53,7 +66,7 @@ const EpisodeCard = ({
   // Grid view (default)
   if (viewMode === "grid") {
     return (
-      <div className="group relative overflow-hidden rounded-2xl bg-white shadow-lg border border-gray-200/70 transition-all duration-300 hover:shadow-xl hover:shadow-gray-900/20 hover:-translate-y-1 ring-1 ring-gray-100/70 h-[400px] flex flex-col">
+      <div className="group relative overflow-hidden rounded-xl bg-white shadow-lg hover:shadow-xl transition-shadow border border-gray-100 h-[400px] flex flex-col">
         <Link
           className="flex flex-col h-full"
           href={`/episode/${youtube.uuid}`}
@@ -115,7 +128,7 @@ const EpisodeCard = ({
 
   // List view
   return (
-    <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl hover:shadow-gray-900/20 transition-all duration-300 border border-gray-200/70 overflow-hidden ring-1 ring-gray-100/70 hover:-translate-y-1">
+    <div className="group bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 overflow-hidden">
       <Link href={`/episode/${youtube.uuid}`} className="flex">
         <div className="relative w-48 h-32 flex-shrink-0">
           <Image

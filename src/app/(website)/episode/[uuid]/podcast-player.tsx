@@ -100,12 +100,7 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
       },
       isPlaying,
       seekTo: (timeInSeconds: number, playAfterSeek = false) => {
-        console.log(
-          `Seek request: ${timeInSeconds}s, playAfterSeek: ${playAfterSeek}, ready: ${isPlayerReady}`
-        );
-
         if (!youtubePlayerRef.current || !isPlayerReady) {
-          console.log("Player not ready - storing pending seek request");
           pendingSeekRef.current = { timeInSeconds, playAfterSeek };
           return;
         }
@@ -194,7 +189,6 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
       // Player event handlers defined inside useCallback
       const handlePlayerReady = (event: YT.PlayerEvent) => {
         try {
-          console.log("YouTube player ready!");
           // Verify the player methods are available
           if (typeof event.target.getDuration === "function") {
             const durationSec = event.target.getDuration();
@@ -213,7 +207,6 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
           // Execute any pending seek request
           if (pendingSeekRef.current) {
             const { timeInSeconds, playAfterSeek } = pendingSeekRef.current;
-            console.log(`Executing pending seek to ${timeInSeconds}s`);
 
             setTimeout(() => {
               if (youtubePlayerRef.current) {

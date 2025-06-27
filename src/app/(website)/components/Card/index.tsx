@@ -34,10 +34,14 @@ const Card = ({
   };
 
   return (
-    <article className="overflow-hidden rounded-lg shadow transition hover:shadow-lg">
-      <Image alt="Office" src={imageUrl} className="h-56 w-full object-cover" />
+    <article className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100 overflow-hidden">
+      <Image
+        alt="Office"
+        src={imageUrl}
+        className="h-56 w-full object-cover rounded-lg mb-4"
+      />
 
-      <div className="bg-white p-4 sm:p-6">
+      <div className="">
         <time
           dateTime={formatDateTime()}
           className="block text-xs text-gray-500"
@@ -46,11 +50,13 @@ const Card = ({
         </time>
 
         <Link href="#">
-          <h3 className="mt-0.5 text-lg text-gray-900">{title}</h3>
+          <h3 className="mt-0.5 text-lg text-gray-900 font-semibold">
+            {title}
+          </h3>
         </Link>
 
         {description && (
-          <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
+          <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-600">
             {description}
           </p>
         )}

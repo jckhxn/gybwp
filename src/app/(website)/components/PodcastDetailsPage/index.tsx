@@ -259,11 +259,15 @@ const PodcastDetailsPageComponent = () => {
           <Section
             className={`flex flex-row flex-wrap items-center justify-center mt-20 mx-6 md:mx-20 `}
           >
-            {episode.sponsors.map(({ name, uuid, image, bgColor }) => {
+            {episode.sponsors.map(({ name, uuid, slug, image, bgColor }) => {
               return (
                 <Link
                   key={`sponsor-${name}`}
-                  href={`/sponsors/${uuid}`}
+                  href={
+                    slug?.current
+                      ? `/sponsors/${slug.current}`
+                      : `/sponsors/${uuid}`
+                  }
                   className="m-3 lg:m-6"
                 >
                   <div
