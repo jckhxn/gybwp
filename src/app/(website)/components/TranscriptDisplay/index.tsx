@@ -47,15 +47,17 @@ export const TranscriptDisplay: React.FC<TranscriptDisplayProps> = ({
 
     const speakerList =
       type === "host" ? allSpeakers.hosts : allSpeakers.guests;
-    const resolved = speakerList.find((speaker: any) => speaker._id === ref._ref);
-    
+    const resolved = speakerList.find(
+      (speaker: any) => speaker._id === ref._ref
+    );
+
     console.log(`Resolving ${type}:`, {
       refId: ref._ref,
       speakerList,
       resolved,
-      allSpeakers
+      allSpeakers,
     });
-    
+
     return resolved;
   };
   // Debug logging
