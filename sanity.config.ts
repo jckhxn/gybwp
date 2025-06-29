@@ -8,28 +8,27 @@ import { locate } from "./src/app/(website)/lib/locate";
 import { pages } from "@tinloof/sanity-studio";
 
 import { youtubeInput } from "./src/app/(website)/sanity/plugins/youtube";
-import schemas from "./src/app/(website)/sanity/schemas";
+import schemas from "./sanity/schemas";
+import config from "./config";
 
-const config = defineConfig({
-  projectId: "hxymd1na",
-  dataset: "production",
-  title: "JKL Data",
-  apiVersion: "2023-08-22",
-  basePath: "/dash",
+const sanityConfig = defineConfig({
+  projectId: config.sanity.projectId,
+  dataset: config.sanity.dataset,
+  title: config.siteName,
+  apiVersion: config.sanity.apiVersion,
+  basePath: config.sanity.studioUrl,
 
   plugins: [
     structureTool({}),
     pages({
-      title: "Live Preview",
-
-      creatablePages: ["episode"],
+      title: "Pages",
+      creatablePages: ["page", "person", "episode", "sponsor"],
       locate,
       previewUrl: {
         draftMode: {
           enable: "/api/draft",
         },
-
-        preview: "/episode/",
+        preview: "/",
       },
     }),
     youtubeInput({ apiKey: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY }),
@@ -38,4 +37,5 @@ const config = defineConfig({
   schema: { types: schemas },
   useCdn: false,
 });
-export default config;
+
+export default sanityConfig;
