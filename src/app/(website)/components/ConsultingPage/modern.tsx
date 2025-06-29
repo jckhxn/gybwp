@@ -289,7 +289,7 @@ export default function ModernConsultingPage() {
       </section>
 
       {/* About Jeff Section */}
-      <section className="py-20 lg:py-32 bg-gray-900">
+      <section id="profile" className="py-20 lg:py-32 bg-gray-900">
         <div className="container px-4 md:px-6">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
             <div className="relative order-2 lg:order-1">

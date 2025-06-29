@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { CalendarDays, Clock } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
+import { redirect } from "next/navigation";
 
 import Button from "@/src/app/(website)/components/ui/button";
 import {
@@ -53,12 +54,33 @@ async function getGuestData(slug: string) {
   return guestData;
 }
 
+// Check if slug belongs to a host document
+async function checkIfHostSlug(slug: string) {
+  const hostData = await client.fetch(
+    `*[_type == "host" && slug.current == $slug][0]`,
+    { slug }
+  );
+  return !!hostData; // Returns true if host exists with this slug
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: { guest: string | string[] };
 }): Promise<Metadata> {
   const slug = Array.isArray(params.guest) ? params.guest[0] : params.guest;
+
+  // Check if this is a host slug
+  const isHostSlug = await checkIfHostSlug(slug);
+  if (isHostSlug) {
+    // Return metadata for consulting page
+    return {
+      title: "Business Consulting - Growing Your Business With People",
+      description:
+        "Expert business consulting and coaching services to help grow your business.",
+    };
+  }
+
   const guestData = await getGuestData(slug);
 
   return {
@@ -76,7 +98,27 @@ export default async function GuestPage({
   guest: string | string[];
 }) {
   const slug = Array.isArray(guest) ? guest[0] : guest;
-  const guestData = await getGuestData(slug);
+
+  // First check if this slug belongs to a host document
+  const isHostSlug = await checkIfHostSlug(slug);
+  if (isHostSlug) {
+    // Redirect to consulting page with profile anchor
+    redirect("/consulting#profile");
+  }
+
+  // If not a host slug, try to get guest data
+  let guestData;
+  try {
+    guestData = await getGuestData(slug);
+  } catch (error) {
+    // If guest not found, check once more if it's a host slug (edge case)
+    const isHost = await checkIfHostSlug(slug);
+    if (isHost) {
+      redirect("/consulting#profile");
+    }
+    // If not a host either, throw the original error
+    throw error;
+  }
 
   return (
     <div className="container max-w-6xl py-8 mx-auto">
