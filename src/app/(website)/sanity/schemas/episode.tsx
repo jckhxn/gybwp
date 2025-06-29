@@ -93,7 +93,7 @@ const episode = {
               return {
                 title: title || "Untitled Episode",
                 subtitle: `Season ${seasonNumber || "?"} Episode ${episodeNumber || "?"}`,
-                media: e,
+                media,
               };
             },
           },
@@ -231,20 +231,20 @@ const episode = {
             },
           ],
         },
+        // Primary: Enhanced transcript with portable text (paste & annotate)
         {
           name: "transcript",
-          title: "Transcript",
+          title: "📝 Transcript (Paste & Annotate)",
           type: "array",
-          description: "Full transcript of the podcast episode",
+          description:
+            "✅ RECOMMENDED: Paste your transcript and easily add timestamps and speaker labels. Perfect copy-paste workflow!",
           of: [
             {
               type: "block",
-              // Customize the toolbar options for transcript editing
               styles: [
                 { title: "Normal", value: "normal" },
                 { title: "Speaker", value: "h4" },
               ],
-              // Limit marks to only what's needed for transcripts
               marks: {
                 decorators: [
                   { title: "Strong", value: "strong" },
@@ -260,13 +260,362 @@ const episode = {
                         name: "time",
                         title: "Time",
                         type: "string",
-                        description: "Format: MM:SS or HH:MM:SS",
+                        description:
+                          "Format: MM:SS or HH:MM:SS (e.g., 1:23 or 1:23:45)",
                         validation: (Rule) =>
-                          Rule.regex(/^([0-9]+:)?[0-5]?[0-9]:[0-5][0-9]$/),
+                          Rule.regex(/^(\d{1,2}:)?\d{1,2}:\d{2}$/).error(
+                            "Use format MM:SS or HH:MM:SS"
+                          ),
+                        placeholder: "e.g., 1:23 or 1:23:45",
+                      },
+                      {
+                        name: "keyMoment",
+                        title: "Key Moment",
+                        type: "boolean",
+                        description: "Mark this timestamp as a key moment",
+                        initialValue: false,
                       },
                     ],
+                    icon: () => "🕐",
+                    component: ({ children, value }) => (
+                      <span
+                        style={{
+                          backgroundColor: "#e6f3ff",
+                          padding: "2px 4px",
+                          borderRadius: "3px",
+                          border: "1px solid #b3d9ff",
+                          fontSize: "0.85em",
+                          fontWeight: "bold",
+                          color: "#0066cc",
+                        }}
+                      >
+                        {value?.keyMoment && (
+                          <span style={{ marginRight: "2px" }}>★</span>
+                        )}
+                        [{value?.time || "??:??"}]{children}
+                      </span>
+                    ),
+                  },
+                  {
+                    name: "speaker",
+                    title: "Speaker Reference",
+                    type: "object",
+                    description: "Link text to a specific speaker",
+                    fields: [
+                      {
+                        name: "type",
+                        title: "Speaker Type",
+                        type: "string",
+                        options: {
+                          list: [
+                            { title: "Host", value: "host" },
+                            { title: "Guest", value: "guest" },
+                            { title: "Other", value: "other" },
+                          ],
+                        },
+                        initialValue: "guest",
+                      },
+                      {
+                        name: "hostRef",
+                        title: "Host",
+                        type: "reference",
+                        to: [{ type: "host" }],
+                        hidden: ({ parent }) => parent?.type !== "host",
+                      },
+                      {
+                        name: "guestRef",
+                        title: "Guest",
+                        type: "reference",
+                        to: [{ type: "guest" }],
+                        hidden: ({ parent }) => parent?.type !== "guest",
+                      },
+                      {
+                        name: "otherName",
+                        title: "Speaker Name",
+                        type: "string",
+                        placeholder: "e.g., Co-host, Moderator, etc.",
+                        hidden: ({ parent }) => parent?.type !== "other",
+                      },
+                    ],
+                    icon: () => "👤",
+                    component: ({ children, value }) => (
+                      <span
+                        style={{
+                          backgroundColor: "#f0f8e6",
+                          padding: "2px 4px",
+                          borderRadius: "3px",
+                          border: "1px solid #c8e6c8",
+                          fontSize: "0.85em",
+                          fontWeight: "bold",
+                          color: "#2d5016",
+                        }}
+                      >
+                        @ {children}
+                      </span>
+                    ),
                   },
                 ],
+              },
+            },
+          ],
+        },
+
+        // Alternative: Structured transcript segments (for advanced use cases)
+        {
+          name: "transcriptSegments",
+          title: "⚙️ Transcript Segments (Advanced)",
+          type: "array",
+          description:
+            "⚠️ Advanced: Individual segments with separate fields. Use the main transcript field above for easier editing.",
+          hidden: ({ document }) => !!document?.transcript?.length, // Hide if rich text is being used
+          of: [
+            {
+              type: "object",
+              title: "Transcript Segment",
+              fields: [
+                {
+                  name: "timestamp",
+                  title: "Timestamp",
+                  type: "string",
+                  validation: (Rule) =>
+                    Rule.required()
+                      .regex(/^(\d{1,2}:)?\d{1,2}:\d{2}$/)
+                      .error("Use format MM:SS or HH:MM:SS"),
+                  placeholder: "e.g., 1:23 or 1:23:45",
+                  description:
+                    "When this segment starts (MM:SS or HH:MM:SS format)",
+                },
+                {
+                  name: "speaker",
+                  title: "Speaker",
+                  type: "object",
+                  description: "Select who is speaking in this segment",
+                  fields: [
+                    {
+                      name: "type",
+                      title: "Speaker Type",
+                      type: "string",
+                      options: {
+                        list: [
+                          { title: "Host", value: "host" },
+                          { title: "Guest", value: "guest" },
+                          { title: "Other/Manual", value: "other" },
+                        ],
+                      },
+                      initialValue: "host",
+                      validation: (Rule) => Rule.required(),
+                    },
+                    {
+                      name: "hostRef",
+                      title: "Host",
+                      type: "reference",
+                      to: [{ type: "host" }],
+                      hidden: ({ parent }) => parent?.type !== "host",
+                      validation: (Rule) =>
+                        Rule.custom((hostRef, context) => {
+                          const type = context.parent?.type;
+                          if (type === "host" && !hostRef) {
+                            return "Please select the host";
+                          }
+                          return true;
+                        }),
+                    },
+                    {
+                      name: "guestRef",
+                      title: "Guest",
+                      type: "reference",
+                      to: [{ type: "guest" }],
+                      hidden: ({ parent }) => parent?.type !== "guest",
+                      validation: (Rule) =>
+                        Rule.custom((guestRef, context) => {
+                          const type = context.parent?.type;
+                          if (type === "guest" && !guestRef) {
+                            return "Please select a guest";
+                          }
+                          return true;
+                        }),
+                    },
+                    {
+                      name: "otherName",
+                      title: "Speaker Name",
+                      type: "string",
+                      placeholder: "e.g., Co-host, Moderator, etc.",
+                      hidden: ({ parent }) => parent?.type !== "other",
+                      validation: (Rule) =>
+                        Rule.custom((otherName, context) => {
+                          const type = context.parent?.type;
+                          if (type === "other" && !otherName) {
+                            return "Please enter the speaker's name";
+                          }
+                          return true;
+                        }),
+                    },
+                  ],
+                  preview: {
+                    select: {
+                      type: "type",
+                      hostName: "hostRef.name",
+                      guestName: "guestRef.name",
+                      otherName: "otherName",
+                    },
+                    prepare({ type, hostName, guestName, otherName }) {
+                      switch (type) {
+                        case "host":
+                          return {
+                            title: hostName || "Host",
+                            subtitle: "Podcast Host",
+                          };
+                        case "guest":
+                          return {
+                            title: guestName || "Guest",
+                            subtitle: "Episode Guest",
+                          };
+                        case "other":
+                          return {
+                            title: otherName || "Other Speaker",
+                            subtitle: "Other Speaker",
+                          };
+                        default:
+                          return {
+                            title: "Unknown Speaker",
+                            subtitle: "Please configure speaker",
+                          };
+                      }
+                    },
+                  },
+                },
+                {
+                  name: "text",
+                  title: "Text",
+                  type: "text",
+                  rows: 3,
+                  validation: (Rule) => Rule.required(),
+                  description: "What the speaker says during this segment",
+                },
+                {
+                  name: "keyMoment",
+                  title: "Key Moment",
+                  type: "boolean",
+                  description:
+                    "Mark this as an important moment in the episode",
+                  initialValue: false,
+                },
+              ],
+              preview: {
+                select: {
+                  timestamp: "timestamp",
+                  text: "text",
+                  speakerType: "speaker.type",
+                  hostName: "speaker.hostRef.name",
+                  guestName: "speaker.guestRef.name",
+                  otherName: "speaker.otherName",
+                  keyMoment: "keyMoment",
+                },
+                prepare({
+                  timestamp,
+                  text,
+                  speakerType,
+                  hostName,
+                  guestName,
+                  otherName,
+                  keyMoment,
+                }) {
+                  const truncatedText =
+                    text?.length > 60 ? `${text.substring(0, 60)}...` : text;
+                  const keyMomentIndicator = keyMoment ? "⭐ " : "";
+
+                  let speakerDisplay = "Unknown";
+                  switch (speakerType) {
+                    case "host":
+                      speakerDisplay = hostName || "Host";
+                      break;
+                    case "guest":
+                      speakerDisplay = guestName || "Guest";
+                      break;
+                    case "other":
+                      speakerDisplay = otherName || "Other";
+                      break;
+                  }
+
+                  return {
+                    title: `${timestamp} ${keyMomentIndicator}[${speakerDisplay}]`,
+                    subtitle: truncatedText,
+                  };
+                },
+              },
+            },
+          ],
+          options: {
+            sortable: true,
+            layout: "list",
+          },
+        },
+        // Legacy: Keep the old structured segments as backup (hidden)
+        {
+          name: "legacyTranscriptSegments",
+          title: "Legacy Transcript Segments",
+          type: "array",
+          description: "Backup structured transcript field",
+          hidden: true,
+          of: [
+            {
+              type: "object",
+              fields: [
+                {
+                  name: "timestamp",
+                  title: "Timestamp",
+                  type: "string",
+                  validation: (Rule) =>
+                    Rule.required()
+                      .regex(/^(\d{1,2}:)?\d{1,2}:\d{2}$/)
+                      .error("Use format MM:SS or HH:MM:SS"),
+                  placeholder: "e.g., 1:23 or 1:23:45",
+                },
+                {
+                  name: "speaker",
+                  title: "Speaker",
+                  type: "string",
+                  options: {
+                    list: [
+                      { title: "Host", value: "host" },
+                      { title: "Guest", value: "guest" },
+                      { title: "Co-host", value: "cohost" },
+                      { title: "Other", value: "other" },
+                    ],
+                  },
+                  initialValue: "host",
+                },
+                {
+                  name: "text",
+                  title: "Text",
+                  type: "text",
+                  rows: 3,
+                  validation: (Rule) => Rule.required(),
+                },
+                {
+                  name: "keyMoment",
+                  title: "Key Moment",
+                  type: "boolean",
+                  description: "Mark this as an important moment",
+                  initialValue: false,
+                },
+              ],
+              preview: {
+                select: {
+                  timestamp: "timestamp",
+                  text: "text",
+                  speaker: "speaker",
+                  keyMoment: "keyMoment",
+                },
+                prepare({ timestamp, text, speaker, keyMoment }) {
+                  const truncatedText =
+                    text?.length > 60 ? `${text.substring(0, 60)}...` : text;
+                  const keyMomentIndicator = keyMoment ? "⭐ " : "";
+                  return {
+                    title: `${timestamp} ${keyMomentIndicator}[${speaker || "Unknown"}]`,
+                    subtitle: truncatedText,
+                  };
+                },
               },
             },
           ],

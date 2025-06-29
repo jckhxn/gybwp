@@ -6,7 +6,6 @@ import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import routes from "@/src/app/(website)/routes";
 import { SanityDocument } from "sanity";
-import { PortableText } from "@portabletext/react";
 
 import {
   Play,
@@ -36,6 +35,7 @@ import { Badge } from "@/src/app/(website)/components/ui/badge";
 import { SponsorsList } from "../sponsors";
 import { urlForImage } from "../../lib/sanity-image";
 import { CTA } from "../HomePage/static-data";
+import TranscriptDisplay from "../TranscriptDisplay";
 import PodcastPlayer, {
   PlayerHandle,
 } from "../../episode/[uuid]/podcast-player";
@@ -149,7 +149,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   const takeaways = episode?.details?.keyTakeaways || [];
   const discussionTopics = episode?.details?.discussionTopics || [];
   const highlights = episode?.details?.highlights || [];
-  const transcript = episode?.details?.transcript || "";
+  const transcript = episode?.transcript || episode?.details?.transcript || "";
+  const transcriptSegments = episode?.transcriptSegments || [];
   const featuredGuests = episode?.details?.featuredGuests || [];
   const uuid = episode?.youtube?.uuid || episode?.uuid;
   const duration = episode?.youtube?.duration || "";
@@ -183,7 +184,13 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
       ...(discussionTopics?.map((topic: any) => topic.title).filter(Boolean) ||
         []),
     ],
-    wordCount: transcript ? transcript.length / 5 : 2000, // Estimate word count
+    wordCount:
+      (transcript && transcript.length > 0) ||
+      (transcriptSegments && transcriptSegments.length > 0)
+        ? transcript?.length
+          ? transcript.length / 5
+          : transcriptSegments.length * 50
+        : 2000, // Estimate word count
   });
 
   // 2. PodcastEpisode schema (semantic correctness)
@@ -725,7 +732,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   )}
 
                   {/* Transcript section */}
-                  {transcript && (
+                  {((transcript && transcript.length > 0) ||
+                    (transcriptSegments && transcriptSegments.length > 0)) && (
                     <Button
                       variant="outline"
                       size="sm"
@@ -1034,7 +1042,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 )}
 
                 {/* Transcript Section */}
-                {transcript && (
+                {((transcript && transcript.length > 0) ||
+                  (transcriptSegments && transcriptSegments.length > 0)) && (
                   <div
                     id="transcript"
                     className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
@@ -1088,79 +1097,13 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
 
                       <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
                         <div className="max-h-80 overflow-y-scroll space-y-4 pr-2 transcript-scroll">
-                          <PortableText
-                            value={transcript}
-                            components={{
-                              block: (props) => {
-                                const { value, children } = props;
-                                const style = value.style || "normal";
-
-                                if (style === "h4") {
-                                  return (
-                                    <h4 className="font-semibold text-lg text-gray-900 mt-6 mb-3 border-l-4 border-purple-400 pl-4">
-                                      {children}
-                                    </h4>
-                                  );
-                                }
-
-                                return (
-                                  <p className="text-gray-700 text-base leading-relaxed mb-4">
-                                    {children}
-                                  </p>
-                                );
-                              },
-                              marks: {
-                                strong: ({ children }) => (
-                                  <strong className="font-semibold text-gray-900">
-                                    {children}
-                                  </strong>
-                                ),
-                                em: ({ children }) => (
-                                  <em className="italic text-gray-800">
-                                    {children}
-                                  </em>
-                                ),
-                                timestamp: ({ value, children }) => (
-                                  <button
-                                    className="inline-flex items-center gap-1 bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium rounded-md px-2 py-1 text-xs ml-1 hover:from-purple-600 hover:to-indigo-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-1"
-                                    onClick={() => {
-                                      if (playerRef.current && value?.time) {
-                                        // Convert timestamp to seconds
-                                        const parts = value.time.split(":");
-                                        let seconds = 0;
-                                        if (parts.length === 3) {
-                                          // HH:MM:SS
-                                          seconds =
-                                            parseInt(parts[0]) * 3600 +
-                                            parseInt(parts[1]) * 60 +
-                                            parseInt(parts[2]);
-                                        } else if (parts.length === 2) {
-                                          // MM:SS
-                                          seconds =
-                                            parseInt(parts[0]) * 60 +
-                                            parseInt(parts[1]);
-                                        }
-
-                                        console.log(
-                                          `Inline timestamp clicked: ${value.time} -> ${seconds} seconds`
-                                        );
-                                        playerRef.current.seekTo(seconds, true);
-                                      }
-                                    }}
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="h-2.5 w-2.5"
-                                      fill="currentColor"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path d="M8 5v14l11-7z" />
-                                    </svg>
-                                    {value?.time || "00:00"}
-                                  </button>
-                                ),
-                              },
-                            }}
+                          <TranscriptDisplay
+                            transcript={transcript}
+                            transcriptSegments={transcriptSegments}
+                            className="transcript-content"
+                            youtubeId={episode?.youtube?.id}
+                            playerRef={playerRef}
+                            allSpeakers={episode?.allSpeakers}
                           />
                         </div>
 

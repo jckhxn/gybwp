@@ -91,6 +91,39 @@ export const TOTAL_SEASONS_QUERY = groq`{"seasonName":array::unique(*[_type == "
 // Get details for current Podcast.
 export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && coalesce(uuid,youtube.uuid) == $uuid][0] {
     ...,
+    // Include both transcript formats 
+    transcript[] {
+      ...,
+      markDefs[] {
+        ...,
+        _type == "speaker" => {
+          ...,
+          "hostRef": hostRef->,
+          "guestRef": guestRef->
+        }
+      }
+    },
+    transcriptSegments[] {
+      ...,
+      speaker {
+        ...,
+        hostRef->,
+        guestRef->
+      }
+    },
+    // Get all speakers - we'll filter in the component
+    "allSpeakers": {
+      "hosts": *[_type == "host"] {
+        _id,
+        name,
+        slug
+      },
+      "guests": *[_type == "guest"] {
+        _id,
+        name,
+        slug
+      }
+    },
   relatedEpisodes[]->
     {
       youtube{
