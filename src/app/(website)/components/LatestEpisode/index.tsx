@@ -229,7 +229,7 @@ export const LatestEpisode = () => {
 
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Link
-                      href={`/episodes/${latestEpisode.pathname?.current || latestEpisode.uuid}`}
+                      href={`${latestEpisode.pathname?.current || latestEpisode.uuid}`}
                       className="group relative inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-primary to-primary/90 hover:from-primary-light hover:to-primary text-white px-6 py-3 text-base font-semibold shadow-lg shadow-primary/25 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
                     >
                       <Play className="h-4 w-4 mr-2" fill="currentColor" />
@@ -238,7 +238,7 @@ export const LatestEpisode = () => {
                     </Link>
 
                     <Link
-                      href={`/episodes/${latestEpisode.pathname?.current || latestEpisode.uuid}`}
+                      href={`${latestEpisode.pathname?.current || latestEpisode.uuid}`}
                       className="group inline-flex items-center justify-center rounded-xl bg-white hover:bg-gray-50 text-gray-700 hover:text-gray-900 px-6 py-3 text-base font-medium border border-gray-300 hover:border-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500/20 focus:ring-offset-2"
                     >
                       View Details

@@ -36,16 +36,8 @@ export default async function Page({ params, searchParams }: PageProps) {
   // Check if this is a UUID format
   const isUuidFormat = isUUID(slug);
 
-  console.log("Episode page debug:", {
-    slug,
-    isUuidFormat,
-    hasRedirect: redirectMap[slug],
-    redirectTarget: redirectMap[slug],
-  });
-
   // For UUID format, check if we have a redirect mapping
   if (isUuidFormat && redirectMap[slug]) {
-    console.log(`Redirecting ${slug} to ${redirectMap[slug]}`);
     redirect(redirectMap[slug]);
   }
 

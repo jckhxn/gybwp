@@ -36,11 +36,12 @@ import { SponsorsList } from "../sponsors";
 import { urlForImage } from "../../lib/sanity-image";
 import { CTA } from "../HomePage/static-data";
 import TranscriptDisplay from "../TranscriptDisplay";
-import PodcastPlayer, {
-  PlayerHandle,
-} from "../../episodes/[uuid]_backup/podcast-player";
+import {
+  PodcastPlayer,
+  RelatedEpisodes,
+  type PlayerHandle,
+} from "../episodes";
 import StickyVideoPlayer from "../StickyVideoPlayer";
-import RelatedEpisodes from "../../episodes/[uuid]_backup/related-episodes";
 import {
   formatDate,
   formatDescriptionText,
@@ -1006,9 +1007,6 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                                           seconds = parseInt(parts[0]);
                                         }
 
-                                        console.log(
-                                          `Timestamp clicked: ${highlight.timestamp} -> ${seconds} seconds`
-                                        );
                                         playerRef.current.seekTo(seconds, true);
                                       }
                                     }}

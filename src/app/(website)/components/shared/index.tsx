@@ -86,3 +86,6 @@ export const generateImage = ({
 
   return "";
 };
+
+// Component exports
+export { ThemeToggle } from './theme-toggle';
