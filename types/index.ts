@@ -62,14 +62,38 @@ export interface HomeHeroSection extends BaseSection {
   title: string;
   subtitle?: string;
   description?: string;
+
+  // Top badge
+  badgeText?: string;
+
+  // Primary CTA button
   primaryButton?: {
     text: string;
     link: string;
   };
+
+  // Secondary CTA button
   secondaryButton?: {
     text: string;
     link: string;
   };
+
+  // Podcast platforms section
+  platformsHeading?: string;
+  platforms?: Array<{
+    name: string;
+    url: string;
+    logoImage?: any;
+  }> | null;
+
+  // Host badge information
+  hostBadge?: {
+    label?: string;
+    name?: string;
+    title?: string;
+  } | null;
+
+  // Visual elements
   backgroundImage?: any;
   showLatestEpisode?: boolean;
 }

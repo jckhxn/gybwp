@@ -11,6 +11,26 @@ export const PAGE_QUERY = groq`
       _key,
       _type,
       ...,
+      // Expand images properly
+      backgroundImage {
+        asset-> {
+          _id,
+          url
+        },
+        alt
+      },
+      // Expand platform logos in homeHero sections
+      platforms[] {
+        name,
+        url,
+        logoImage {
+          asset-> {
+            _id,
+            url
+          },
+          alt
+        }
+      },
       // Expand person references in sections
       person-> {
         _id,

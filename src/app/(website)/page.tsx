@@ -1,11 +1,12 @@
 import React from "react";
+import { Page } from "@/components/Page";
+import { loadPage } from "@/data/sanity";
 
-import HomePageComponent from "@/src/app/(website)/components/HomePage";
+export default async function IndexRoute() {
+  const data = await loadPage("/");
+  if (!data) {
+    // Not found sanity page?
+  }
 
-export default function page() {
-  return (
-    <>
-      <HomePageComponent />
-    </>
-  );
+  return <Page data={data} />;
 }

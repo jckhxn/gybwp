@@ -2,6 +2,7 @@
 
 - Bundle YouTube plugin for ✨cleanliness
 - Clean up queries and front end :)
+- Retain Watch Now/Listen Now hero Buttons
 - Pages -> Indiviual Page Builder Components -> Accept params from Sanity -> Sanity schema matches content type (Somehow do efficient query data fetching etc)
   (the idea here is to take existing pages and break abstract the components to enable page building. Data fetching should be handled )
 - Episodes out of order : (401-2,3 come after 402,403 because of \_createdAt)
@@ -13,6 +14,7 @@
 - - Get rid of youtube.uuid
 - Extract and organize components from pages, build pages in Sanity.
 - Component builder for Page Builder
+- Singleton features like nav and footer from (https://github.com/tinloof/medusa-dtc-starter-munchies/tree/main/storefront)
 
 ## 🔄 UUID → Slug Migration Plan
 
@@ -418,26 +420,77 @@ ClientError: transaction failed: Insufficient permissions; permission "update" r
 
 **🎉 Complete migration from UUID-based `/episode/` routing to SEO-friendly `/episodes/` routing with full backward compatibility and 301 redirects!**
 
-## ✅ **BROWSE EPISODES COMPONENT UPDATED TO USE SLUGS!**
+## ✅ **CLIENT-SIDE SANITY IMAGE URL FIX**
 
-### **Browse Episodes Now Uses SEO-Friendly Slugs:**
+### **Issue Fixed:**
 
-- **Updated Query**: `EPISODES_BY_SEASON_QUERY` now includes `pathname` data
-- **Updated Interface**: Added `pathname` field to Episode interface
-- **Smart URL Generation**: Created `getEpisodeUrl()` helper that prioritizes pathname over UUID
-- **Fallback Support**: Still supports UUID fallback for episodes without pathname
-- **SEO Benefits**: Browse Episodes now links to clean, descriptive URLs
+- **Error**: `'server-only' cannot be imported from a Client Component module`
+- **Root Cause**: `HomeHero` component (client-side) was importing server-only Sanity client
+- **Impact**: Homepage couldn't load due to server-only import in client component
+
+### **Solution Implemented:**
+
+- **Created**: `lib/imageUrlClient.ts` - Client-safe image URL builder
+- **Uses**: Public environment variables (`NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`)
+- **Updated**: `HomeHero` component to use `getImageUrlClient()` instead of server-only `getImageUrl()`
+- **Result**: ✅ Client components can now safely process Sanity images
 
 ### **Files Updated:**
 
-- ✅ `src/app/(website)/lib/queries.ts` - Updated `EPISODES_BY_SEASON_QUERY` to include pathname
-- ✅ `src/app/(website)/components/BrowseEpisodes/index.tsx` - Updated interface and link generation
-- ✅ Added `getEpisodeUrl()` helper function for smart URL generation
+- ✅ `lib/imageUrlClient.ts` - New client-safe image URL utilities
+- ✅ `components/sections/hero/HomeHero.tsx` - Updated to use client-safe image functions
+- ✅ Fixed platform logo and background image URL generation
 
-### **URL Examples in Browse Episodes:**
+### **Technical Details:**
 
-- **SEO Format**: `/episodes/ai-business-and-the-future-of-work-with-david-thomas` ✅
-- **UUID Fallback**: `/episodes/807` (for episodes without pathname) ✅
-- **Browse Fallback**: `/episodes` (if no valid identifier) ✅
+- **Server-Side**: `data/sanity/imageUrl.ts` (for Server Components)
+- **Client-Side**: `lib/imageUrlClient.ts` (for Client Components)
+- **Both**: Support width, height, and quality parameters for optimization
+- **Fallbacks**: Handle missing images gracefully
 
-**🎉 Browse Episodes component now displays and links to SEO-friendly slug URLs instead of UUIDs!**
+**🚀 Homepage Hero section now properly loads with configurable Sanity content and images!**
+
+## ✅ **NULL SAFETY FIX FOR HOMEHERO COMPONENT**
+
+### **Issue Fixed:**
+
+- **Error**: `Cannot read properties of null (reading 'map')`
+- **Root Cause**: Sanity data was returning `null` for `platforms` array, overriding component defaults
+- **Location**: `components/sections/hero/HomeHero.tsx` line 159
+
+### **Solution Implemented:**
+
+- **Safe Variables**: Created `safePlatforms` and `safeHostBadge` with proper null checks
+- **Fallback Arrays**: Provide default podcast platforms if Sanity data is null/undefined
+- **Conditional Rendering**: Only render platforms section if platforms exist
+- **Type Safety**: Updated TypeScript interfaces to allow `null` values from Sanity
+
+### **Code Changes:**
+
+```typescript
+// Before (problematic)
+platforms = [defaultPlatforms] // Could be overridden by null
+
+// After (safe)
+const safePlatforms = platforms || [defaultPlatforms];
+{safePlatforms.length > 0 && (
+  <motion.div>
+    {safePlatforms.map(...)}
+  </motion.div>
+)}
+```
+
+### **Files Updated:**
+
+- ✅ `components/sections/hero/HomeHero.tsx` - Added null safety for arrays and objects
+- ✅ `types/index.ts` - Updated interfaces to allow `null` values from Sanity
+- ✅ Added conditional rendering to prevent empty sections
+
+### **Benefits:**
+
+- **Robust Error Handling**: Component gracefully handles missing Sanity data
+- **Fallback Content**: Shows default platforms/host info when data missing
+- **Type Safety**: Proper TypeScript typing for nullable Sanity fields
+- **User Experience**: No crashes, always shows meaningful content
+
+**🎉 HomeHero component now safely handles all data scenarios without crashes!**
