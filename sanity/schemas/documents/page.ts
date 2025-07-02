@@ -1,26 +1,26 @@
-import { definePathname } from '@tinloof/sanity-studio'
-import { defineField, defineType } from 'sanity'
-import { sections } from '../sections'
+import { definePathname } from "@tinloof/sanity-studio";
+import { defineField, defineType } from "sanity";
+import { sections } from "../sections";
 
 export default defineType({
-  type: 'document',
-  name: 'page',
-  title: 'Page',
+  type: "document",
+  name: "page",
+  title: "Page",
   fields: [
     defineField({
-      type: 'string',
-      name: 'title',
-      title: 'Page Title',
+      type: "string",
+      name: "title",
+      title: "Page Title",
       validation: (Rule) => Rule.required(),
     }),
-    definePathname({ 
-      name: 'pathname',
-      title: 'URL Path',
+    definePathname({
+      name: "pathname",
+      title: "URL Path",
     }),
     defineField({
-      name: 'sectionsBody',
-      title: 'Page Sections',
-      type: 'array',
+      name: "sectionsBody",
+      title: "Page Sections",
+      type: "array",
       of: sections.map((section) => ({
         type: section.name,
       })),
@@ -28,7 +28,7 @@ export default defineType({
         insertMenu: {
           views: [
             {
-              name: 'grid',
+              name: "grid",
               previewImageUrl: (type) => `/sections/${type}.png`,
             },
           ],
@@ -38,15 +38,15 @@ export default defineType({
   ],
   preview: {
     select: {
-      title: 'title',
-      pathname: 'pathname.current',
+      title: "title",
+      pathname: "pathname.current",
     },
     prepare(selection) {
-      const { title, pathname } = selection
+      const { title, pathname } = selection;
       return {
-        title: title || 'Untitled',
-        subtitle: pathname || '/',
-      }
+        title: title || "Untitled",
+        subtitle: pathname || "/",
+      };
     },
   },
-})
+});

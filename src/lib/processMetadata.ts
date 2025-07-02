@@ -4,6 +4,7 @@ import { formatEpisodeTitle } from "./formatTitle";
 interface Episode {
   episodeName?: string;
   blurb?: string;
+  pathname?: { current?: string };
   youtube?: {
     title?: string;
     blurb?: string;
@@ -73,8 +74,10 @@ export default async function processMetadata(data: Data): Promise<Metadata> {
   const duration = episode.youtube?.duration;
   const uuid = episode.uuid;
 
-  // Build URLs
-  const episodeUrl = `https://gybwp.com/episode/${uuid}`;
+  // Build URLs - prioritize pathname, fallback to UUID
+  const episodeUrl = episode.pathname?.current
+    ? `https://gybwp.com${episode.pathname.current}`
+    : `https://gybwp.com/episodes/${uuid}`;
   const youtubeUrl = youtubeId
     ? `https://www.youtube.com/watch?v=${youtubeId}`
     : episode.url;

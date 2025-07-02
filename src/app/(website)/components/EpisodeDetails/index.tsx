@@ -38,9 +38,9 @@ import { CTA } from "../HomePage/static-data";
 import TranscriptDisplay from "../TranscriptDisplay";
 import PodcastPlayer, {
   PlayerHandle,
-} from "../../episode/[uuid]/podcast-player";
+} from "../../episodes/[uuid]_backup/podcast-player";
 import StickyVideoPlayer from "../StickyVideoPlayer";
-import RelatedEpisodes from "../../episode/[uuid]/related-episodes";
+import RelatedEpisodes from "../../episodes/[uuid]_backup/related-episodes";
 import {
   formatDate,
   formatDescriptionText,
@@ -119,6 +119,11 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   // For redesign just grab the document manually.
   const episode = Array.isArray(data) ? data[0] : data;
 
+  // All hooks must be called before any early returns
+  const playerRef = useRef<PlayerHandle>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
   // Handle cases where episode data is missing or invalid
   if (!episode) {
     return (
@@ -169,7 +174,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   const articleStructuredData = generateEpisodeArticleStructuredData({
     title,
     description: description || blurb,
-    url: `https://gybwp.com/episode/${uuid}`,
+    url: `https://gybwp.com/episodes/${uuid}`,
     publishedAt,
     youtubeId: episode?.youtube?.id,
     uuid,
@@ -197,7 +202,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   const episodeStructuredData = generateSimplifiedPodcastEpisodeStructuredData({
     title,
     description: description || blurb,
-    url: `https://gybwp.com/episode/${uuid}`,
+    url: `https://gybwp.com/episodes/${uuid}`,
     episodeNumber: episodeNumber ? Number(episodeNumber) : undefined,
     seasonNumber: seasonNumber ? Number(seasonNumber) : undefined,
     publishedAt,
@@ -233,11 +238,6 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
       })
     : null;
 
-  // Create a ref to the player component
-  const playerRef = useRef<PlayerHandle>(null);
-  // Track playing state
-  const [isPlaying, setIsPlaying] = useState(false);
-
   // Handle play button click
   const handlePlayClick = () => {
     if (playerRef.current) {
@@ -253,9 +253,6 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   const handlePlayStateChange = (playing: boolean) => {
     setIsPlaying(playing);
   };
-
-  // Share modal state
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   // Share links data
   const shareLinks = [
@@ -566,7 +563,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                       Video Not Available
                     </h3>
                     <p className="text-gray-600">
-                      This episode doesn't have an associated video.
+                      This episode doesn&apos;t have an associated video.
                     </p>
                   </div>
                 </div>

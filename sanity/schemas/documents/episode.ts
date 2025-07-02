@@ -1,132 +1,129 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from "sanity";
+import { definePathname } from "@tinloof/sanity-studio";
+import { generateEpisodePathname } from "../../utils/slugify";
+import React from "react";
 
 export default defineType({
-  name: 'episode',
-  title: 'Episode',
-  type: 'document',
+  name: "episode",
+  title: "Episode",
+  type: "document",
   fields: [
-    defineField({
-      name: 'title',
-      title: 'Title',
-      type: 'string',
-      validation: Rule => Rule.required()
-    }),
-    defineField({
-      name: 'pathname',
-      title: 'Pathname',
-      type: 'slug',
+    definePathname({
+      name: "pathname",
+      description:
+        "After adding YouTube video, manually click the generate button or enter the pathname",
       options: {
-        source: 'title',
-        slugify: input => `/episode/${input
-          .toLowerCase()
-          .replace(/\s+/g, '-')
-          .slice(0, 96)}`
+        folder: {
+          canUnlock: true,
+        },
       },
-      validation: Rule => Rule.required()
-    }),
-    defineField({
-      name: 'sectionsBody',
-      title: 'Sections',
-      type: 'array',
-      of: [
-        { type: 'episodeHero' },
-        { type: 'episodePlayer' },
-        { type: 'latestEpisode' },
-        { type: 'featuredNews' },
-        { type: 'newsletter' },
-        // Add more episode-specific sections as needed
-      ]
-    }),
-    defineField({
-      name: 'youtube',
-      title: 'YouTube Details',
-      type: 'object',
-      fields: [
-        defineField({
-          name: 'videoId',
-          title: 'Video ID',
-          type: 'string'
-        }),
-        defineField({
-          name: 'publishedAt',
-          title: 'Published At',
-          type: 'datetime'
-        }),
-        defineField({
-          name: 'description',
-          title: 'Description',
-          type: 'text'
-        }),
-        defineField({
-          name: 'thumbnail',
-          title: 'Thumbnail',
-          type: 'image'
-        })
-      ]
-    }),
-    defineField({
-      name: 'guests',
-      title: 'Guests',
-      type: 'array',
-      of: [
-        {
-          type: 'reference',
-          to: [{ type: 'person' }],
-          options: {
-            filter: 'role == "guest"'
+      validation: (Rule: any) =>
+        Rule.custom((value: any, context: any) => {
+          const youtubeTitle = context.document?.youtube?.title;
+          if (
+            youtubeTitle &&
+            (!value?.current || value.current === "/episode/")
+          ) {
+            const suggestedPath = generateEpisodePathname(youtubeTitle);
+            return {
+              message: `Suggested pathname: ${suggestedPath}`,
+              level: "info",
+            };
           }
-        }
-      ]
+          return true;
+        }),
+      hidden: ({ document }: any) => !document?.youtube?.title,
     }),
     defineField({
-      name: 'sponsors',
-      title: 'Sponsors',
-      type: 'array',
+      name: "youtube",
+      title: "YouTube Video",
+      type: "youtubeVideo",
+      description: "Add the YouTube video for this episode",
+    }),
+    defineField({
+      name: "season",
+      title: "Season",
+      type: "reference",
+      to: [{ type: "season" }],
+    }),
+    defineField({
+      name: "guests",
+      title: "Guests",
+      type: "array",
       of: [
         {
-          type: 'reference',
-          to: [{ type: 'sponsor' }]
-        }
-      ]
+          type: "reference",
+          to: [{ type: "person" }],
+          options: {
+            filter: 'role == "guest"',
+          },
+        },
+      ],
     }),
     defineField({
-      name: 'transcript',
-      title: 'Transcript',
-      type: 'episodeTranscriptField'
+      name: "sponsors",
+      title: "Sponsors",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "sponsor" }],
+        },
+      ],
     }),
     defineField({
-      name: 'featured',
-      title: 'Featured Episode',
-      type: 'boolean',
-      initialValue: false
+      name: "transcript",
+      title: "Transcript",
+      type: "episodeTranscriptField",
     }),
     defineField({
-      name: 'category',
-      title: 'Category',
-      type: 'string',
+      name: "featured",
+      title: "Featured Episode",
+      type: "boolean",
+      initialValue: false,
+    }),
+    defineField({
+      name: "category",
+      title: "Category",
+      type: "string",
       options: {
         list: [
-          { title: 'Business', value: 'business' },
-          { title: 'Leadership', value: 'leadership' },
-          { title: 'Technology', value: 'technology' },
-          { title: 'HR', value: 'hr' },
-          { title: 'Strategy', value: 'strategy' }
-        ]
-      }
-    })
+          { title: "Business", value: "business" },
+          { title: "Leadership", value: "leadership" },
+          { title: "Technology", value: "technology" },
+          { title: "HR", value: "hr" },
+          { title: "Strategy", value: "strategy" },
+        ],
+      },
+    }),
   ],
   preview: {
     select: {
-      title: 'title',
-      pathname: 'pathname.current',
-      featured: 'featured'
+      title: "youtube.title",
+      subtitle: "pathname.current",
+      thumbnail: "youtube.thumbnail",
     },
-    prepare({ title, pathname, featured }) {
+    prepare({
+      title,
+      subtitle,
+      thumbnail,
+    }: {
+      title?: string;
+      subtitle?: string;
+      thumbnail?: string;
+    }) {
       return {
-        title: title || 'Untitled Episode',
-        subtitle: pathname || '/episode/untitled',
-        media: featured ? '⭐' : '🎙️'
-      }
-    }
-  }
-})
+        title,
+        subtitle,
+        media: thumbnail
+          ? () =>
+              React.createElement("img", {
+                src: thumbnail,
+                alt: title || "thumbnail",
+                style: { objectFit: "cover", width: "100%", height: "100%" },
+              })
+          : undefined,
+      };
+    },
+  },
+});

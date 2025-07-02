@@ -69,7 +69,7 @@ export const getNextEpisode = (episode: string, episodes: [Object]) => {
   });
 
   if (nextEpisodeUUID) {
-    return `/episode/${nextEpisodeUUID}`;
+    return `/episodes/${nextEpisodeUUID}`;
   }
 
   return null;

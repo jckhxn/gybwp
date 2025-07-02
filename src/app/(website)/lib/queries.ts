@@ -48,14 +48,34 @@ about,
   }
 }`;
 
-// Get all Episodes by UUID
-export const EPISODES = groq`*[_type == "episode"]| order(uuid asc){uuid}`;
+// Get all Episodes by creation date (replacing UUID-based ordering)
+export const EPISODES = groq`*[_type == "episode"] | order(_createdAt asc) {
+  uuid,
+  pathname,
+  _createdAt
+}`;
 
-// Get all Episodes for sitemap
-export const ALL_EPISODES = groq`*[_type == "episode"] | order(uuid desc)`;
+// Get all Episodes for sitemap (updated to use pathname and proper ordering)
+export const ALL_EPISODES = groq`*[_type == "episode"] | order(_createdAt desc) {
+  uuid,
+  pathname,
+  _updatedAt,
+  _createdAt
+}`;
 
-// Get the latest episode document
-export const LATEST_EPISODE = groq`*[_type == "episode"] | order(_createdAt desc)[0]`;
+// Get the latest episode document with all needed fields
+export const LATEST_EPISODE = groq`*[_type == "episode"] | order(_createdAt desc)[0] {
+  ...,
+  "uuid": coalesce(uuid, youtube.uuid),
+  pathname,
+  "image": coalesce(image, youtube.thumbnail),
+  "seasonNumber": coalesce(seasonNumber, youtube.seasonNumber),
+  "episodeNumber": coalesce(episodeNumber, youtube.episodeNumber),
+  "title": coalesce(title, youtube.title),
+  "blurb": coalesce(blurb, youtube.blurb),
+  "publishedAt": coalesce(publishedAt, youtube.publishedAt),
+  youtube
+}`;
 
 // Get episode details
 export const EPISODES_DETAILS_QUERY = groq`*[_type == "episode" && uuid == $uuid]{
@@ -74,11 +94,34 @@ export const INITIAL_SEASON_EPISODES_QUERY = groq`{
 }
 `;
 
-// Get episodes by season Name
-export const EPISODES_BY_SEASON_QUERY = groq`*[_type == "episode" && season->title == $name] | order(_createdAt desc)`;
-// Get episodes homepage.
-export const SEASON_EPISODES_QUERY = groq`*[_type == "episode" && coalesce(seasonNumber,youtube.seasonNumber) == $seasonNumber]|order(uuid desc){...,
+// Get episodes by season Name - updated to include pathname
+export const EPISODES_BY_SEASON_QUERY = groq`*[_type == "episode" && season->title == $name] | order(_createdAt desc) {
+  ...,
+  "uuid": coalesce(uuid, youtube.uuid),
+  pathname,
+  "image": coalesce(image, youtube.thumbnail),
+  "seasonNumber": coalesce(seasonNumber, youtube.seasonNumber),
+  "episodeNumber": coalesce(episodeNumber, youtube.episodeNumber),
+  "publishedAt": youtube.publishedAt,
+  youtube {
+    title,
+    episodeNumber,
+    seasonNumber,
+    thumbnail,
+    uuid,
+    publishedAt,
+    blurb,
+    duration
+  },
+  details {
+    keyTakeaways
+  }
+}`;
+// Get episodes homepage - updated to include pathname and use proper ordering
+export const SEASON_EPISODES_QUERY = groq`*[_type == "episode" && coalesce(seasonNumber,youtube.seasonNumber) == $seasonNumber] | order(_createdAt desc) {
+  ...,
   "uuid":coalesce(uuid,youtube.uuid),
+  pathname,
   "image":coalesce(image,youtube.thumbnail),
   "seasonNumber":coalesce(seasonNumber,youtube.seasonNumber),
   "episodeNumber":coalesce(seasonNumber,youtube.episodeNumber),
@@ -222,6 +265,7 @@ export const SPONSOR_DETAILS_QUERY = groq`{
   "episodes": *[_type == "episode" && (*[_type == "sponsor" && slug.current == $slug][0].uuid in sponsors)] | order(coalesce(youtube.publishedAt, _createdAt) desc) {
   _id,
   "uuid": coalesce(uuid, youtube.uuid),
+  pathname,
   "image": coalesce(image, youtube.thumbnail),
   "seasonNumber": coalesce(seasonNumber, youtube.seasonNumber),
   "episodeNumber": coalesce(episodeNumber, youtube.episodeNumber),
@@ -281,3 +325,118 @@ export const OTHER_ARTICLES_QUERY = groq`*[_type == "article"]`;
  * Returns episodes ordered by UUID
  */
 export const RANDOM_RELATED_EPISODES = groq`*[_type == "episode" && coalesce(uuid,youtube.uuid) in $uuids] | order(coalesce(uuid,youtube.uuid) asc) [0...3]`;
+
+// Get details for current Episode by UUID or pathname (dual-mode during migration)
+export const EPISODE_BY_IDENTIFIER_QUERY = groq`*[_type == "episode" && (coalesce(uuid,youtube.uuid) == $identifier || pathname.current == $identifier)][0] {
+    ...,
+    // Include both transcript formats 
+    transcript[] {
+      ...,
+      markDefs[] {
+        ...,
+        _type == "speaker" => {
+          ...,
+          "hostRef": hostRef->,
+          "guestRef": guestRef->
+        }
+      }
+    },
+    transcriptSegments[] {
+      ...,
+      speaker {
+        ...,
+        hostRef->,
+        guestRef->
+      }
+    },
+    // Get all speakers - we'll filter in the component
+    "allSpeakers": {
+      "hosts": *[_type == "host"] {
+        _id,
+        name,
+        slug
+      },
+      "guests": *[_type == "guest"] {
+        _id,
+        name,
+        slug
+      }
+    },
+  relatedEpisodes[]->
+    {
+      youtube{
+      title,
+      seasonNumber,
+      episodeNumber,
+      uuid,
+      thumbnail,
+    }
+    }
+   ,
+    content {
+      files[] {
+        link,
+        name,
+        type,
+        "file": pdf.asset->url,
+        "image": image.asset->url
+      }
+    },
+    "blurb": coalesce(youtube.blurb, blurb),
+    "episodeName": coalesce(youtube.title, episodeName),
+    "episodeNumber": coalesce(youtube.episodeNumber, episodeNumber),
+    "image": coalesce(youtube.thumbnail, image),
+    "seasonNumber": coalesce(youtube.seasonNumber, seasonNumber),
+    "url": coalesce("https://www.youtube.com/" + youtube.id, url),
+    "uuid": coalesce(youtube.uuid, uuid),
+    "publishedAt": youtube.publishedAt,
+    guests[]->,
+    sponsors[]-> {
+      _id,
+      name,
+      uuid,
+      slug,
+      logo,
+      image,
+      description,
+      website,
+      tier,
+      bgColor,
+      isActive
+    },
+    details {
+    ...,
+      featuredGuests[] {
+        ...,
+        "image": image.asset->url,
+       "episodes": *[_type=="episode" && details.featuredGuests[].name match ^.name && !(coalesce(uuid,youtube.uuid) == $identifier || pathname.current == $identifier)] {
+      ...,
+      "episodeName": coalesce(youtube.title, episodeName),
+      "episodeNumber": coalesce(youtube.episodeNumber, episodeNumber),
+      "url": coalesce("https://www.youtube.com/" + youtube.id, url),
+      
+    }
+      }
+    },
+    "allParts":*[_type == "episode" && uuid != $identifier && uuid match $epID] | order(uuid asc) 
+,
+  "nextEpisode": *[_type == "episode" && _createdAt > ^._createdAt && uuid != ^._id] | order(_createdAt asc, uuid asc)[0].pathname.current,
+    "prevEpisode": *[_type == "episode" && _createdAt < ^._createdAt && uuid != ^._id] | order(_createdAt desc, uuid desc)[0].pathname.current,uuid,
+    season-> {
+      ...,
+       sponsors[]-> {
+         _id,
+         name,
+         uuid,
+         slug,
+         logo,
+         image,
+         description,
+         website,
+         tier,
+         bgColor,
+         isActive
+       },
+    },
+    "sections": sections[]
+}`;

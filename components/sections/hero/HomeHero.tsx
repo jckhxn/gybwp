@@ -1,32 +1,34 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Play, Headphones } from "lucide-react";
 import heroImage from "@/public/images/main-page-hero.webp";
+import { HomeHeroSection } from "@/types";
 
 interface HomeHeroProps {
-  title?: string;
-  subtitle?: string;
-  description?: string;
-  ctaText?: string;
-  ctaLink?: string;
-  backgroundImage?: any;
+  section: HomeHeroSection;
 }
 
-export function HomeHero({
-  title = "Growing Your Business With People",
-  subtitle = "Where Leadership Meets Excellence", 
-  description = "Join CEO & Leadership Coach Jeff Lackey as he explores how the best leaders grow their companies by investing in their most valuable asset: their people.",
-  ctaText = "Listen Now",
-  ctaLink = "/episode",
-  backgroundImage
-}: HomeHeroProps) {
+export function HomeHero({ section }: HomeHeroProps) {
+  const {
+    title = "Growing Your Business With People",
+    subtitle = "Where Leadership Meets Excellence",
+    description = "Join CEO & Leadership Coach Jeff Lackey as he explores how the best leaders grow their companies by investing in their most valuable asset: their people.",
+    primaryButton = { text: "Listen Now", link: "/episode" },
+    secondaryButton,
+    backgroundImage,
+    showLatestEpisode = false,
+  } = section;
+
   return (
     <section className="w-full py-16 md:py-24 lg:py-28 bg-gradient-to-br from-main-dark via-main to-main-light relative overflow-hidden">
+      {/* ...existing code... */}
       {/* Pattern overlay for texture */}
       <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGRkZGRkYiIGZpbGwtb3BhY2l0eT0iMSI+PHBhdGggZD0iTTM2IDM0aDR2MWgtNHpNNDAgMzJoNHYxaC00ek0zMiAzN2g0djFoLTR6TTM2IDM5YTEgMSAwIDAgMSAxIDFoNHYxaC00YTEgMSAwIDAgMS0xLTF2LTR6TTMxIDM0aDR2MWgtNHpNMzUgMzJoNHYxaC00ek0yNyAzN2g0djFoLTR6TTMxIDM5YTEgMSAwIDAgMSAxIDFoNHYxaC00YTEgMSAwIDAgMS0xLTF2LTR6Ii8+PC9nPjwvZz48L3N2Zz4=')] bg-repeat"></div>
-      
+
       {/* Floating elements */}
       <div className="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
       <div className="absolute top-40 right-20 w-32 h-32 bg-accent/20 rounded-full blur-2xl"></div>
@@ -80,18 +82,20 @@ export function HomeHero({
                 className="flex flex-col sm:flex-row gap-4 pt-4"
               >
                 <Link
-                  href={ctaLink}
+                  href={primaryButton.link}
                   className="inline-flex items-center justify-center gap-2 bg-white text-primary hover:bg-gray-50 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   <Play className="h-5 w-5" />
-                  {ctaText}
+                  {primaryButton.text}
                 </Link>
-                <Link
-                  href="/about"
-                  className="inline-flex items-center justify-center gap-2 border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300"
-                >
-                  Learn More
-                </Link>
+                {secondaryButton && (
+                  <Link
+                    href={secondaryButton.link}
+                    className="inline-flex items-center justify-center gap-2 border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300"
+                  >
+                    {secondaryButton.text}
+                  </Link>
+                )}
               </motion.div>
             </div>
           </div>

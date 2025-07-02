@@ -1,27 +1,27 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { BrowseEpisodesSection } from '@/types'
+import { useState } from "react";
+import { BrowseEpisodesSection } from "@/types";
 
 interface BrowseEpisodesProps {
-  section: BrowseEpisodesSection
+  section: BrowseEpisodesSection;
 }
 
 export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
-  const [currentPage, setCurrentPage] = useState(1)
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
   const {
-    title = 'Browse Episodes',
+    title = "Browse Episodes",
     subtitle,
     showFeatured = true,
     episodesPerPage = 12,
-    showFilters = true
-  } = section
+    showFilters = true,
+  } = section;
 
   // TODO: Fetch episodes data from Sanity
-  const episodes: any[] = [] // Placeholder
-  const categories = ['Business', 'Leadership', 'Technology', 'HR'] // Placeholder
+  const episodes: any[] = []; // Placeholder
+  const categories = ["Business", "Leadership", "Technology", "HR"]; // Placeholder
 
   return (
     <section className="py-16 bg-white">
@@ -43,8 +43,8 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
               onClick={() => setSelectedCategory(null)}
               className={`px-4 py-2 rounded-full transition-colors ${
                 selectedCategory === null
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               All Episodes
@@ -55,8 +55,8 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded-full transition-colors ${
                   selectedCategory === category
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
                 {category}
@@ -67,13 +67,19 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
 
         {episodes.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">No episodes found. Episodes will appear here once added to the CMS.</p>
+            <p className="text-gray-500">
+              No episodes found. Episodes will appear here once added to the
+              CMS.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Episode cards will be rendered here */}
             {episodes.map((episode) => (
-              <div key={episode._id} className="bg-white rounded-lg shadow-md overflow-hidden">
+              <div
+                key={episode._id}
+                className="bg-white rounded-lg shadow-md overflow-hidden"
+              >
                 {/* Episode card content */}
               </div>
             ))}
@@ -92,9 +98,7 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
               >
                 Previous
               </button>
-              <span className="px-4 py-2">
-                Page {currentPage}
-              </span>
+              <span className="px-4 py-2">Page {currentPage}</span>
               <button
                 onClick={() => setCurrentPage(currentPage + 1)}
                 className="px-4 py-2 border rounded-md"
@@ -106,5 +110,5 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
         )}
       </div>
     </section>
-  )
+  );
 }

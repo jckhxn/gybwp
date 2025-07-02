@@ -1,4 +1,8 @@
-export function ConsultingHero({ title = "Consulting", subtitle, description }: any) {
+export function ConsultingHero({
+  title = "Consulting",
+  subtitle,
+  description,
+}: any) {
   return (
     <section className="w-full py-16 md:py-20 lg:py-24 bg-gradient-to-b from-gray-50/70 to-white">
       <div className="container mx-auto px-6 max-w-7xl">

@@ -1,21 +1,41 @@
-import page from './documents/page'
-import person from './documents/person'
-import episode from './documents/episode'
-import sponsor from './documents/sponsor'
-import { sections } from './sections'
+// Import schemas from local documents folder
+import article from "./documents/article";
+import episode from "./documents/episode";
+import featuredArticle from "./documents/featuredArticle";
+import sponsor from "./documents/sponsor";
+import guest from "./documents/guest";
+import season from "./documents/season";
+import host from "./documents/host";
+
+// Import new page builder schemas
+import page from "./documents/page";
+import { sections } from "./sections";
+import person from "./documents/person";
+
+// Import field types
+import episodeTranscriptField from "./episodeTranscriptField";
+import transcriptSegment from "./transcriptSegment";
 
 const schemas = [
+  // Core document types (migrated from legacy)
+  season,
+  episode,
+  guest,
+  person,
+  host,
+  sponsor,
+  article,
+  featuredArticle,
+
   // New page builder documents
   page,
-  person,
-  episode,
-  sponsor,
-  
-  // Section schemas
-  ...sections,
-  
-  // Note: Existing field types (episodeTranscriptField, transcriptSegment) 
-  // will be included when they're converted to proper TypeScript exports
-]
 
-export default schemas
+  // Section schemas for page builder
+  ...sections,
+
+  // Field types
+  episodeTranscriptField,
+  transcriptSegment,
+];
+
+export default schemas;
