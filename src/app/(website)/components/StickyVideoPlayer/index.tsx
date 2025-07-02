@@ -2,9 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { X, Maximize2, Play, Pause } from "lucide-react";
-import PodcastPlayer, {
-  PlayerHandle,
-} from "../../episodes/[uuid]_backup/podcast-player";
+import { PodcastPlayer, type PlayerHandle } from "../episodes";
 
 interface StickyVideoPlayerProps {
   videoId?: string;

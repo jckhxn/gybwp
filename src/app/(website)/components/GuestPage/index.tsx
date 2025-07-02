@@ -13,7 +13,7 @@ import {
 } from "@/src/app/(website)/components/ui/avatar";
 import { Separator } from "@/src/app/(website)/components/ui/separator";
 import { Badge } from "@/src/app/(website)/components/ui/badge";
-import PodcastPlayer from "@/src/app/(website)/episodes/[uuid]_backup/podcast-player";
+import { PodcastPlayer, type PlayerHandle } from "../episodes";
 import SocialShare from "./social-share";
 // import RelatedEpisodes from "./related-episodes";
 import GuestBio from "./guest-bio";

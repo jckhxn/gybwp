@@ -11,9 +11,7 @@ import {
   ExternalLink,
   Pause,
 } from "lucide-react";
-import PodcastPlayer, {
-  type PlayerHandle,
-} from "@/src/app/(website)/episodes/[uuid]_backup/podcast-player";
+import { PodcastPlayer, type PlayerHandle } from "../episodes";
 import { Badge } from "@/src/app/(website)/components/ui/badge";
 
 // Fix the Button import to use default import instead of named import
