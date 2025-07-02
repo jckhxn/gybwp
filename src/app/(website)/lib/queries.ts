@@ -440,3 +440,124 @@ export const EPISODE_BY_IDENTIFIER_QUERY = groq`*[_type == "episode" && (coalesc
     },
     "sections": sections[]
 }`;
+
+// Episode template queries
+export const DEFAULT_EPISODE_TEMPLATE_QUERY = groq`*[_type == "episodeTemplate" && isDefault == true][0] {
+  _id,
+  name,
+  description,
+  sectionsBody[] {
+    ...,
+    _type
+  }
+}`;
+
+export const EPISODE_TEMPLATE_BY_ID_QUERY = groq`*[_type == "episodeTemplate" && _id == $templateId][0] {
+  _id,
+  name,
+  description,
+  sectionsBody[] {
+    ...,
+    _type
+  }
+}`;
+
+// Enhanced episode query with page builder support
+export const EPISODE_WITH_PAGE_BUILDER_QUERY = groq`*[_type == "episode" && (coalesce(uuid,youtube.uuid) == $identifier || pathname.current == $identifier)][0] {
+    ...,
+    customLayout,
+    sectionsBody[] {
+      ...,
+      _type
+    },
+    // Include both transcript formats 
+    transcript[] {
+      ...,
+      markDefs[] {
+        ...,
+        _type == "speaker" => {
+          ...,
+          "hostRef": hostRef->,
+          "guestRef": guestRef->
+        }
+      }
+    },
+    transcriptSegments[] {
+      ...,
+      speaker {
+        ...,
+        hostRef->,
+        guestRef->
+      }
+    },
+    // Get all speakers - we'll filter in the component
+    "allSpeakers": {
+      "hosts": *[_type == "host"] {
+        _id,
+        name,
+        slug
+      },
+      "guests": *[_type == "guest"] {
+        _id,
+        name,
+        slug
+      }
+    },
+    // Enhanced guest data
+    guests[]-> {
+      _id,
+      name,
+      title,
+      bio,
+      image,
+      socialLinks,
+      slug
+    },
+    // Enhanced sponsor data (from episode or season)
+    sponsors[]-> {
+      _id,
+      name,
+      logo,
+      image,
+      website,
+      tier,
+      slug,
+      uuid
+    },
+    season-> {
+      _id,
+      title,
+      sponsors[]-> {
+        _id,
+        name,
+        logo,
+        image,
+        website,
+        tier,
+        slug,
+        uuid
+      }
+    },
+    relatedEpisodes[]-> {
+      youtube {
+        title,
+        seasonNumber,
+        episodeNumber,
+        uuid,
+        thumbnail,
+      },
+      pathname,
+      _id
+    },
+    content {
+      files[] {
+        link,
+        name,
+        type,
+        description
+      }
+    },
+    // Navigation data
+    "prevEpisode": *[_type == "episode" && _createdAt < ^._createdAt] | order(_createdAt desc)[0].pathname.current,
+    "nextEpisode": *[_type == "episode" && _createdAt > ^._createdAt] | order(_createdAt asc)[0].pathname.current
+}`;

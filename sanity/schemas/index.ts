@@ -1,6 +1,7 @@
 // Import schemas from local documents folder
 import article from "./documents/article";
 import episode from "./documents/episode";
+import episodeTemplate from "./documents/episodeTemplate";
 import featuredArticle from "./documents/featuredArticle";
 import sponsor from "./documents/sponsor";
 import guest from "./documents/guest";
@@ -20,6 +21,7 @@ const schemas = [
   // Core document types (migrated from legacy)
   season,
   episode,
+  episodeTemplate,
   guest,
   person,
   host,
