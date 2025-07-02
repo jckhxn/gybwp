@@ -96,7 +96,7 @@ export function generatePodcastSeriesStructuredData(): PodcastSeries {
       target: [
         {
           "@type": "EntryPoint",
-          urlTemplate: "https://gybwp.com/episode/{episodeId}",
+          urlTemplate: "https://gybwp.com/episodes/{episodeId}",
         },
       ],
     },
@@ -129,7 +129,7 @@ export function generatePodcastEpisodeStructuredData(episodeData: {
   const baseUrl = "https://gybwp.com";
   const episodeUrl = episodeData.url.startsWith("http")
     ? episodeData.url
-    : `${baseUrl}/episode/${episodeData.uuid}`;
+    : `${baseUrl}/episodes/${episodeData.uuid}`;
 
   // Create mentions array for guests
   const mentions: Person[] =
@@ -268,7 +268,7 @@ export function generateVideoObjectStructuredData(episodeData: {
   };
 }): VideoObject {
   const baseUrl = "https://gybwp.com";
-  const episodeUrl = `${baseUrl}/episode/${episodeData.uuid}`;
+  const episodeUrl = `${baseUrl}/episodes/${episodeData.uuid}`;
   const youtubeUrl = `https://www.youtube.com/watch?v=${episodeData.youtubeId}`;
 
   // Format duration to ISO 8601 if available
@@ -663,7 +663,7 @@ export function generateSimplifiedPodcastEpisodeStructuredData(episodeData: {
   const baseUrl = "https://gybwp.com";
   const episodeUrl = episodeData.url.startsWith("http")
     ? episodeData.url
-    : `${baseUrl}/episode/${episodeData.uuid}`;
+    : `${baseUrl}/episodes/${episodeData.uuid}`;
 
   // Format duration to ISO 8601 if available
   const isoDuration = formatDurationToISO(episodeData.duration);
@@ -806,7 +806,7 @@ export function generateEpisodeArticleStructuredData(episodeData: {
   const baseUrl = "https://gybwp.com";
   const episodeUrl = episodeData.url.startsWith("http")
     ? episodeData.url
-    : `${baseUrl}/episode/${episodeData.uuid}`;
+    : `${baseUrl}/episodes/${episodeData.uuid}`;
 
   // Get thumbnail from YouTube if available
   const thumbnailUrl = episodeData.youtubeId
@@ -918,7 +918,7 @@ export function generateEnhancedVideoObjectStructuredData(episodeData: {
   viewCount?: number;
 }): Record<string, any> {
   const baseUrl = "https://gybwp.com";
-  const episodeUrl = `${baseUrl}/episode/${episodeData.uuid}`;
+  const episodeUrl = `${baseUrl}/episodes/${episodeData.uuid}`;
   const youtubeUrl = `https://www.youtube.com/watch?v=${episodeData.youtubeId}`;
 
   // Format duration to ISO 8601 if available

@@ -1,43 +1,43 @@
-import { defineField } from 'sanity'
+import { defineField, defineType } from "sanity";
 
-export default defineField({
-  name: 'section.homeHero',
-  title: 'Home Hero',
-  type: 'object',
+export default defineType({
+  name: "homeHero",
+  title: "Home Hero",
+  type: "object",
   fields: [
     defineField({
-      name: 'title',
-      type: 'string',
-      title: 'Hero Title',
-      initialValue: 'Growing Your Business With People',
+      name: "title",
+      type: "string",
+      title: "Hero Title",
+      initialValue: "Growing Your Business With People",
     }),
     defineField({
-      name: 'subtitle',
-      type: 'string',
-      title: 'Hero Subtitle',
-      initialValue: 'Where Leadership Meets Excellence',
+      name: "subtitle",
+      type: "string",
+      title: "Hero Subtitle",
+      initialValue: "Where Leadership Meets Excellence",
     }),
     defineField({
-      name: 'description',
-      type: 'text',
-      title: 'Hero Description',
+      name: "description",
+      type: "text",
+      title: "Hero Description",
     }),
     defineField({
-      name: 'ctaText',
-      type: 'string',
-      title: 'CTA Button Text',
-      initialValue: 'Listen Now',
+      name: "ctaText",
+      type: "string",
+      title: "CTA Button Text",
+      initialValue: "Listen Now",
     }),
     defineField({
-      name: 'ctaLink',
-      type: 'string',
-      title: 'CTA Button Link',
-      initialValue: '/episode',
+      name: "ctaLink",
+      type: "string",
+      title: "CTA Button Link",
+      initialValue: "/episode",
     }),
     defineField({
-      name: 'backgroundImage',
-      type: 'image',
-      title: 'Background Image',
+      name: "backgroundImage",
+      type: "image",
+      title: "Background Image",
       options: {
         hotspot: true,
       },
@@ -45,15 +45,15 @@ export default defineField({
   ],
   preview: {
     select: {
-      title: 'title',
-      subtitle: 'subtitle',
+      title: "title",
+      subtitle: "subtitle",
     },
     prepare(selection) {
-      const { title, subtitle } = selection
+      const { title, subtitle } = selection;
       return {
-        title: 'Home Hero',
-        subtitle: title || 'Hero Section',
-      }
+        title: "Home Hero",
+        subtitle: title || "Hero Section",
+      };
     },
   },
-})
+});

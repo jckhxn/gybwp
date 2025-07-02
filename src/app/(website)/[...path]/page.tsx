@@ -1,59 +1,61 @@
-import { notFound } from 'next/navigation'
-import { loadQuery } from '@/data/sanity'
-import { pageByPathQuery } from '@/data/sanity/queries'
-import { Page } from '@/components/Page'
-import { PagePayload } from '@/types'
+import { notFound } from "next/navigation";
+import { loadQuery } from "@/data/sanity";
+import { pageByPathQuery } from "@/data/sanity/queries";
+import { Page } from "@/components/Page";
+import { PagePayload } from "@/types";
 
 export default async function DynamicPage({
   params,
 }: {
-  params: { path: string[] }
+  params: Promise<{ path: string[] }>;
 }) {
-  const pathname = params.path ? `/${params.path.join('/')}` : '/'
-  
+  const { path } = await params;
+  const pathname = path ? `/${path.join("/")}` : "/";
+
   try {
     const page = await loadQuery<PagePayload>({
       query: pageByPathQuery,
       params: { pathname },
-    })
+    });
 
     if (!page) {
-      notFound()
+      notFound();
     }
 
-    return <Page page={page} />
+    return <Page page={page} />;
   } catch (error) {
-    console.error('Error loading page:', error)
-    notFound()
+    console.error("Error loading page:", error);
+    notFound();
   }
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: { path: string[] }
+  params: Promise<{ path: string[] }>;
 }) {
-  const pathname = params.path ? `/${params.path.join('/')}` : '/'
-  
+  const { path } = await params;
+  const pathname = path ? `/${path.join("/")}` : "/";
+
   try {
     const page = await loadQuery<PagePayload>({
       query: pageByPathQuery,
       params: { pathname },
-    })
+    });
 
     if (!page) {
       return {
-        title: 'Page Not Found',
-      }
+        title: "Page Not Found",
+      };
     }
 
     return {
-      title: page.title || 'Growing Your Business With People',
-      description: 'Growing Your Business With People - Podcast and Consulting',
-    }
+      title: page.title || "Growing Your Business With People",
+      description: "Growing Your Business With People - Podcast and Consulting",
+    };
   } catch (error) {
     return {
-      title: 'Growing Your Business With People',
-    }
+      title: "Growing Your Business With People",
+    };
   }
 }

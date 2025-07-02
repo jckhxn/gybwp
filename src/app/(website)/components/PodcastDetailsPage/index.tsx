@@ -81,13 +81,13 @@ const PodcastDetailsPageComponent = () => {
                 nextEpisode ? "text-center" : "text-left ml-6"
               } mb-4 md:text-left md:mb-0`}
             >
-              <Link href={`/episode/${prevEpisode}`}>
+              <Link href={`/episodes/${prevEpisode}`}>
                 <Button className="px-10 py-2 mt-4" color="main">
                   {DATA.backButtonText}
                 </Button>
               </Link>
               {nextEpisode ? (
-                <Link href={`/episode/${nextEpisode}`}>
+                <Link href={`/episodes/${nextEpisode}`}>
                   <Button className="ml-2 px-6 py-2 mt-4" color="primary">
                     {DATA.nextEpisodeButton}
                   </Button>
@@ -100,7 +100,7 @@ const PodcastDetailsPageComponent = () => {
                   data?.episodeDetails[0]?.nextEpisode
                 ) && (
                   <Link
-                    href={`/episode/${data?.episodeDetails[0]?.nextEpisode}`}
+                    href={`/episodes/${data?.episodeDetails[0]?.nextEpisode}`}
                   >
                     <Button className="ml-2 px-6 py-2 mt-4" color="primary">
                       Play Part{" "}

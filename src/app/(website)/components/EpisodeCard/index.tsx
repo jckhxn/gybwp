@@ -18,6 +18,7 @@ type YoutubeData = {
 type Props = {
   image?: string;
   uuid?: string;
+  pathname?: { current?: string };
   youtube?: YoutubeData;
   seasonNumber?: number;
   episodeNumber?: number;
@@ -49,9 +50,28 @@ const EpisodeCard = ({
     thumbnail: "/api/placeholder/600/400",
     publishedAt: "",
   },
+  uuid,
+  pathname,
   viewMode = "grid",
   guests = [],
 }: Props) => {
+  // Helper function to generate episode URL
+  const getEpisodeUrl = () => {
+    // Prioritize pathname, fallback to UUID-based URL for backwards compatibility
+    if (pathname?.current) {
+      return pathname.current;
+    }
+    if (youtube?.uuid) {
+      return `/episodes/${youtube.uuid}`;
+    }
+    if (uuid) {
+      return `/episodes/${uuid}`;
+    }
+    return "/episodes"; // Fallback to episodes listing
+  };
+
+  const episodeUrl = getEpisodeUrl();
+
   // Format the date to show as Month, Date (e.g., "April 22")
   const formatDate = (dateString: string) => {
     if (!dateString) return "";
@@ -67,10 +87,7 @@ const EpisodeCard = ({
   if (viewMode === "grid") {
     return (
       <div className="group relative overflow-hidden rounded-xl bg-white shadow-lg hover:shadow-xl transition-shadow border border-gray-100 h-[400px] flex flex-col">
-        <Link
-          className="flex flex-col h-full"
-          href={`/episode/${youtube.uuid}`}
-        >
+        <Link className="flex flex-col h-full" href={episodeUrl}>
           <div className="relative overflow-hidden h-[200px] w-full">
             <Image
               alt={`Thumbnail for ${formatEpisodeTitle(youtube.title)}`}
@@ -129,7 +146,7 @@ const EpisodeCard = ({
   // List view
   return (
     <div className="group bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 overflow-hidden">
-      <Link href={`/episode/${youtube.uuid}`} className="flex">
+      <Link href={episodeUrl} className="flex">
         <div className="relative w-48 h-32 flex-shrink-0">
           <Image
             alt={`Thumbnail for ${formatEpisodeTitle(youtube.title)}`}

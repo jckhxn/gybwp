@@ -24,10 +24,13 @@ export type episodeType = {
   episodeLinks?: socialsType[];
   sponsors: sponsorUUIDs[];
   uuid: string;
+  pathname?: { current?: string };
   url: string;
   image: string;
   blurb: string;
   season?: string | number;
+  _updatedAt?: string;
+  _createdAt?: string;
   details?: {
     featuredGuests: guestsType[];
     description: string[];

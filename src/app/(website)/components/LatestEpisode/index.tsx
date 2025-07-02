@@ -19,8 +19,11 @@ interface Episode {
   episodeName?: string;
   episodeNumber?: number;
   seasonNumber?: number;
-  thumbnail?: string;
+  image?: string;
   uuid?: string;
+  pathname?: {
+    current?: string;
+  };
   publishedAt?: string;
   blurb?: string;
   youtube?: {
@@ -43,13 +46,10 @@ export const LatestEpisode = () => {
   useEffect(() => {
     const fetchLatestEpisode = async () => {
       try {
-        // Fetch the latest episode directly using the new LATEST_EPISODE query
+        // Fetch the latest episode directly using the updated LATEST_EPISODE query
         const latestEpisodeData = await client.fetch(LATEST_EPISODE);
 
-        if (latestEpisodeData && latestEpisodeData.youtube?.uuid) {
-          setLatestEpisode(latestEpisodeData.youtube);
-        }
-        if (latestEpisodeData && latestEpisodeData.uuid) {
+        if (latestEpisodeData) {
           setLatestEpisode(latestEpisodeData);
         }
       } catch (err) {
@@ -166,10 +166,13 @@ export const LatestEpisode = () => {
                 {/* Enhanced glow effect */}
                 <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 via-secondary/10 to-primary/20 rounded-2xl blur-xl opacity-20 group-hover:opacity-40 transition-all duration-700"></div>
 
-                <Link href={`/episode/${latestEpisode.uuid}`} className="block">
+                <Link
+                  href={`/episodes/${latestEpisode.pathname?.current || latestEpisode.uuid}`}
+                  className="block"
+                >
                   <div className="relative aspect-video overflow-hidden rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 backdrop-blur-sm border border-gray-200/60 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ring-1 ring-gray-100/50">
                     <Image
-                      src={latestEpisode.thumbnail || "/images/placeholder.svg"}
+                      src={latestEpisode.image || "/images/placeholder.svg"}
                       alt={latestEpisode.title || "Latest episode thumbnail"}
                       width={640}
                       height={360}
@@ -226,7 +229,7 @@ export const LatestEpisode = () => {
 
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Link
-                      href={`/episode/${latestEpisode.uuid}`}
+                      href={`/episodes/${latestEpisode.pathname?.current || latestEpisode.uuid}`}
                       className="group relative inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-primary to-primary/90 hover:from-primary-light hover:to-primary text-white px-6 py-3 text-base font-semibold shadow-lg shadow-primary/25 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
                     >
                       <Play className="h-4 w-4 mr-2" fill="currentColor" />
@@ -235,7 +238,7 @@ export const LatestEpisode = () => {
                     </Link>
 
                     <Link
-                      href={`/episode/${latestEpisode.uuid}`}
+                      href={`/episodes/${latestEpisode.pathname?.current || latestEpisode.uuid}`}
                       className="group inline-flex items-center justify-center rounded-xl bg-white hover:bg-gray-50 text-gray-700 hover:text-gray-900 px-6 py-3 text-base font-medium border border-gray-300 hover:border-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500/20 focus:ring-offset-2"
                     >
                       View Details

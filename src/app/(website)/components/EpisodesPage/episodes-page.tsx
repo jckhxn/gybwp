@@ -174,7 +174,7 @@ export function EpisodesPage() {
   // Reset pagination when filters change
   useEffect(() => {
     pagination.reset();
-  }, [searchTerm, sortBy, activeSeason, viewMode, pagination.reset]);
+  }, [searchTerm, sortBy, activeSeason, viewMode, pagination]);
 
   const totalEpisodes = allEpisodes.length;
   const currentSeasonEpisodes = data.length;

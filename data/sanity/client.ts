@@ -1,7 +1,7 @@
-import 'server-only'
+import "server-only";
 
-import { createClient } from 'next-sanity'
-import config from '@/config'
+import { createClient } from "next-sanity";
+import config from "@/config";
 
 export const client = createClient({
   projectId: config.sanity.projectId,
@@ -12,4 +12,4 @@ export const client = createClient({
     enabled: false,
     studioUrl: config.sanity.studioUrl,
   },
-})
+});

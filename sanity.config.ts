@@ -7,7 +7,7 @@ import { visionTool } from "@sanity/vision";
 import { locate } from "./src/app/(website)/lib/locate";
 import { pages } from "@tinloof/sanity-studio";
 
-import { youtubeInput } from "./src/app/(website)/sanity/plugins/youtube";
+import { youtubeInput } from "./sanity/plugins/youtube";
 import schemas from "./sanity/schemas";
 import config from "./config";
 
@@ -22,8 +22,10 @@ const sanityConfig = defineConfig({
     structureTool({}),
     pages({
       title: "Pages",
-      creatablePages: ["page", "person", "episode", "sponsor"],
-      locate,
+      creatablePages: ["page"], // Only allow page builder for new page types
+      resolve: {
+        locations: locate,
+      },
       previewUrl: {
         draftMode: {
           enable: "/api/draft",
@@ -31,7 +33,10 @@ const sanityConfig = defineConfig({
         preview: "/",
       },
     }),
-    youtubeInput({ apiKey: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY }),
+    youtubeInput({
+      apiKey: config.youtube.apiKey,
+      channelId: config.youtube.channelId,
+    }),
     visionTool(),
   ],
   schema: { types: schemas },

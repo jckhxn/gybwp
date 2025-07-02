@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build ",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migration:uuid-to-slug": "npx tsx migrations/uuid-to-slug-migration.ts"
   },
   "dependencies": {
     "@netlify/plugin-nextjs": "^4.38.1",
@@ -24,7 +25,6 @@
     "@radix-ui/react-toast": "^1.2.13",
     "@reduxjs/toolkit": "^1.9.5",
     "@sanity/image-url": "^1.0.2",
-    "@sanity/migrate": "^3.40.0",
     "@sanity/react-loader": "^1.9.19",
     "@sanity/ui": "^2.1.4",
     "@sanity/vision": "^3.15.1",
@@ -63,5 +63,8 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.0.4",
     "usehooks-ts": "^3.1.0"
+  },
+  "devDependencies": {
+    "dotenv": "^17.0.1"
   }
 }

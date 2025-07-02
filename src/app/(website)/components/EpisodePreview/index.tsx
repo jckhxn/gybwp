@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { PODCAST_DETAILS_QUERY } from "../../lib/queries";
+import { EPISODE_BY_IDENTIFIER_QUERY } from "../../lib/queries";
 import { QueryResponseInitial, useQuery } from "@sanity/react-loader";
 import { QueryParams, SanityDocument } from "next-sanity";
 
@@ -12,7 +12,7 @@ const EpisodePreview = ({
   params: QueryParams;
 }) => {
   const { data } = useQuery<SanityDocument | null>(
-    PODCAST_DETAILS_QUERY,
+    EPISODE_BY_IDENTIFIER_QUERY,
     params,
     {
       initial,

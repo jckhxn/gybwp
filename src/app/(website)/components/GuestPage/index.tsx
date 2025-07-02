@@ -13,7 +13,7 @@ import {
 } from "@/src/app/(website)/components/ui/avatar";
 import { Separator } from "@/src/app/(website)/components/ui/separator";
 import { Badge } from "@/src/app/(website)/components/ui/badge";
-import PodcastPlayer from "@/src/app/(website)/episode/[uuid]/podcast-player";
+import PodcastPlayer from "@/src/app/(website)/episodes/[uuid]_backup/podcast-player";
 import SocialShare from "./social-share";
 // import RelatedEpisodes from "./related-episodes";
 import GuestBio from "./guest-bio";
@@ -211,7 +211,7 @@ export default async function GuestPage({
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {guestData.previousEpisodes.map((episode: any, idx: number) => (
               <Link
-                href={`/episode/${episode.uuid}`}
+                href={`/episodes/${episode.uuid}`}
                 key={episode.uuid || idx}
                 className="rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 block bg-white hover:border-primary/20 group"
               >

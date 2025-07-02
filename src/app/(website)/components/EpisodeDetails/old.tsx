@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import PodcastPlayer, {
   type PlayerHandle,
-} from "@/src/app/(website)/episode/[uuid]/podcast-player";
+} from "@/src/app/(website)/episodes/[uuid]_backup/podcast-player";
 import { Badge } from "@/src/app/(website)/components/ui/badge";
 
 // Fix the Button import to use default import instead of named import
@@ -170,7 +170,7 @@ const EpisodeCard = ({
     <>
       {/* Pass along rich data */}
       <JSONLD data={structuredData} />
-      
+
       <div className="bg-light min-h-screen">
         <div className="container mx-auto px-4 py-8">
           <div className="lg:flex lg:space-x-8">

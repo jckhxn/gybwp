@@ -1,3 +1,15 @@
 {
-  "git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+  "mcp.servers": {
+    "sanity": {
+      "command": "npx",
+      "args": ["-y", "@sanity/mcp-server@latest"],
+      "env": {
+        "SANITY_PROJECT_ID": "hxymd1na",
+        "SANITY_DATASET": "production",
+        "SANITY_API_TOKEN": "skiMmWgCB2Nx008z4OZsaNVxuTR632QtB3hXxcck9fbPlJBczmlOCIP7JuG7Bm4EEe7A8kZXU3CCUqbQWuNaUK5gsIbYxaDbYa6RWCcFovD2c5UYQaC9fhhO3U4OVRxXgEbnXGwzSZwepVvKaalpRKQ4bMJYkk2S8dQHiynwl1uTyCkpqo6V",
+        "MCP_USER_ROLE": "editor"
+      }
+    }
+  }
 }

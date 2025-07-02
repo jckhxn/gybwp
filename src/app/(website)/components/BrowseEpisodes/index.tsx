@@ -17,6 +17,9 @@ import { Badge } from "@/src/app/(website)/components/ui/badge";
 interface Episode {
   _id: string;
   duration?: string;
+  pathname?: {
+    current?: string;
+  };
   youtube?: {
     title?: string;
     episodeNumber?: number;
@@ -42,6 +45,18 @@ export const BrowseEpisodes = ({
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
   const [activeEpisodeIndex, setActiveEpisodeIndex] = useState(0);
+
+  // Helper function to get episode URL - prioritize pathname over UUID
+  const getEpisodeUrl = (episode: Episode): string => {
+    if (episode.pathname?.current) {
+      return episode.pathname.current;
+    }
+    // Fallback to UUID format for episodes without pathname
+    if (episode.youtube?.uuid) {
+      return `/episodes/${episode.youtube.uuid}`;
+    }
+    return "/episodes"; // Fallback to episodes listing
+  };
 
   // Define Season interface
   interface Season {
@@ -326,7 +341,7 @@ export const BrowseEpisodes = ({
                 {episodes.map((episode, idx) => (
                   <Link
                     key={`episode-${idx}`}
-                    href={`/episode/${episode.youtube?.uuid}`}
+                    href={getEpisodeUrl(episode)}
                     className="group flex-shrink-0 w-[85vw] sm:w-[360px] md:w-[320px] snap-start-enhanced block cursor-pointer"
                     style={{
                       scrollSnapAlign: "start",

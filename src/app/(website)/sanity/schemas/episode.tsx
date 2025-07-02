@@ -25,13 +25,16 @@ const episode = {
   fields: [
     definePathname({
       name: "pathname",
-      initialValue: { current: "/episode/" },
+      initialValue: { current: "/episodes/" },
       description: "Enter the UUID here to use Live Preview editing",
       options: {
+        source: "youtube.title",
+        slugify: (input: string) => generateEpisodePathname(input),
         folder: {
           canUnlock: true,
         },
       },
+
       hidden: ({ document }) => !document?.youtube?.uuid,
     }),
     {

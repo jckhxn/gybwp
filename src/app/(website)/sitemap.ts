@@ -9,11 +9,12 @@ export default async function sitemap() {
 
   const episodes = await client.fetch(ALL_EPISODES);
 
-  if (episodes) console.log(episodes);
   const episodeUrls = episodes.map((episode: episodeType) => ({
-    url: `${baseUrl}/episode/${episode.uuid}`,
+    url: episode.pathname?.current
+      ? `${baseUrl}${episode.pathname.current}`
+      : `${baseUrl}/episodes/${episode.uuid}`, // Fallback for episodes without pathname
     //@ts-ignore
-    lastModified: episode._createdAt,
+    lastModified: episode._updatedAt || episode._createdAt,
   }));
   return [
     {

@@ -5,7 +5,7 @@ import {
   PortableTextMarkComponentProps,
 } from "@portabletext/react";
 import Link from "next/link";
-import { PlayerHandle } from "@/src/app/(website)/episode/[uuid]/podcast-player";
+import { PlayerHandle } from "@/src/app/(website)/episodes/[uuid]_backup/podcast-player";
 
 interface TimestampAnnotation {
   _type: "timestamp";

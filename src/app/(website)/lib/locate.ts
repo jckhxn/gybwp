@@ -31,7 +31,7 @@ export const locate: DocumentLocationResolver = (params, context) => {
           locations: [
             {
               title: formatEpisodeTitle(doc.youtube.title) || "Untitled",
-              href: `/episode/${doc.youtube.uuid}`,
+              href: `/episodes/${doc.youtube.uuid}`,
             },
           ],
         };

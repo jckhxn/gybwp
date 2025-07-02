@@ -1,4 +1,4 @@
-import { groq } from 'next-sanity'
+import { groq } from "next-sanity";
 
 // Base page query for any page type
 export const PAGE_QUERY = groq`
@@ -63,7 +63,7 @@ export const PAGE_QUERY = groq`
       } | order(_createdAt desc)
     }
   }
-`
+`;
 
 // Query for all pages (for sitemap generation)
 export const ALL_PAGES_QUERY = groq`
@@ -73,7 +73,7 @@ export const ALL_PAGES_QUERY = groq`
     "pathname": pathname.current,
     _updatedAt
   }
-`
+`;
 
 // Query for all episodes (for homepage, etc.)
 export const ALL_EPISODES_QUERY = groq`
@@ -88,7 +88,7 @@ export const ALL_EPISODES_QUERY = groq`
     },
     _createdAt
   }
-`
+`;
 
 // Query for all people
 export const ALL_PEOPLE_QUERY = groq`
@@ -99,7 +99,7 @@ export const ALL_PEOPLE_QUERY = groq`
     role,
     isMainHost
   }
-`
+`;
 
 // Page by path query - specific for the new page builder
 export const pageByPathQuery = groq`
@@ -124,4 +124,4 @@ export const pageByPathQuery = groq`
       }
     }
   }
-`
+`;

@@ -8,7 +8,7 @@ const routes = {
   internal: {
     home: "/",
     about: "/about",
-    episode: "/episode",
+    episode: "/episodes",
     podcastDetails: (podcastId: string) => `/${podcastId}`,
     sponsors: "/sponsors",
     sponsorsDetails: (sponsorSlug: string) => `/sponsors/${sponsorSlug}`,
