@@ -167,7 +167,7 @@ export const LatestEpisode = () => {
                 <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 via-secondary/10 to-primary/20 rounded-2xl blur-xl opacity-20 group-hover:opacity-40 transition-all duration-700"></div>
 
                 <Link
-                  href={`/episodes/${latestEpisode.pathname?.current || latestEpisode.uuid}`}
+                  href={`${latestEpisode.pathname?.current || latestEpisode.uuid}`}
                   className="block"
                 >
                   <div className="relative aspect-video overflow-hidden rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 backdrop-blur-sm border border-gray-200/60 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer ring-1 ring-gray-100/50">
