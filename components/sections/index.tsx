@@ -5,6 +5,14 @@ import { BrowseEpisodesSection } from "@/components/sections/episodes/BrowseEpis
 import { NewsletterSection } from "@/components/sections/shared/NewsletterSection";
 import { FeaturedNewsSection } from "@/components/sections/shared/FeaturedNewsSection";
 
+// Import episode-specific sections
+import EpisodeOverview from "@/components/sections/episodes/EpisodeOverview";
+import EpisodeTranscript from "@/components/sections/episodes/EpisodeTranscript";
+import EpisodeGuests from "@/components/sections/episodes/EpisodeGuests";
+import EpisodeSponsors from "@/components/sections/episodes/EpisodeSponsors";
+import RelatedEpisodes from "@/components/sections/episodes/RelatedEpisodes";
+import SubscribeSection from "@/components/sections/episodes/SubscribeSection";
+
 // Section registry - maps Sanity section types to React components
 export const sections = {
   homeHero: HomeHero,
@@ -12,6 +20,12 @@ export const sections = {
   browseEpisodes: BrowseEpisodesSection,
   newsletter: NewsletterSection,
   featuredNews: FeaturedNewsSection,
+  episodeOverview: EpisodeOverview,
+  episodeTranscript: EpisodeTranscript,
+  episodeGuests: EpisodeGuests,
+  episodeSponsors: EpisodeSponsors,
+  relatedEpisodes: RelatedEpisodes,
+  subscribeSection: SubscribeSection,
 };
 
 export function SectionRenderer(props: { section: Section }) {
