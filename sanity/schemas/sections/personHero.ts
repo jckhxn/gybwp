@@ -10,7 +10,7 @@ export default defineType({
       type: "reference",
       title: "Person",
       to: [{ type: "person" }],
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     }),
     defineField({
       name: "title",

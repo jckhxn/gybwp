@@ -15,7 +15,10 @@ interface EpisodeSectionRendererProps {
   episode: any;
 }
 
-export function EpisodeSectionRenderer({ section, episode }: EpisodeSectionRendererProps) {
+export function EpisodeSectionRenderer({
+  section,
+  episode,
+}: EpisodeSectionRendererProps) {
   switch (section._type) {
     case "episodeHero":
       return <EpisodeHero section={section} episode={episode} />;

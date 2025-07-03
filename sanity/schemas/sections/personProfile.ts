@@ -10,7 +10,7 @@ export default defineType({
       title: "Person",
       type: "reference",
       to: [{ type: "person" }],
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     }),
     defineField({
       name: "showBio",
@@ -35,7 +35,7 @@ export default defineType({
       title: "Max Episodes to Show",
       type: "number",
       initialValue: 6,
-      validation: (Rule) => Rule.min(1).max(20),
+      validation: (Rule: any) => Rule.min(1).max(20),
       hidden: ({ parent }) => !parent?.showEpisodes,
     }),
   ],

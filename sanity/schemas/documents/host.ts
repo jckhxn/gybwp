@@ -26,7 +26,7 @@ export default defineType({
       title: "Host Name",
       type: "string",
       description: "Full name of the podcast host",
-      validation: (rule) => rule.required(),
+      validation: (rule: any) => rule.required(),
     }),
     defineField({
       name: "slug",
@@ -37,7 +37,7 @@ export default defineType({
         source: "name",
         maxLength: 90,
       },
-      validation: (rule) => rule.required(),
+      validation: (rule: any) => rule.required(),
     }),
     defineField({
       name: "title",
@@ -61,7 +61,7 @@ export default defineType({
       type: "text",
       description: "Brief biography of the host",
       rows: 4,
-    }),
+    } as any),
     defineField({
       name: "company",
       title: "Company/Organization",
@@ -95,7 +95,7 @@ export default defineType({
           type: "url",
         }),
       ],
-    }),
+    } as any),
     defineField({
       name: "email",
       title: "Contact Email",

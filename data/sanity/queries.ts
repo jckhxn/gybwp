@@ -1,6 +1,6 @@
 import { groq } from "next-sanity";
 
-// Base page query for any page type
+// Base page query for any page type with full data expansion
 export const PAGE_QUERY = groq`
   *[_type in ["page", "episode", "person", "sponsor"] && pathname.current == $pathname][0] {
     _id,
@@ -121,27 +121,121 @@ export const ALL_PEOPLE_QUERY = groq`
   }
 `;
 
-// Page by path query - specific for the new page builder
-export const pageByPathQuery = groq`
-  *[_type == "page" && pathname.current == $pathname][0] {
-    _id,
-    _type,
-    "pathname": pathname.current,
-    title,
-    sectionsBody[] {
-      _key,
-      _type,
+// Query for a single episode by various identifiers
+export const EPISODE_BY_IDENTIFIER_QUERY = groq`*[_type == "episode" && (
+  coalesce(uuid,youtube.uuid) == $identifier || 
+  pathname.current == $identifier ||
+  pathname.current == "/episode/" + $slug ||
+  pathname.current == "/episodes/" + $slug ||
+  slug.current == $slug
+)][0] {
+    ...,
+    // Include both transcript formats 
+    transcript[] {
       ...,
-      // Expand person references in sections
-      person-> {
+      markDefs[] {
+        ...,
+        _type == "speaker" => {
+          ...,
+          "hostRef": hostRef->,
+          "guestRef": guestRef->
+        }
+      }
+    },
+    transcriptSegments[] {
+      ...,
+      speaker {
+        ...,
+        hostRef->,
+        guestRef->
+      }
+    },
+    // Get all speakers - we'll filter in the component
+    "allSpeakers": {
+      "hosts": *[_type == "host"] {
         _id,
         name,
-        "slug": slug.current,
-        role,
-        isMainHost,
-        consultingProfile,
-        guestProfile
+        slug
+      },
+      "guests": *[_type == "guest"] {
+        _id,
+        name,
+        slug
       }
+    },
+  relatedEpisodes[]->
+    {
+      youtube{
+      title,
+      seasonNumber,
+      episodeNumber,
+      uuid,
+      thumbnail,
     }
-  }
-`;
+    },
+    content {
+      files[] {
+        link,
+        name,
+        type,
+        "file": pdf.asset->url,
+        "image": image.asset->url
+      }
+    },
+    "blurb": coalesce(youtube.blurb, blurb),
+    "episodeName": coalesce(youtube.title, episodeName),
+    "episodeNumber": coalesce(youtube.episodeNumber, episodeNumber),
+    "image": coalesce(youtube.thumbnail, image),
+    "seasonNumber": coalesce(youtube.seasonNumber, seasonNumber),
+    "url": coalesce("https://www.youtube.com/" + youtube.id, url),
+    "uuid": coalesce(youtube.uuid, uuid),
+    "publishedAt": youtube.publishedAt,
+    guests[]->,
+    sponsors[]-> {
+      _id,
+      name,
+      uuid,
+      slug,
+      logo,
+      image,
+      description,
+      website,
+      tier,
+      bgColor,
+      isActive
+    },
+    details {
+    ...,
+      featuredGuests[] {
+        ...,
+        "image": image.asset->url,
+       "episodes": *[_type=="episode" && details.featuredGuests[].name match ^.name && !(coalesce(uuid,youtube.uuid) == $identifier || pathname.current == $identifier)] {
+      ...,
+      "episodeName": coalesce(youtube.title, episodeName),
+      "episodeNumber": coalesce(youtube.episodeNumber, episodeNumber),
+      "url": coalesce("https://www.youtube.com/" + youtube.id, url),
+      
+    }
+      }
+    },
+    "allParts":*[_type == "episode" && uuid != $identifier && uuid match $epID] | order(uuid asc),
+  "nextEpisode": *[_type == "episode" && _createdAt > ^._createdAt && uuid != ^._id] | order(_createdAt asc, uuid asc)[0].pathname.current,
+    "prevEpisode": *[_type == "episode" && _createdAt < ^._createdAt && uuid != ^._id] | order(_createdAt desc, uuid desc)[0].pathname.current,uuid,
+    season-> {
+      ...,
+       sponsors[]-> {
+         _id,
+         name,
+         uuid,
+         slug,
+         logo,
+         image,
+         description,
+         website,
+         tier,
+         bgColor,
+         isActive
+       },
+    },
+    "sections": sections[]
+}`;

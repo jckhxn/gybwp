@@ -28,7 +28,7 @@ export default defineType({
       title: "Episodes per Page",
       type: "number",
       initialValue: 12,
-      validation: (Rule) => Rule.min(1).max(50),
+      validation: (Rule: any) => Rule.min(1).max(50),
     }),
     defineField({
       name: "showFilters",

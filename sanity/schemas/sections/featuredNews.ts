@@ -22,7 +22,7 @@ export default defineType({
       title: "Max Items to Show",
       type: "number",
       initialValue: 3,
-      validation: (Rule) => Rule.min(1).max(10),
+      validation: (Rule: any) => Rule.min(1).max(10),
     }),
     defineField({
       name: "showReadMore",

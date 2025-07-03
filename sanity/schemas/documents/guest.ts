@@ -67,9 +67,9 @@ export default defineType({
             }),
             // Add more social media fields as needed (e.g., facebook, instagram)
           ],
-        }),
+        } as any),
       ],
-    }),
+    } as any),
     defineField({
       name: "about",
       title: "About",
@@ -87,7 +87,7 @@ export default defineType({
         maxLength: 96,
         slugify: (input: any) => input.toLowerCase().replace(/\s+/g, "-"),
       },
-      validation: (rule) =>
+      validation: (rule: any) =>
         rule
           .required()
           .error(

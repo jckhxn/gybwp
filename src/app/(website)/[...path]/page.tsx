@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation";
-import { loadQuery } from "@/data/sanity";
-import { pageByPathQuery } from "@/data/sanity/queries";
+import { loadPage } from "@/data/sanity";
 import { Page } from "@/components/Page";
-import { PagePayload } from "@/types";
 
 export default async function DynamicPage({
   params,
@@ -13,16 +11,13 @@ export default async function DynamicPage({
   const pathname = path ? `/${path.join("/")}` : "/";
 
   try {
-    const page = await loadQuery<PagePayload>({
-      query: pageByPathQuery,
-      params: { pathname },
-    });
+    const page = await loadPage(pathname);
 
     if (!page) {
       notFound();
     }
 
-    return <Page page={page} />;
+    return <Page data={page} />;
   } catch (error) {
     console.error("Error loading page:", error);
     notFound();
@@ -38,10 +33,7 @@ export async function generateMetadata({
   const pathname = path ? `/${path.join("/")}` : "/";
 
   try {
-    const page = await loadQuery<PagePayload>({
-      query: pageByPathQuery,
-      params: { pathname },
-    });
+    const page = await loadPage(pathname);
 
     if (!page) {
       return {

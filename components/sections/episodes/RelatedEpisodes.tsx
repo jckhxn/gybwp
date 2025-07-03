@@ -16,7 +16,10 @@ interface RelatedEpisodesProps {
   };
 }
 
-export default function RelatedEpisodes({ data, episode }: RelatedEpisodesProps) {
+export default function RelatedEpisodes({
+  data,
+  episode,
+}: RelatedEpisodesProps) {
   if (!data?.showRelated) return null;
 
   const relatedEpisodes = episode?.relatedEpisodes || [];

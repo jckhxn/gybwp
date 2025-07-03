@@ -9,7 +9,7 @@ export default defineType({
       name: "name",
       title: "Name",
       type: "string",
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     }),
     defineField({
       name: "pathname",
@@ -20,7 +20,7 @@ export default defineType({
         slugify: (input: string) =>
           `/sponsor/${input.toLowerCase().replace(/\s+/g, "-").slice(0, 96)}`,
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     }),
     defineField({
       name: "sectionsBody",

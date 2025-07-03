@@ -36,11 +36,7 @@ import { SponsorsList } from "../sponsors";
 import { urlForImage } from "../../lib/sanity-image";
 import { CTA } from "../HomePage/static-data";
 import TranscriptDisplay from "../TranscriptDisplay";
-import {
-  PodcastPlayer,
-  RelatedEpisodes,
-  type PlayerHandle,
-} from "../episodes";
+import { PodcastPlayer, RelatedEpisodes, type PlayerHandle } from "../episodes";
 import StickyVideoPlayer from "../StickyVideoPlayer";
 import {
   formatDate,

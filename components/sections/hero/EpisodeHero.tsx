@@ -2,13 +2,13 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  Play, 
-  Share2, 
-  Clock, 
-  Calendar, 
-  ChevronLeft, 
-  ChevronRight 
+import {
+  Play,
+  Share2,
+  Clock,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
 import { formatEpisodeTitle } from "@/src/lib/formatTitle";
@@ -43,15 +43,17 @@ export function EpisodeHero({ section, episode }: EpisodeHeroProps) {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   // Extract data from episode with proper fallbacks
-  const rawTitle = 
-    section.title || 
-    episode?.youtube?.title || 
-    episode?.episodeName || 
+  const rawTitle =
+    section.title ||
+    episode?.youtube?.title ||
+    episode?.episodeName ||
     "Untitled Episode";
   const title = formatEpisodeTitle(rawTitle);
   const blurb = episode?.youtube?.blurb || episode?.blurb || "";
-  const seasonNumber = episode?.youtube?.seasonNumber || episode?.seasonNumber || "";
-  const episodeNumber = episode?.youtube?.episodeNumber || episode?.episodeNumber || "";
+  const seasonNumber =
+    episode?.youtube?.seasonNumber || episode?.seasonNumber || "";
+  const episodeNumber =
+    episode?.youtube?.episodeNumber || episode?.episodeNumber || "";
   const publishedAt = episode?.youtube?.publishedAt || episode?.publishedAt;
   const duration = episode?.youtube?.duration || "";
 
@@ -146,7 +148,7 @@ export function EpisodeHero({ section, episode }: EpisodeHeroProps) {
               </button>
             )}
 
-            <button 
+            <button
               onClick={() => setIsShareModalOpen(true)}
               className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-gray-200 hover:bg-white hover:shadow-lg text-gray-700 hover:text-gray-900 px-8 py-4 rounded-xl font-semibold transition-all duration-300"
             >

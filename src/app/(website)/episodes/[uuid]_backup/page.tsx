@@ -1,8 +1,7 @@
 // @ts-nocheck
 import { redirect } from "next/navigation";
 import { SanityDocument } from "next-sanity";
-import { EPISODE_BY_IDENTIFIER_QUERY } from "../../lib/queries";
-import { loadQuery } from "@/src/app/(website)/lib/store";
+import { loadEpisode } from "@/data/sanity";
 
 // Import redirect map for legacy UUID support
 import redirectMap from "@/uuid-to-pathname-redirects.json";
@@ -24,14 +23,10 @@ export default async function UUIDRedirectPage({ params }: PageProps) {
   // If not in static map, try to find episode by UUID and redirect to pathname
   try {
     const epID = uuid.split("-")[0];
-    const initial = await loadQuery<SanityDocument>(
-      EPISODE_BY_IDENTIFIER_QUERY,
-      { identifier: uuid, epID },
-      { perspective: "published" }
-    );
+    const initial = await loadEpisode(uuid);
 
-    if (initial.data?.pathname?.current) {
-      redirect(initial.data.pathname.current);
+    if (initial?.pathname?.current) {
+      redirect(initial.pathname.current);
     }
   } catch (error) {
     console.error("Error finding episode for UUID redirect:", error);

@@ -1,6 +1,8 @@
 import React from "react";
 
 import { draftMode } from "next/headers";
+import { VisualEditing } from "next-sanity";
+import { revalidatePath, revalidateTag } from "next/cache";
 import Script from "next/script";
 // components
 import Footer from "./components/Footer";
@@ -22,7 +24,6 @@ import type { AppProps } from "next/app";
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 import type { Metadata } from "next";
-import LiveVisualEditing from "./sanity/components/LiveVisualEditing";
 import JSONLD from "./components/SEO/jsonld";
 
 export const metadata: Metadata = {
@@ -66,6 +67,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const isDraftModeEnabled = (await draftMode()).isEnabled;
+
   return (
     <>
       <html lang="en">
@@ -78,7 +81,29 @@ export default async function RootLayout({
           <main className={openSans.className}>
             <Header />
             {children}
-            {(await draftMode()).isEnabled && <LiveVisualEditing />}
+            {isDraftModeEnabled && (
+              <VisualEditing
+                refresh={async (payload) => {
+                  "use server";
+                  if (!isDraftModeEnabled) {
+                    console.debug(
+                      "Skipped manual refresh because draft mode is not enabled"
+                    );
+                    return;
+                  }
+                  if (payload.source === "mutation") {
+                    if (payload.document.slug?.current) {
+                      const tag = `${payload.document._type}:${payload.document.slug.current}`;
+                      console.log("Revalidate slug", tag);
+                      await revalidateTag(tag);
+                    }
+                    console.log("Revalidate tag", payload.document._type);
+                    return revalidateTag(payload.document._type);
+                  }
+                  await revalidatePath("/", "layout");
+                }}
+              />
+            )}
             <Footer />
           </main>
         </body>

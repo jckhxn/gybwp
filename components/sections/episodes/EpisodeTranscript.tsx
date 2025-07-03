@@ -15,7 +15,10 @@ interface EpisodeTranscriptProps {
   };
 }
 
-export default function EpisodeTranscript({ data, episode }: EpisodeTranscriptProps) {
+export default function EpisodeTranscript({
+  data,
+  episode,
+}: EpisodeTranscriptProps) {
   if (!data?.showTranscript) return null;
 
   const transcript = episode?.transcript || "";
@@ -50,7 +53,8 @@ export default function EpisodeTranscript({ data, episode }: EpisodeTranscriptPr
             Episode Transcript
           </h3>
           <p className="text-gray-600 text-sm">
-            Full transcript with {data.showTimestamps ? "timestamps" : "text only"}
+            Full transcript with{" "}
+            {data.showTimestamps ? "timestamps" : "text only"}
           </p>
         </div>
 

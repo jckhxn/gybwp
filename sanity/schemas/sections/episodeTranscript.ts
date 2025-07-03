@@ -36,7 +36,10 @@ export default defineType({
 
       return {
         title: "Episode Transcript",
-        subtitle: features.length > 0 ? `Shows: ${features.join(", ")}` : "Basic transcript",
+        subtitle:
+          features.length > 0
+            ? `Shows: ${features.join(", ")}`
+            : "Basic transcript",
       };
     },
   },

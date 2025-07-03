@@ -28,7 +28,7 @@ export default defineType({
       title: "Maximum Episodes to Show",
       type: "number",
       initialValue: 3,
-      validation: (Rule) => Rule.min(1).max(6),
+      validation: (Rule: any) => Rule.min(1).max(6),
     }),
   ],
   preview: {
@@ -40,7 +40,9 @@ export default defineType({
     prepare({ title, showRelated, maxEpisodes }) {
       return {
         title: title || "Related Episodes",
-        subtitle: showRelated ? `Shows up to ${maxEpisodes || 3} episodes` : "Hidden",
+        subtitle: showRelated
+          ? `Shows up to ${maxEpisodes || 3} episodes`
+          : "Hidden",
       };
     },
   },

@@ -11,7 +11,7 @@ export default defineType({
       type: "string",
       name: "title",
       title: "Page Title",
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     }),
     definePathname({
       name: "pathname",
@@ -29,12 +29,12 @@ export default defineType({
           views: [
             {
               name: "grid",
-              previewImageUrl: (type) => `/sections/${type}.png`,
+              previewImageUrl: (type: string) => `/sections/${type}.png`,
             },
           ],
         },
       },
-    }),
+    } as any),
   ],
   preview: {
     select: {

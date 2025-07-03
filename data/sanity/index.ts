@@ -5,10 +5,12 @@ import {
   SponsorPayload,
 } from "@/types";
 import { loadQuery } from "./loadQuery";
-import { PAGE_QUERY, ALL_EPISODES_QUERY, ALL_PEOPLE_QUERY } from "./queries";
-
-// Export loadQuery for use in other parts of the app
-export { loadQuery } from "./loadQuery";
+import {
+  PAGE_QUERY,
+  ALL_EPISODES_QUERY,
+  ALL_PEOPLE_QUERY,
+  EPISODE_BY_IDENTIFIER_QUERY,
+} from "./queries";
 
 export async function loadPage(pathname: string) {
   return loadQuery<
@@ -16,20 +18,26 @@ export async function loadPage(pathname: string) {
   >({
     query: PAGE_QUERY,
     params: { pathname },
-    tags: [pathname === "/" ? "page" : pathname.split("/")[1]],
   });
 }
 
 export async function loadAllEpisodes() {
   return loadQuery<any[]>({
     query: ALL_EPISODES_QUERY,
-    tags: ["episode"],
+    params: {},
   });
 }
 
 export async function loadAllPeople() {
   return loadQuery<PersonPayload[]>({
     query: ALL_PEOPLE_QUERY,
-    tags: ["person"],
+    params: {},
+  });
+}
+
+export async function loadEpisode(identifier: string, slug?: string) {
+  return loadQuery<any>({
+    query: EPISODE_BY_IDENTIFIER_QUERY,
+    params: { identifier, slug, epID: identifier?.split("-")[0] },
   });
 }
