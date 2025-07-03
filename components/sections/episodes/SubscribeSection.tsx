@@ -109,7 +109,8 @@ export default function SubscribeSection({ data }: SubscribeSectionProps) {
                   Get Episode Updates
                 </h4>
                 <p className="text-gray-600 text-sm mb-4 text-center">
-                  Subscribe to our newsletter for episode notifications and exclusive content
+                  Subscribe to our newsletter for episode notifications and
+                  exclusive content
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
                   <input

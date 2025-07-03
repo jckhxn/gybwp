@@ -88,4 +88,4 @@ export const generateImage = ({
 };
 
 // Component exports
-export { ThemeToggle } from './theme-toggle';
+export { ThemeToggle } from "./theme-toggle";

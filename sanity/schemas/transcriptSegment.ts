@@ -10,7 +10,7 @@ export default defineType({
       title: "Timestamp",
       type: "string",
       placeholder: "e.g., 1:23 or 1:23:45",
-      validation: (Rule) =>
+      validation: (Rule: any) =>
         Rule.regex(/^(\d{1,2}:)?\d{1,2}:\d{2}$/, {
           name: "timestamp",
           invert: false,
@@ -56,7 +56,7 @@ export default defineType({
       title: "Text",
       type: "text",
       rows: 3,
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     }),
     defineField({
       name: "notes",

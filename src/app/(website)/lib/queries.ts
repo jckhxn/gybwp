@@ -327,7 +327,13 @@ export const OTHER_ARTICLES_QUERY = groq`*[_type == "article"]`;
 export const RANDOM_RELATED_EPISODES = groq`*[_type == "episode" && coalesce(uuid,youtube.uuid) in $uuids] | order(coalesce(uuid,youtube.uuid) asc) [0...3]`;
 
 // Get details for current Episode by UUID or pathname (dual-mode during migration)
-export const EPISODE_BY_IDENTIFIER_QUERY = groq`*[_type == "episode" && (coalesce(uuid,youtube.uuid) == $identifier || pathname.current == $identifier)][0] {
+export const EPISODE_BY_IDENTIFIER_QUERY = groq`*[_type == "episode" && (
+  coalesce(uuid,youtube.uuid) == $identifier || 
+  pathname.current == $identifier ||
+  pathname.current == "/episode/" + $slug ||
+  pathname.current == "/episodes/" + $slug ||
+  slug.current == $slug
+)][0] {
     ...,
     // Include both transcript formats 
     transcript[] {
@@ -441,10 +447,10 @@ export const EPISODE_BY_IDENTIFIER_QUERY = groq`*[_type == "episode" && (coalesc
     "sections": sections[]
 }`;
 
-// Episode template queries
-export const DEFAULT_EPISODE_TEMPLATE_QUERY = groq`*[_type == "episodeTemplate" && isDefault == true][0] {
+// Episode template queries (deprecated - use EPISODE_TEMPLATE_QUERY instead)
+export const DEFAULT_EPISODE_TEMPLATE_QUERY = groq`*[_type == "episodeTemplate"][0] {
   _id,
-  name,
+  title,
   description,
   sectionsBody[] {
     ...,
@@ -454,11 +460,24 @@ export const DEFAULT_EPISODE_TEMPLATE_QUERY = groq`*[_type == "episodeTemplate" 
 
 export const EPISODE_TEMPLATE_BY_ID_QUERY = groq`*[_type == "episodeTemplate" && _id == $templateId][0] {
   _id,
-  name,
+  title,
   description,
   sectionsBody[] {
     ...,
     _type
+  }
+}`;
+
+// Episode template singleton query
+export const EPISODE_TEMPLATE_QUERY = groq`*[_type == "episodeTemplate"][0] {
+  _id,
+  title,
+  description,
+  usage,
+  sectionsBody[] {
+    ...,
+    _type,
+    _key
   }
 }`;
 

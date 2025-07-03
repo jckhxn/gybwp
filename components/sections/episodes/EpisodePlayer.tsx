@@ -2,7 +2,10 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { PodcastPlayer, type PlayerHandle } from "@/src/app/(website)/components/episodes";
+import {
+  PodcastPlayer,
+  type PlayerHandle,
+} from "@/src/app/(website)/components/episodes";
 import StickyVideoPlayer from "@/src/app/(website)/components/StickyVideoPlayer";
 
 interface EpisodePlayerProps {
@@ -48,7 +51,9 @@ export function EpisodePlayer({ section, episode }: EpisodePlayerProps) {
               />
             </svg>
             <p className="text-lg font-medium">No video available</p>
-            <p className="text-sm">This episode doesn&apos;t have a video player</p>
+            <p className="text-sm">
+              This episode doesn&apos;t have a video player
+            </p>
           </div>
         </div>
       </div>

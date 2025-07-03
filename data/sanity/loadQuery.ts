@@ -1,45 +1,46 @@
+import type { UnfilteredResponseQueryOptions } from "@sanity/client";
+import type { QueryParams } from "next-sanity";
+
+import { draftMode } from "next/headers";
 import "server-only";
 
-import type { QueryParams } from "next-sanity";
-import { draftMode } from "next/headers";
-
-import { client } from "./client";
 import config from "@/config";
+import { client } from "@/data/sanity/client";
 
-const token = config.sanity.token;
-
-if (!token) {
-  throw new Error("The `SANITY_API_TOKEN` environment variable is required.");
-}
+const DEFAULT_PARAMS = {} as QueryParams;
 
 export async function loadQuery<QueryResponse>({
   query,
-  params = {},
-  revalidate = 60, // default to 60 seconds
-  tags = [],
+  params = DEFAULT_PARAMS,
 }: {
   query: string;
   params?: QueryParams;
-  revalidate?: number | false;
-  tags?: string[];
-}) {
+}): Promise<QueryResponse> {
   const isDraftMode = (await draftMode()).isEnabled;
+  const token = config.sanity.token;
+
   if (isDraftMode && !token) {
-    throw new Error("The `SANITY_API_TOKEN` environment variable is required.");
+    throw new Error(
+      "The `SANITY_API_READ_TOKEN` environment variable is required in Draft Mode."
+    );
   }
 
   const perspective = isDraftMode ? "previewDrafts" : "published";
-  const queryClient = client.withConfig({
+
+  const options = {
+    filterResponse: false,
+    useCdn: false,
+    resultSourceMap: isDraftMode ? "withKeyArraySelector" : false,
     token: isDraftMode ? token : undefined,
     perspective,
-    useCdn: !isDraftMode,
-    stega: isDraftMode,
-  });
-
-  return queryClient.fetch<QueryResponse>(query, params, {
     next: {
-      revalidate: isDraftMode ? 0 : revalidate,
-      tags,
+      tags: ["sanity"],
+      revalidate: isDraftMode ? 0 : undefined,
     },
-  });
+  } satisfies UnfilteredResponseQueryOptions;
+  const result = await client.fetch<QueryResponse>(query, params, {
+    ...options,
+    stega: isDraftMode,
+  } as UnfilteredResponseQueryOptions);
+  return result.result;
 }

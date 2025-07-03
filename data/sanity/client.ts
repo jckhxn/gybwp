@@ -1,15 +1,18 @@
-import "server-only";
-
-import { createClient } from "next-sanity";
 import config from "@/config";
+import { ClientPerspective, createClient } from "@sanity/client";
 
-export const client = createClient({
+const clientConfig = {
   projectId: config.sanity.projectId,
   dataset: config.sanity.dataset,
   apiVersion: config.sanity.apiVersion,
-  useCdn: false,
+  useCdn: process.env.NODE_ENV === "production",
+  perspective: "published" as ClientPerspective,
+};
+
+export const client = createClient({
+  ...clientConfig,
   stega: {
-    enabled: false,
     studioUrl: config.sanity.studioUrl,
+    // logger: console,
   },
 });

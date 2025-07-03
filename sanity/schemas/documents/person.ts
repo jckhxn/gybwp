@@ -11,7 +11,7 @@ export default defineType({
       name: "name",
       type: "string",
       title: "Full Name",
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     }),
     defineField({
       name: "slug",
@@ -21,7 +21,7 @@ export default defineType({
         source: "name",
         maxLength: 96,
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     }),
     definePathname({
       name: "pathname",
@@ -41,21 +41,21 @@ export default defineType({
           { title: "Team Member", value: "team" },
         ],
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     }),
     defineField({
       name: "isMainHost",
       type: "boolean",
       title: "Is Main Host/Consultant",
       description: "Mark this person as the main host and consultant",
-      hidden: ({ document }) => document?.role !== "host-consultant",
+      hidden: ({ document }: any) => document?.role !== "host-consultant",
     }),
     // Consulting-specific fields
     defineField({
       name: "consultingProfile",
       type: "object",
       title: "Consulting Profile",
-      hidden: ({ document }) => document?.role !== "host-consultant",
+      hidden: ({ document }: any) => document?.role !== "host-consultant",
       fields: [
         defineField({
           name: "bio",
@@ -82,13 +82,13 @@ export default defineType({
           title: "Calendar Booking Link",
         }),
       ],
-    }),
+    } as any),
     // Guest-specific fields
     defineField({
       name: "guestProfile",
       type: "object",
       title: "Guest Profile",
-      hidden: ({ document }) => document?.role !== "guest",
+      hidden: ({ document }: any) => document?.role !== "guest",
       fields: [
         defineField({
           name: "bio",
@@ -127,9 +127,9 @@ export default defineType({
             defineField({ name: "linkedin", type: "url", title: "LinkedIn" }),
             defineField({ name: "website", type: "url", title: "Website" }),
           ],
-        }),
+        } as any),
       ],
-    }),
+    } as any),
     // Page sections for dedicated person pages
     defineField({
       name: "sectionsBody",
@@ -143,12 +143,12 @@ export default defineType({
           views: [
             {
               name: "grid",
-              previewImageUrl: (type) => `/sections/${type}.png`,
+              previewImageUrl: (type: string) => `/sections/${type}.png`,
             },
           ],
         },
       },
-    }),
+    } as any),
   ],
   preview: {
     select: {

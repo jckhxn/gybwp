@@ -10,8 +10,7 @@ import EpisodePreview from "@/src/app/(website)/components/EpisodePreview";
 import EpisodeDetails from "@/src/app/(website)/components/EpisodeDetails/";
 
 // Queries and utilities
-import { EPISODE_BY_IDENTIFIER_QUERY } from "../../lib/queries";
-import { loadQuery } from "@/src/app/(website)/lib/store";
+import { loadEpisode } from "@/data/sanity";
 import processMetadata from "@/src/lib/processMetadata";
 import { formatEpisodeTitle } from "@/src/lib/formatTitle";
 
@@ -49,31 +48,23 @@ export default async function Page({ params, searchParams }: PageProps) {
       : `/episode/${slug}`;
   const epID = isUuidFormat ? slug.split("-")[0] : null;
 
-  const initial = await loadQuery<SanityDocument>(
-    EPISODE_BY_IDENTIFIER_QUERY,
-    { identifier, epID },
-    {
-      perspective: (await draftMode()).isEnabled
-        ? "previewDrafts"
-        : "published",
-    }
-  );
+  const initial = await loadEpisode(identifier, slug);
 
   // If episode found by UUID, redirect to pathname
-  if (initial.data && isUuidFormat && initial.data.pathname?.current) {
-    redirect(initial.data.pathname.current);
+  if (initial && isUuidFormat && initial.pathname?.current) {
+    redirect(initial.pathname.current);
   }
 
   // If no episode found, return 404
-  if (!initial.data) {
+  if (!initial) {
     throw new Error("Episode not found");
   }
 
   return (await draftMode()).isEnabled ? (
-    <EpisodePreview initial={initial} params={{ identifier, epID }} />
+    <EpisodePreview initial={{ data: initial }} params={{ identifier, epID }} />
   ) : (
     <>
-      <EpisodeDetails data={initial.data} />
+      <EpisodeDetails data={initial} />
     </>
   );
 }
@@ -95,17 +86,9 @@ export async function generateMetadata({
   const epID = isUuidFormat ? slug.split("-")[0] : null;
 
   try {
-    const initial = await loadQuery<SanityDocument>(
-      EPISODE_BY_IDENTIFIER_QUERY,
-      { identifier, epID },
-      {
-        perspective: (await draftMode()).isEnabled
-          ? "previewDrafts"
-          : "published",
-      }
-    );
+    const initial = await loadEpisode(identifier, slug);
 
-    const episode = initial.data;
+    const episode = initial;
 
     if (!episode) {
       return {

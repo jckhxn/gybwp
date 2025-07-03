@@ -42,19 +42,23 @@ interface EpisodeSponsorsProps {
   };
 }
 
-export default function EpisodeSponsors({ data, episode }: EpisodeSponsorsProps) {
+export default function EpisodeSponsors({
+  data,
+  episode,
+}: EpisodeSponsorsProps) {
   if (!data?.showSponsors) return null;
 
   // Get sponsors from either direct sponsors or from season
   const episodeSponsors = episode?.sponsors || [];
   const seasonSponsors = episode?.season?.sponsors || [];
-  const sponsors = episodeSponsors.length > 0 ? episodeSponsors : seasonSponsors;
+  const sponsors =
+    episodeSponsors.length > 0 ? episodeSponsors : seasonSponsors;
 
   if (sponsors.length === 0) return null;
 
   const getSponsorLink = (sponsor: any) => {
     if (!data.allowClickthrough) return null;
-    
+
     if (sponsor.website) return sponsor.website;
     if (sponsor.slug?.current) return `/sponsor/${sponsor.slug.current}`;
     if (sponsor.uuid) return `/sponsor/${sponsor.uuid}`;
@@ -85,22 +89,23 @@ export default function EpisodeSponsors({ data, episode }: EpisodeSponsorsProps)
           <h3 className="text-2xl font-bold text-gray-900 mb-2">
             {data.title || "Episode Sponsors"}
           </h3>
-          <p className="text-gray-600 text-sm">
-            Thank you to our sponsors
-          </p>
+          <p className="text-gray-600 text-sm">Thank you to our sponsors</p>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
           {sponsors.map((sponsor) => {
             const sponsorLink = getSponsorLink(sponsor);
-            
+
             const sponsorContent = (
               <div className="flex flex-col items-center text-center">
                 <div className="w-28 h-20 sm:w-36 sm:h-24 relative rounded-lg overflow-hidden border border-gray-200 bg-white flex items-center justify-center shadow-sm">
                   <Image
                     src={
                       sponsor.logo
-                        ? urlForImage(sponsor.logo)?.width(250).height(150).url()
+                        ? urlForImage(sponsor.logo)
+                            ?.width(250)
+                            .height(150)
+                            .url()
                         : sponsor.image || "/placeholder-logo.png"
                     }
                     alt={`${sponsor.name} logo`}
@@ -158,11 +163,12 @@ export default function EpisodeSponsors({ data, episode }: EpisodeSponsorsProps)
           <p className="text-sm text-gray-600 mb-2">
             Special thanks to our sponsors who help make this podcast possible
           </p>
-          {data.allowClickthrough && sponsors.some((s) => getSponsorLink(s)) && (
-            <p className="text-xs text-gray-500">
-              Click on sponsor logos to learn more about them
-            </p>
-          )}
+          {data.allowClickthrough &&
+            sponsors.some((s) => getSponsorLink(s)) && (
+              <p className="text-xs text-gray-500">
+                Click on sponsor logos to learn more about them
+              </p>
+            )}
         </div>
       </div>
     </div>

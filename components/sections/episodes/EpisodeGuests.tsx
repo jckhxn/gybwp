@@ -3,7 +3,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/src/app/(website)/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/src/app/(website)/components/ui/avatar";
 import { Card, CardContent } from "@/src/app/(website)/components/ui/card";
 import { urlForImage } from "@/src/app/(website)/lib/sanity-image";
 
@@ -69,14 +73,20 @@ export default function EpisodeGuests({ data, episode }: EpisodeGuestsProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {guests.map((guest) => (
-            <Card key={guest._id} className="border border-gray-200 hover:shadow-md transition-shadow">
+            <Card
+              key={guest._id}
+              className="border border-gray-200 hover:shadow-md transition-shadow"
+            >
               <CardContent className="p-6">
                 <div className="flex flex-col items-center text-center">
                   <Avatar className="w-16 h-16 mb-4">
                     <AvatarImage
                       src={
                         guest.image
-                          ? urlForImage(guest.image)?.width(128).height(128).url()
+                          ? urlForImage(guest.image)
+                              ?.width(128)
+                              .height(128)
+                              .url()
                           : undefined
                       }
                       alt={guest.name}
@@ -89,8 +99,10 @@ export default function EpisodeGuests({ data, episode }: EpisodeGuestsProps) {
                     </AvatarFallback>
                   </Avatar>
 
-                  <h4 className="font-semibold text-gray-900 mb-1">{guest.name}</h4>
-                  
+                  <h4 className="font-semibold text-gray-900 mb-1">
+                    {guest.name}
+                  </h4>
+
                   {guest.title && (
                     <p className="text-sm text-gray-600 mb-3">{guest.title}</p>
                   )}
@@ -101,24 +113,34 @@ export default function EpisodeGuests({ data, episode }: EpisodeGuestsProps) {
                     </p>
                   )}
 
-                  {data.showSocialLinks && guest.socialLinks && guest.socialLinks.length > 0 && (
-                    <div className="flex gap-2">
-                      {guest.socialLinks.map((link, index) => (
-                        <Link
-                          key={index}
-                          href={link.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-gray-400 hover:text-indigo-600 transition-colors"
-                        >
-                          <span className="sr-only">{link.platform}</span>
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 3.314-2.686 6-6 6s-6-2.686-6-6a5.987 5.987 0 01.332-2.973z" clipRule="evenodd" />
-                          </svg>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                  {data.showSocialLinks &&
+                    guest.socialLinks &&
+                    guest.socialLinks.length > 0 && (
+                      <div className="flex gap-2">
+                        {guest.socialLinks.map((link, index) => (
+                          <Link
+                            key={index}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-gray-400 hover:text-indigo-600 transition-colors"
+                          >
+                            <span className="sr-only">{link.platform}</span>
+                            <svg
+                              className="w-4 h-4"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 3.314-2.686 6-6 6s-6-2.686-6-6a5.987 5.987 0 01.332-2.973z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
 
                   {guest.slug?.current && (
                     <Link

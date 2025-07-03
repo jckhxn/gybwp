@@ -45,7 +45,7 @@ export default defineType({
       title: "Season",
       type: "reference",
       to: [{ type: "season" }],
-    }),
+    } as any),
     defineField({
       name: "guests",
       title: "Guests",
@@ -59,7 +59,7 @@ export default defineType({
           },
         },
       ],
-    }),
+    } as any),
     defineField({
       name: "sponsors",
       title: "Sponsors",
@@ -70,7 +70,7 @@ export default defineType({
           to: [{ type: "sponsor" }],
         },
       ],
-    }),
+    } as any),
     defineField({
       name: "transcript",
       title: "Transcript",
@@ -99,9 +99,10 @@ export default defineType({
         { type: "newsletter" },
         { type: "consultingCTA" },
       ],
-      description: "Custom sections for this episode (only used if Custom Layout is enabled)",
-      hidden: ({ document }) => !document?.customLayout,
-    }),
+      description:
+        "Custom sections for this episode (only used if Custom Layout is enabled)",
+      hidden: ({ document }: { document: any }) => !document?.customLayout,
+    } as any),
     defineField({
       name: "featured",
       title: "Featured Episode",

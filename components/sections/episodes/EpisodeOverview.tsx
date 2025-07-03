@@ -17,14 +17,17 @@ interface EpisodeOverviewProps {
   };
 }
 
-export default function EpisodeOverview({ data, episode }: EpisodeOverviewProps) {
+export default function EpisodeOverview({
+  data,
+  episode,
+}: EpisodeOverviewProps) {
   if (!data?.showDescription) return null;
 
-  const description = 
-    data.customDescription || 
-    episode?.youtube?.description || 
-    episode?.youtube?.blurb || 
-    episode?.blurb || 
+  const description =
+    data.customDescription ||
+    episode?.youtube?.description ||
+    episode?.youtube?.blurb ||
+    episode?.blurb ||
     "";
 
   if (!description) return null;
