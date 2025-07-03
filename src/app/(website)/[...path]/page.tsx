@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { loadPage } from "@/data/sanity";
-import { Page } from "@/components/Page";
+import { Page } from "@/src/components/Page";
 
 export default async function DynamicPage({
   params,

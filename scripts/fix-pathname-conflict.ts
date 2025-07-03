@@ -1,4 +1,4 @@
-import { client } from "../src/app/(website)/sanity/sanity-utils";
+import { client } from "../src/lib/sanity-utils";
 
 async function fixPathnameConflict() {
   console.log("🔍 Finding documents with root pathname '/'...");

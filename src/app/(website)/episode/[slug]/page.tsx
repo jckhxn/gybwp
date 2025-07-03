@@ -6,8 +6,8 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 // Components
-import EpisodePreview from "@/src/app/(website)/components/EpisodePreview";
-import EpisodeDetails from "@/src/app/(website)/components/EpisodeDetails/";
+import EpisodePreview from "@/src/components/EpisodePreview";
+import EpisodeDetails from "@/src/components/EpisodeDetails/";
 
 // Queries and utilities
 import { loadEpisode } from "@/data/sanity";

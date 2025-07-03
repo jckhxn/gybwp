@@ -18,6 +18,7 @@ const VideoInfo = (props: Props) => {
   const [title, setTitle] = useState(details.title);
   const [description, setDescription] = useState(details.description);
   const [blurb, setBlurb] = useState(details.blurb ? details.blurb : ""); // Assuming blurb is not provided initially
+  const [uuid, setUUID] = useState(details.uuid);
 
   // @ts-ignore
   const handleTitleChange = (event) => {
@@ -34,6 +35,16 @@ const VideoInfo = (props: Props) => {
   const handleBlurbChange = (event) => {
     setBlurb(event.target.value);
     props.onReplace({ ...details, blurb: event.target.value });
+  };
+  // @ts-ignore
+  const handleUUIDChange = (event) => {
+    // Validate text
+    const regex = /^[0-9\-_]*$/;
+    const validatedUUID = regex.test(event.target.value);
+    if (validatedUUID) {
+      setUUID(event.target.value);
+      props.onReplace({ ...details, uuid: event.target.value });
+    }
   };
 
   return (
@@ -62,6 +73,14 @@ const VideoInfo = (props: Props) => {
                 placeholder="Enter a blurb here"
                 value={blurb}
                 onChange={handleBlurbChange}
+              />
+            </FormField>
+            <FormField title="Episode UUID">
+              <TextArea
+                height="100%"
+                placeholder="Change or add part or clip number"
+                value={uuid}
+                onChange={handleUUIDChange}
               />
             </FormField>
           </Box>

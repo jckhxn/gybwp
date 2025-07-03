@@ -14,7 +14,7 @@ import { defineField, defineType } from "sanity";
  *
  * Example:
  * ```tsx
- * import { EpisodeSectionRenderer } from "@/components/sections/episodes/EpisodeSectionRenderer";
+ * import { EpisodeSectionRenderer } from "@/src/components/sections/episodes/EpisodeSectionRenderer";
  *
  * function EpisodePage({ template, episode }) {
  *   return (
