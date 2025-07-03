@@ -2,7 +2,7 @@
 "use client";
 import React from "react";
 
-import SponsorsPageComponent from "../components/SponsorsPage";
+import SponsorsPageComponent from "@/src/components/pages/SponsorsPage";
 
 export default function page() {
   return (

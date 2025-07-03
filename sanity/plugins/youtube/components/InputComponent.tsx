@@ -13,7 +13,6 @@ import { ActionsMenu } from "./ActionsMenu";
 import { VideoPreview } from "./VideoPreview";
 import { VideoSearch } from "./VideoSearch";
 import { YoutubeVideoData } from "../utils";
-import { generateEpisodePathname } from "../../../utils/slugify";
 import VideoInfo from "./VideoInfo";
 
 export type YoutubeObject = {
@@ -23,6 +22,7 @@ export type YoutubeObject = {
   episodeNumber: number;
   seasonNumber: number;
   publishedAt: string;
+  uuid: string;
   thumbnails: string[];
 };
 
@@ -31,7 +31,7 @@ export type YoutubeInputProps = ObjectInputProps<
   ObjectSchemaType
 >;
 
-type Props = YoutubeInputProps & { apiKey: string; channelId?: string };
+type Props = YoutubeInputProps & { apiKey: string };
 
 export function YoutubeInputComponent(props: Props) {
   const client = useClient({ apiVersion: "2022-03-07" });
@@ -43,9 +43,6 @@ export function YoutubeInputComponent(props: Props) {
   }
 
   async function patchData(data: YoutubeVideoData) {
-    // Generate the pathname from the YouTube title
-    const pathname = generateEpisodePathname(data.title);
-
     await client
       .transaction()
       .createIfNotExists({ _type: "episode", _id: documentId })
@@ -53,20 +50,15 @@ export function YoutubeInputComponent(props: Props) {
 
     await client
       .patch(documentId)
-      .set({ pathname: { current: pathname } })
+      .set({ pathname: { current: `/episodes/${String(data.uuid)}` } })
       .commit();
-
     props.onChange(set(data));
   }
 
   return (
     <Stack space={3}>
       {!props.value?.id && (
-        <VideoSearch
-          apiKey={props.apiKey}
-          channelId={props.channelId}
-          onSubmit={patchData}
-        />
+        <VideoSearch apiKey={props.apiKey} onSubmit={patchData} />
       )}
       {!!props.value?.id && (
         <Box style={{ position: "relative" }}>
@@ -78,7 +70,6 @@ export function YoutubeInputComponent(props: Props) {
           <ActionsMenu
             onReset={reset}
             apiKey={props.apiKey}
-            channelId={props.channelId}
             onReplace={patchData}
             details={props.value}
           />
@@ -90,10 +81,8 @@ export function YoutubeInputComponent(props: Props) {
   );
 }
 
-export function createScopedInputComponent(apiKey: string, channelId?: string) {
+export function createScopedInputComponent(apiKey: string) {
   return function ScopedInputComponent(props: YoutubeInputProps) {
-    return (
-      <YoutubeInputComponent {...props} apiKey={apiKey} channelId={channelId} />
-    );
+    return <YoutubeInputComponent {...props} apiKey={apiKey} />;
   };
 }

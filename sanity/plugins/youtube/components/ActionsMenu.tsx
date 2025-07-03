@@ -22,7 +22,7 @@ import { FormField, set, unset } from "sanity";
 
 export function ActionsMenu(props: {
   apiKey: string;
-  channelId?: string;
+
   onReplace: (data: YoutubeVideoData) => void;
   onReset: () => void;
   details: YoutubeVideoData;
@@ -80,7 +80,6 @@ export function ActionsMenu(props: {
             <Box padding={4}>
               <VideoSearch
                 apiKey={props.apiKey}
-                channelId={props.channelId}
                 onSubmit={(data) => {
                   props.onReplace(data);
                   setShowReplace(false);

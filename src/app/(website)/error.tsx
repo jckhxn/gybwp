@@ -1,7 +1,7 @@
 "use client"; // Error components must be Client Components
 
 import { useEffect } from "react";
-import ErrorPageComponent from "@/src/app/(website)/components/ErrorPage";
+import ErrorPageComponent from "@/src/components/pages/ErrorPage";
 
 export default function Error({
   error,

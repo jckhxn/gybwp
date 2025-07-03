@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from "react";
 
-import SponsorsPageDetailsComponent from "../../components/SponsorsDetailPage";
+import SponsorsPageDetailsComponent from "@/src/components/SponsorsDetailPage";
 
 export default function page() {
   return (

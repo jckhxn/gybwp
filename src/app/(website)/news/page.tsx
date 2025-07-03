@@ -2,8 +2,8 @@
 "use client";
 import React from "react";
 // components
-import Articles from "../components/Articles";
-import FeaturedNews from "../components/FeaturedNews/index";
+import Articles from "@/src/components/features/Articles";
+import FeaturedNews from "@/src/components/features/FeaturedNews";
 
 //
 //

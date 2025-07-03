@@ -1,7 +1,7 @@
 import React from "react";
 
 import type { Metadata } from "next";
-import { EpisodesPage } from "../components/EpisodesPage/episodes-page";
+import { EpisodesPage } from "@/src/components/pages/EpisodesPage/episodes-page";
 
 export const metadata: Metadata = {
   title: "All Episodes - Growing Your Business With People",

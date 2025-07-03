@@ -5,8 +5,8 @@ import { VisualEditing } from "next-sanity";
 import { revalidatePath, revalidateTag } from "next/cache";
 import Script from "next/script";
 // components
-import Footer from "./components/Footer";
-import Header from "./components/Header";
+import Footer from "@/src/components/layout/Footer";
+import Header from "@/src/components/layout/Header";
 
 // styling
 import "tailwindcss/tailwind.css";

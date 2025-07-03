@@ -1,5 +1,5 @@
 import React from "react";
-import ModernConsultingPage from "../components/ConsultingPage/modern";
+import ModernConsultingPage from "@/src/components/pages/ConsultingPage/modern";
 
 type Props = {};
 
