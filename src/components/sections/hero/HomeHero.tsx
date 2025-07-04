@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { Play, Headphones } from "lucide-react";
 import heroImage from "@/public/images/main-page-hero.webp";
 import { HomeHeroSection } from "@/types";
-import Button from "@/src/components/Button";
+import Button from "@/src/components/ui/Button";
 import {
   getImageUrlClient,
   getHeroImageUrl,
@@ -60,7 +60,7 @@ export function HomeHero({ section }: HomeHeroProps) {
   };
 
   return (
-    <section className="w-full py-16 md:py-24 lg:py-28 bg-gradient-to-br from-main-dark via-main to-main-light relative overflow-hidden">
+    <section className="w-full pt-16 md:pt-24 lg:pt-28 pb-4 md:pb-6 lg:pb-8 bg-gradient-to-br from-main-dark via-main to-main-light relative overflow-hidden">
       {/* Pattern overlay for texture */}
       <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGRkZGRkYiIGZpbGwtb3BhY2l0eT0iMSI+PHBhdGggZD0iTTM2IDM0aDR2MWgtNHpNNDAgMzJoNHYxaC00ek0zMiAzN2g0djFoLTR6TTM2IDM5aDR2MWgtNHpNNDAgNDFoNHYxaC00ek0zMiA0NGg0djFoLTR6TTM2IDQ2aDR2MWgtNHoiLz48L2c+PC9nPjwvc3ZnPg==')] mix-blend-overlay"></div>
 
