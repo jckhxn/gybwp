@@ -52,7 +52,7 @@ export default defineType({
           title: "Website",
           type: "url",
           description: "URL to the guest's website (optional)",
-        }),
+        } as any),
         defineField({
           name: "social",
           title: "Social Media",
@@ -64,7 +64,7 @@ export default defineType({
               title: "Twitter",
               type: "url",
               description: "URL to the guest's Twitter profile (optional)",
-            }),
+            } as any),
             // Add more social media fields as needed (e.g., facebook, instagram)
           ],
         } as any),
@@ -75,7 +75,7 @@ export default defineType({
       title: "About",
       type: "text",
       description: "A short bio or description of the guest",
-    }),
+    } as any),
     defineField({
       name: "slug",
       title: "Slug",
@@ -87,12 +87,7 @@ export default defineType({
         maxLength: 96,
         slugify: (input: any) => input.toLowerCase().replace(/\s+/g, "-"),
       },
-      validation: (rule: any) =>
-        rule
-          .required()
-          .error(
-            "Press 'Generate' to create a slug based on  the guest's name."
-          ),
+      validation: (rule: any) => rule.required(),
     }),
   ],
 });

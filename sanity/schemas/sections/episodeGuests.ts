@@ -10,13 +10,13 @@ export default defineType({
       title: "Show Guests",
       type: "boolean",
       initialValue: true,
-    }),
+    } as any),
     defineField({
       name: "title",
       title: "Section Title",
       type: "string",
       initialValue: "Featured Guests",
-    }),
+    } as any),
     defineField({
       name: "showBios",
       title: "Show Guest Bios",
@@ -28,7 +28,7 @@ export default defineType({
       title: "Show Social Links",
       type: "boolean",
       initialValue: true,
-    }),
+    } as any),
   ],
   preview: {
     select: {
@@ -37,8 +37,8 @@ export default defineType({
     },
     prepare({ title, showGuests }) {
       return {
-        title: title || "Episode Guests",
-        subtitle: showGuests ? "Shows guest information" : "Hidden",
+        title: title || "Featured Guests",
+        subtitle: showGuests ? "Guests enabled" : "Guests disabled",
       };
     },
   },

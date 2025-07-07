@@ -1,246 +1,436 @@
 "use client";
-// Next
+
+import React from "react";
 import Image from "next/image";
-// Shadcn components
-import { Label } from "@/src/components/ui/label";
-import { Input } from "@/src/components/ui/input";
-import { Textarea } from "@/src/components/ui/textarea";
-import Button from "@/src/components/ui/button";
+import { Badge } from "@/src/components/ui/badge";
+import ConsultingContactForm from "../../features/ConsultingContactForm";
+import {
+  Users,
+  TrendingUp,
+  Target,
+  Award,
+  CheckCircle,
+  ArrowRight,
+  Star,
+  Globe,
+  Building,
+  Lightbulb,
+} from "lucide-react";
 
 // Static images
 import services from "@/public/images/consultingmain.webp";
 import consulting from "@/public/images/consulting1.webp";
 import consulting2 from "@/public/images/consulting2.webp";
-import { CONSULTING_INFO } from "./static-data";
-import { useState } from "react";
 
-// State
-const initialFormState = {
-  name: "",
-  email: "",
-  message: "",
-};
+const SERVICES = [
+  {
+    icon: <Users className="w-8 h-8" />,
+    title: "Talent Acquisition & Management",
+    description: "End-to-end talent solutions from attraction to retention",
+    features: [
+      "Strategic talent planning",
+      "Executive search & coaching",
+      "Vendor assessment & selection",
+      "Performance optimization",
+    ],
+  },
+  {
+    icon: <Globe className="w-8 h-8" />,
+    title: "Global Experience",
+    description: "Proven expertise across 70+ countries and diverse industries",
+    features: [
+      "Healthcare & pharmaceuticals",
+      "Insurance & financial services",
+      "Aerospace & defense",
+      "Retail & communications",
+    ],
+  },
+  {
+    icon: <TrendingUp className="w-8 h-8" />,
+    title: "Functional Excellence",
+    description: "28+ years of proven results in talent transformation",
+    features: [
+      "High-volume recruitment (200k+ hires)",
+      "AI/ML & predictive analytics",
+      "Diversity, equity & inclusion",
+      "Performance management",
+    ],
+  },
+  {
+    icon: <Building className="w-8 h-8" />,
+    title: "Business Support & Planning",
+    description: "Strategic assessment and operational excellence",
+    features: [
+      "Performance management",
+      "Strategic assessment",
+      "Recruitment marketing",
+      "Interim leadership roles",
+    ],
+  },
+];
 
-//@ts-ignore
-const encode = (data) => {
-  return Object.keys(data)
-    .map((key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
-    .join("&");
-};
+const STATS = [
+  { number: "28+", label: "Years of Experience" },
+  { number: "1M+", label: "Professionals Hired" },
+  { number: "70+", label: "Countries Served" },
+  { number: "200k+", label: "Annual Hires Supported" },
+];
 
-export default function Consulting() {
-  const [formState, setFormState] = useState(initialFormState);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState(false);
+const KEY_BENEFITS = [
+  {
+    icon: <Target className="w-6 h-6" />,
+    title: "Maximizing Organizational Performance",
+    description: "Strategic talent alignment with business objectives",
+  },
+  {
+    icon: <Award className="w-6 h-6" />,
+    title: "Leadership and Talent Development",
+    description: "Building capability and succession planning",
+  },
+  {
+    icon: <Lightbulb className="w-6 h-6" />,
+    title: "Creating High-Performance Cultures",
+    description: "Fostering innovation and sustainable growth",
+  },
+];
 
-  //@ts-ignore
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormState({ ...formState, [name]: value });
-  };
-  //@ts-ignore
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: encode({ "form-name": "contact-jkl", ...formState }),
-      });
-      if (response.ok) {
-        setSubmitted(true);
-        setFormState(initialFormState);
-      } else {
-        setError(true);
-      }
-    } catch (error) {
-      setError(true);
-    }
-  };
-
+export default function ModernConsultingPage() {
   return (
     <main className="w-full">
-      <section className="w-full py-12 md:py-24 lg:py-24 bg-light ">
-        <div className="container px-4 md:px-6">
-          <div className="flex-row justify-around md:flex ">
-            <div className="mb-8 text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              Some of Our Services
-            </div>
-            <Image
-              className="mb-14"
-              width={650}
-              height={650}
-              src={services}
-              alt="Consulting Services Image"
-            />
-          </div>
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            {CONSULTING_INFO.features.map(
-              ({ pill, title, description }, idx) => (
-                <div key={`consulting-feature-${idx}`}>
-                  <div className="space-y-4">
-                    <div className="inline-block rounded-lg bg-gray-800 text-gray-200 px-3 py-1 text-sm font-medium">
-                      {pill}
-                    </div>
-                    <h3 className="text-xl font-bold">{title}</h3>
-                    <div className="text-gray-700">
-                      {description.map((d, idx) => (
-                        <ul
-                          className="list-disc pl-4"
-                          key={`description-${idx}`}
-                        >
-                          <li>{d}</li>
-                        </ul>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )
-            )}
-          </div>
-        </div>
-      </section>
-      <section className="w-full py-12 md:py-24 lg:py-32">
-        <div className="container px-4 md:px-6">
-          <div className="grid gap-10 lg:grid-cols-2">
-            <div className="space-y-4">
-              <div className="inline-block text-gray-200 rounded-lg bg-gray-800 px-3 py-1 text-sm font-medium">
-                About Us
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                Empowering Businesses with Tailored Consulting Solutions
-              </h2>
-              <p className="text-gray-600">
-                At our consulting firm, we believe in a holistic approach to
-                business transformation. Our team of experienced professionals
-                combines deep industry expertise with a forward-thinking mindset
-                to help our clients navigate the ever-evolving business
-                landscape.
-              </p>
-              <p className="text-gray-600">
-                We work closely with our clients to understand their unique
-                challenges and develop customized strategies that drive
-                sustainable growth and success. Whether you&apos;re looking to
-                optimize your operations, leverage technology, or navigate
-                complex organizational changes, we&apos;re here to guide you
-                every step of the way.
-              </p>
-            </div>
-            <Image
-              alt="About"
-              className="mx-auto aspect-square overflow-hidden rounded-xl object-cover object-center sm:w-full"
-              src={consulting}
-            />
-          </div>
-        </div>
-      </section>
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-800">
-        <div className="container px-4 md:px-6">
-          <div className="grid gap-10 lg:grid-cols-2">
-            <div className="space-y-4">
-              <div className="inline-block rounded-lg bg-gray-300 px-3 py-1 text-sm font-medium0">
-                Meet your Consultant
-              </div>
-              <h2 className="text-slate-300 text-3xl font-bold tracking-loose sm:text-4xl md:text-5xl">
-                Jeffrey Lackey, Sr
-              </h2>
-              <p className="text-gray-500 dark:text-gray-400">
-                As a global strategic talent leader, I continually seek to
-                remain ahead of technology and innovation trends. I immerse
-                myself in interactions with thought leaders and experts to
-                explore new applications beyond the TA realm. This practice
-                ensures our clients receive fresh, unique perspectives that set
-                them apart.
-              </p>
-              <p className="text-gray-500 dark:text-gray-400">
-                At JKL Advisors, we empower YOUR business with people. With 28+
-                years and hiring over 1 million professionals, we&#39;re poised
-                to help you attract, develop, and retain top talent. Our value
-                creation framework strengthens operations while fostering
-                innovative, growth-driven solutions.
-              </p>
-            </div>
-            <div className="flex flex-col items-center justify-center space-y-4">
-              <Image
-                alt="Jeffrey Lackey"
-                className="mx-auto aspect-square overflow-hidden rounded-full object-cover object-center"
-                src={consulting2}
-              />
-              <div className="space-y-1 text-center">
-                <h3 className="text-slate-300 text-2xl font-bold">
-                  Jeffrey Lackey
-                </h3>
-                <p className="text-gray-500 dark:text-gray-400">
-                  Senior Consultant
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 py-20 lg:py-32">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="container relative px-4 md:px-6">
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <Badge
+                  variant="secondary"
+                  className="bg-blue-100 text-blue-800 px-4 py-2"
+                >
+                  JKL Advisors Consulting
+                </Badge>
+                <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+                  Empowering Your Business with
+                  <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                    {" "}
+                    People
+                  </span>
+                </h1>
+                <p className="text-xl text-gray-200 leading-relaxed">
+                  Transform your organization through strategic talent
+                  solutions. With 28+ years of experience and over 1 million
+                  successful hires, we help businesses grow through their most
+                  important investment: people.
                 </p>
               </div>
-              {submitted ? (
-                <div className="text-green-500">
-                  Thank you for contacting us! We&apos;ll get back to you soon.
-                </div>
-              ) : (
-                <form
-                  method="POST"
-                  name="contact-jkl"
-                  onSubmit={handleSubmit}
-                  className="w-full max-w-md space-y-4"
-                  data-netlify="true"
-                  data-netlify-honeypot="bot-field"
-                >
-                  <input type="hidden" name="form-name" value="contact-jkl" />
-                  <input type="hidden" name="bot-field" />
-                  <div className="space-y-1">
-                    <Label className="text-gray-300" htmlFor="name">
-                      Name
-                    </Label>
-                    <Input
-                      value={formState.name}
-                      onChange={handleChange}
-                      required
-                      id="name"
-                      name="name"
-                      placeholder="Enter your name"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-gray-300" htmlFor="email">
-                      Email
-                    </Label>
-                    <Input
-                      value={formState.email}
-                      onChange={handleChange}
-                      pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-                      required
-                      id="email"
-                      name="email"
-                      placeholder="Enter your email"
-                      type="email"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-gray-300" htmlFor="message">
-                      Message
-                    </Label>
-                    <Textarea
-                      onChange={handleChange}
-                      value={formState.message}
-                      id="message"
-                      name="message"
-                      placeholder="Enter your message"
-                    />
-                  </div>
-                  {error && (
-                    <div className="text-red-500">
-                      Something went wrong. Please try again later.
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {STATS.map((stat, index) => (
+                  <div key={index} className="text-center">
+                    <div className="text-2xl md:text-3xl font-bold text-white">
+                      {stat.number}
                     </div>
-                  )}
-                  <div className="bg-gray-200">
-                    <Button className="w-full">Contact Jeff</Button>
+                    <div className="text-sm text-gray-300">{stat.label}</div>
                   </div>
-                </form>
-              )}
+                ))}
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a
+                  href="https://cal.com/jeffrey-lackey-sr/30min"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center bg-slate-700 hover:bg-slate-800 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl border border-slate-600 hover:border-slate-500"
+                >
+                  <svg
+                    className="mr-3 w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  Book Free Consultation
+                </a>
+                <a
+                  href="#contact"
+                  className="inline-flex items-center justify-center bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 px-8 py-4 rounded-lg font-semibold transition-colors"
+                >
+                  Send Message
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </a>
+                <a
+                  href="#services"
+                  className="inline-flex items-center justify-center border border-white/20 text-white hover:bg-white/10 px-8 py-4 rounded-lg font-semibold transition-colors"
+                >
+                  Explore Services
+                </a>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <Image
+                  src={services}
+                  alt="Consulting Services"
+                  className="w-full h-auto"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section id="services" className="py-20 lg:py-32 bg-gray-50">
+        <div className="container px-4 md:px-6">
+          <div className="text-center mb-16">
+            <Badge variant="outline" className="mb-4">
+              Our Services
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
+              Comprehensive Talent Solutions
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              From strategic planning to execution, we provide end-to-end
+              consulting services that drive sustainable business growth through
+              people.
+            </p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            {SERVICES.map((service, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100"
+              >
+                <div className="text-blue-600 mb-4">{service.icon}</div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600 mb-4">{service.description}</p>
+                <ul className="space-y-2">
+                  {service.features.map((feature, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-2 text-sm text-gray-700"
+                    >
+                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Philosophy Section */}
+      <section className="py-20 lg:py-32">
+        <div className="container px-4 md:px-6">
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <Badge
+                  variant="outline"
+                  className="bg-orange-50 text-orange-700 border-orange-200"
+                >
+                  Our Philosophy
+                </Badge>
+                <h2 className="text-3xl md:text-5xl font-bold text-gray-900">
+                  People Are Your Greatest Investment
+                </h2>
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  Within the Consulting practice of JKL Advisors, we help CEOs
+                  and business leaders grow their business with the biggest and
+                  most important investment - People!
+                </p>
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  Unlike financial accounting that treats people as expenses, we
+                  believe people are a special asset type that anticipates
+                  growth. We need to treat our people like an investment to lead
+                  our companies to exponential and sustainable growth.
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                {KEY_BENEFITS.map((benefit, index) => (
+                  <div key={index} className="flex gap-4">
+                    <div className="text-blue-600 mt-1">{benefit.icon}</div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 mb-1">
+                        {benefit.title}
+                      </h3>
+                      <p className="text-gray-600">{benefit.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="relative rounded-2xl overflow-hidden shadow-xl">
+                <Image
+                  src={consulting}
+                  alt="Business transformation through people"
+                  className="w-full h-auto"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About Jeff Section */}
+      <section id="profile" className="py-20 lg:py-32 bg-gray-900">
+        <div className="container px-4 md:px-6">
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+            <div className="relative order-2 lg:order-1">
+              <div className="relative rounded-2xl overflow-hidden shadow-xl">
+                <Image
+                  src={consulting2}
+                  alt="Jeffrey Lackey, Senior Consultant"
+                  className="w-full h-auto"
+                />
+              </div>
+              <div className="absolute -bottom-6 -right-6 bg-white rounded-xl p-6 shadow-xl max-w-xs">
+                <div className="flex items-center gap-2 mb-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="w-5 h-5 fill-yellow-400 text-yellow-400"
+                    />
+                  ))}
+                </div>
+                <p className="text-sm text-gray-600">
+                  &quot;Jeff&apos;s strategic approach transformed our talent
+                  acquisition process.&quot;
+                </p>
+                <p className="text-xs text-gray-500 mt-1">- Fortune 500 CEO</p>
+              </div>
+            </div>
+
+            <div className="space-y-8 order-1 lg:order-2">
+              <div className="space-y-4">
+                <Badge
+                  variant="secondary"
+                  className="bg-blue-100 text-blue-800"
+                >
+                  Meet Your Consultant
+                </Badge>
+                <h2 className="text-3xl md:text-5xl font-bold text-white">
+                  Jeffrey Lackey, Sr.
+                </h2>
+                <p className="text-xl text-gray-300">
+                  Global Strategic Talent Leader
+                </p>
+              </div>
+
+              <div className="space-y-6 text-gray-300">
+                <p className="text-lg leading-relaxed">
+                  As a global strategic talent leader, I continually seek to
+                  remain ahead of technology and innovation trends. I immerse
+                  myself in interactions with thought leaders and experts to
+                  explore new applications beyond the TA realm.
+                </p>
+                <p className="text-lg leading-relaxed">
+                  At JKL Advisors, we empower YOUR business with people. With
+                  28+ years and hiring over 1 million professionals, we&apos;re
+                  poised to help you attract, develop, and retain top talent.
+                  Our value creation framework strengthens operations while
+                  fostering innovative, growth-driven solutions.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-6">
+                <div className="text-center p-4 bg-gray-800 rounded-lg">
+                  <div className="text-2xl font-bold text-white">1M+</div>
+                  <div className="text-sm text-gray-400">
+                    Professionals Hired
+                  </div>
+                </div>
+                <div className="text-center p-4 bg-gray-800 rounded-lg">
+                  <div className="text-2xl font-bold text-white">28+</div>
+                  <div className="text-sm text-gray-400">Years Experience</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section
+        id="contact"
+        className="py-20 lg:py-32 bg-gradient-to-br from-gray-800 via-gray-900 to-black"
+      >
+        <div className="container px-4 md:px-6">
+          <div className="text-center mb-16">
+            <Badge
+              variant="secondary"
+              className="bg-slate-100 text-slate-700 mb-4"
+            >
+              Get Started
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
+              Ready to Transform Your Business?
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+              Let&apos;s discuss how we can help you achieve your talent and
+              growth objectives. Choose your preferred way to connect with Jeff.
+            </p>
+
+            {/* Cal.com CTA */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <a
+                href="https://cal.com/jeffrey-lackey-sr/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center bg-slate-700 hover:bg-slate-600 text-white px-10 py-4 rounded-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl text-lg border border-slate-600 hover:border-slate-500"
+              >
+                <svg
+                  className="mr-3 w-6 h-6"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Schedule Your 30-Minute Strategy Call
+              </a>
+              <div className="text-center sm:text-left">
+                <div className="text-sm text-gray-300 font-medium">
+                  ✓ Free consultation
+                </div>
+                <div className="text-sm text-gray-300 font-medium">
+                  ✓ Instant booking
+                </div>
+                <div className="text-sm text-gray-300 font-medium">
+                  ✓ No commitment required
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-4 text-gray-400">
+                <div className="h-px bg-gray-600 flex-1 max-w-24"></div>
+                <span className="text-sm font-medium">OR SEND A MESSAGE</span>
+                <div className="h-px bg-gray-600 flex-1 max-w-24"></div>
+              </div>
+            </div>
+          </div>
+
+          <ConsultingContactForm />
         </div>
       </section>
     </main>

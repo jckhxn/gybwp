@@ -1,3 +1,4 @@
+// DEPRECATED: This schema is being removed. Featured articles are now handled by a 'featured' boolean on the main article schema.
 import { defineField, defineType } from "sanity";
 
 export default defineType({

@@ -11,7 +11,7 @@ import ContactModal from "@/src/components/features/ContactModal";
 import { Heart, Star, Trophy, Award } from "lucide-react";
 
 // copy
-import { SPONSORS, PARTNERS, SPONSORS_INFO } from "./static-data";
+// import { SPONSORS, PARTNERS, SPONSORS_INFO } from "./static-data";
 
 // sanity
 import { client } from "@/src/lib/sanity-utils";
@@ -154,41 +154,6 @@ const SponsorsPageComponent = () => {
             </div>
           </div>
         </div>
-
-        {/* Partners Section */}
-        {PARTNERS.length > 0 && (
-          <div className="bg-slate-100/50 py-16 lg:py-24">
-            <div className="container mx-auto px-6">
-              <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-16">
-                  <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-                    {SPONSORS_INFO.partnerHeader}
-                  </h2>
-                  <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                    Additional partners who support our mission
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                  {PARTNERS.map(({ imgAlt, imgUrl }, idx) => (
-                    <div
-                      key={`partner-${idx}`}
-                      className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-200"
-                    >
-                      <Image
-                        src={imgUrl}
-                        alt={imgAlt}
-                        className="w-full h-20 object-contain"
-                        width={175}
-                        height={90}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     );
   }

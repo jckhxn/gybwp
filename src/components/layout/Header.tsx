@@ -2,10 +2,12 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Button from "../../ui/button";
+import Button from "@/src/components/ui/Button";
 import routes from "@/src/app/(website)/routes";
-import { PAGES, COPY } from "./static-data";
+import { PAGES } from "./Header/static-data";
 import logo from "@/public/images/logo.webp";
+
+
 
 const Navigation = () => {
   const [mobileNavOpen, setMobileNavOpen] = useState<boolean>(false);
@@ -47,12 +49,12 @@ const Navigation = () => {
             ))}
           </nav>
           <Link
-            href={routes.external.follow}
+            href="https://www.linkedin.com/company/growing-your-business-with-people "
             target="_blank"
             rel="noopener noreferrer"
             className="hidden md:flex bg-secondary text-white hover:bg-secondary-dark px-4 py-2 rounded-md"
           >
-            {COPY.buttonText}
+            Follow Us
           </Link>
           <Button
             variant="ghost"
@@ -116,7 +118,7 @@ const Navigation = () => {
                   className="mt-4 bg-secondary text-white hover:bg-secondary-dark px-4 py-3 rounded-md text-center font-medium"
                   onClick={() => setMobileNavOpen(false)}
                 >
-                  {COPY.buttonText}
+                  Follow Us
                 </Link>
               </div>
             </nav>

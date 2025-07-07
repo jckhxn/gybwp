@@ -1,72 +1,96 @@
-import React, { forwardRef } from "react";
-import classNames from "classnames";
-import { cva, type VariantProps } from "class-variance-authority";
+// This file will be moved to src/components/ui/Button.tsx. Update all imports to '@/src/components/ui/Button'.
+import Link from "next/link";
+import React, { MouseEventHandler, ReactNode } from "react";
 
-// Define button variants using cva for shadcn compatibility
-export const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-white hover:bg-primary-dark",
-        outline:
-          "border border-primary text-primary hover:bg-primary hover:text-white",
-        ghost: "text-primary hover:bg-primary-light",
-        link: "text-primary underline-offset-4 hover:underline p-0",
-      },
-      size: {
-        sm: "px-2 py-1 text-sm",
-        default: "px-4 py-2",
-        md: "px-4 py-2",
-        lg: "px-6 py-3 text-lg",
-        icon: "p-2",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  }
-);
+export type ButtonColors = "main" | "primary" | "secondary" | "white" | "light";
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  children: React.ReactNode;
+interface ButtonProps {
+  children: ReactNode;
+  onClick?: MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
+  as?: "a";
+  href?: string;
+  target?: string;
+  rel?: string;
+  color?: ButtonColors;
+  type?: "default" | "icon" | "disabled";
   className?: string;
-  onClick?: () => void;
-  disabled?: boolean;
 }
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      children,
-      variant = "default",
-      size = "default",
-      className,
-      onClick,
-      type = "button",
-      disabled = false,
-      ...props
-    },
-    ref
-  ) => {
+const Button = ({
+  children,
+  onClick: handleClick,
+  as,
+  href,
+  target,
+  rel,
+  color = "main",
+  type = "default",
+  className: passedClasses = "",
+}: ButtonProps) => {
+  let fontStyle = color === "white" ? "text-black" : "text-white";
+
+  let bgColor: string;
+  let bgHoverColor: string;
+  switch (color) {
+    case "main":
+      bgColor = "bg-main";
+      bgHoverColor = "hover:bg-main/80";
+      break;
+    case "primary":
+      bgColor = "bg-primary";
+      bgHoverColor = "hover:bg-primary/80";
+      break;
+    case "secondary":
+      bgColor = "bg-secondary";
+      bgHoverColor = "hover:bg-secondary/80";
+      break;
+    case "white":
+      bgColor = "bg-white";
+      bgHoverColor = "hover:bg-white/80";
+      break;
+    case "light":
+      bgColor = "bg-light";
+      bgHoverColor = "hover:bg-light/80";
+      break;
+    default:
+      bgColor = "bg-main";
+      bgHoverColor = "hover:bg-main/80";
+      break;
+  }
+
+  let disabledStyle = "";
+  if (type === "disabled") {
+    bgColor = `bg-white`;
+    bgHoverColor = `hover:bg-white/80`;
+    fontStyle = "black";
+    disabledStyle = "border border-grey border-1 !cursor-not-allowed";
+  }
+
+  const button = (
+    <button
+      disabled={type === "disabled"}
+      onClick={handleClick}
+      className={`inline-block rounded ${bgColor} text-sm ${fontStyle} transition ${bgHoverColor} ${passedClasses} ${disabledStyle}`}
+    >
+      {children}
+    </button>
+  );
+
+  if (as === "a") {
     return (
-      <button
-        ref={ref}
-        type={type}
-        className={classNames(buttonVariants({ variant, size }), className)}
-        onClick={onClick}
-        disabled={disabled}
-        {...props}
+      <Link
+        href={href || "/"}
+        target={target}
+        rel={rel}
+        onClick={handleClick}
+        className="w-fit"
       >
-        {children}
-      </button>
+        {button}
+      </Link>
     );
   }
-);
 
-Button.displayName = "Button";
+  return button;
+};
 
 export default Button;

@@ -10,13 +10,13 @@ export default defineType({
       title: "Show Transcript",
       type: "boolean",
       initialValue: true,
-    }),
+    } as any),
     defineField({
       name: "showTimestamps",
       title: "Show Timestamps",
       type: "boolean",
       initialValue: true,
-    }),
+    } as any),
     defineField({
       name: "allowDownload",
       title: "Allow Download",
@@ -38,8 +38,8 @@ export default defineType({
         title: "Episode Transcript",
         subtitle:
           features.length > 0
-            ? `Shows: ${features.join(", ")}`
-            : "Basic transcript",
+            ? `Features: ${features.join(", ")}`
+            : "No features enabled",
       };
     },
   },

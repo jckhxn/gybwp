@@ -1,9 +1,3 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/uIc1pdBHifp
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
-
 import Link from "next/link";
 import Image from "next/image";
 // Static Images
@@ -11,7 +5,7 @@ import logo from "@/public/images/logo.webp";
 import hero from "@/public/images/blueprint.webp";
 import host from "@/public/images/consulting1.webp";
 import { SVGProps } from "react";
-import JSONLD from "../SEO/jsonld";
+import JSONLD from "../../SEO/jsonld";
 import { generateAboutPageStructuredData } from "@/src/lib/structured-data";
 
 export default function AboutPage() {

@@ -16,6 +16,6 @@ export default defineType({
       title: "List of Sponsors for the Season",
       type: "array",
       of: [{ type: "reference", to: [{ type: "sponsor" }] }],
-    }),
+    } as any),
   ],
 });

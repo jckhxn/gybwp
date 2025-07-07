@@ -21,7 +21,7 @@ export const locate: DocumentLocationResolver = (params, context) => {
         uuid
       }`,
       queryParams,
-      { perspective: "previewDrafts" }
+      { perspective: "drafts" }
     );
 
     // Return a streaming list of locations

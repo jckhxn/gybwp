@@ -5,7 +5,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { redirect } from "next/navigation";
 
-import Button from "@/src/components/ui/button";
+import Button from "@/src/components/ui/Button";
 import {
   Avatar,
   AvatarFallback,

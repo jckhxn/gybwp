@@ -3,7 +3,7 @@ import routes from "@/src/app/(website)/routes";
 
 // components
 import { Section } from "@/src/components/shared";
-import Button from "@/src/components/Button";
+import Button from "@/src/components/ui/Button";
 
 //
 //

@@ -9,17 +9,17 @@ import {
   DOTS,
 } from "@/src/components/features/Articles/usePagination";
 
-// copy
-import { ARTICLES } from "@/src/components/News/static-data";
-import { ARTICLES_INFO } from "@/src/components/features/Articles/static-data";
+// // copy
+// import { ARTICLES } from "@/src/components/News/static-data";
+// import { ARTICLES_INFO } from "@/src/components/features/Articles/static-data";
 import Link from "next/link";
 
 // // SWR
 // import useSWR from "swr";
 import { client } from "@/data/sanity/client";
-import { OTHER_ARTICLES_QUERY } from "@/data/sanity/queries";
+import { OTHER_ARTICLES_QUERY } from "../../../../data/sanity/queries";
 
-const Articles = () => {
+const Articles = ({ excludeIds = [] }) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,11 +27,11 @@ const Articles = () => {
 
   useEffect(() => {
     client
-      .fetch(OTHER_ARTICLES_QUERY)
+      .fetch(OTHER_ARTICLES_QUERY, { excludeIds })
       .then((res) => setData(res))
       .catch((err) => setError(err))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [excludeIds]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -40,7 +40,7 @@ const Articles = () => {
   }, [data, isLoading]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const totalCount: number = ARTICLES.length;
+  const totalCount: number = articles ? articles.length : 0;
   const pageSize: number = 5;
   const totalPageCount: number = Math.ceil(totalCount / pageSize);
   const pageSlice: number = currentPage * 5;
@@ -67,33 +67,49 @@ const Articles = () => {
 
   const HOVER_STYLES = "hover:bg-gray-500 hover:text-white";
 
+  if (isLoading) {
+    return (
+      <Section className="max-w-[80%] mt-12 m-auto">
+        Loading articles...
+      </Section>
+    );
+  }
+  if (error) {
+    return (
+      <Section className="max-w-[80%] mt-12 m-auto">
+        Error loading articles.
+      </Section>
+    );
+  }
+
   return (
     <Section className="max-w-[80%] mt-12 m-auto">
       {/* HEADING */}
       <div className="mx-auto text-left mb-6">
         <SectionHeading className="!text-xl font-thin sm:!text-2xl text-black">
-          {ARTICLES_INFO.header}
+          More News
         </SectionHeading>
       </div>
       {/* ARTICLES */}
 
-      {articles
-        ?.slice(pageSlice - 5, pageSlice)
-        .map(({ company, date, title, link }, idx) => (
-          <Link key={`article-${idx}`} href={link} target="_blank">
-            <div className="mb-5 px-8 py-4 bg-light text-black">
-              <div className="mt-2">
-                <span className="text-xl font-medium">{title}</span>
-              </div>
+      {articles &&
+        articles
+          .slice(pageSlice - 5, pageSlice)
+          .map(({ company, date, title, link }, idx) => (
+            <Link key={`article-${idx}`} href={link} target="_blank">
+              <div className="mb-5 px-8 py-4 bg-light text-black">
+                <div className="mt-2">
+                  <span className="text-xl font-medium">{title}</span>
+                </div>
 
-              <div className="flex items-center justify-between mt-2">
-                <span className="text-sm font-light">{company}</span>
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-sm font-light">{company}</span>
 
-                <span className="text-sm font-light">{date}</span>
+                  <span className="text-sm font-light">{date}</span>
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
       {/* PAGINATION */}
       {totalPageCount > 1 && (
         <div className="flex justify-end mr-6 mt-4">

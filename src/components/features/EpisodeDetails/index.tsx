@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 
 // Fix import paths to use @/src/app/(website)/components instead of full paths
-import Button from "@/src/components/ui/button";
+import Button from "@/src/components/ui/Button";
 import { Separator } from "@/src/components/ui/separator";
 import { formatEpisodeTitle } from "@/src/lib/formatTitle";
 import {
@@ -30,13 +30,17 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/src/components/ui/avatar";
-import { Card, CardContent } from "@/src/components/ui/card";
+import { Card, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/src/components/ui/badge";
 import { SponsorsList } from "@/src/components/features/sponsors";
 import { urlForImage } from "@/src/lib/sanity-image";
 import { CTA } from "@/src/components/pages/HomePage/static-data";
 import TranscriptDisplay from "@/src/components/features/TranscriptDisplay";
-import { PodcastPlayer, RelatedEpisodes, type PlayerHandle } from "@/src/components/features/episodes";
+import {
+  PodcastPlayer,
+  RelatedEpisodes,
+  type PlayerHandle,
+} from "@/src/components/features/episodes";
 import StickyVideoPlayer from "@/src/components/features/StickyVideoPlayer";
 import {
   formatDate,
@@ -88,7 +92,7 @@ const SubscribeForm = () => (
       </p>
     </div>
     <Link
-      href={CTA.buttonUrl}
+      href="https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7049506606413213696"
       target="_blank"
       rel="noopener noreferrer"
       className="inline-flex items-center justify-center gap-3 rounded-lg bg-gradient-to-r from-primary to-primary-light hover:from-primary-light hover:to-primary px-8 py-3 text-base font-medium text-white shadow-lg hover:shadow-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"

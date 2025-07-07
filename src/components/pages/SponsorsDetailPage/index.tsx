@@ -6,10 +6,10 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Components
-import Button from "@/src/components/Button";
+import Button from "@/src/components/ui/Button";
 import { urlForImage } from "@/src/lib/sanity-image";
-import EpisodeCard from "@/src/components/EpisodeCard";
-import SeasonDropdown from "@/src/components/SeasonDropdown";
+import EpisodeCard from "@/src/components/features/EpisodeCard";
+import SeasonDropdown from "@/src/components/features/SeasonDropdown";
 
 // Icons
 import {

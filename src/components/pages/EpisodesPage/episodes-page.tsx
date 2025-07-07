@@ -6,11 +6,11 @@ import {
   EPISODES_BY_SEASON_QUERY,
   ALL_SEASONS_QUERY,
   ALL_EPISODES,
-} from "../../lib/queries";
-import SeasonDropdown from "@/src/components/SeasonDropdown";
-import EpisodeCard from "../EpisodeCard";
-import { PaginationControls } from "../PaginationControls";
-import { usePagination } from "../../hooks/usePagination";
+} from "@/src/lib/queries";
+import SeasonDropdown from "@/src/components/features/SeasonDropdown";
+import EpisodeCard from "@/src/components/features/EpisodeCard";
+import { PaginationControls } from "@/src/components/features/PaginationControls";
+import { usePagination } from "@/src/lib/usePagination";
 import {
   Search,
   Filter,
@@ -22,6 +22,7 @@ import {
   LayoutGrid,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // Utility function for safe data access
 const safeguardEpisodeData = (episode: any) => {
@@ -70,6 +71,11 @@ export function EpisodesPage() {
     "newest"
   );
   const [showFilters, setShowFilters] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get page from query string
+  const pageFromQuery = parseInt(searchParams.get("page") || "1", 10);
 
   // Load all seasons and episodes on mount
   useEffect(() => {
@@ -168,13 +174,30 @@ export function EpisodesPage() {
   const pagination = usePagination({
     data: filteredAndSortedEpisodes,
     itemsPerPage: viewMode === "grid" ? 12 : 8, // Fewer items for list view
-    initialPage: 1,
+    initialPage: pageFromQuery,
+    scrollToTop: false,
   });
+
+  // Update URL when page changes
+  const handlePageChange = (page: number) => {
+    const params = new URLSearchParams(Array.from(searchParams.entries()));
+    if (page > 1) {
+      params.set("page", String(page));
+    } else {
+      params.delete("page");
+    }
+    router.push(`?${params.toString()}`);
+    pagination.goToPage(page);
+  };
 
   // Reset pagination when filters change
   useEffect(() => {
     pagination.reset();
-  }, [searchTerm, sortBy, activeSeason, viewMode, pagination]);
+    // Remove ?page= from URL when filters change
+    const params = new URLSearchParams(Array.from(searchParams.entries()));
+    params.delete("page");
+    router.replace(`?${params.toString()}`);
+  }, [searchTerm, sortBy, activeSeason, viewMode]);
 
   const totalEpisodes = allEpisodes.length;
   const currentSeasonEpisodes = data.length;
@@ -395,7 +418,7 @@ export function EpisodesPage() {
               <PaginationControls
                 currentPage={pagination.currentPage}
                 totalPages={pagination.totalPages}
-                onPageChange={pagination.goToPage}
+                onPageChange={handlePageChange}
                 hasNextPage={pagination.hasNextPage}
                 hasPreviousPage={pagination.hasPreviousPage}
                 totalItems={pagination.totalItems}

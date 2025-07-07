@@ -8,15 +8,11 @@ import Link from "next/link";
 import { Section, SectionHeading } from "@/src/components/shared";
 import defaultImageSrc from "public/images/logo.webp";
 
-// copy
-import { NEWS_INFO } from "@/src/components/features/FeaturedNews/static-data";
-import { FEATURED_ARTICLES } from "@/src/components/News/static-data";
-
 import { ExternalLink, ArrowRight, Clock, Calendar } from "lucide-react";
-import Button from "@/src/components/ui/button";
+import Button from "@/src/components/ui/Button";
 // SWR
 import { client } from "@/data/sanity/client";
-import { FEATURED_ARTICLES_QUERY } from "@/src/lib/queries";
+import { ALL_ARTICLES_WITH_FEATURED_QUERY } from "@/data/sanity/queries";
 import {
   fetchOpenGraphImage,
   testImageLink,
@@ -45,25 +41,24 @@ const FeaturedNews = ({
 
   useEffect(() => {
     client
-      .fetch(FEATURED_ARTICLES_QUERY)
+      .fetch(ALL_ARTICLES_WITH_FEATURED_QUERY)
       .then((res) => {
         if (res) {
-          const articles = Object.keys(res).map((key) => res[key]);
-          // Add default excerpt if missing and process dates
-          const articlesWithDefaults = articles.map((article) => {
-            // Process excerpt
+          // Separate featured and non-featured articles
+          const featured = res.filter((a) => a.featured);
+          const articlesWithDefaults = featured.map((article) => {
             const excerpt =
               article.excerpt ||
               article.description ||
               `Read more about this featured article from ${article.publication || article.company || "our media partners"}`;
-
             return {
               ...article,
               excerpt,
             };
           });
-
           setFeaturedArticles(articlesWithDefaults);
+          // Optionally, set all articles for passing to Articles component
+          // setAllArticles(res);
         }
       })
       .catch((err) => setError(err))

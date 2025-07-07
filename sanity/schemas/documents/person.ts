@@ -61,13 +61,13 @@ export default defineType({
           name: "bio",
           type: "text",
           title: "Biography",
-        }),
+        } as any),
         defineField({
           name: "expertise",
           type: "array",
           title: "Areas of Expertise",
           of: [{ type: "string" }],
-        }),
+        } as any),
         defineField({
           name: "profileImage",
           type: "image",
@@ -75,7 +75,7 @@ export default defineType({
           options: {
             hotspot: true,
           },
-        }),
+        } as any),
         defineField({
           name: "calendarLink",
           type: "url",
@@ -94,12 +94,12 @@ export default defineType({
           name: "bio",
           type: "text",
           title: "Biography",
-        }),
+        } as any),
         defineField({
           name: "company",
           type: "string",
           title: "Company",
-        }),
+        } as any),
         defineField({
           name: "title",
           type: "string",
@@ -109,7 +109,7 @@ export default defineType({
           name: "website",
           type: "url",
           title: "Website",
-        }),
+        } as any),
         defineField({
           name: "profileImage",
           type: "image",
@@ -123,7 +123,11 @@ export default defineType({
           type: "object",
           title: "Social Links",
           fields: [
-            defineField({ name: "twitter", type: "url", title: "Twitter" }),
+            defineField({
+              name: "twitter",
+              type: "url",
+              title: "Twitter",
+            } as any),
             defineField({ name: "linkedin", type: "url", title: "LinkedIn" }),
             defineField({ name: "website", type: "url", title: "Website" }),
           ],

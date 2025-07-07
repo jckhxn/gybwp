@@ -15,7 +15,7 @@ export default defineType({
           name: "timestamp",
           invert: false,
         }).error("Please use format MM:SS or HH:MM:SS"),
-    }),
+    } as any),
     defineField({
       name: "speaker",
       title: "Speaker",
@@ -34,21 +34,21 @@ export default defineType({
             ],
           },
           initialValue: "host",
-        }),
+        } as any),
         defineField({
           name: "person",
           title: "Person",
           type: "reference",
           to: [{ type: "person" }],
           hidden: ({ parent }) => parent?.type === "narrator",
-        }),
+        } as any),
         defineField({
           name: "customName",
           title: "Custom Name",
           type: "string",
           description: "Use when speaker is not in the people collection",
           hidden: ({ parent }) => parent?.type !== "narrator" && parent?.person,
-        }),
+        } as any),
       ],
     }),
     defineField({
@@ -57,14 +57,14 @@ export default defineType({
       type: "text",
       rows: 3,
       validation: (Rule: any) => Rule.required(),
-    }),
+    } as any),
     defineField({
       name: "notes",
       title: "Notes",
       type: "text",
       rows: 2,
       description: "Internal notes about this segment",
-    }),
+    } as any),
   ],
   preview: {
     select: {

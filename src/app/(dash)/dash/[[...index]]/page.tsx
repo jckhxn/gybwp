@@ -1,5 +1,5 @@
 import React from "react";
-import DashComponent from "../../../(website)/components/DashboardPage";
+import DashComponent from "@/src/components/pages/DashboardPage";
 
 export default function page() {
   return <DashComponent />;
