@@ -306,6 +306,17 @@ export const ALL_SPONSORS_QUERY = groq`*[_type == "sponsor"] {
 
 // Other Articles Query
 export const OTHER_ARTICLES_QUERY = groq`*[_type == "article"]`;
+export const FEATURED_ARTICLES_QUERY = groq`*[_type == "article" && featured == true] | order(_createdAt desc) {
+  _id,
+  company,
+  title,
+  link,
+  date,
+  image,
+  excerpt,
+  description,
+  publication
+}`;
 
 /**
  * Query to fetch episode documents for specific UUIDs

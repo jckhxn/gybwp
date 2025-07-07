@@ -12,7 +12,7 @@ import { ExternalLink, ArrowRight, Clock, Calendar } from "lucide-react";
 import Button from "@/src/components/ui/Button";
 // SWR
 import { client } from "@/data/sanity/client";
-import { ALL_ARTICLES_WITH_FEATURED_QUERY } from "@/data/sanity/queries";
+import { FEATURED_ARTICLES_QUERY } from "@/data/sanity/queries";
 import {
   fetchOpenGraphImage,
   testImageLink,
@@ -41,12 +41,11 @@ const FeaturedNews = ({
 
   useEffect(() => {
     client
-      .fetch(ALL_ARTICLES_WITH_FEATURED_QUERY)
+      .fetch(FEATURED_ARTICLES_QUERY)
       .then((res) => {
         if (res) {
-          // Separate featured and non-featured articles
-          const featured = res.filter((a) => a.featured);
-          const articlesWithDefaults = featured.map((article) => {
+          // Process the featured articles
+          const articlesWithDefaults = res.map((article) => {
             const excerpt =
               article.excerpt ||
               article.description ||
@@ -57,8 +56,6 @@ const FeaturedNews = ({
             };
           });
           setFeaturedArticles(articlesWithDefaults);
-          // Optionally, set all articles for passing to Articles component
-          // setAllArticles(res);
         }
       })
       .catch((err) => setError(err))
