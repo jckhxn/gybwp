@@ -274,3 +274,17 @@ export const ALL_ARTICLES_WITH_FEATURED_QUERY = groq`
     publication
   }
 `;
+
+export const FEATURED_ARTICLES_QUERY = groq`
+  *[_type == "article" && featured == true] | order(_createdAt desc) {
+    _id,
+    company,
+    title,
+    link,
+    date,
+    image,
+    excerpt,
+    description,
+    publication
+  }
+`;

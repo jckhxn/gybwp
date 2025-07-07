@@ -27,7 +27,10 @@ export default defineType({
       // Date of the Article
       name: "date",
       title: "Date of Article",
-      type: "string",
+      type: "date",
+      options: {
+        dateFormat: "YYYY-MM-DD",
+      },
     }),
     defineField({
       name: "featured",
@@ -37,11 +40,50 @@ export default defineType({
         "Mark this article as featured to include it in the Featured Articles section.",
       initialValue: false,
     }),
+    defineField({
+      name: "image",
+      title: "Article Image",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+      description: "Featured image for this article",
+    }),
+    defineField({
+      // Publication name
+      name: "publication",
+      title: "Publication Name",
+      type: "string",
+      description: "The name of the publication (e.g. CNN, Forbes, etc.)",
+    }),
+    defineField({
+      // Excerpt for display in cards
+      name: "excerpt",
+      title: "Excerpt",
+      type: "text",
+      description: "A short excerpt to display in the article card",
+    }),
+    defineField({
+      // Short Description of the Article
+      name: "description",
+      title: "Short Description from Article",
+      type: "text",
+      description: "Brief description of the article content",
+    }),
   ],
   preview: {
     select: {
       title: "title",
       subtitle: "company",
+      media: "image",
+      featured: "featured",
+    },
+    prepare({ title, subtitle, media, featured }) {
+      return {
+        title: `${featured ? "⭐ " : ""}${title}`,
+        subtitle: subtitle,
+        media,
+      };
     },
   },
 });

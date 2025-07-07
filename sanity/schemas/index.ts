@@ -2,7 +2,6 @@
 import article from "./documents/article";
 import episode from "./documents/episode";
 import episodeTemplate from "./documents/episodeTemplate";
-import featuredArticle from "./documents/featuredArticle";
 import sponsor from "./documents/sponsor";
 import guest from "./documents/guest";
 import season from "./documents/season";
@@ -27,7 +26,6 @@ const schemas = [
   host,
   sponsor,
   article,
-  featuredArticle,
 
   // New page builder documents
   page,
