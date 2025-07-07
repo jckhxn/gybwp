@@ -10,13 +10,13 @@ export default defineType({
       title: "Show Transcript",
       type: "boolean",
       initialValue: true,
-    }),
+    } as any),
     defineField({
       name: "showGuests",
       title: "Show Guests",
       type: "boolean",
       initialValue: true,
-    }),
+    } as any),
     defineField({
       name: "showSponsors",
       title: "Show Sponsors",
@@ -28,7 +28,7 @@ export default defineType({
       title: "Autoplay",
       type: "boolean",
       initialValue: false,
-    }),
+    } as any),
   ],
   preview: {
     select: {

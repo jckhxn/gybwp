@@ -15,7 +15,7 @@ export const youtubeInput = definePlugin<{
           name: "youtubeVideo",
           type: "object",
           components: {
-            input: createScopedInputComponent(config.apiKey, config.channelId),
+            input: createScopedInputComponent(config.apiKey),
           },
           fields: [
             {

@@ -4,11 +4,7 @@ import routes from "@/src/app/(website)/routes";
 // components
 import Link from "next/link";
 import Image from "next/image";
-import logo from "images/logo.webp";
-import Button from "../Button";
 
-// copy
-import { footer } from "./static-data";
 import { Separator } from "@/src/components/ui/separator";
 
 const Footer = () => {

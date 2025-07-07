@@ -93,7 +93,7 @@ export const Newsletter = () => {
 
                 {/* Enhanced CTA button */}
                 <Link
-                  href={CTA.buttonUrl}
+                  href="https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7049506606413213696"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-light px-8 py-4 text-base font-medium text-white transition-all duration-200 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"

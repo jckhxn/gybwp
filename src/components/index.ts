@@ -11,7 +11,7 @@ export { SectionRenderer } from "./sections";
 // Pages
 export { default as HomePage } from "./pages/HomePage";
 export { default as AboutPage } from "./pages/AboutPage";
-export { default as ConsultingPage } from "./pages/ConsultingPage";
+export { default as ConsultingPage } from "./pages/ConsultingPage/old";
 export { default as EpisodesPage } from "./pages/EpisodesPage";
 
 // Features

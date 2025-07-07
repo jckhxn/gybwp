@@ -8,6 +8,7 @@ import { pages } from "@tinloof/sanity-studio";
 import { youtubeInput } from "./sanity/plugins/youtube";
 import schemas from "./sanity/schemas";
 import config from "./config";
+import { locate } from "./src/app/(website)/lib/locate";
 
 const sanityConfig = defineConfig({
   projectId: config.sanity.projectId,
@@ -34,6 +35,9 @@ const sanityConfig = defineConfig({
   ],
   schema: { types: schemas },
   useCdn: false,
+  presentation: {
+    locate,
+  },
 });
 
 export default sanityConfig;

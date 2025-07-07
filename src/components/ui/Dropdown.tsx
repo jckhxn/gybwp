@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 // components
 import { Section } from "@/src/components/shared";
-import Button from "../Button";
+import Button from "@/components/ui/Button";
 
 // copy
 import { PODCAST } from "../HomePage/static-data";

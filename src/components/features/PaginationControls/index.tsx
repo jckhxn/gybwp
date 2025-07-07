@@ -9,8 +9,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "../ui/pagination";
-import { PaginationControls } from "@/src/components/features/PaginationControls";
+} from "../../ui/pagination";
 import { usePagination } from "@/src/lib/usePagination";
 
 interface PaginationControlsProps {

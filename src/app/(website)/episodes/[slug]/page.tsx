@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 // Components
-import EpisodeDetails from "@/src/components/EpisodeDetails/";
+import EpisodeDetails from "@/src/components/features/EpisodeDetails";
 
 // Queries and utilities
 import { loadEpisode } from "@/data/sanity";

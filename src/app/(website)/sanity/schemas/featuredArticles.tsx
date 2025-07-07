@@ -1,5 +1,7 @@
 import { deprecate } from "util";
 
+// DEPRECATED: This schema is being removed. Featured articles are now handled by a 'featured' boolean on the main article schema.
+
 const featuredArticle = {
   name: "featuredArticle",
   title: "Featured Articles",

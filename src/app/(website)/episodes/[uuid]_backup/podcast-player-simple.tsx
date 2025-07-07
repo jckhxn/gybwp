@@ -18,8 +18,8 @@ import {
   Maximize,
   Minimize,
 } from "lucide-react";
-import { Slider } from "@/src/components/ui/slider";
-import Button from "@/src/components/ui/button";
+import Slider from "@/src/components/ui/slider";
+import Button from "@/src/components/ui/Button";
 
 // Add YouTube Player API types
 declare global {

@@ -1,5 +1,5 @@
 import React from "react";
-import GuestPage from "@/src/components/GuestPage";
+import GuestPage from "@/src/components/pages/GuestPage";
 
 type PageProps = {
   params: Promise<{ guest: string | string[] }>;

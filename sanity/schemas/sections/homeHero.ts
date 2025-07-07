@@ -10,13 +10,13 @@ export default defineType({
       type: "string",
       title: "Hero Title",
       initialValue: "Growing Your Business With People",
-    }),
+    } as any),
     defineField({
       name: "subtitle",
       type: "string",
       title: "Hero Subtitle",
       initialValue: "Where Leadership Meets Excellence",
-    }),
+    } as any),
     defineField({
       name: "description",
       type: "text",
@@ -29,7 +29,7 @@ export default defineType({
       type: "string",
       title: "Top Badge Text",
       initialValue: "Business Leadership Podcast",
-    }),
+    } as any),
     defineField({
       name: "primaryButton",
       type: "object",
@@ -40,7 +40,7 @@ export default defineType({
           type: "string",
           title: "Button Text",
           initialValue: "Listen Now",
-        }),
+        } as any),
         defineField({
           name: "link",
           type: "string",
@@ -48,7 +48,7 @@ export default defineType({
           initialValue: "/episodes",
         }),
       ],
-    }),
+    } as any),
     defineField({
       name: "secondaryButton",
       type: "object",
@@ -59,7 +59,7 @@ export default defineType({
           type: "string",
           title: "Button Text",
           initialValue: "About Jeff",
-        }),
+        } as any),
         defineField({
           name: "link",
           type: "string",
@@ -73,7 +73,7 @@ export default defineType({
       type: "string",
       title: "Platforms Heading",
       initialValue: "Available on:",
-    }),
+    } as any),
     defineField({
       name: "platforms",
       type: "array",
@@ -86,12 +86,12 @@ export default defineType({
               name: "name",
               type: "string",
               title: "Platform Name",
-            }),
+            } as any),
             defineField({
               name: "url",
               type: "url",
               title: "Platform URL",
-            }),
+            } as any),
             defineField({
               name: "logoImage",
               type: "image",
@@ -123,7 +123,7 @@ export default defineType({
           url: "https://www.buzzsprout.com/2057493",
         },
       ],
-    }),
+    } as any),
     defineField({
       name: "hostBadge",
       type: "object",
@@ -134,19 +134,19 @@ export default defineType({
           type: "string",
           title: "Badge Label",
           initialValue: "Host",
-        }),
+        } as any),
         defineField({
           name: "name",
           type: "string",
           title: "Host Name",
           initialValue: "Jeff Lackey",
-        }),
+        } as any),
         defineField({
           name: "title",
           type: "string",
           title: "Host Title",
           initialValue: "CEO & Leadership Coach",
-        }),
+        } as any),
       ],
     }),
     defineField({
@@ -162,18 +162,17 @@ export default defineType({
       type: "boolean",
       title: "Show Latest Episode",
       initialValue: false,
-    }),
+    } as any),
   ],
   preview: {
     select: {
       title: "title",
       subtitle: "subtitle",
     },
-    prepare(selection) {
-      const { title, subtitle } = selection;
+    prepare({ title, subtitle }) {
       return {
-        title: "Home Hero",
-        subtitle: title || "Hero Section",
+        title: title || "Home Hero",
+        subtitle: subtitle || "Hero section",
       };
     },
   },

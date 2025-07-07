@@ -9,19 +9,19 @@ export default defineType({
       name: "title",
       title: "Title",
       type: "string",
-    }),
+    } as any),
     defineField({
       name: "episode",
       title: "Episode",
       type: "reference",
       to: [{ type: "episode" }],
-    }),
+    } as any),
     defineField({
       name: "showPlayButton",
       title: "Show Play Button",
       type: "boolean",
       initialValue: true,
-    }),
+    } as any),
     defineField({
       name: "backgroundImage",
       title: "Background Image",
@@ -29,7 +29,7 @@ export default defineType({
       options: {
         hotspot: true,
       },
-    }),
+    } as any),
   ],
   preview: {
     select: {
@@ -39,7 +39,7 @@ export default defineType({
     prepare({ title, episode }) {
       return {
         title: title || "Episode Hero",
-        subtitle: episode ? `Episode: ${episode}` : "Episode hero section",
+        subtitle: episode ? `Episode: ${episode}` : "No episode selected",
       };
     },
   },

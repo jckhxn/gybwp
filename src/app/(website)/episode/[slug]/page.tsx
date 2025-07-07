@@ -6,8 +6,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 // Components
-import EpisodePreview from "@/src/components/EpisodePreview";
-import EpisodeDetails from "@/src/components/EpisodeDetails/";
+import EpisodeDetails from "@/src/components/features/EpisodeDetails";
 
 // Queries and utilities
 import { loadEpisode } from "@/data/sanity";
@@ -61,7 +60,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   }
 
   return (await draftMode()).isEnabled ? (
-    <EpisodePreview initial={{ data: initial }} params={{ identifier, epID }} />
+    <EpisodeDetails initial={{ data: initial }} params={{ identifier, epID }} />
   ) : (
     <>
       <EpisodeDetails data={initial} />

@@ -239,3 +239,38 @@ export const EPISODE_BY_IDENTIFIER_QUERY = groq`*[_type == "episode" && (
     },
     "sections": sections[]
 }`;
+
+export const ALL_ARTICLES_QUERY = groq`
+  *[_type == "article"] | order(_createdAt desc) {
+    _id,
+    company,
+    title,
+    link,
+    date
+  }
+`;
+
+export const OTHER_ARTICLES_QUERY = groq`
+  *[_type == "article" && !(_id in $excludeIds)] | order(_createdAt desc) {
+    _id,
+    company,
+    title,
+    link,
+    date
+  }
+`;
+
+export const ALL_ARTICLES_WITH_FEATURED_QUERY = groq`
+  *[_type == "article"] | order(_createdAt desc) {
+    _id,
+    company,
+    title,
+    link,
+    date,
+    featured,
+    image,
+    excerpt,
+    description,
+    publication
+  }
+`;

@@ -11,13 +11,13 @@ export default defineType({
       type: "reference",
       to: [{ type: "person" }],
       validation: (Rule: any) => Rule.required(),
-    }),
+    } as any),
     defineField({
       name: "showBio",
       title: "Show Bio",
       type: "boolean",
       initialValue: true,
-    }),
+    } as any),
     defineField({
       name: "showSocialLinks",
       title: "Show Social Links",
@@ -29,7 +29,7 @@ export default defineType({
       title: "Show Episodes",
       type: "boolean",
       initialValue: true,
-    }),
+    } as any),
     defineField({
       name: "maxEpisodes",
       title: "Max Episodes to Show",
@@ -37,7 +37,7 @@ export default defineType({
       initialValue: 6,
       validation: (Rule: any) => Rule.min(1).max(20),
       hidden: ({ parent }) => !parent?.showEpisodes,
-    }),
+    } as any),
   ],
   preview: {
     select: {
@@ -47,7 +47,6 @@ export default defineType({
     prepare({ title, role }) {
       return {
         title: title ? `Profile: ${title}` : "Person Profile",
-        subtitle: role || "Person profile section",
       };
     },
   },

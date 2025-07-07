@@ -8,7 +8,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/src/components/ui/avatar";
-import { Card, CardContent } from "@/src/components/ui/card";
+import { Card, CardContent } from "@/src/components/ui/Card";
 import { urlForImage } from "@/src/lib/sanity-image";
 
 interface EpisodeGuestsProps {

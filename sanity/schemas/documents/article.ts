@@ -29,5 +29,19 @@ export default defineType({
       title: "Date of Article",
       type: "string",
     }),
+    defineField({
+      name: "featured",
+      title: "Featured",
+      type: "boolean",
+      description:
+        "Mark this article as featured to include it in the Featured Articles section.",
+      initialValue: false,
+    }),
   ],
+  preview: {
+    select: {
+      title: "title",
+      subtitle: "company",
+    },
+  },
 });

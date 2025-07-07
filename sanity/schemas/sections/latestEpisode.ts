@@ -10,12 +10,12 @@ export default defineType({
       type: "string",
       title: "Section Title",
       initialValue: "Latest Episode",
-    }),
+    } as any),
     defineField({
       name: "description",
       type: "text",
       title: "Section Description",
-    }),
+    } as any),
     defineField({
       name: "showAutomatic",
       type: "boolean",
@@ -30,17 +30,16 @@ export default defineType({
       title: "Specific Episode",
       to: [{ type: "episode" }],
       hidden: ({ parent }) => parent?.showAutomatic,
-    }),
+    } as any),
   ],
   preview: {
     select: {
       title: "title",
       showAutomatic: "showAutomatic",
     },
-    prepare(selection) {
-      const { title, showAutomatic } = selection;
+    prepare({ title, showAutomatic }) {
       return {
-        title: "Latest Episode",
+        title: title || "Latest Episode",
         subtitle: showAutomatic ? "Automatic" : "Manual selection",
       };
     },
