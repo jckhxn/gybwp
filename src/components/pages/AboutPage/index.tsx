@@ -162,8 +162,8 @@ export default function AboutPage() {
               Meet the Host
             </h2>
             <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
-              "I firmly believe people aren’t just a company’s most vital asset;
-              they’re an investment primed for growth."
+              &quot;I firmly believe people aren’t just a company’s most vital
+              asset; they’re an investment primed for growth.&quot;
             </p>
             <p className="text-base text-gray-500">
               Jeff’s leadership journey includes roles at Fortune 100 companies,
