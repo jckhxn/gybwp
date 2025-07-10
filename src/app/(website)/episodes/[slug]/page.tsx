@@ -29,7 +29,7 @@ function isUUID(identifier: string): boolean {
 export default async function Page({ params, searchParams }: PageProps) {
   const resolvedParams = await params;
   const { slug: rawSlug } = resolvedParams;
-  
+
   // Decode the URL parameter to handle special characters
   const slug = decodeURIComponent(rawSlug);
 

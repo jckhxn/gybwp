@@ -1010,61 +1010,74 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                       Featured Guest{episode.guests.length > 1 ? "s" : ""}
                     </h2>
                     <div className="space-y-8">
-                      {episode.guests.map((guest, index) => (
-                        <div
-                          key={guest._id || index}
-                          className="flex flex-col sm:flex-row gap-4 items-start sm:items-center"
-                        >
-                          <Avatar className="h-20 w-20">
-                            {guest.image ? (
-                              <AvatarImage
-                                src={urlFor(guest.image)
-                                  .width(160)
-                                  .height(160)
-                                  .url()}
-                                alt={guest.name || "Guest"}
-                              />
-                            ) : (
-                              <AvatarImage
-                                src="/placeholder.svg?height=80&width=80"
-                                alt={guest.name || "Guest"}
-                              />
-                            )}
-                            <AvatarFallback>
-                              {guest.name
-                                ? guest.name.substring(0, 2).toUpperCase()
-                                : "GU"}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <h3 className="text-lg font-semibold">
-                              {guest.name || "Guest Name"}
-                            </h3>
-                            {guest.title && (
-                              <p className="text-sm text-muted-foreground mb-2">
-                                {guest.title}
-                              </p>
-                            )}
-                            {guest.about && (
-                              <p className="text-sm text-muted-foreground mb-4">
-                                {guest.about}
-                              </p>
-                            )}
-                            <div className="flex gap-2">
-                              {guest.slug && guest.slug.current && (
-                                <Link href={`/guest/${encodeURIComponent(guest.slug.current)}`}>
-                                  <Button
-                                    color="primary"
-                                    className="flex items-center gap-1 px-4 py-2 bg-primary text-white hover:bg-primary-dark rounded transition-all text-sm font-medium"
-                                  >
-                                    More Details
-                                  </Button>
-                                </Link>
+                      {" "}
+                      {episode.guests.map((guest, index) => {
+                        return (
+                          <div
+                            key={guest._id || index}
+                            className="flex flex-col sm:flex-row gap-4 items-start sm:items-center"
+                          >
+                            <Avatar className="h-20 w-20">
+                              {guest.guestProfile?.profileImage ? (
+                                <AvatarImage
+                                  src={urlFor(guest.guestProfile.profileImage)
+                                    .width(160)
+                                    .height(160)
+                                    .url()}
+                                  alt={guest.name || "Guest"}
+                                />
+                              ) : guest.image ? (
+                                <AvatarImage
+                                  src={urlFor(guest.image)
+                                    .width(160)
+                                    .height(160)
+                                    .url()}
+                                  alt={guest.name || "Guest"}
+                                />
+                              ) : (
+                                <AvatarImage
+                                  src="/placeholder.svg?height=80&width=80"
+                                  alt={guest.name || "Guest"}
+                                />
                               )}
+                              <AvatarFallback>
+                                {guest.name
+                                  ? guest.name.substring(0, 2).toUpperCase()
+                                  : "GU"}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <h3 className="text-lg font-semibold">
+                                {guest.name || "Guest Name"}
+                              </h3>
+                              {(guest.guestProfile?.title || guest.title) && (
+                                <p className="text-sm text-muted-foreground mb-2">
+                                  {guest.guestProfile?.title || guest.title}
+                                </p>
+                              )}
+                              {(guest.guestProfile?.bio || guest.about) && (
+                                <p className="text-sm text-muted-foreground mb-4">
+                                  {guest.guestProfile?.bio || guest.about}
+                                </p>
+                              )}
+                              <div className="flex gap-2">
+                                {guest.slug && guest.slug.current && (
+                                  <Link
+                                    href={`/guest/${encodeURIComponent(guest.slug.current)}`}
+                                  >
+                                    <Button
+                                      color="primary"
+                                      className="flex items-center gap-1 px-4 py-2 bg-primary text-white hover:bg-primary-dark rounded transition-all text-sm font-medium"
+                                    >
+                                      More Details
+                                    </Button>
+                                  </Link>
+                                )}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 )}

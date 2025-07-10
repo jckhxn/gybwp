@@ -2,9 +2,11 @@
 "use client";
 
 import { formatDescriptionText } from "@/src/lib/utils";
+import { getComponentId } from "@/src/lib/sectionId";
 
 interface EpisodeOverviewProps {
   data: {
+    sectionId?: string;
     showDescription?: boolean;
     customDescription?: string;
   };
@@ -23,6 +25,8 @@ export default function EpisodeOverview({
 }: EpisodeOverviewProps) {
   if (!data?.showDescription) return null;
 
+  const componentId = getComponentId(data, "episode-overview");
+
   const description =
     data.customDescription ||
     episode?.youtube?.description ||
@@ -33,7 +37,10 @@ export default function EpisodeOverview({
   if (!description) return null;
 
   return (
-    <div className="relative bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
+    <div
+      id={componentId}
+      className="relative bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden"
+    >
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-cyan-500"></div>
       <div className="p-8">
         <div className="text-center mb-6">

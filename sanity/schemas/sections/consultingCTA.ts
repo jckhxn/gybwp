@@ -6,6 +6,13 @@ export default defineType({
   type: "object",
   fields: [
     defineField({
+      name: "sectionId",
+      title: "Section ID",
+      type: "string",
+      description:
+        "Optional custom ID for this section. Will auto-generate from schema name if not provided.",
+    }),
+    defineField({
       name: "title",
       title: "Title",
       type: "string",
@@ -29,6 +36,13 @@ export default defineType({
       title: "Button Link",
       type: "string",
       initialValue: "/consulting#contact",
+    }),
+    defineField({
+      name: "componentLink",
+      type: "componentLink",
+      title: "Component Link",
+      description:
+        "Advanced linking options - use this instead of the simple button link field for more control",
     }),
     defineField({
       name: "backgroundImage",

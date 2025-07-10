@@ -2,9 +2,11 @@
 "use client";
 
 import { TranscriptDisplay } from "@/src/components/features/TranscriptDisplay";
+import { getComponentId } from "@/src/lib/sectionId";
 
 interface EpisodeTranscriptProps {
   data: {
+    sectionId?: string;
     showTranscript?: boolean;
     showTimestamps?: boolean;
     allowDownload?: boolean;
@@ -21,6 +23,8 @@ export default function EpisodeTranscript({
 }: EpisodeTranscriptProps) {
   if (!data?.showTranscript) return null;
 
+  const componentId = getComponentId(data, "episode-transcript");
+
   const transcript = episode?.transcript || "";
   const transcriptSegments = episode?.transcriptSegments || [];
 
@@ -29,7 +33,10 @@ export default function EpisodeTranscript({
   }
 
   return (
-    <div className="relative bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
+    <div
+      id={componentId}
+      className="relative bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden"
+    >
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-emerald-500"></div>
       <div className="p-8">
         <div className="text-center mb-6">
