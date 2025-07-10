@@ -10,13 +10,13 @@ export default defineType({
       title: "Show Related Episodes",
       type: "boolean",
       initialValue: true,
-    } as any),
+    }),
     defineField({
       name: "title",
       title: "Section Title",
       type: "string",
       initialValue: "Related Episodes",
-    } as any),
+    }),
     defineField({
       name: "subtitle",
       title: "Section Subtitle",
@@ -29,7 +29,7 @@ export default defineType({
       type: "number",
       initialValue: 3,
       validation: (Rule: any) => Rule.min(1).max(6),
-    } as any),
+    }),
   ],
   preview: {
     select: {

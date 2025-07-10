@@ -43,8 +43,8 @@ export default function SubscribeForm() {
         />
       </div>
       <Button
-        type="submit"
-        className="w-full"
+        color="primary"
+        className="w-full py-3 px-6 text-base font-semibold bg-primary text-white rounded hover:bg-primary/80 transition"
         disabled={isSubmitting || isSuccess}
       >
         {isSubmitting

@@ -60,15 +60,14 @@ export default defineType({
       title: "Biography",
       type: "text",
       description: "Brief biography of the host",
-      rows: 4,
-    } as any),
+    }),
     defineField({
       name: "company",
       title: "Company/Organization",
       type: "string",
       description: "Host's company or organization",
-    } as any),
-    defineField({
+    }),
+    {
       name: "socialLinks",
       title: "Social Media Links",
       type: "object",
@@ -78,12 +77,12 @@ export default defineType({
           name: "website",
           title: "Website",
           type: "url",
-        } as any),
+        }),
         defineField({
           name: "linkedin",
           title: "LinkedIn",
           type: "url",
-        } as any),
+        }),
         defineField({
           name: "twitter",
           title: "Twitter",
@@ -93,9 +92,9 @@ export default defineType({
           name: "instagram",
           title: "Instagram",
           type: "url",
-        } as any),
+        }),
       ],
-    } as any),
+    },
     defineField({
       name: "email",
       title: "Contact Email",

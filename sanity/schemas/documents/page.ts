@@ -17,7 +17,7 @@ export default defineType({
       name: "pathname",
       title: "URL Path",
     }),
-    defineField({
+    {
       name: "sectionsBody",
       title: "Page Sections",
       type: "array",
@@ -34,7 +34,7 @@ export default defineType({
           ],
         },
       },
-    } as any),
+    },
   ],
   preview: {
     select: {

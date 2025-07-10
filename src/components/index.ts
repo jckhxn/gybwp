@@ -9,20 +9,15 @@ export { default as Footer } from "./layout/Footer";
 export { SectionRenderer } from "./sections";
 
 // Pages
-export { default as HomePage } from "./pages/HomePage";
 export { default as AboutPage } from "./pages/AboutPage";
-export { default as ConsultingPage } from "./pages/ConsultingPage/old";
-export { default as EpisodesPage } from "./pages/EpisodesPage";
+export { default as ConsultingPage } from "./pages/ConsultingPage";
 
 // Features
 export { default as EpisodeDetails } from "./features/EpisodeDetails";
-export { default as EpisodePreview } from "./features/EpisodePreview";
-export { default as BrowseEpisodes } from "./features/BrowseEpisodes";
-export { default as LatestEpisode } from "./features/LatestEpisode";
+export { BrowseEpisodes } from "./features/BrowseEpisodes";
+export { LatestEpisode } from "./features/LatestEpisode";
 
 // Shared utilities
-export { default as Button } from "./Button";
-export { default as Card } from "./Card";
 export * from "./shared";
 
 // Sanity integration

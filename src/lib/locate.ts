@@ -44,11 +44,11 @@ export const locate: DocumentLocationResolver = (params, context) => {
         }
         // Then try slug
         else if (doc.slug?.current) {
-          href = `/episodes/${doc.slug.current}`;
+          href = `/episodes/${encodeURIComponent(doc.slug.current)}`;
         }
         // Finally try UUID (legacy)
         else if (doc.uuid || doc.youtube?.uuid) {
-          href = `/episodes/${doc.uuid || doc.youtube.uuid}`;
+          href = `/episodes/${encodeURIComponent(doc.uuid || doc.youtube.uuid)}`;
         }
 
         if (!href) {

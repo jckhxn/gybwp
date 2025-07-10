@@ -10,12 +10,12 @@ export default defineType({
       type: "string",
       title: "Section Title",
       initialValue: "Latest Episode",
-    } as any),
+    }),
     defineField({
       name: "description",
       type: "text",
       title: "Section Description",
-    } as any),
+    }),
     defineField({
       name: "showAutomatic",
       type: "boolean",
@@ -24,13 +24,13 @@ export default defineType({
         "If enabled, shows the most recent episode. If disabled, choose a specific episode.",
       initialValue: true,
     }),
-    defineField({
+    {
       name: "specificEpisode",
       type: "reference",
       title: "Specific Episode",
       to: [{ type: "episode" }],
       hidden: ({ parent }) => parent?.showAutomatic,
-    } as any),
+    },
   ],
   preview: {
     select: {

@@ -10,13 +10,13 @@ export default defineType({
       title: "Show Description",
       type: "boolean",
       initialValue: true,
-    } as any),
+    }),
     defineField({
       name: "customDescription",
       title: "Custom Description",
       type: "text",
       description: "Override the episode description if needed",
-    } as any),
+    }),
   ],
   preview: {
     prepare() {

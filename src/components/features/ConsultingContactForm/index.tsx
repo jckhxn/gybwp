@@ -81,13 +81,12 @@ export default function ConsultingContactForm() {
           Thank you for your interest in our consulting services. Jeff will get
           back to you within 24 hours.
         </p>
-        <Button
+        <button
           onClick={() => setSubmitted(false)}
-          variant="outline"
-          className="text-green-700 border-green-300 hover:bg-green-50"
+          className="px-4 py-2 text-green-700 border border-green-300 hover:bg-green-50 rounded-md transition-colors"
         >
           Send Another Message
-        </Button>
+        </button>
       </div>
     );
   }
@@ -207,10 +206,10 @@ export default function ConsultingContactForm() {
           </div>
         )}
 
-        <Button
+        <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 h-auto"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 h-auto rounded-md transition-colors disabled:opacity-50"
         >
           {isSubmitting ? (
             <>
@@ -220,7 +219,7 @@ export default function ConsultingContactForm() {
           ) : (
             "Start the Conversation"
           )}
-        </Button>
+        </button>
 
         <p className="text-xs text-gray-400 text-center">
           * Required fields. We respect your privacy and will never share your

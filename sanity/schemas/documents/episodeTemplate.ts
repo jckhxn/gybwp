@@ -54,7 +54,7 @@ export default defineType({
       initialValue:
         "This template defines the layout and sections for all episode detail pages. Each section will automatically receive its props from the episode document being viewed.",
     }),
-    defineField({
+    {
       name: "sectionsBody",
       title: "Episode Page Sections",
       type: "array",
@@ -83,7 +83,7 @@ export default defineType({
         { type: "consultingCTA" },
       ],
       validation: (Rule: any) => Rule.required().min(1),
-    } as any),
+    },
     defineField({
       name: "usage",
       title: "Usage Instructions",

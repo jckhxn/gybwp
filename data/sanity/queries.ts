@@ -152,12 +152,12 @@ export const EPISODE_BY_IDENTIFIER_QUERY = groq`*[_type == "episode" && (
     },
     // Get all speakers - we'll filter in the component
     "allSpeakers": {
-      "hosts": *[_type == "host"] {
+      "hosts": *[_type == "person" && role == "host-consultant"] {
         _id,
         name,
         slug
       },
-      "guests": *[_type == "guest"] {
+      "guests": *[_type == "person" && role == "guest"] {
         _id,
         name,
         slug

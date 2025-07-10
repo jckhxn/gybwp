@@ -110,7 +110,7 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         {trigger || (
-          <Button className={className} size="lg">
+          <Button className={className}>
             <Mail className="w-4 h-4 mr-2" />
             Contact Us
           </Button>
@@ -226,19 +226,18 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
           )}
 
           <div className="flex gap-3 pt-4">
-            <Button
+            <button
               type="button"
-              variant="outline"
               onClick={() => setIsOpen(false)}
               disabled={status.type === "loading"}
-              className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+              className="flex-1 px-4 py-2 border border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition-colors"
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
               disabled={!isFormValid || status.type === "loading"}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+              className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors disabled:opacity-50"
             >
               {status.type === "loading" ? (
                 <>
@@ -251,7 +250,7 @@ const ContactModal = ({ trigger, className }: ContactModalProps) => {
                   Send Message
                 </>
               )}
-            </Button>
+            </button>
           </div>
         </form>
       </DialogContent>

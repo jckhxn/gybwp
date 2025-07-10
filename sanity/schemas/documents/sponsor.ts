@@ -22,7 +22,7 @@ export default defineType({
       },
       validation: (Rule: any) => Rule.required(),
     }),
-    defineField({
+    {
       name: "sectionsBody",
       title: "Sections",
       type: "array",
@@ -32,7 +32,7 @@ export default defineType({
         { type: "newsletter" },
         // Add more sponsor-specific sections as needed
       ],
-    } as any),
+    },
     defineField({
       name: "logo",
       title: "Logo",
@@ -50,8 +50,7 @@ export default defineType({
       name: "description",
       title: "Description",
       type: "text",
-      rows: 3,
-    } as any),
+    }),
     defineField({
       name: "sponsorshipLevel",
       title: "Sponsorship Level",
@@ -63,7 +62,7 @@ export default defineType({
           { title: "Supporting Sponsor", value: "supporting" },
         ],
       },
-    } as any),
+    }),
     defineField({
       name: "active",
       title: "Active Sponsor",

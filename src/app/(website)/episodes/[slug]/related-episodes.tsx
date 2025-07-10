@@ -28,72 +28,63 @@ export default function RelatedEpisodes({
   };
 
   return (
-    <div className="space-y-4">
-      {episodes.map((episode: any, index: number) => {
-        // For references that have been expanded, the data is in either episode.youtube or episode
-        // For references that haven't been expanded, we might just have _ref fields
-        const youtube = episode?.youtube || {};
-
-        // Extract necessary data from the referenced episode
-        const rawTitle = youtube.title || episode.title || "Untitled Episode";
-        const title = formatEpisodeTitle(rawTitle);
-        const seasonNumber =
-          youtube.seasonNumber || episode.seasonNumber || "?";
-        const episodeNumber =
-          youtube.episodeNumber || episode.episodeNumber || "?";
-
-        // Handle image/thumbnail with special consideration for Sanity image objects
-        let thumbnailUrl = "/placeholder.svg";
-        if (youtube.thumbnail) {
-          thumbnailUrl = youtube.thumbnail;
-        } else if (episode.image) {
-          thumbnailUrl = isSanityImage(episode.image)
-            ? urlFor(episode.image).width(80).height(80).url()
-            : episode.image;
-        }
-
-        // Determine path to episode - prioritize pathname, fallback to slug construction
-        const episodeId =
-          youtube.uuid || episode._id || episode.uuid || episode._ref;
-        const pathName =
-          episode.pathname?.current ||
-          episode.slug?.current ||
-          `/episodes/${episodeId}`;
-
-        return (
-          <div key={episodeId || index} className="flex gap-3">
-            <Image
-              src={thumbnailUrl}
-              alt={title}
-              width={80}
-              height={80}
-              className="rounded-md object-cover"
-            />
-            <div className="flex flex-col">
-              <span className="text-xs text-muted-foreground">
+    <>
+      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+        {episodes.map((episode: any, index: number) => {
+          const youtube = episode?.youtube || {};
+          const rawTitle = youtube.title || episode.title || "Untitled Episode";
+          const title = formatEpisodeTitle(rawTitle);
+          const seasonNumber =
+            youtube.seasonNumber || episode.seasonNumber || "?";
+          const episodeNumber =
+            youtube.episodeNumber || episode.episodeNumber || "?";
+          let thumbnailUrl = "/placeholder.svg";
+          if (youtube.thumbnail) {
+            thumbnailUrl = youtube.thumbnail;
+          } else if (episode.image) {
+            thumbnailUrl = isSanityImage(episode.image)
+              ? urlFor(episode.image).width(80).height(80).url()
+              : episode.image;
+          }
+          const episodeId =
+            youtube.uuid || episode._id || episode.uuid || episode._ref;
+          const pathName =
+            episode.pathname?.current ||
+            episode.slug?.current ||
+            `/episodes/${episodeId}`;
+          return (
+            <div
+              key={episodeId || index}
+              className="flex flex-col bg-white rounded-xl border shadow-lg p-6 h-full transition-shadow hover:shadow-2xl"
+            >
+              <Image
+                src={thumbnailUrl}
+                alt={title}
+                width={80}
+                height={80}
+                className="rounded-md object-cover mb-3 mx-auto"
+              />
+              <span className="text-xs text-muted-foreground mb-1">
                 S{seasonNumber}E{episodeNumber}
               </span>
-              <h4 className="text-sm font-medium line-clamp-2">{title}</h4>
+              <h4 className="text-sm font-medium line-clamp-2 mb-2">{title}</h4>
+              <div className="flex-grow" />
               <Link href={pathName}>
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="p-0 h-auto mt-1 justify-start"
-                >
+                <Button className="w-full mt-2 px-4 py-2 bg-primary text-white hover:bg-primary-dark rounded transition-all text-sm font-medium">
                   Listen Now
                 </Button>
               </Link>
             </div>
-          </div>
-        );
-      })}
-      <div className="pt-4 mt-2">
+          );
+        })}
+      </div>
+      <div className="pt-4 mt-2 w-full flex justify-center items-center">
         <Link href="/episodes">
-          <Button variant="outline" size="sm" className="w-full">
+          <Button className="px-6 py-2 bg-primary text-white hover:bg-primary-dark rounded transition-all text-base font-semibold text-center mx-auto">
             View All Episodes
           </Button>
         </Link>
       </div>
-    </div>
+    </>
   );
 }

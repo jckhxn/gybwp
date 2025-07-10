@@ -7,7 +7,9 @@ export default function VisualEditingComponent() {
   useEffect(() => {
     // Only enable visual editing in development or preview mode
     if (process.env.NODE_ENV === "development") {
-      import("@sanity/visual-editing/refresh");
+      import("@sanity/visual-editing/refresh").catch(() => {
+        // Ignore import errors in case the package is not available
+      });
     }
   }, []);
 

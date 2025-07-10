@@ -11,11 +11,11 @@ export default defineType({
       type: "string",
       description: "The title of the season e.g Season One",
     }),
-    defineField({
+    {
       name: "sponsors",
       title: "List of Sponsors for the Season",
       type: "array",
       of: [{ type: "reference", to: [{ type: "sponsor" }] }],
-    } as any),
+    },
   ],
 });

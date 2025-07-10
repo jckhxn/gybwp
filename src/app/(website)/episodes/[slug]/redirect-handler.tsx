@@ -48,7 +48,7 @@ export async function handleEpisodeRedirect(slug: string) {
   }
 
   // Fetch episode data to determine if redirect is needed
-  const { data: episode } = await loadQuery<EpisodeRedirectData>({
+  const episode = await loadQuery<EpisodeRedirectData>({
     query: EPISODE_REDIRECT_QUERY,
     params: { identifier: isUuidFormat ? slug : `/episode/${slug}` },
   });
