@@ -5,19 +5,19 @@ export default defineType({
   title: "Person Hero",
   type: "object",
   fields: [
-    defineField({
+    {
       name: "person",
       type: "reference",
       title: "Person",
       to: [{ type: "person" }],
       validation: (Rule: any) => Rule.required(),
-    } as any),
+    },
     defineField({
       name: "title",
       type: "string",
       title: "Custom Title (optional)",
       description: "Override the person name with a custom title",
-    } as any),
+    }),
     defineField({
       name: "subtitle",
       type: "text",

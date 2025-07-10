@@ -40,13 +40,13 @@ export default defineType({
       type: "youtubeVideo",
       description: "Add the YouTube video for this episode",
     }),
-    defineField({
+    {
       name: "season",
       title: "Season",
       type: "reference",
       to: [{ type: "season" }],
-    } as any),
-    defineField({
+    },
+    {
       name: "guests",
       title: "Guests",
       type: "array",
@@ -59,8 +59,8 @@ export default defineType({
           },
         },
       ],
-    } as any),
-    defineField({
+    },
+    {
       name: "sponsors",
       title: "Sponsors",
       type: "array",
@@ -70,7 +70,7 @@ export default defineType({
           to: [{ type: "sponsor" }],
         },
       ],
-    } as any),
+    },
     defineField({
       name: "transcript",
       title: "Transcript",
@@ -83,7 +83,7 @@ export default defineType({
       description: "Enable custom page builder layout for this episode",
       initialValue: false,
     }),
-    defineField({
+    {
       name: "sectionsBody",
       title: "Page Sections",
       type: "array",
@@ -102,7 +102,7 @@ export default defineType({
       description:
         "Custom sections for this episode (only used if Custom Layout is enabled)",
       hidden: ({ document }: { document: any }) => !document?.customLayout,
-    } as any),
+    },
     defineField({
       name: "featured",
       title: "Featured Episode",

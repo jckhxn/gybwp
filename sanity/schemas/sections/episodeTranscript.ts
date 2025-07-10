@@ -10,13 +10,13 @@ export default defineType({
       title: "Show Transcript",
       type: "boolean",
       initialValue: true,
-    } as any),
+    }),
     defineField({
       name: "showTimestamps",
       title: "Show Timestamps",
       type: "boolean",
       initialValue: true,
-    } as any),
+    }),
     defineField({
       name: "allowDownload",
       title: "Allow Download",

@@ -10,14 +10,13 @@ export default defineType({
       title: "Title",
       type: "string",
       initialValue: "Services",
-    } as any),
+    }),
     defineField({
       name: "subtitle",
       title: "Subtitle",
       type: "text",
-      rows: 2,
-    } as any),
-    defineField({
+    }),
+    {
       name: "services",
       title: "Services",
       type: "array",
@@ -30,26 +29,25 @@ export default defineType({
               title: "Service Title",
               type: "string",
               validation: (Rule: any) => Rule.required(),
-            } as any),
+            }),
             defineField({
               name: "description",
               title: "Description",
               type: "text",
-              rows: 3,
               validation: (Rule: any) => Rule.required(),
-            } as any),
+            }),
             defineField({
               name: "icon",
               title: "Icon",
               type: "string",
               description: "Icon name or emoji",
-            } as any),
-            defineField({
+            }),
+            {
               name: "features",
               title: "Features",
               type: "array",
               of: [{ type: "string" }],
-            } as any),
+            },
           ],
           preview: {
             select: {
@@ -59,7 +57,7 @@ export default defineType({
           },
         },
       ],
-    } as any),
+    },
   ],
   preview: {
     select: {

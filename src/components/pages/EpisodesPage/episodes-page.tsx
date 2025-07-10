@@ -197,7 +197,15 @@ export function EpisodesPage() {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
     params.delete("page");
     router.replace(`?${params.toString()}`);
-  }, [searchTerm, sortBy, activeSeason, viewMode]);
+  }, [
+    searchTerm,
+    sortBy,
+    activeSeason,
+    viewMode,
+    pagination,
+    router,
+    searchParams,
+  ]);
 
   const totalEpisodes = allEpisodes.length;
   const currentSeasonEpisodes = data.length;

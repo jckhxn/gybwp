@@ -48,7 +48,7 @@ const Collection = ({
               seasonNumber,
             }) => (
               <li key={`collection-item-${uuid}`}>
-                <Link href={`/episodes/${uuid}` || ""}>
+                <Link href={`/episodes/${encodeURIComponent(uuid)}` || ""}>
                   <Image
                     id={`${uuid}-img`}
                     src={image}

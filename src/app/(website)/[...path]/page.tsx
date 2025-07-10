@@ -13,9 +13,9 @@ export default async function DynamicPage({
   try {
     const page = await loadPage(pathname);
 
-    if (!page) {
-      notFound();
-    }
+    // if (!page) {
+    //   notFound();
+    // }
 
     return <Page data={page} />;
   } catch (error) {
@@ -42,7 +42,10 @@ export async function generateMetadata({
     }
 
     return {
-      title: page.title || "Growing Your Business With People",
+      title:
+        "title" in page && page.title
+          ? page.title
+          : "Growing Your Business With People",
       description: "Growing Your Business With People - Podcast and Consulting",
     };
   } catch (error) {

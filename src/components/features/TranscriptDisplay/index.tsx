@@ -185,7 +185,7 @@ export const TranscriptDisplay: React.FC<TranscriptDisplayProps> = ({
           console.log("Guest with slug found:", resolvedGuest);
           return (
             <Link
-              href={`/guest/${resolvedGuest.slug.current}`}
+              href={`/guest/${encodeURIComponent(resolvedGuest.slug.current)}`}
               className="hover:opacity-80 transition-opacity cursor-pointer inline-block"
               title={`View guest profile: ${resolvedGuest.name}`}
             >
@@ -199,7 +199,7 @@ export const TranscriptDisplay: React.FC<TranscriptDisplayProps> = ({
           console.log("Host with slug found:", resolvedHost);
           return (
             <Link
-              href={`/guest/${resolvedHost.slug.current}`}
+              href={`/guest/${encodeURIComponent(resolvedHost.slug.current)}`}
               className="hover:opacity-80 transition-opacity cursor-pointer inline-block"
               title={`View host profile: ${resolvedHost.name}`}
             >
@@ -295,7 +295,7 @@ export const TranscriptDisplay: React.FC<TranscriptDisplayProps> = ({
                             if (hostSlug) {
                               return (
                                 <Link
-                                  href={`/guest/${hostSlug}`}
+                                  href={`/guest/${encodeURIComponent(hostSlug)}`}
                                   className="text-blue-600 hover:text-blue-800 transition-colors cursor-pointer"
                                   title={`View host profile: ${hostName}`}
                                 >
@@ -319,7 +319,7 @@ export const TranscriptDisplay: React.FC<TranscriptDisplayProps> = ({
                             if (guestSlug) {
                               return (
                                 <Link
-                                  href={`/guest/${guestSlug}`}
+                                  href={`/guest/${encodeURIComponent(guestSlug)}`}
                                   className="text-blue-600 hover:text-blue-800 transition-colors cursor-pointer"
                                   title={`View guest profile: ${guestName}`}
                                 >

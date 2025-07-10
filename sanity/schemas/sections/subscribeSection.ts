@@ -10,13 +10,13 @@ export default defineType({
       title: "Show Subscribe Section",
       type: "boolean",
       initialValue: true,
-    } as any),
+    }),
     defineField({
       name: "title",
       title: "Section Title",
       type: "string",
       initialValue: "Subscribe & Listen",
-    } as any),
+    }),
     defineField({
       name: "subtitle",
       title: "Section Subtitle",
@@ -28,7 +28,7 @@ export default defineType({
       title: "Show Podcast Platforms",
       type: "boolean",
       initialValue: true,
-    } as any),
+    }),
     defineField({
       name: "showNewsletter",
       title: "Show Newsletter Signup",

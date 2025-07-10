@@ -4,7 +4,7 @@
 import { groq } from "next-sanity";
 
 // Guest Details query (by URL param -> slug)
-export const GUEST_QUERY = groq`*[_type == "guest" && slug.current == $slug][0] {
+export const GUEST_QUERY = groq`*[_type == "person" && role == "guest" && slug.current == $slug][0] {
   ...,
 
 "episodes": *[_type == "episode" && references('guests', ^._id)]
@@ -18,34 +18,31 @@ export const GUEST_QUERY = groq`*[_type == "guest" && slug.current == $slug][0] 
 }
 }`;
 
-// Detailed Guest query with latest episode and previous episodes
-export const GUEST_DETAIL_QUERY = groq`*[_type == "guest" && slug.current == $slug][0] {
+// Detailed Guest query with episodes array
+export const GUEST_DETAIL_QUERY = groq`*[_type == "person" && role == "guest" && slug.current == $slug][0] {
   _id,
   name,
-  title,
-about, 
-  image,
-  socialLinks,
-  "latestEpisode": *[_type == "episode" && references(^._id)] | order(youtube.publishedAt desc)[0] {
-  youtube {
-  id},
-    "title": youtube.title,
-    "number": youtube.episodeNumber,
-    "date": youtube.publishedAt,
-    "duration": "45 minutes",
-    "description": youtube.blurb,
-    "uuid": youtube.uuid,
-    "audioUrl": youtube.url
+  guestProfile {
+    title,
+    bio,
+    company,
+    website,
+    profileImage,
+    socialLinks
   },
-  "previousEpisodes": *[_type == "episode" && references(^._id) && _id != ^.latestEpisode._id] | order(youtube.publishedAt desc)[0..2] {
-    "title": youtube.title,
-    "number": youtube.episodeNumber,
-    "date": youtube.publishedAt,
-    "description": youtube.blurb,
-    "uuid": youtube.uuid,
-    "duration": "45 minutes",
-    "image": youtube.thumbnail
-  }
+  "episodes": *[_type == "episode" && ^._id in guests[]._ref] 
+    | order(coalesce(youtube.publishedAt, publishedAt) desc) {
+      _id,
+      youtube { id },
+      "title": coalesce(youtube.title, title),
+      "number": coalesce(youtube.episodeNumber, episodeNumber),
+      "date": coalesce(youtube.publishedAt, publishedAt),
+      "duration": coalesce(youtube.duration, duration, "45 minutes"),
+      "description": coalesce(youtube.blurb, blurb),
+      "uuid": coalesce(youtube.uuid, uuid),
+      "audioUrl": coalesce(youtube.url, url),
+      "image": coalesce(youtube.thumbnail, image)
+    }
 }`;
 
 // Get all Episodes by creation date (replacing UUID-based ordering)
@@ -156,12 +153,12 @@ export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && coalesce(uuid,
     },
     // Get all speakers - we'll filter in the component
     "allSpeakers": {
-      "hosts": *[_type == "host"] {
+      "hosts": *[_type == "person" && role == "host-consultant"] {
         _id,
         name,
         slug
       },
-      "guests": *[_type == "guest"] {
+      "guests": *[_type == "person" && role == "guest"] {
         _id,
         name,
         slug
@@ -355,12 +352,12 @@ export const EPISODE_BY_IDENTIFIER_QUERY = groq`*[_type == "episode" && (
     },
     // Get all speakers - we'll filter in the component
     "allSpeakers": {
-      "hosts": *[_type == "host"] {
+      "hosts": *[_type == "person" && role == "host-consultant"] {
         _id,
         name,
         slug
       },
-      "guests": *[_type == "guest"] {
+      "guests": *[_type == "person" && role == "guest"] {
         _id,
         name,
         slug
@@ -509,12 +506,12 @@ export const EPISODE_WITH_PAGE_BUILDER_QUERY = groq`*[_type == "episode" && (coa
     },
     // Get all speakers - we'll filter in the component
     "allSpeakers": {
-      "hosts": *[_type == "host"] {
+      "hosts": *[_type == "person" && role == "host-consultant"] {
         _id,
         name,
         slug
       },
-      "guests": *[_type == "guest"] {
+      "guests": *[_type == "person" && role == "guest"] {
         _id,
         name,
         slug

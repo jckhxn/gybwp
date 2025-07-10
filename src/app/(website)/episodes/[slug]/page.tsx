@@ -28,7 +28,10 @@ function isUUID(identifier: string): boolean {
 
 export default async function Page({ params, searchParams }: PageProps) {
   const resolvedParams = await params;
-  const { slug } = resolvedParams;
+  const { slug: rawSlug } = resolvedParams;
+  
+  // Decode the URL parameter to handle special characters
+  const slug = decodeURIComponent(rawSlug);
 
   // Check if this is a UUID format
   const isUuidFormat = isUUID(slug);
@@ -75,17 +78,32 @@ export async function generateMetadata({
     : slug.startsWith("/episodes/")
       ? slug
       : `/episodes/${slug}`;
-  const epID = isUuidFormat ? slug.split("-")[0] : null;
 
   try {
     const initial = await loadEpisode(identifier, slug);
-
     const episode = initial;
 
     if (!episode) {
       return {
         title: "Episode Not Found",
         description: "The requested episode could not be found.",
+        openGraph: {
+          title: "Episode Not Found",
+          description: "The requested episode could not be found.",
+          url: `https://gybwp.com/episodes/${slug}`,
+          images: ["https://gybwp.com/images/logo.webp"],
+          siteName: "Growing Your Business With People",
+          locale: "en_US",
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: "Episode Not Found",
+          description: "The requested episode could not be found.",
+          images: ["https://gybwp.com/images/logo.webp"],
+        },
+        alternates: {
+          canonical: `https://gybwp.com/episodes/${slug}`,
+        },
       };
     }
 
@@ -100,6 +118,7 @@ export async function generateMetadata({
       episode.youtube?.thumbnail ||
       "https://gybwp.com/images/logo.webp";
     const publishedAt = episode.youtube?.publishedAt || episode.publishedAt;
+    const updatedAt = episode._updatedAt || publishedAt;
     const seasonNumber = episode.seasonNumber || episode.youtube?.seasonNumber;
     const episodeNumber =
       episode.episodeNumber || episode.youtube?.episodeNumber;
@@ -119,26 +138,64 @@ export async function generateMetadata({
     const rawTitle = title;
     const fullTitle = formatEpisodeTitle(rawTitle);
 
-    // Process metadata with all episode information
-    const metadata = processMetadata({
-      type: "episode",
+    return {
       title: fullTitle,
       description,
-      image,
-      url: episodeUrl,
-      publishedAt,
-      seasonNumber,
-      episodeNumber,
-      duration,
-      youtubeUrl,
-    });
-
-    return metadata;
+      openGraph: {
+        title: fullTitle,
+        description,
+        url: episodeUrl,
+        type: "article",
+        publishedTime: publishedAt,
+        modifiedTime: updatedAt,
+        siteName: "Growing Your Business With People",
+        locale: "en_US",
+        images: [image],
+        ...(youtubeId && {
+          videos: [
+            {
+              url: `https://www.youtube.com/watch?v=${youtubeId}`,
+              width: 1280,
+              height: 720,
+              type: "video/mp4",
+            },
+          ],
+        }),
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: fullTitle,
+        description,
+        images: [image],
+        site: "@gybwpodcast",
+      },
+      alternates: {
+        canonical: episodeUrl,
+      },
+    };
   } catch (error) {
     console.error("Error generating metadata:", error);
     return {
       title: "Episode",
       description: "Growing Your Business With People podcast episode.",
+      openGraph: {
+        title: "Episode",
+        description: "Growing Your Business With People podcast episode.",
+        url: `https://gybwp.com/episodes/${slug}`,
+        images: ["https://gybwp.com/images/logo.webp"],
+        siteName: "Growing Your Business With People",
+        locale: "en_US",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "Episode",
+        description: "Growing Your Business With People podcast episode.",
+        images: ["https://gybwp.com/images/logo.webp"],
+        site: "@gybwpodcast",
+      },
+      alternates: {
+        canonical: `https://gybwp.com/episodes/${slug}`,
+      },
     };
   }
 }

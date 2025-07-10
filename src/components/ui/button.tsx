@@ -4,7 +4,7 @@ import React, { MouseEventHandler, ReactNode } from "react";
 
 export type ButtonColors = "main" | "primary" | "secondary" | "white" | "light";
 
-interface ButtonProps {
+export interface ButtonProps {
   children: ReactNode;
   onClick?: MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
   as?: "a";
@@ -70,7 +70,7 @@ const Button = ({
     <button
       disabled={type === "disabled"}
       onClick={handleClick}
-      className={`inline-block rounded ${bgColor} text-sm ${fontStyle} transition ${bgHoverColor} ${passedClasses} ${disabledStyle}`}
+      className={`inline-block rounded ${bgColor} text-sm transition ${bgHoverColor} ${disabledStyle} ${passedClasses}`}
     >
       {children}
     </button>

@@ -78,9 +78,8 @@ export default function RelatedEpisodes({
               <h4 className="text-sm font-medium line-clamp-2">{title}</h4>
               <Link href={pathName}>
                 <Button
-                  variant="link"
-                  size="sm"
-                  className="p-0 h-auto mt-1 justify-start"
+                  color="primary"
+                  className="py-3 px-6 text-base font-semibold bg-primary text-white rounded hover:bg-primary/80 transition"
                 >
                   Listen Now
                 </Button>
@@ -91,7 +90,10 @@ export default function RelatedEpisodes({
       })}
       <div className="pt-4 mt-2">
         <Link href="/episodes">
-          <Button variant="outline" size="sm" className="w-full">
+          <Button
+            color="primary"
+            className="py-3 px-6 text-base font-semibold bg-primary text-white rounded hover:bg-primary/80 transition"
+          >
             View All Episodes
           </Button>
         </Link>

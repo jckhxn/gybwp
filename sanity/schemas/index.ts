@@ -3,9 +3,9 @@ import article from "./documents/article";
 import episode from "./documents/episode";
 import episodeTemplate from "./documents/episodeTemplate";
 import sponsor from "./documents/sponsor";
-import guest from "./documents/guest";
+// import guest from "./documents/guest"; // REMOVED - migrated to person schema
 import season from "./documents/season";
-import host from "./documents/host";
+// import host from "./documents/host"; // REMOVED - migrated to person schema
 
 // Import new page builder schemas
 import page from "./documents/page";
@@ -21,9 +21,9 @@ const schemas = [
   season,
   episode,
   episodeTemplate,
-  guest,
+  // guest, // REMOVED - migrated to person schema
   person,
-  host,
+  // host, // REMOVED - migrated to person schema
   sponsor,
   article,
 

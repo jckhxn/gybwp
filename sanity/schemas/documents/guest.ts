@@ -41,7 +41,7 @@ export default defineType({
       type: "string",
       description: "(e.g Caretaker at Healthcare Company)",
     }),
-    defineField({
+    {
       name: "links",
       title: "Links",
       type: "object",
@@ -52,8 +52,8 @@ export default defineType({
           title: "Website",
           type: "url",
           description: "URL to the guest's website (optional)",
-        } as any),
-        defineField({
+        }),
+        {
           name: "social",
           title: "Social Media",
           type: "object",
@@ -64,18 +64,18 @@ export default defineType({
               title: "Twitter",
               type: "url",
               description: "URL to the guest's Twitter profile (optional)",
-            } as any),
+            }),
             // Add more social media fields as needed (e.g., facebook, instagram)
           ],
-        } as any),
+        },
       ],
-    } as any),
+    },
     defineField({
       name: "about",
       title: "About",
       type: "text",
       description: "A short bio or description of the guest",
-    } as any),
+    }),
     defineField({
       name: "slug",
       title: "Slug",

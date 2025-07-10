@@ -29,7 +29,10 @@ function isUUID(identifier: string): boolean {
 
 export default async function Page({ params, searchParams }: PageProps) {
   const resolvedParams = await params;
-  const { slug } = resolvedParams;
+  const { slug: rawSlug } = resolvedParams;
+  
+  // Decode the URL parameter to handle special characters
+  const slug = decodeURIComponent(rawSlug);
 
   // Check if this is a UUID format
   const isUuidFormat = isUUID(slug);
@@ -74,7 +77,10 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const resolvedParams = await params;
-  const { slug } = resolvedParams;
+  const { slug: rawSlug } = resolvedParams;
+  
+  // Decode the URL parameter to handle special characters
+  const slug = decodeURIComponent(rawSlug);
 
   const isUuidFormat = isUUID(slug);
   const identifier = isUuidFormat

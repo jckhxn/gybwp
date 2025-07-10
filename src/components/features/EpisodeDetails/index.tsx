@@ -95,7 +95,7 @@ const SubscribeForm = () => (
       href="https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7049506606413213696"
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center justify-center gap-3 rounded-lg bg-gradient-to-r from-primary to-primary-light hover:from-primary-light hover:to-primary px-8 py-3 text-base font-medium text-white shadow-lg hover:shadow-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+      className="inline-flex items-center justify-center gap-3 rounded-lg bg-primary hover:bg-primary-dark px-8 py-3 text-base font-medium text-white shadow-lg hover:shadow-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -301,121 +301,6 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
     },
   ];
 
-  // Share modal component
-  const ShareModal = () => {
-    const [currentUrl, setCurrentUrl] = useState("");
-    const [copySuccess, setCopySuccess] = useState(false);
-
-    // Update the URL after component is mounted (client-side only)
-    useEffect(() => {
-      setCurrentUrl(window.location.href);
-    }, []);
-
-    const handleCopyLink = async () => {
-      if (!currentUrl) return;
-
-      try {
-        await navigator.clipboard.writeText(currentUrl);
-        setCopySuccess(true);
-
-        // Reset the success message after 2 seconds
-        setTimeout(() => {
-          setCopySuccess(false);
-        }, 2000);
-      } catch (err) {
-        console.error("Failed to copy text: ", err);
-      }
-    };
-
-    return (
-      <div
-        className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm ${
-          isShareModalOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        } transition-opacity duration-300 ease-in-out`}
-        onClick={() => setIsShareModalOpen(false)}
-      >
-        <div
-          className={`bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 max-w-md w-full mx-4 transform transition-all duration-300 ${
-            isShareModalOpen
-              ? "scale-100 translate-y-0"
-              : "scale-95 translate-y-4"
-          }`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-semibold">Share this episode</h3>
-            <button
-              onClick={() => setIsShareModalOpen(false)}
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
-            >
-              <X size={24} />
-            </button>
-          </div>
-
-          <div className="mb-6">
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-              Share this episode with your network:
-            </p>
-
-            <div className="flex flex-wrap gap-4 justify-center">
-              {shareLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={currentUrl ? link.getShareUrl(currentUrl) : "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${link.color} text-white px-4 py-2 rounded-md hover:opacity-90 transition-all transform hover:scale-105 shadow-md flex items-center gap-2`}
-                  aria-label={`Share on ${link.name}`}
-                >
-                  {link.icon}
-                  <span className="text-sm font-medium">{link.name}</span>
-                </a>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-              Or copy the link:
-            </p>
-            <div className="flex flex-col">
-              <div className="flex">
-                <input
-                  type="text"
-                  value={currentUrl}
-                  readOnly
-                  className="flex-1 p-2 text-sm border rounded-l-md bg-gray-50 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:outline-none"
-                />
-                <button
-                  onClick={handleCopyLink}
-                  className={`px-4 rounded-r-md transition-colors flex items-center justify-center ${
-                    copySuccess
-                      ? "bg-green-500 text-white"
-                      : "bg-primary text-white hover:bg-primary-dark"
-                  }`}
-                >
-                  {copySuccess ? (
-                    <Check className="h-4 w-4 mr-1" />
-                  ) : (
-                    <Copy className="h-4 w-4 mr-1" />
-                  )}
-                  {copySuccess ? "Copied" : "Copy"}
-                </button>
-              </div>
-              {copySuccess && (
-                <p className="text-green-500 text-xs mt-2">
-                  Link copied to clipboard!
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <>
       {/* Hybrid structured data approach for maximum rich results */}
@@ -443,36 +328,44 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
             <div className="flex justify-between items-center mb-8">
               {episode?.prevEpisode ? (
                 <Link href={`${episode.prevEpisode}`}>
-                  <button className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-gray-200 hover:bg-white hover:shadow-sm transition-all px-4 py-2 rounded-lg text-sm font-medium">
+                  <Button
+                    color="primary"
+                    className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-gray-200 hover:bg-white hover:shadow-sm transition-all px-4 py-2 rounded-lg text-sm font-medium"
+                  >
                     <ChevronLeft className="h-4 w-4" />
                     Previous Episode
-                  </button>
+                  </Button>
                 </Link>
               ) : (
-                <button
+                <Button
+                  color="white"
                   className="flex items-center gap-2 bg-white/50 backdrop-blur-sm border border-gray-200 opacity-50 px-4 py-2 rounded-lg text-sm font-medium"
                   disabled
                 >
                   <ChevronLeft className="h-4 w-4" />
                   Previous Episode
-                </button>
+                </Button>
               )}
 
               {episode?.nextEpisode ? (
                 <Link href={`${episode.nextEpisode}`}>
-                  <button className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-gray-200 hover:bg-white hover:shadow-sm transition-all px-4 py-2 rounded-lg text-sm font-medium">
+                  <Button
+                    color="primary"
+                    className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-gray-200 hover:bg-white hover:shadow-sm transition-all px-4 py-2 rounded-lg text-sm font-medium"
+                  >
                     Next Episode
                     <ChevronRight className="h-4 w-4" />
-                  </button>
+                  </Button>
                 </Link>
               ) : (
-                <button
+                <Button
+                  color="white"
                   className="flex items-center gap-2 bg-white/50 backdrop-blur-sm border border-gray-200 opacity-50 px-4 py-2 rounded-lg text-sm font-medium"
                   disabled
                 >
                   Next Episode
                   <ChevronRight className="h-4 w-4" />
-                </button>
+                </Button>
               )}
             </div>
 
@@ -572,30 +465,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
 
               {/* Action Buttons */}
               <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-                <Button
-                  className="flex items-center gap-3 px-8 py-4 text-base font-medium bg-gradient-to-r from-primary to-primary-light hover:from-primary-light hover:to-primary shadow-lg hover:shadow-xl transition-all duration-200"
-                  onClick={handlePlayClick}
-                >
-                  {isPlaying ? (
-                    <>
-                      <Pause className="h-5 w-5" />
-                      Pause Episode
-                    </>
-                  ) : (
-                    <>
-                      <Play className="h-5 w-5" />
-                      Play Episode
-                    </>
-                  )}
-                </Button>
-                <Button
-                  variant="outline"
-                  className="flex items-center gap-3 px-6 py-4 text-base font-medium bg-white border-gray-300 hover:bg-gray-50 hover:border-primary/30 hover:text-primary shadow-sm hover:shadow-md transition-all duration-200"
-                  onClick={() => setIsShareModalOpen(true)}
-                >
-                  <Share2 className="h-4 w-4" />
-                  Share Episode
-                </Button>
+                {/* Remove the Button that triggers handlePlayClick and displays Play/Pause Episode */}
               </div>
 
               {/* Jump to Section */}
@@ -625,9 +495,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   {/* Overview is always shown if there's a description */}
                   {description && (
                     <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-sm font-medium bg-white border-gray-300 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200"
+                      color="primary"
+                      className="py-2 px-4 text-base font-medium border-2 border-primary text-primary bg-white rounded hover:bg-primary hover:text-white transition"
                       onClick={() => {
                         const element = document.getElementById("overview");
                         if (element) {
@@ -651,9 +520,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   {/* Key Takeaways section */}
                   {takeaways && takeaways.length > 0 && (
                     <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-sm font-medium bg-white border-gray-300 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200"
+                      color="primary"
+                      className="py-2 px-4 text-base font-medium border-2 border-primary text-primary bg-white rounded hover:bg-primary hover:text-white transition"
                       onClick={() => {
                         const element =
                           document.getElementById("key-takeaways");
@@ -678,9 +546,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   {/* Discussion Topics section */}
                   {discussionTopics && discussionTopics.length > 0 && (
                     <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-sm font-medium bg-white border-gray-300 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200"
+                      color="primary"
+                      className="py-2 px-4 text-base font-medium border-2 border-primary text-primary bg-white rounded hover:bg-primary hover:text-white transition"
                       onClick={() => {
                         const element =
                           document.getElementById("discussion-topics");
@@ -705,9 +572,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   {/* Episode Highlights section */}
                   {highlights && highlights.length > 0 && (
                     <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-sm font-medium bg-white border-gray-300 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200"
+                      color="primary"
+                      className="py-2 px-4 text-base font-medium border-2 border-primary text-primary bg-white rounded hover:bg-primary hover:text-white transition"
                       onClick={() => {
                         const element =
                           document.getElementById("episode-highlights");
@@ -733,9 +599,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   {((transcript && transcript.length > 0) ||
                     (transcriptSegments && transcriptSegments.length > 0)) && (
                     <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-sm font-medium bg-white border-gray-300 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200"
+                      color="primary"
+                      className="py-2 px-4 text-base font-medium border-2 border-primary text-primary bg-white rounded hover:bg-primary hover:text-white transition"
                       onClick={() => {
                         const element = document.getElementById("transcript");
                         if (element) {
@@ -761,9 +626,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     Array.isArray(episode.guests) &&
                     episode.guests.length > 0 && (
                       <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-sm font-medium bg-white border-gray-300 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200"
+                        color="primary"
+                        className="py-2 px-4 text-base font-medium border-2 border-primary text-primary bg-white rounded hover:bg-primary hover:text-white transition"
                         onClick={() => {
                           const element =
                             document.getElementById("featured-guest");
@@ -974,58 +838,62 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                                   {index + 1}
                                 </span>
                               </div>
-                              <div className="flex-grow">
+                              <div className="flex-grow flex flex-col">
                                 <div className="flex items-center gap-3 mb-2">
                                   <h3 className="font-semibold text-xl text-gray-900">
                                     {highlight.title ||
                                       `Highlight ${index + 1}`}
                                   </h3>
-                                  <button
-                                    onClick={() => {
-                                      if (
-                                        playerRef.current &&
-                                        highlight.timestamp &&
-                                        typeof highlight.timestamp === "string"
-                                      ) {
-                                        // Convert timestamp to seconds
-                                        const parts =
-                                          highlight.timestamp.split(":");
-                                        let seconds = 0;
-                                        if (parts.length === 3) {
-                                          // HH:MM:SS
-                                          seconds =
-                                            parseInt(parts[0]) * 3600 +
-                                            parseInt(parts[1]) * 60 +
-                                            parseInt(parts[2]);
-                                        } else if (parts.length === 2) {
-                                          // MM:SS
-                                          seconds =
-                                            parseInt(parts[0]) * 60 +
-                                            parseInt(parts[1]);
-                                        } else if (parts.length === 1) {
-                                          // SS
-                                          seconds = parseInt(parts[0]);
+                                  {highlight.timestamp && (
+                                    <button
+                                      onClick={() => {
+                                        if (
+                                          playerRef.current &&
+                                          typeof highlight.timestamp ===
+                                            "string"
+                                        ) {
+                                          // Convert timestamp to seconds
+                                          const parts =
+                                            highlight.timestamp.split(":");
+                                          let seconds = 0;
+                                          if (parts.length === 3) {
+                                            // HH:MM:SS
+                                            seconds =
+                                              parseInt(parts[0]) * 3600 +
+                                              parseInt(parts[1]) * 60 +
+                                              parseInt(parts[2]);
+                                          } else if (parts.length === 2) {
+                                            // MM:SS
+                                            seconds =
+                                              parseInt(parts[0]) * 60 +
+                                              parseInt(parts[1]);
+                                          } else if (parts.length === 1) {
+                                            // SS
+                                            seconds = parseInt(parts[0]);
+                                          }
+                                          playerRef.current.seekTo(
+                                            seconds,
+                                            true
+                                          );
                                         }
-
-                                        playerRef.current.seekTo(seconds, true);
-                                      }
-                                    }}
-                                    className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-teal-500 text-white font-medium rounded-lg px-3 py-1.5 text-sm hover:from-green-600 hover:to-teal-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="h-3 w-3"
-                                      fill="currentColor"
-                                      viewBox="0 0 24 24"
+                                      }}
+                                      className="inline-flex items-center gap-1 bg-gradient-to-r from-green-500 to-teal-500 text-white font-medium rounded-lg px-3 py-1.5 text-sm hover:from-green-600 hover:to-teal-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
                                     >
-                                      <path d="M8 5v14l11-7z" />
-                                    </svg>
-                                    {highlight.timestamp || "00:00"}
-                                  </button>
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-3 w-3"
+                                        fill="currentColor"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path d="M8 5v14l11-7z" />
+                                      </svg>
+                                      {highlight.timestamp || "00:00"}
+                                    </button>
+                                  )}
                                 </div>
                                 <p className="text-gray-600 text-lg leading-relaxed">
-                                  Click the timestamp to jump to this moment in
-                                  the episode
+                                  {highlight.description ||
+                                    "Click the timestamp to jump to this moment in the episode"}
                                 </p>
                               </div>
                             </div>
@@ -1068,8 +936,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                           </h2>
                         </div>
                         <Button
-                          variant="outline"
-                          size="sm"
+                          color="primary"
                           className="bg-white border-purple-300 text-purple-600 hover:bg-purple-50 hover:border-purple-400 hover:text-purple-700 transition-all duration-200"
                         >
                           <svg
@@ -1185,11 +1052,10 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                             )}
                             <div className="flex gap-2">
                               {guest.slug && guest.slug.current && (
-                                <Link href={`/guest/${guest.slug.current}`}>
+                                <Link href={`/guest/${encodeURIComponent(guest.slug.current)}`}>
                                   <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="flex items-center gap-1"
+                                    color="primary"
+                                    className="flex items-center gap-1 px-4 py-2 bg-primary text-white hover:bg-primary-dark rounded transition-all text-sm font-medium"
                                   >
                                     More Details
                                   </Button>
@@ -1249,9 +1115,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                         rel="noopener noreferrer"
                       >
                         <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex items-center justify-center gap-3 w-full bg-white border-gray-300 hover:bg-gray-50 hover:border-primary/30 hover:text-primary font-medium py-3"
+                          color="primary"
+                          className="flex items-center justify-center gap-3 w-full bg-gray-900 text-white hover:bg-gray-800 font-medium py-3 transition-all"
                         >
                           <div className="w-5 h-5 bg-gray-900 rounded flex items-center justify-center">
                             <Image
@@ -1271,9 +1136,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                         rel="noopener noreferrer"
                       >
                         <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex items-center justify-center gap-3 w-full bg-white border-gray-300 hover:bg-gray-50 hover:border-primary/30 hover:text-primary font-medium py-3"
+                          color="primary"
+                          className="flex items-center justify-center gap-3 w-full bg-green-500 text-white hover:bg-green-600 font-medium py-3 transition-all"
                         >
                           <div className="w-5 h-5 bg-green-500 rounded flex items-center justify-center">
                             <Image
@@ -1293,9 +1157,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                         rel="noopener noreferrer"
                       >
                         <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex items-center justify-center gap-3 w-full bg-white border-gray-300 hover:bg-gray-50 hover:border-primary/30 hover:text-primary font-medium py-3"
+                          color="primary"
+                          className="flex items-center justify-center gap-3 w-full bg-orange-500 text-white hover:bg-orange-600 font-medium py-3 transition-all"
                         >
                           <div className="w-5 h-5 bg-orange-500 rounded flex items-center justify-center">
                             <Image
@@ -1494,51 +1357,44 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
 
               {/* Related Episodes */}
               {data.relatedEpisodes && (
-                <div className="relative bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 to-pink-500"></div>
-                  <div className="p-8">
-                    <div className="text-center mb-6">
-                      <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl mb-4">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-7 w-7 text-purple-600"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                          />
-                        </svg>
-                      </div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                        Related Episodes
-                      </h3>
-                      <p className="text-gray-600 text-sm">
-                        More episodes you might enjoy
-                      </p>
+                <div className="bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden p-8 mt-12">
+                  <div className="text-center mb-6">
+                    <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl mb-4">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-7 w-7 text-purple-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                        />
+                      </svg>
                     </div>
-
-                    <RelatedEpisodes
-                      uuid={uuid}
-                      relatedEpisodes={
-                        Array.isArray(data.relatedEpisodes)
-                          ? data.relatedEpisodes
-                          : []
-                      }
-                    />
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                      Related Episodes
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      More episodes you might enjoy
+                    </p>
                   </div>
+                  <RelatedEpisodes
+                    uuid={uuid}
+                    relatedEpisodes={
+                      Array.isArray(data.relatedEpisodes)
+                        ? data.relatedEpisodes
+                        : []
+                    }
+                  />
                 </div>
               )}
             </div>
           </div>
         </main>
-
-        {/* Share Modal */}
-        <ShareModal />
       </div>
     </>
   );

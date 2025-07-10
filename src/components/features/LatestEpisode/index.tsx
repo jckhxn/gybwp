@@ -64,35 +64,88 @@ export const LatestEpisode = () => {
 
   if (isLoading) {
     return (
-      <div className="w-full py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="animate-pulse">
-              <div className="h-64 bg-gray-200 rounded-lg mb-4"></div>
+      <section className="w-full py-12 md:py-16 bg-gradient-to-br from-gray-50/50 via-white to-gray-50/50">
+        <div className="container mx-auto px-6 max-w-4xl">
+          <div className="flex flex-col items-center text-center space-y-8 animate-pulse">
+            {/* Header skeleton */}
+            <div className="space-y-3">
+              <div className="w-28 h-6 bg-gray-300 rounded-full mx-auto"></div>
+              <div className="space-y-2">
+                <div className="h-8 bg-gray-300 rounded w-80 mx-auto"></div>
+                <div className="h-8 bg-gray-300 rounded w-64 mx-auto"></div>
+              </div>
+              <div className="h-5 bg-gray-200 rounded w-48 mx-auto"></div>
             </div>
-            <div className="animate-pulse">
-              <div className="h-8 w-3/4 bg-gray-300 rounded mb-6"></div>
-              <div className="h-4 bg-gray-200 rounded mb-3"></div>
-              <div className="h-4 bg-gray-200 rounded mb-3"></div>
-              <div className="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
-              <div className="h-10 w-1/3 bg-gray-300 rounded"></div>
+
+            {/* Large thumbnail skeleton */}
+            <div className="relative">
+              <div className="w-80 h-80 sm:w-96 sm:h-96 lg:w-[420px] lg:h-[420px] bg-gray-200 rounded-2xl"></div>
+              <div className="absolute -top-3 -right-3 w-16 h-7 bg-gray-300 rounded-full"></div>
+            </div>
+
+            {/* Content skeleton */}
+            <div className="space-y-6 max-w-2xl mx-auto w-full">
+              <div className="flex gap-3 justify-center">
+                <div className="h-8 bg-gray-200 rounded-full w-24"></div>
+                <div className="h-8 bg-gray-200 rounded-full w-20"></div>
+              </div>
+              <div className="space-y-2">
+                <div className="h-4 bg-gray-200 rounded w-full"></div>
+                <div className="h-4 bg-gray-200 rounded w-5/6 mx-auto"></div>
+                <div className="h-4 bg-gray-200 rounded w-4/5 mx-auto"></div>
+              </div>
+              <div className="flex gap-2 justify-center">
+                <div className="h-6 bg-gray-200 rounded-full w-16"></div>
+                <div className="h-6 bg-gray-200 rounded-full w-20"></div>
+                <div className="h-6 bg-gray-200 rounded-full w-14"></div>
+              </div>
+              <div className="flex gap-3 justify-center">
+                <div className="h-11 bg-gray-300 rounded-xl w-32"></div>
+                <div className="h-11 bg-gray-200 rounded-xl w-28"></div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 
   if (error || !latestEpisode) {
     return (
-      <div className="w-full py-12">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
-            Unable to load the latest episode
-          </h2>
-          <p className="text-gray-600 mb-6">Please check back later.</p>
+      <section className="w-full py-12 md:py-16 bg-gradient-to-br from-gray-50/50 via-white to-gray-50/50">
+        <div className="container mx-auto px-6 max-w-2xl text-center">
+          <div className="space-y-4">
+            <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto flex items-center justify-center">
+              <svg
+                className="w-8 h-8 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900">
+              Unable to load the latest episode
+            </h2>
+            <p className="text-gray-600 max-w-md mx-auto">
+              We&apos;re having trouble loading the latest episode. Please check
+              back in a few moments.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="inline-flex items-center justify-center rounded-xl bg-primary hover:bg-primary-light text-white px-6 py-3 font-semibold shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:scale-[1.02]"
+            >
+              Try Again
+            </button>
+          </div>
         </div>
-      </div>
+      </section>
     );
   }
 
@@ -150,127 +203,201 @@ export const LatestEpisode = () => {
   };
 
   return (
-    <section className="w-full py-8 md:py-12 bg-transparent relative overflow-hidden mb-0">
-      <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-        <div className="flex flex-col items-center gap-8 text-center">
-          {/* Pill and section header */}
-          <div className="w-full flex flex-col items-center mb-2">
-            <span className="inline-block bg-primary/10 text-primary px-4 py-1 rounded-full font-semibold text-sm mb-2">
+    <section className="w-full py-12 md:py-16 bg-gradient-to-br from-gray-50/50 via-white to-gray-50/50 relative overflow-hidden">
+      {/* Subtle background decoration */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/3 rounded-full blur-3xl" />
+        <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-primary/3 rounded-full blur-3xl" />
+      </div>
+
+      <div className="container mx-auto px-6 max-w-4xl relative">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col items-center text-center space-y-8"
+        >
+          {/* Header Section */}
+          <div className="space-y-3">
+            <motion.span
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="inline-block bg-primary text-white px-4 py-1.5 rounded-full font-semibold text-sm tracking-wide uppercase"
+            >
               Latest Episode
-            </span>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
-              Don&apos;t Miss Our Newest Release
-            </h1>
-          </div>
-          <div className="w-full flex flex-col items-center">
-            {/* Thumbnail with overlays */}
-            <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 mx-auto mb-6 group">
-              <Image
-                src={getThumbnail(latestEpisode)}
-                alt={latestEpisode.title || "Latest episode thumbnail"}
-                fill
-                className="object-cover rounded-2xl border border-gray-200 dark:border-gray-700 shadow-md transition-transform duration-300 group-hover:scale-105"
-                priority
-              />
-              {/* Soft overlay gradient */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none" />
-              {/* Play button overlay */}
-              <Link
-                href={getEpisodeLink(latestEpisode)}
-                aria-label="Listen to latest episode"
-              >
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 bg-white/80 dark:bg-gray-900/80 rounded-full flex items-center justify-center shadow-md border border-gray-200 dark:border-gray-700 transition-transform duration-300 group-hover:scale-110 group-hover:shadow-lg">
-                    <Play
-                      className="h-8 w-8 text-primary transition-transform duration-300 group-hover:scale-110"
-                      fill="currentColor"
-                    />
-                  </div>
-                </div>
-              </Link>
-              {/* Episode number badge */}
-              {getEpisodeNumber(latestEpisode) && (
-                <div className="absolute top-3 left-3 bg-gray-900/80 dark:bg-gray-100/80 text-white dark:text-gray-900 text-xs font-bold px-3 py-1 rounded-full shadow-md border border-gray-200 dark:border-gray-700">
-                  Ep. {getEpisodeNumber(latestEpisode)}
-                </div>
-              )}
-            </div>
-          </div>
-          {/* Episode info */}
-          <div className="space-y-2 w-full">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-2">
+            </motion.span>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight max-w-3xl mx-auto"
+            >
               {formatEpisodeTitle(
                 latestEpisode.title ||
                   latestEpisode.episodeName ||
                   "Latest Episode"
               ).replace(/\.$/, "")}
-            </h2>
+            </motion.h1>
+
             {getGuestNames(latestEpisode) && (
-              <div className="text-primary font-medium text-lg mb-1">
-                with {getGuestNames(latestEpisode)}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="text-primary font-medium text-lg"
+              >
+                Featuring {getGuestNames(latestEpisode)}
+              </motion.div>
+            )}
+          </div>
+
+          {/* Large Thumbnail Section */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="relative group"
+          >
+            {/* Main thumbnail container - large and centered */}
+            <div className="relative w-80 h-80 sm:w-96 sm:h-96 lg:w-[420px] lg:h-[420px] rounded-2xl overflow-hidden shadow-xl shadow-black/5 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-black/10">
+              <Image
+                src={getThumbnail(latestEpisode)}
+                alt={latestEpisode.title || "Latest episode thumbnail"}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                priority
+              />
+
+              {/* Gradient overlay on hover */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+              {/* Play button overlay */}
+              <Link
+                href={getEpisodeLink(latestEpisode)}
+                aria-label="Listen to latest episode"
+                className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <div className="w-20 h-20 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/20 transition-all duration-300 hover:scale-110">
+                  <Play
+                    className="h-9 w-9 text-primary ml-0.5"
+                    fill="currentColor"
+                  />
+                </div>
+              </Link>
+            </div>
+
+            {/* Episode number badge */}
+            {getEpisodeNumber(latestEpisode) && (
+              <div className="absolute -top-3 -right-3 bg-primary text-white text-sm font-bold px-3 py-1.5 rounded-full shadow-lg border-2 border-white">
+                Ep. {getEpisodeNumber(latestEpisode)}
               </div>
             )}
-            <div className="flex flex-wrap items-center justify-center gap-4 text-gray-600 text-sm mb-2">
-              <span className="flex items-center gap-1">
+
+            {/* Subtle glow effect */}
+            <div className="absolute -z-10 -inset-6 bg-gradient-to-br from-primary/5 to-transparent rounded-2xl blur-xl opacity-60" />
+          </motion.div>
+
+          {/* Content Section */}
+          <div className="space-y-6 max-w-2xl mx-auto">
+            {/* Episode metadata */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="flex flex-wrap items-center justify-center gap-4 text-gray-600"
+            >
+              <span className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full text-sm">
                 <Calendar className="h-4 w-4" />
-                {formatEpisodeDate(latestEpisode.publishedAt)}
+                <span className="font-medium">
+                  {formatEpisodeDate(latestEpisode.publishedAt)}
+                </span>
               </span>
               {getDuration(latestEpisode) && (
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full text-sm">
                   <Clock className="h-4 w-4" />
-                  {getDuration(latestEpisode)}
+                  <span className="font-medium">
+                    {getDuration(latestEpisode)}
+                  </span>
                 </span>
               )}
-            </div>
-            <p className="text-gray-700 text-base leading-relaxed mb-4">
+            </motion.div>
+
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="text-gray-700 text-base leading-relaxed"
+            >
               {latestEpisode.blurb ||
                 latestEpisode.youtube?.blurb ||
                 "Tune in to our latest episode where we discuss important topics and insights with industry experts."}
-            </p>
+            </motion.p>
+
             {/* Tags */}
             {getTags(latestEpisode).length > 0 && (
-              <div className="flex flex-wrap justify-center gap-2 mb-4">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.7 }}
+                className="flex flex-wrap justify-center gap-2"
+              >
                 {getTags(latestEpisode)
                   .slice(0, 4)
                   .map((tag: any, i: number) => (
                     <span
                       key={i}
-                      className="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full font-medium"
+                      className="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full font-medium border border-primary/20"
                     >
                       {tag}
                     </span>
                   ))}
-              </div>
+              </motion.div>
             )}
+
             {/* Action buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="flex flex-col sm:flex-row gap-3 justify-center pt-2"
+            >
               <Link
                 href={getEpisodeLink(latestEpisode)}
-                className="group inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-primary to-primary/90 hover:from-primary-light hover:to-primary text-white px-6 py-3 text-base font-semibold shadow-lg shadow-primary/25 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
+                className="group inline-flex items-center justify-center rounded-xl bg-primary hover:bg-primary-light text-white px-6 py-3 text-base font-semibold shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary/50"
               >
                 <Play className="h-4 w-4 mr-2" fill="currentColor" />
                 Listen Now
-                <ArrowRight className="ml-2 h-4 w-4 transform transition-transform duration-200 group-hover:translate-x-1" />
+                <ArrowRight className="ml-2 h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
               <Link
                 href={getEpisodeLink(latestEpisode)}
-                className="group inline-flex items-center justify-center rounded-xl bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white px-6 py-3 text-base font-medium border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500/20 focus:ring-offset-2"
+                className="group inline-flex items-center justify-center rounded-xl bg-white hover:bg-gray-50 text-gray-900 px-6 py-3 text-base font-medium border border-gray-200 hover:border-gray-300 shadow-md transition-all duration-300 hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-gray-300"
               >
                 Show Notes
-                <ArrowRight className="ml-2 h-4 w-4 transform transition-transform duration-200 group-hover:translate-x-1" />
+                <ArrowRight className="ml-2 h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
-            </div>
-          </div>
-          <div className="flex justify-center w-full pt-10">
-            <ScrollToSection
-              targetId="episodes"
-              className="inline-flex items-center text-primary hover:text-primary-light transition-colors gap-1"
+            </motion.div>
+
+            {/* Browse all episodes link */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.9 }}
+              className="pt-4"
             >
-              Browse all episodes
-              <ArrowRight className="h-4 w-4 transform transition-transform duration-200 hover:translate-x-1" />
-            </ScrollToSection>
+              <ScrollToSection
+                targetId="episodes"
+                className="inline-flex items-center text-primary hover:text-primary-light transition-colors gap-2 font-medium group text-sm"
+              >
+                Browse all episodes
+                <ArrowRight className="h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
+              </ScrollToSection>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

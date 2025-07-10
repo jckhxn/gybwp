@@ -29,6 +29,7 @@ export default defineType({
       options: {
         source: (doc: any) => `/person/${doc.slug?.current || ""}`,
       },
+      hidden: true, // Hide from Studio UI but keep functional
     }),
     defineField({
       name: "role",
@@ -51,7 +52,7 @@ export default defineType({
       hidden: ({ document }: any) => document?.role !== "host-consultant",
     }),
     // Consulting-specific fields
-    defineField({
+    {
       name: "consultingProfile",
       type: "object",
       title: "Consulting Profile",
@@ -61,13 +62,13 @@ export default defineType({
           name: "bio",
           type: "text",
           title: "Biography",
-        } as any),
-        defineField({
+        }),
+        {
           name: "expertise",
           type: "array",
           title: "Areas of Expertise",
           of: [{ type: "string" }],
-        } as any),
+        },
         defineField({
           name: "profileImage",
           type: "image",
@@ -75,16 +76,16 @@ export default defineType({
           options: {
             hotspot: true,
           },
-        } as any),
+        }),
         defineField({
           name: "calendarLink",
           type: "url",
           title: "Calendar Booking Link",
         }),
       ],
-    } as any),
+    },
     // Guest-specific fields
-    defineField({
+    {
       name: "guestProfile",
       type: "object",
       title: "Guest Profile",
@@ -94,12 +95,12 @@ export default defineType({
           name: "bio",
           type: "text",
           title: "Biography",
-        } as any),
+        }),
         defineField({
           name: "company",
           type: "string",
           title: "Company",
-        } as any),
+        }),
         defineField({
           name: "title",
           type: "string",
@@ -109,7 +110,7 @@ export default defineType({
           name: "website",
           type: "url",
           title: "Website",
-        } as any),
+        }),
         defineField({
           name: "profileImage",
           type: "image",
@@ -118,7 +119,7 @@ export default defineType({
             hotspot: true,
           },
         }),
-        defineField({
+        {
           name: "socialLinks",
           type: "object",
           title: "Social Links",
@@ -127,15 +128,15 @@ export default defineType({
               name: "twitter",
               type: "url",
               title: "Twitter",
-            } as any),
+            }),
             defineField({ name: "linkedin", type: "url", title: "LinkedIn" }),
             defineField({ name: "website", type: "url", title: "Website" }),
           ],
-        } as any),
+        },
       ],
-    } as any),
+    },
     // Page sections for dedicated person pages
-    defineField({
+    {
       name: "sectionsBody",
       title: "Page Sections",
       type: "array",
@@ -152,7 +153,7 @@ export default defineType({
           ],
         },
       },
-    } as any),
+    },
   ],
   preview: {
     select: {

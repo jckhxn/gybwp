@@ -9,14 +9,13 @@ export default defineType({
       name: "timestamp",
       title: "Timestamp",
       type: "string",
-      placeholder: "e.g., 1:23 or 1:23:45",
       validation: (Rule: any) =>
         Rule.regex(/^(\d{1,2}:)?\d{1,2}:\d{2}$/, {
           name: "timestamp",
           invert: false,
         }).error("Please use format MM:SS or HH:MM:SS"),
-    } as any),
-    defineField({
+    }),
+    {
       name: "speaker",
       title: "Speaker",
       type: "object",
@@ -34,37 +33,35 @@ export default defineType({
             ],
           },
           initialValue: "host",
-        } as any),
-        defineField({
+        }),
+        {
           name: "person",
           title: "Person",
           type: "reference",
           to: [{ type: "person" }],
           hidden: ({ parent }) => parent?.type === "narrator",
-        } as any),
+        },
         defineField({
           name: "customName",
           title: "Custom Name",
           type: "string",
           description: "Use when speaker is not in the people collection",
           hidden: ({ parent }) => parent?.type !== "narrator" && parent?.person,
-        } as any),
+        }),
       ],
-    }),
+    },
     defineField({
       name: "text",
       title: "Text",
       type: "text",
-      rows: 3,
       validation: (Rule: any) => Rule.required(),
-    } as any),
+    }),
     defineField({
       name: "notes",
       title: "Notes",
       type: "text",
-      rows: 2,
       description: "Internal notes about this segment",
-    } as any),
+    }),
   ],
   preview: {
     select: {
