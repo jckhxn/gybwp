@@ -20,9 +20,11 @@ import {
   type PlayerHandle,
 } from "@/src/components/features/episodes";
 import routes from "@/src/app/(website)/routes";
-import { GUEST_DETAIL_QUERY } from "@/src/lib/queries";
+import { GUEST_DETAIL_QUERY, HOST_DETAIL_QUERY } from "@/src/lib/queries";
 import { urlFor } from "@/src/lib/utils";
 import { loadQuery } from "@/data/sanity/loadQuery";
+import { ComponentLinkData } from "@/src/components/ui/ComponentLink";
+import { buildComponentLinkUrl } from "@/src/lib/componentLink";
 
 // Type for episode data
 interface EpisodeType {
@@ -53,13 +55,26 @@ interface GuestDataType {
   episodes?: EpisodeType[];
 }
 
-// Check if slug belongs to a host document
-async function checkIfHostSlug(slug: string) {
-  const hostData = await loadQuery({
-    query: `*[_type == "person" && role == "host-consultant" && slug.current == $slug][0]`,
+// Type for host data returned by HOST_DETAIL_QUERY
+interface HostDataType {
+  _id: string;
+  name: string;
+  pageReference?: ComponentLinkData;
+  consultingProfile?: {
+    bio?: string;
+    expertise?: string[];
+    profileImage?: any;
+    calendarLink?: string;
+  };
+}
+
+// Check if slug belongs to a host document and return host data
+async function getHostData(slug: string): Promise<HostDataType | null> {
+  const hostData = await loadQuery<HostDataType>({
+    query: HOST_DETAIL_QUERY,
     params: { slug },
   });
-  return !!hostData; // Returns true if host exists with this slug
+  return hostData;
 }
 
 export async function generateMetadata({
@@ -70,9 +85,9 @@ export async function generateMetadata({
   const slug = Array.isArray(params.guest) ? params.guest[0] : params.guest;
 
   // Check if this is a host slug
-  const isHostSlug = await checkIfHostSlug(slug);
-  if (isHostSlug) {
-    // Return metadata for consulting page
+  const hostData = await getHostData(slug);
+  if (hostData) {
+    // Return metadata for consulting page or target page
     return {
       title: "Business Consulting - Growing Your Business With People",
       description:
@@ -112,9 +127,13 @@ export default async function GuestPage({
   const slug = Array.isArray(guest) ? guest[0] : guest;
 
   // First check if this slug belongs to a host document
-  const isHostSlug = await checkIfHostSlug(slug);
-  if (isHostSlug) {
-    // Redirect to consulting page with profile anchor
+  const hostData = await getHostData(slug);
+  if (hostData && hostData.pageReference) {
+    // Use the pageReference to redirect to the specific page and component
+    const targetUrl = buildComponentLinkUrl(hostData.pageReference);
+    redirect(targetUrl);
+  } else if (hostData) {
+    // Fallback to consulting page with profile anchor if no pageReference
     redirect("/consulting#profile");
   }
 
@@ -129,9 +148,9 @@ export default async function GuestPage({
   }
 
   // For now, let's just display the basic guest info without episodes
-  console.log('Successfully found guest:', guestData);
-  console.log('Episodes:', guestData.episodes);
-  
+  console.log("Successfully found guest:", guestData);
+  console.log("Episodes:", guestData.episodes);
+
   // Extract latest episode (first item) and all episodes for the sidebar
   const latestEpisode = guestData.episodes?.[0];
   const allEpisodesForSidebar = guestData.episodes?.slice(0, 4); // Show up to 4 episodes total
@@ -149,7 +168,12 @@ export default async function GuestPage({
                 <div className="space-y-6 p-6">
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="bg-primary/10 text-primary">Latest Episode</Badge>
+                      <Badge
+                        variant="secondary"
+                        className="bg-primary/10 text-primary"
+                      >
+                        Latest Episode
+                      </Badge>
                     </div>
                     <h1 className="text-2xl font-bold text-gray-900">
                       {latestEpisode.title}
@@ -162,27 +186,24 @@ export default async function GuestPage({
                       <div className="flex items-center gap-2">
                         <CalendarDays className="h-4 w-4" />
                         {latestEpisode.date &&
-                          format(
-                            new Date(latestEpisode.date),
-                            "MMM d, yyyy"
-                          )}
+                          format(new Date(latestEpisode.date), "MMM d, yyyy")}
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Video Player */}
                   <div className="rounded-xl overflow-hidden aspect-video shadow-md">
                     {latestEpisode.youtube?.id ? (
-                      <PodcastPlayer 
-                        videoId={latestEpisode.youtube.id}
-                      />
+                      <PodcastPlayer videoId={latestEpisode.youtube.id} />
                     ) : (
                       <div className="bg-gray-200 h-full flex items-center justify-center">
-                        <span className="text-gray-500">Video not available</span>
+                        <span className="text-gray-500">
+                          Video not available
+                        </span>
                       </div>
                     )}
                   </div>
-                  
+
                   {/* Episode Description */}
                   {latestEpisode.description && (
                     <div className="p-4 bg-gray-50 rounded-lg">
@@ -191,7 +212,7 @@ export default async function GuestPage({
                       </p>
                     </div>
                   )}
-                  
+
                   {/* Episode Link */}
                   {latestEpisode.uuid && (
                     <div className="flex justify-center pt-2">
@@ -251,8 +272,12 @@ export default async function GuestPage({
 
                 {guestData.guestProfile?.bio && (
                   <div className="mb-6">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-3">About</h4>
-                    <p className="text-gray-700 leading-relaxed">{guestData.guestProfile.bio}</p>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                      About
+                    </h4>
+                    <p className="text-gray-700 leading-relaxed">
+                      {guestData.guestProfile.bio}
+                    </p>
                   </div>
                 )}
 
@@ -270,70 +295,76 @@ export default async function GuestPage({
                 )}
               </div>
             </div>
-        </div>
+          </div>
 
-        <div className="space-y-6">
-          <h3 className="text-2xl font-bold text-gray-900">Episodes featuring {guestData.name}</h3>
-          {allEpisodesForSidebar &&
-          allEpisodesForSidebar.length > 0 ? (
-            <div className="space-y-4">
-              {allEpisodesForSidebar.map((episode: EpisodeType, index: number) => (
-                <Link
-                  key={episode.uuid || index}
-                  href={`/episode/${encodeURIComponent(episode.uuid)}`}
-                  className="block"
-                >
-                  <div className="p-5 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-all duration-200 cursor-pointer hover:border-primary/30 group">
-                    <div className="flex gap-4">
-                      {episode.image && (
-                        <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
-                          <Image
-                            src={episode.image}
-                            alt={episode.title}
-                            width={80}
-                            height={80}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                          />
-                        </div>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between mb-2">
-                          <h4 className="font-semibold text-lg line-clamp-2 group-hover:text-primary transition-colors">
-                            {episode.title}
-                          </h4>
-                          {episode.number && (
-                            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full ml-2 flex-shrink-0 font-medium">
-                              #{episode.number}
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                          {episode.description}
-                        </p>
-                        <div className="flex items-center gap-4 text-xs text-gray-500">
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            {episode.duration}
-                          </div>
-                          {episode.date && (
-                            <div className="flex items-center gap-1">
-                              <CalendarDays className="h-3 w-3" />
-                              {format(new Date(episode.date), "MMM d, yyyy")}
+          <div className="space-y-6">
+            <h3 className="text-2xl font-bold text-gray-900">
+              Episodes featuring {guestData.name}
+            </h3>
+            {allEpisodesForSidebar && allEpisodesForSidebar.length > 0 ? (
+              <div className="space-y-4">
+                {allEpisodesForSidebar.map(
+                  (episode: EpisodeType, index: number) => (
+                    <Link
+                      key={episode.uuid || index}
+                      href={`/episode/${encodeURIComponent(episode.uuid)}`}
+                      className="block"
+                    >
+                      <div className="p-5 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-all duration-200 cursor-pointer hover:border-primary/30 group">
+                        <div className="flex gap-4">
+                          {episode.image && (
+                            <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
+                              <Image
+                                src={episode.image}
+                                alt={episode.title}
+                                width={80}
+                                height={80}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                              />
                             </div>
                           )}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between mb-2">
+                              <h4 className="font-semibold text-lg line-clamp-2 group-hover:text-primary transition-colors">
+                                {episode.title}
+                              </h4>
+                              {episode.number && (
+                                <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full ml-2 flex-shrink-0 font-medium">
+                                  #{episode.number}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                              {episode.description}
+                            </p>
+                            <div className="flex items-center gap-4 text-xs text-gray-500">
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                {episode.duration}
+                              </div>
+                              {episode.date && (
+                                <div className="flex items-center gap-1">
+                                  <CalendarDays className="h-3 w-3" />
+                                  {format(
+                                    new Date(episode.date),
+                                    "MMM d, yyyy"
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="flex items-center justify-center h-40 text-gray-500 bg-white rounded-xl border border-gray-200">
-              <p>No episodes found</p>
-            </div>
-          )}
-        </div>
+                    </Link>
+                  )
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center justify-center h-40 text-gray-500 bg-white rounded-xl border border-gray-200">
+                <p>No episodes found</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

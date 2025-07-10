@@ -13,11 +13,13 @@ import { ConsultingCTA } from "@/src/components/sections/consulting/ConsultingCT
 interface EpisodeSectionRendererProps {
   section: any;
   episode: any;
+  index?: number;
 }
 
 export function EpisodeSectionRenderer({
   section,
   episode,
+  index,
 }: EpisodeSectionRendererProps) {
   switch (section._type) {
     case "episodeHero":

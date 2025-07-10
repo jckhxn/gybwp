@@ -2,14 +2,13 @@
 "use client";
 
 import { useRef, useState } from "react";
-import {
-  PodcastPlayer,
-  type PlayerHandle,
-} from "@/src/components/episodes";
+import { PodcastPlayer, type PlayerHandle } from "@/src/components/episodes";
 import StickyVideoPlayer from "@/src/components/StickyVideoPlayer";
+import { getComponentId } from "@/src/lib/sectionId";
 
 interface EpisodePlayerProps {
   section: {
+    sectionId?: string;
     showTranscript?: boolean;
     showGuests?: boolean;
     showSponsors?: boolean;
@@ -28,12 +27,17 @@ export function EpisodePlayer({ section, episode }: EpisodePlayerProps) {
   const playerRef = useRef<PlayerHandle>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const componentId = getComponentId(section, "episode-player");
+
   const youtubeId = episode?.youtube?.id;
   const episodeTitle = episode?.youtube?.title || "Episode";
 
   if (!youtubeId) {
     return (
-      <div className="relative bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
+      <div
+        id={componentId}
+        className="relative bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden"
+      >
         <div className="p-8 text-center">
           <div className="text-gray-500">
             <svg
@@ -61,7 +65,7 @@ export function EpisodePlayer({ section, episode }: EpisodePlayerProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div id={componentId} className="space-y-6">
       {/* Video Player */}
       <div className="relative aspect-video rounded-xl overflow-hidden shadow-lg bg-black">
         <StickyVideoPlayer

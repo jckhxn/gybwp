@@ -6,6 +6,14 @@ export default defineType({
   type: "object",
   fields: [
     defineField({
+      name: "sectionId",
+      title: "Section ID",
+      type: "string",
+      description:
+        "Optional custom ID for this section. Will auto-generate from title if not provided.",
+      placeholder: "consulting-services",
+    }),
+    defineField({
       name: "title",
       title: "Title",
       type: "string",

@@ -7,8 +7,6 @@ import routes from "@/src/app/(website)/routes";
 import { PAGES } from "./Header/static-data";
 import logo from "@/public/images/logo.webp";
 
-
-
 const Navigation = () => {
   const [mobileNavOpen, setMobileNavOpen] = useState<boolean>(false);
 
@@ -68,7 +66,7 @@ const Navigation = () => {
               height="24"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="currentColor"
+              stroke="white"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"

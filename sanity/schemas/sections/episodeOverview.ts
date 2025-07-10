@@ -6,6 +6,14 @@ export default defineType({
   type: "object",
   fields: [
     defineField({
+      name: "sectionId",
+      title: "Section ID",
+      type: "string",
+      description:
+        "Optional custom ID for this section. Will auto-generate 'episode-overview' if not provided.",
+      placeholder: "episode-overview",
+    }),
+    defineField({
       name: "showDescription",
       title: "Show Description",
       type: "boolean",

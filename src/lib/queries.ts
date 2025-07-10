@@ -45,6 +45,31 @@ export const GUEST_DETAIL_QUERY = groq`*[_type == "person" && role == "guest" &&
     }
 }`;
 
+// Host Detail query with page reference
+export const HOST_DETAIL_QUERY = groq`*[_type == "person" && role == "host-consultant" && slug.current == $slug][0] {
+  _id,
+  name,
+  pageReference {
+    linkType,
+    targetComponentId,
+    targetPage-> {
+      _type,
+      slug,
+      pathname
+    },
+    targetPageComponentId,
+    externalUrl,
+    scrollBehavior,
+    scrollOffset
+  },
+  consultingProfile {
+    bio,
+    expertise,
+    profileImage,
+    calendarLink
+  }
+}`;
+
 // Get all Episodes by creation date (replacing UUID-based ordering)
 export const EPISODES = groq`*[_type == "episode"] | order(_createdAt asc) {
   uuid,
@@ -192,7 +217,19 @@ export const PODCAST_DETAILS_QUERY = groq`*[_type == "episode" && coalesce(uuid,
     "url": coalesce("https://www.youtube.com/" + youtube.id, url),
     "uuid": coalesce(youtube.uuid, uuid),
     "publishedAt": youtube.publishedAt,
-    guests[]->,
+    guests[]-> {
+      _id,
+      name,
+      slug,
+      role,
+      "title": guestProfile.title,
+      "about": guestProfile.bio,
+      "bio": guestProfile.bio,
+      "image": guestProfile.profileImage,
+      "company": guestProfile.company,
+      "website": guestProfile.website,
+      guestProfile
+    },
     sponsors[]-> {
       _id,
       name,
@@ -391,7 +428,19 @@ export const EPISODE_BY_IDENTIFIER_QUERY = groq`*[_type == "episode" && (
     "url": coalesce("https://www.youtube.com/" + youtube.id, url),
     "uuid": coalesce(youtube.uuid, uuid),
     "publishedAt": youtube.publishedAt,
-    guests[]->,
+    guests[]-> {
+      _id,
+      name,
+      slug,
+      role,
+      "title": guestProfile.title,
+      "about": guestProfile.bio,
+      "bio": guestProfile.bio,
+      "image": guestProfile.profileImage,
+      "company": guestProfile.company,
+      "website": guestProfile.website,
+      guestProfile
+    },
     sponsors[]-> {
       _id,
       name,
@@ -521,11 +570,16 @@ export const EPISODE_WITH_PAGE_BUILDER_QUERY = groq`*[_type == "episode" && (coa
     guests[]-> {
       _id,
       name,
-      title,
-      bio,
-      image,
-      socialLinks,
-      slug
+      slug,
+      role,
+      "title": guestProfile.title,
+      "bio": guestProfile.bio,
+      "about": guestProfile.bio,
+      "image": guestProfile.profileImage,
+      "company": guestProfile.company,
+      "website": guestProfile.website,
+      socialLinks: guestProfile.socialLinks,
+      guestProfile
     },
     // Enhanced sponsor data (from episode or season)
     sponsors[]-> {

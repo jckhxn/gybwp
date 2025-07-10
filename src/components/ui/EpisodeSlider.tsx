@@ -124,7 +124,10 @@ const Slider: React.FC<{
                 key={`carousel-item-${idx}`}
                 className="flex-shrink-0 w-64 h-40 bg-white rounded-md shadow-md hover:shadow-lg transition-shadow duration-300 dark:bg-gray-900"
               >
-                <Link href={`/episodes/${encodeURIComponent(uuid)}`} className="bg-main group">
+                <Link
+                  href={`/episodes/${encodeURIComponent(uuid)}`}
+                  className="bg-main group"
+                >
                   <Image
                     src={image || ""}
                     alt={episodeName}

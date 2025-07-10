@@ -6,6 +6,18 @@ export default defineType({
   type: "object",
   fields: [
     defineField({
+      name: "sectionId",
+      type: "string",
+      title: "Section ID",
+      description:
+        "Unique ID for this section (used for component linking). Auto-generated if not provided.",
+      placeholder: "hero-section",
+      validation: (Rule) =>
+        Rule.regex(/^[a-z0-9-]+$/).error(
+          "Section ID must contain only lowercase letters, numbers, and hyphens"
+        ),
+    }),
+    defineField({
       name: "title",
       type: "string",
       title: "Hero Title",
@@ -47,6 +59,13 @@ export default defineType({
           title: "Button Link",
           initialValue: "/episodes",
         }),
+        defineField({
+          name: "componentLink",
+          type: "componentLink",
+          title: "Component Link",
+          description:
+            "Advanced linking options - use this instead of the simple link field for more control",
+        }),
       ],
     },
     {
@@ -65,6 +84,13 @@ export default defineType({
           type: "string",
           title: "Button Link",
           initialValue: "/about",
+        }),
+        defineField({
+          name: "componentLink",
+          type: "componentLink",
+          title: "Component Link",
+          description:
+            "Advanced linking options - use this instead of the simple link field for more control",
         }),
       ],
     },

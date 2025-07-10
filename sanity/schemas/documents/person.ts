@@ -154,6 +154,16 @@ export default defineType({
         },
       },
     },
+
+    // Page reference for hosts - allows linking to specific page sections
+    defineField({
+      name: "pageReference",
+      type: "componentLink",
+      title: "Page Reference",
+      description:
+        "Link to a specific page and section (useful for hosts to link to their about section)",
+      hidden: ({ document }: any) => document?.role !== "host-consultant",
+    }),
   ],
   preview: {
     select: {

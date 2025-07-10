@@ -5,6 +5,12 @@ export default defineType({
   title: "Person Hero",
   type: "object",
   fields: [
+    defineField({
+      name: "sectionId",
+      title: "Section ID",
+      type: "string",
+      description: "Optional custom ID for this section. Will auto-generate from schema name if not provided.",
+    }),
     {
       name: "person",
       type: "reference",

@@ -16,11 +16,14 @@ import person from "./documents/person";
 import episodeTranscriptField from "./episodeTranscriptField";
 import transcriptSegment from "./transcriptSegment";
 
+// Import object types
+import componentLink from "./objects/componentLink";
+
 const schemas = [
   // Core document types (migrated from legacy)
   season,
   episode,
-  episodeTemplate,
+  // episodeTemplate
   // guest, // REMOVED - migrated to person schema
   person,
   // host, // REMOVED - migrated to person schema
@@ -36,6 +39,9 @@ const schemas = [
   // Field types
   episodeTranscriptField,
   transcriptSegment,
+
+  // Object types
+  componentLink,
 ];
 
 export default schemas;

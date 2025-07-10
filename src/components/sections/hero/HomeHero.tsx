@@ -7,19 +7,22 @@ import { motion } from "framer-motion";
 import { Play, Headphones } from "lucide-react";
 import heroImage from "@/public/images/main-page-hero.webp";
 import { HomeHeroSection } from "@/types";
-import Button from "@/src/components/ui/Button";
+import { SmartButton } from "@/src/components/ui/SmartButton";
 import {
   getImageUrlClient,
   getHeroImageUrl,
   getHeroImageSrcSet,
   getHeroImageSizes,
 } from "@/src/lib/imageUrlClient";
+import { getComponentId } from "@/src/lib/sectionId";
 
 interface HomeHeroProps {
   section: HomeHeroSection;
 }
 
 export function HomeHero({ section }: HomeHeroProps) {
+  const componentId = getComponentId(section, "home-hero");
+
   const {
     title = "Growing Your Business With People",
     subtitle = "Where Leadership Meets Excellence",
@@ -60,7 +63,10 @@ export function HomeHero({ section }: HomeHeroProps) {
   };
 
   return (
-    <section className="w-full pt-16 md:pt-24 lg:pt-28 pb-4 md:pb-6 lg:pb-8 bg-gradient-to-br from-main-dark via-main to-main-light relative overflow-hidden">
+    <section
+      id={componentId}
+      className="w-full pt-16 md:pt-24 lg:pt-28 pb-4 md:pb-6 lg:pb-8 bg-gradient-to-br from-main-dark via-main to-main-light relative overflow-hidden"
+    >
       {/* Pattern overlay for texture */}
       <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGRkZGRkYiIGZpbGwtb3BhY2l0eT0iMSI+PHBhdGggZD0iTTM2IDM0aDR2MWgtNHpNNDAgMzJoNHYxaC00ek0zMiAzN2g0djFoLTR6TTM2IDM5aDR2MWgtNHpNNDAgNDFoNHYxaC00ek0zMiA0NGg0djFoLTR6TTM2IDQ2aDR2MWgtNHoiLz48L2c+PC9nPjwvc3ZnPg==')] mix-blend-overlay"></div>
 
@@ -130,28 +136,24 @@ export function HomeHero({ section }: HomeHeroProps) {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-4 mt-6"
             >
-              <Button
-                as="a"
-                href={primaryButton.link}
-                color="primary"
+              <SmartButton
+                data={primaryButton}
                 className="group relative h-14 px-8 text-base font-medium text-white overflow-hidden rounded-lg bg-gradient-to-r from-primary to-primary-light shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center gap-2"
               >
                 {/* Shimmer effect on hover */}
                 <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out"></span>
                 <Play className="inline-block w-5 h-5 relative z-10" />
                 <span className="relative z-10">{primaryButton.text}</span>
-              </Button>
+              </SmartButton>
 
               {secondaryButton && (
-                <Button
-                  as="a"
-                  href={secondaryButton.link}
-                  color="secondary"
+                <SmartButton
+                  data={secondaryButton}
                   className="group h-14 px-8 text-base font-medium text-white bg-transparent border-2 border-white/30 rounded-lg transition-all duration-300 hover:bg-white/10 hover:border-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-1 flex items-center gap-2"
                 >
                   <Headphones className="inline-block w-5 h-5 group-hover:scale-110 transition-transform" />
                   {secondaryButton.text}
-                </Button>
+                </SmartButton>
               )}
             </motion.div>
 
