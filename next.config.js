@@ -4,6 +4,15 @@ const nextConfig = {
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx", "js", "jsx"],
 
+  // Ignore docs folder during build
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    config.watchOptions = {
+      ...config.watchOptions,
+      ignored: ['**/docs/**', '**/node_modules/**'],
+    };
+    return config;
+  },
+
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "cdn.sanity.io" },
