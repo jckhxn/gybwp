@@ -186,7 +186,7 @@ export function EpisodesPage() {
     } else {
       params.delete("page");
     }
-    router.push(`?${params.toString()}`);
+    router.push(`?${params.toString()}`, { scroll: false });
     pagination.goToPage(page);
   };
 
@@ -196,16 +196,13 @@ export function EpisodesPage() {
     // Remove ?page= from URL when filters change
     const params = new URLSearchParams(Array.from(searchParams.entries()));
     params.delete("page");
-    router.replace(`?${params.toString()}`);
-  }, [
-    searchTerm,
-    sortBy,
-    activeSeason,
-    viewMode,
-    pagination,
-    router,
-    searchParams,
-  ]);
+    const newUrl = `?${params.toString()}`;
+    // Only navigate if URL actually changed to prevent infinite loops
+    if (window.location.search !== newUrl) {
+      router.replace(newUrl, { scroll: false });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTerm, sortBy, activeSeason, viewMode]);
 
   const totalEpisodes = allEpisodes.length;
   const currentSeasonEpisodes = data.length;
