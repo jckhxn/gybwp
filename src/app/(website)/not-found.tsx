@@ -7,7 +7,7 @@ import routes from "@/src/app/(website)/routes";
 
 // components
 import { Section } from "@/src/components/shared";
-import { Button } from "@/src/components/ui/Button";
+import { Button } from "@/src/components/ui/button";
 export default function Error({
   error,
   reset,

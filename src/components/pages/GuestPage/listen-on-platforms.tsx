@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Headphones, ChevronDown, Music, Music2 } from "lucide-react";
 
-import { Button } from "@/src/components/ui/Button";
+import { Button } from "@/src/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
