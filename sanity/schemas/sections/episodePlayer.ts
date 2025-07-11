@@ -11,7 +11,6 @@ export default defineType({
       type: "string",
       description:
         "Optional custom ID for this section. Will auto-generate 'episode-player' if not provided.",
-      placeholder: "episode-player",
     }),
     defineField({
       name: "showTranscript",

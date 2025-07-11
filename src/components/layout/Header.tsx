@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Button from "@/src/components/ui/Button";
+import { Button } from "@/src/components/ui/Button";
 import routes from "@/src/app/(website)/routes";
 import { PAGES } from "./Header/static-data";
 import logo from "@/public/images/logo.webp";

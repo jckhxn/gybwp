@@ -11,7 +11,6 @@ export default defineType({
       type: "string",
       description:
         "Optional custom ID for this section. Will auto-generate from title if not provided.",
-      placeholder: "consulting-services",
     }),
     defineField({
       name: "title",

@@ -512,7 +512,7 @@ export const BrowseEpisodes = ({
 
           <div className="mt-8">
             <Link
-              href="/episode"
+              href="/episodes"
               className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary/90 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-primary/25 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
             >
               Explore All Episodes

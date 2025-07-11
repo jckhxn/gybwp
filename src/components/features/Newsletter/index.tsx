@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { CTA } from "@/src/components/pages/HomePage/static-data";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 

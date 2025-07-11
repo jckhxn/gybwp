@@ -16,7 +16,7 @@ export interface ComponentLinkData {
   externalUrl?: string;
   linkText?: string;
   openInNewTab?: boolean;
-  scrollBehavior?: "smooth" | "auto" | "instant";
+  scrollBehavior?: "smooth" | "auto";
   scrollOffset?: number;
 }
 
@@ -77,7 +77,7 @@ export function SmartButton({
 
   const scrollToElement = (
     elementId: string,
-    behavior: "smooth" | "auto" | "instant" = "smooth",
+    behavior: "smooth" | "auto" = "smooth",
     offset: number = 80
   ) => {
     const element = document.getElementById(elementId);
@@ -89,7 +89,6 @@ export function SmartButton({
       // Map scroll behavior values
       let scrollBehavior: ScrollBehavior = "smooth";
       if (behavior === "auto") scrollBehavior = "auto";
-      if (behavior === "instant") scrollBehavior = "instant";
       if (behavior === "smooth") scrollBehavior = "smooth";
 
       window.scrollTo({
@@ -271,7 +270,6 @@ export function useComponentNavigation() {
         const behavior = linkData.scrollBehavior || "smooth";
         let scrollBehavior: ScrollBehavior = "smooth";
         if (behavior === "auto") scrollBehavior = "auto";
-        if (behavior === "instant") scrollBehavior = "instant";
         if (behavior === "smooth") scrollBehavior = "smooth";
 
         window.scrollTo({
@@ -323,7 +321,6 @@ export function useComponentNavigation() {
             const behavior = linkData.scrollBehavior || "smooth";
             let scrollBehavior: ScrollBehavior = "smooth";
             if (behavior === "auto") scrollBehavior = "auto";
-            if (behavior === "instant") scrollBehavior = "instant";
             if (behavior === "smooth") scrollBehavior = "smooth";
 
             window.scrollTo({

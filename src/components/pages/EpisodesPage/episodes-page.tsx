@@ -186,7 +186,7 @@ export function EpisodesPage() {
     } else {
       params.delete("page");
     }
-    router.push(`?${params.toString()}`, { scroll: false });
+    router.push(`?${params.toString()}`);
     pagination.goToPage(page);
   };
 
@@ -196,12 +196,8 @@ export function EpisodesPage() {
     // Remove ?page= from URL when filters change
     const params = new URLSearchParams(Array.from(searchParams.entries()));
     params.delete("page");
-    const newUrl = `?${params.toString()}`;
-    // Only navigate if URL actually changed to prevent infinite loops
-    if (window.location.search !== newUrl) {
-      router.replace(newUrl, { scroll: false });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    router.replace(`?${params.toString()}`);
+    // Only depend on things that should trigger a reset
   }, [searchTerm, sortBy, activeSeason, viewMode]);
 
   const totalEpisodes = allEpisodes.length;

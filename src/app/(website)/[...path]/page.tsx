@@ -13,9 +13,9 @@ export default async function DynamicPage({
   try {
     const page = await loadPage(pathname);
 
-    // if (!page) {
-    //   notFound();
-    // }
+    if (!page) {
+      return notFound();
+    }
 
     return <Page data={page} />;
   } catch (error) {

@@ -20,5 +20,5 @@ export { LatestEpisode } from "./features/LatestEpisode";
 // Shared utilities
 export * from "./shared";
 
-// Sanity integration
-export { default as VisualEditing } from "./VisualEditing";
+// // Sanity integration
+// export { default as VisualEditing } from "./VisualEditing";

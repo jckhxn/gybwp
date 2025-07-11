@@ -19,7 +19,7 @@ import {
   Minimize,
 } from "lucide-react";
 import EpisodeSlider from "@/src/components/ui/EpisodeSlider";
-import { ButtonNew as Button } from "@/src/components/ui/button-new";
+import { ButtonNew as Button } from "@/src/components/ui/button-shadcn";
 import { Slider } from "@/src/components/ui/slider";
 
 // Add YouTube Player API types
