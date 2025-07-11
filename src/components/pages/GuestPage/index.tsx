@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 
 import React from "react";
 
-import { Button } from "@/src/components/ui/Button";
+import { Button } from "@/src/components/ui/button";
 import {
   Avatar,
   AvatarFallback,

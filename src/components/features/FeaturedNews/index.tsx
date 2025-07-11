@@ -9,7 +9,7 @@ import { Section, SectionHeading } from "@/src/components/shared";
 import defaultImageSrc from "public/images/logo.webp";
 
 import { ExternalLink, ArrowRight, Clock, Calendar } from "lucide-react";
-import { Button } from "@/src/components/ui/Button";
+import { Button } from "@/src/components/ui/button";
 // SWR
 import { client } from "@/data/sanity/client";
 import { FEATURED_ARTICLES_QUERY } from "@/data/sanity/queries";

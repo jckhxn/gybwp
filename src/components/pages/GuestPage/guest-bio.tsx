@@ -5,7 +5,7 @@ import { useState } from "react";
 import { ExternalLink, ChevronDown } from "lucide-react";
 import Link from "next/link";
 
-import { Button } from "@/src/components/ui/Button";
+import { Button } from "@/src/components/ui/button";
 import { Card, CardContent } from "@/components/ui/Card";
 
 interface GuestBioProps {

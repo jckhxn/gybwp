@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
-import { Button } from "@/src/components/ui/Button";
+import { Button } from "@/src/components/ui/button";
 import { toast } from "@/src/lib/use-toast";
 
 export default function SocialShare() {

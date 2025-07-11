@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
 
 // components
-import { Button } from "@/src/components/ui/Button";
+import { Button } from "@/src/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { ScrollArea, ScrollBar } from "@/src/components/ui/ScrollArea";

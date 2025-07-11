@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 
 // Fix import paths to use @/src/app/(website)/components instead of full paths
-import { Button } from "@/src/components/ui/Button";
+import { Button } from "@/src/components/ui/button";
 import { Separator } from "@/src/components/ui/separator";
 import { formatEpisodeTitle } from "@/src/lib/formatTitle";
 import {
