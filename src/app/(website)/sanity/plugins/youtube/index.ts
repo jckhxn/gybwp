@@ -1,5 +1,5 @@
 import { definePlugin } from "sanity";
-import { createScopedInputComponent } from "./components/InputComponent";
+import { createScopedInputComponent } from "@/sanity/plugins/youtube/components/InputComponent";
 
 export { type YoutubeVideoData } from "./utils";
 

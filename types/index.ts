@@ -184,3 +184,16 @@ export type Section =
   | ConsultingCTASection
   | NewsletterSection
   | FeaturedNewsSection;
+
+export interface EpisodeType {
+  _id: string;
+  youtube?: { id: string };
+  title: string;
+  number: number;
+  date: string;
+  duration: string;
+  description: string;
+  uuid: string;
+  audioUrl?: string;
+  image?: string;
+}

@@ -6,13 +6,6 @@
 # Personal files
 Notes.md
 
-# Backup files
-/backups
-backups/
-
-# Documentation files (not for build)
-/docs
-
 #Sanity dataset 
 
 # Sanity Scripts

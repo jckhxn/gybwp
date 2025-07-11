@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
 
 // components
-import Button from "@/src/components/ui/Button";
+import { Button } from "@/src/components/ui/Button";
 import Image from "next/image";
 import Link from "next/link";
 import { ScrollArea, ScrollBar } from "@/src/components/ui/ScrollArea";
@@ -155,11 +155,10 @@ const Slider: React.FC<{
         {parts ? null : (
           <div className="mt-6 gap-4 ml-[8px] md:ml-[50px]">
             <Button
-              aria-label={`${
-                sliderIndex === 0 ? "disabled" : "enabled"
-              } menu back button`}
+              aria-label={`Go to previous slide${sliderIndex === 0 ? " (disabled)" : ""} menu back button`}
               className="h-[60px] w-[60px] md:h-[70px] md:w-[70px] mt-4 mr-4"
-              type={sliderIndex === 0 ? "disabled" : "default"}
+              type="button"
+              disabled={sliderIndex === 0}
               onClick={() => decrementSlider()}
             >
               ←
@@ -167,9 +166,8 @@ const Slider: React.FC<{
             <Button
               aria-label="menu forward button"
               className="h-[60px] w-[60px] md:h-[70px] md:w-[70px] mt-4"
-              type={
-                sliderIndex >= items.length - increment ? "disabled" : "default"
-              }
+              type="button"
+              disabled={sliderIndex >= items.length - increment}
               onClick={() => incrementSlider()}
             >
               →

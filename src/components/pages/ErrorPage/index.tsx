@@ -3,7 +3,7 @@ import routes from "@/src/app/(website)/routes";
 
 // components
 import { Section } from "@/src/components/shared";
-import Button from "@/src/components/ui/Button";
+import { Button } from "@/src/components/ui/Button";
 
 //
 //
@@ -66,11 +66,10 @@ const ErrorPage = ({ error }: { error?: Error }) => {
 
               <Button
                 color="primary"
-                as="a"
-                href={routes.internal.home}
+                asChild
                 className="w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto hover:bg-blue-600"
               >
-                Take me home
+                <a href={routes.internal.home}>Go Home</a>
               </Button>
             </div>
           </div>

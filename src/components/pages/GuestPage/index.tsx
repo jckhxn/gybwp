@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 
 import React from "react";
 
-import Button from "@/src/components/ui/Button";
+import { Button } from "@/src/components/ui/Button";
 import {
   Avatar,
   AvatarFallback,
@@ -25,20 +25,7 @@ import { urlFor } from "@/src/lib/utils";
 import { loadQuery } from "@/data/sanity/loadQuery";
 import { ComponentLinkData } from "@/src/components/ui/ComponentLink";
 import { buildComponentLinkUrl } from "@/src/lib/componentLink";
-
-// Type for episode data
-interface EpisodeType {
-  _id: string;
-  youtube?: { id: string };
-  title: string;
-  number: number;
-  date: string;
-  duration: string;
-  description: string;
-  uuid: string;
-  audioUrl?: string;
-  image?: string;
-}
+import type { EpisodeType } from "@/types";
 
 // Type for guest data returned by GUEST_DETAIL_QUERY
 interface GuestDataType {

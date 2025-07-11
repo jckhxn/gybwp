@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 // copy
-import { episodeType } from "../HomePage/episode-data";
+import type { EpisodeType } from "@/types";
 
 const Collection = ({
   header,
@@ -16,7 +16,7 @@ const Collection = ({
 }: {
   header?: string;
   description?: string;
-  items: Array<episodeType>;
+  items: Array<EpisodeType>;
 }) => {
   return (
     <Section>

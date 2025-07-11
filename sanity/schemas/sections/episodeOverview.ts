@@ -11,7 +11,6 @@ export default defineType({
       type: "string",
       description:
         "Optional custom ID for this section. Will auto-generate 'episode-overview' if not provided.",
-      placeholder: "episode-overview",
     }),
     defineField({
       name: "showDescription",

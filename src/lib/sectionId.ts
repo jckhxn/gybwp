@@ -1,5 +1,5 @@
 import React from "react";
-import { generateComponentId } from "../../sanity/components/ComponentIdInput";
+import { generateComponentId } from "./generateComponentId";
 
 /**
  * Generates a component ID for a section based on its schema and properties

@@ -16,7 +16,7 @@ export interface ComponentLinkData {
   externalUrl?: string;
   linkText?: string;
   openInNewTab?: boolean;
-  scrollBehavior?: "smooth" | "auto" | "instant";
+  scrollBehavior?: "smooth" | "auto";
   scrollOffset?: number;
 }
 

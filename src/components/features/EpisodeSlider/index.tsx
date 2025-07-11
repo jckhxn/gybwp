@@ -3,7 +3,7 @@
 import { SVGProps, useEffect, useState, useRef } from "react";
 import { client } from "@/src/lib/sanity-utils";
 import { ALL_SEASONS_QUERY, EPISODES_BY_SEASON_QUERY } from "@/src/lib/queries";
-import EpisodeCard from "@/src/components/EpisodeCard";
+import EpisodeCard from "@/src/components/features/EpisodeCard";
 
 // Define interfaces for the types we're using
 interface Season {

@@ -1,4 +1,4 @@
-import { defineType, defineField } from "sanity";
+import { defineType, defineField, SchemaTypeDefinition } from "sanity";
 import { ComponentIdInput } from "../../components/ComponentIdInput";
 import { ComponentLinkInput } from "../../components/ComponentLinkInput";
 
@@ -32,12 +32,12 @@ export default defineType({
       title: "Target Component ID",
       type: "string",
       description: "Select or enter the component ID to scroll to on this page",
-      hidden: ({ parent }) => parent?.linkType !== "samePage",
+      hidden: ({ parent }: any) => parent?.linkType !== "samePage",
       components: {
         input: ComponentIdInput,
       },
-      validation: (Rule) =>
-        Rule.custom((value, context) => {
+      validation: (Rule: any) =>
+        Rule.custom((value: any, context: any) => {
           const linkType = (context.parent as any)?.linkType;
           if (linkType === "samePage" && !value) {
             return "Component ID is required for same page links";
@@ -47,22 +47,22 @@ export default defineType({
     }),
 
     // For different page links
-    defineField({
+    {
       name: "targetPage",
       title: "Target Page",
       type: "reference",
       to: [{ type: "page" }, { type: "episode" }, { type: "person" }],
       description: "Select the page to link to",
-      hidden: ({ parent }) => parent?.linkType !== "differentPage",
-      validation: (Rule) =>
-        Rule.custom((value, context) => {
+      hidden: ({ parent }: any) => parent?.linkType !== "differentPage",
+      validation: (Rule: any) =>
+        Rule.custom((value: any, context: any) => {
           const linkType = (context.parent as any)?.linkType;
           if (linkType === "differentPage" && !value) {
             return "Target page is required for different page links";
           }
           return true;
         }),
-    }),
+    } as any,
 
     defineField({
       name: "targetPageComponentId",
@@ -118,7 +118,6 @@ export default defineType({
         list: [
           { title: "Smooth", value: "smooth" },
           { title: "Auto", value: "auto" },
-          { title: "Instant", value: "instant" },
         ],
       },
       initialValue: "smooth",

@@ -24,7 +24,7 @@ import type { AppProps } from "next/app";
 //
 // DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
 import type { Metadata } from "next";
-import JSONLD from "./components/SEO/jsonld";
+import JSONLD from "@/src/components/SEO/jsonld";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gybwp.com"),

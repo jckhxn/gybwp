@@ -11,7 +11,6 @@ export default defineType({
       title: "Section ID",
       description:
         "Unique ID for this section (used for component linking). Auto-generated if not provided.",
-      placeholder: "hero-section",
       validation: (Rule) =>
         Rule.regex(/^[a-z0-9-]+$/).error(
           "Section ID must contain only lowercase letters, numbers, and hyphens"
