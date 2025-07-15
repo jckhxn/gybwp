@@ -75,6 +75,22 @@ export function SectionRenderer(props: {
   if (section._type === "featuredNews") {
     return <FeaturedNews section={section} />;
   }
+  // About page components manage their own IDs
+  if (section._type === "aboutHero") {
+    return <AboutHero section={section} />;
+  }
+  if (section._type === "aboutMission") {
+    return <AboutMission section={section} />;
+  }
+  if (section._type === "aboutHost") {
+    return <AboutHost section={section} />;
+  }
+  if (section._type === "aboutTestimonials") {
+    return <AboutTestimonials section={section} />;
+  }
+  if (section._type === "aboutListenConnect") {
+    return <AboutListenConnect section={section} />;
+  }
   return (
     <div id={componentId}>
       <SectionComponent {...section} episode={episode} index={index} />

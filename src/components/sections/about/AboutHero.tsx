@@ -1,8 +1,58 @@
-import PlatformBadge from "./PlatformBadge";
+"use client";
 
-export function AboutHero({ title, subtitle, badges }) {
+import React from "react";
+import Link from "next/link";
+import { getComponentId } from "@/src/lib/sectionId";
+import { MailIcon, Podcast } from "lucide-react";
+
+interface AboutHeroProps {
+  section: {
+    _type: "aboutHero";
+    _key?: string;
+    sectionId?: string;
+    badgeText?: string;
+    title?: string;
+    subtitle?: string;
+    platforms?: Array<{
+      name: string;
+      url: string;
+      icon?: string;
+    }>;
+  };
+}
+
+export function AboutHero({ section }: AboutHeroProps) {
+  const componentId = getComponentId(section, "about-hero");
+  
+  const {
+    badgeText = "About the Podcast",
+    title = "Growing Your Business With People",
+    subtitle = "Actionable insights for leaders who believe people are their greatest investment. Join us for fireside chats with Fortune 100 CEOs, startup founders, bestselling authors, and industry pioneers.",
+    platforms
+  } = section;
+
+  // Ensure platforms is always an array
+  const safePlatforms = platforms || [
+    {
+      name: "Apple Podcasts",
+      url: "https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511"
+    },
+    {
+      name: "Spotify",
+      url: "https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH"
+    },
+    {
+      name: "BuzzSprout",
+      url: "https://www.buzzsprout.com/2057493/share"
+    },
+    {
+      name: "Contact",
+      url: "/consulting"
+    }
+  ];
+
   return (
-    <section className="w-full py-20 bg-gradient-to-br from-primary/30 via-secondary/10 to-white">
+    <section id={componentId} className="w-full py-20 bg-gradient-to-br from-primary/30 via-secondary/10 to-white">
       <div className="container mx-auto px-6 max-w-5xl flex flex-col items-center text-center gap-8">
         <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 px-4 py-2 text-sm font-medium text-primary border border-primary/30">
           <svg
@@ -21,7 +71,7 @@ export function AboutHero({ title, subtitle, badges }) {
             <line x1="12" x2="12" y1="19" y2="22" />
             <line x1="8" x2="16" y1="22" y2="22" />
           </svg>
-          About the Podcast
+          {badgeText}
         </div>
         <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent leading-tight">
           {title}
@@ -30,11 +80,37 @@ export function AboutHero({ title, subtitle, badges }) {
           {subtitle}
         </p>
         <div className="flex flex-wrap gap-4 justify-center mt-4">
-          {badges?.map((badge) => (
-            <PlatformBadge key={badge.label} {...badge} />
+          {safePlatforms.map((platform, index) => (
+            <PlatformBadge
+              key={index}
+              href={platform.url}
+              label={platform.name}
+              icon={platform.name === "Contact" ? <MailIcon className="h-4 w-4" /> : <Podcast className="h-4 w-4" />}
+            />
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function PlatformBadge({
+  href,
+  label,
+  icon,
+}: {
+  href: string;
+  label: string;
+  icon?: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-secondary/10 hover:from-primary/20 hover:to-secondary/20 text-primary hover:text-primary/80 rounded-lg border border-primary/20 hover:border-primary/30 transition-all duration-200"
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+    >
+      {icon || <Podcast className="h-4 w-4" />} {label}
+    </Link>
   );
 }
