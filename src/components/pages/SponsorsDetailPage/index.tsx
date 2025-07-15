@@ -267,11 +267,11 @@ const SponsorsDetailPageComponent = () => {
             The sponsor you&apos;re looking for doesn&apos;t exist or has been
             moved.
           </p>
-          <Link href={routes.internal.sponsors}>
-            <Button color="primary" className="px-6 py-3">
+          <Button asChild className="px-6 py-3 !bg-primary !text-white hover:!bg-primary/90 !border-primary transition-colors font-semibold">
+            <Link href={routes.internal.sponsors}>
               Back to Sponsors
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </div>
     );
@@ -654,11 +654,11 @@ const SponsorsDetailPageComponent = () => {
                   Join {sponsor.name} and other forward-thinking companies in
                   supporting quality business content.
                 </p>
-                <Link href={routes.internal.sponsors}>
-                  <Button color="primary" className="px-8 py-3">
+                <Button asChild className="px-8 py-3 !bg-primary !text-white hover:!bg-primary/90 !border-primary transition-colors font-semibold">
+                  <Link href={routes.internal.sponsors}>
                     Learn More About Sponsorship
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </div>
             </div>
           </>
@@ -675,11 +675,11 @@ const SponsorsDetailPageComponent = () => {
               {sponsor.name} is a valued sponsor, but hasn&apos;t sponsored any
               episodes yet. Check back soon for sponsored content!
             </p>
-            <Link href={routes.internal.sponsors}>
-              <Button color="primary" className="px-6 py-3">
+            <Button asChild className="px-6 py-3 !bg-primary !text-white hover:!bg-primary/90 !border-primary transition-colors font-semibold">
+              <Link href={routes.internal.sponsors}>
                 View All Sponsors
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         )}
       </main>

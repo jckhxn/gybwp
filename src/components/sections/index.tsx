@@ -22,6 +22,12 @@ import { AboutListenConnect } from "@/src/components/sections/about/AboutListenC
 import { EpisodesPageBuilder } from "@/src/components/sections/episodes/EpisodesPageBuilder";
 import { EpisodesHero } from "@/src/components/sections/episodes/EpisodesHero";
 import { EpisodesDirectory } from "@/src/components/sections/episodes/EpisodesDirectory";
+// Import Consulting sections
+import { ConsultingHero } from "@/src/components/sections/consulting/ConsultingHero";
+import { ConsultingServices } from "@/src/components/sections/consulting/ConsultingServices";
+import { ConsultingPhilosophy } from "@/src/components/sections/consulting/ConsultingPhilosophy";
+import { ConsultingContact } from "@/src/components/sections/consulting/ConsultingContact";
+import { ConsultingMeetConsultant } from "@/src/components/sections/consulting/ConsultingMeetConsultant";
 
 const sectionComponents: Record<string, any> = {
   homeHero: HomeHero,
@@ -43,6 +49,11 @@ const sectionComponents: Record<string, any> = {
   episodesPageBuilder: EpisodesPageBuilder,
   episodesHero: EpisodesHero,
   episodesDirectory: EpisodesDirectory,
+  consultingHero: ConsultingHero,
+  consultingServices: ConsultingServices,
+  consultingPhilosophy: ConsultingPhilosophy,
+  consultingContact: ConsultingContact,
+  consultingMeetConsultant: ConsultingMeetConsultant,
 };
 
 export function SectionRenderer(props: {
@@ -107,6 +118,22 @@ export function SectionRenderer(props: {
   }
   if (section._type === "episodesDirectory") {
     return <EpisodesDirectory section={section} />;
+  }
+  // Consulting page components manage their own IDs
+  if (section._type === "consultingHero") {
+    return <ConsultingHero section={section} />;
+  }
+  if (section._type === "consultingServices") {
+    return <ConsultingServices section={section} />;
+  }
+  if (section._type === "consultingPhilosophy") {
+    return <ConsultingPhilosophy section={section} />;
+  }
+  if (section._type === "consultingContact") {
+    return <ConsultingContact section={section} />;
+  }
+  if (section._type === "consultingMeetConsultant") {
+    return <ConsultingMeetConsultant section={section} />;
   }
   return (
     <div id={componentId}>

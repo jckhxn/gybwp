@@ -97,7 +97,6 @@ export default defineType({
         { type: "relatedEpisodes" },
         { type: "subscribeSection" },
         { type: "newsletter" },
-        { type: "consultingCTA" },
       ],
       description:
         "Custom sections for this episode (only used if Custom Layout is enabled)",

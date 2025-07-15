@@ -308,6 +308,13 @@ export type Section =
   | EpisodesHeroSection
   | EpisodesDirectorySection;
 
+export interface SeasonType {
+  _id: string;
+  title: string;
+  shortCode: string;
+  sponsors?: any[];
+}
+
 export interface EpisodeType {
   _id: string;
   youtube?: { id: string };

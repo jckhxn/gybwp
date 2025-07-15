@@ -96,6 +96,26 @@ export function FeaturedNews({ section }: FeaturedNewsProps) {
     );
   }
 
+  if (error) {
+    return (
+      <section id={componentId} className="w-full py-12 md:py-16 lg:py-20 bg-off-white rounded-xl mt-8 mb-6">
+        <div className="container mx-auto px-2 sm:px-4 md:px-6">
+          <div className="flex flex-col items-center text-center">
+            <div className="inline-flex items-center rounded-full bg-red-100 px-4 py-1.5 text-sm font-medium text-red-800 mb-4">
+              Error Loading News
+            </div>
+            <h2 className="text-lg sm:text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl mb-4">
+              {title}
+            </h2>
+            <p className="max-w-[95vw] sm:max-w-[800px] text-gray-600 text-sm sm:text-base md:text-lg">
+              Unable to load featured articles at this time. Please try again later.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   // Use consistent styling for section-based component
 
   // Helper function to get image URL from a Sanity image object

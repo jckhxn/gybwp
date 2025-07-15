@@ -4,7 +4,10 @@ import latestEpisode from "./latestEpisode";
 import browseEpisodes from "./browseEpisodes";
 import personProfile from "./personProfile";
 import consultingServices from "./consultingServices";
-import consultingCTA from "./consultingCTA";
+
+import consultingHero from "./consultingHero";
+import consultingPhilosophy from "./consultingPhilosophy";
+import consultingContact from "./consultingContact";
 import newsletter from "./newsletter";
 import featuredNews from "./featuredNews";
 import episodeHero from "./episodeHero";
@@ -23,6 +26,7 @@ import aboutListenConnect from "./aboutListenConnect";
 import episodesPageBuilder from "./episodesPageBuilder";
 import episodesHero from "./episodesHero";
 import episodesDirectory from "./episodesDirectory";
+import consultingMeetConsultant from "./consultingMeetConsultant";
 
 export const sections = [
   homeHero,
@@ -30,8 +34,11 @@ export const sections = [
   latestEpisode,
   browseEpisodes,
   personProfile,
+  consultingHero,
   consultingServices,
-  consultingCTA,
+  consultingPhilosophy,
+  consultingContact,
+  consultingMeetConsultant,
   newsletter,
   featuredNews,
   episodeHero,
