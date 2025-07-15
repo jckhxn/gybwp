@@ -94,25 +94,49 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [seasonsData, setSeasonsData] = useState<Season[]>([]);
-  useEffect(() => {
-    client.fetch(ALL_SEASONS_QUERY).then((data) => setSeasonsData(data));
-  }, []);
-
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Load seasons on component mount
   useEffect(() => {
-    if (activeSeason) {
+    setIsLoading(true);
+    client.fetch(ALL_SEASONS_QUERY).then((data) => {
+      setSeasonsData(data);
+      setSeasons(data);
+      // Auto-select first season
+      if (data && data.length > 0 && !activeSeason) {
+        setActiveSeason(data[0].title);
+      }
+    }).catch((err) => {
+      setError(err);
+      setIsLoading(false);
+    });
+  }, [activeSeason]);
+
+  // Load episodes when active season changes
+  useEffect(() => {
+    if (activeSeason && seasons.length > 0) {
       setIsLoading(true);
-      // Find the season to get the identifier that works with the query
-      const season = getSeasonIdentifier(seasons, activeSeason);
-      const queryIdentifier = season ? season.title : activeSeason; // Use title for query compatibility
+      // Use the activeSeason directly as it's now the title
+      const queryIdentifier = activeSeason;
+      
+      console.log('Fetching episodes for season:', queryIdentifier);
       
       client
         .fetch(EPISODES_BY_SEASON_QUERY, { name: queryIdentifier })
-        .then((res) => setData(res))
-        .catch((err) => setError(err))
-        .finally(() => setIsLoading(false));
+        .then((res) => {
+          console.log('Episodes fetched:', res);
+          setData(res);
+          setError(null);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.error('Error fetching episodes:', err);
+          setError(err);
+          setData(null);
+          setIsLoading(false);
+        });
     }
   }, [activeSeason, seasons]);
 
@@ -135,24 +159,12 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
     }
   }, [data]);
 
-  // Set seasons and initial active season
-  useEffect(() => {
-    if (seasonsData && Array.isArray(seasonsData) && seasonsData.length > 0) {
-      setSeasons(seasonsData);
-      if (!activeSeason) {
-        setActiveSeason(getSeasonForUrl(seasonsData[0]));
-      }
-    }
-  }, [seasonsData, activeSeason]);
-
   // Ensure snap behavior is properly applied
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (container && episodes.length > 0) {
-      // Force snap behavior
-      container.style.scrollSnapType = "x mandatory";
-      (container.style as any).WebkitOverflowScrolling = "touch";
-      container.style.overscrollBehaviorX = "contain";
+      // Snap behavior is now handled by Tailwind classes
+      container.classList.add('snap-x', 'snap-mandatory', 'overscroll-x-contain');
     }
   }, [episodes]);
 
@@ -234,12 +246,7 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
       id={componentId}
       className="mt-14"
     >
-      <div
-        className={
-          false
-          ? "w-full py-2"
-          : "w-full py-12 md:py-16 lg:py-20 bg-gradient-to-b from-gray-50/70 to-white relative"
-      }
+      <div className="w-full py-12 md:py-16 lg:py-20 bg-gradient-to-b from-gray-50/70 to-white relative"
     >
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         <div className="flex flex-col items-center gap-4 md:gap-8 text-center">
@@ -260,7 +267,7 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
                   <circle cx="12" cy="12" r="10" />
                   <path d="M8 12h8" />
                 </svg>
-                {title}
+                Episodes
               </div>
               <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight">
                 {title}
@@ -281,20 +288,19 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
 
           {seasons.length > 0 && (
             <div className="flex justify-center w-full mb-8 px-4">
-              <div className="flex flex-wrap justify-center gap-2 p-1 max-w-4xl">
+              <div className="flex flex-wrap justify-center gap-2 max-w-4xl">
                 {seasons.map((season, index) => (
                   <button
                     key={season._id}
                     type="button"
-                    onClick={() => setActiveSeason(getSeasonForUrl(season))}
+                    onClick={() => setActiveSeason(season.title)}
                     className={`
-                      relative px-3 py-2.5 text-sm font-medium whitespace-nowrap rounded-xl transition-all duration-200 ease-in-out flex-shrink-0 shadow-lg border backdrop-blur-sm
+                      px-4 py-2 text-sm font-medium whitespace-nowrap rounded-lg border transition-colors
                       ${
-                        getSeasonForUrl(season) === activeSeason
-                          ? "bg-primary text-white shadow-lg shadow-primary/30 scale-105 border-primary/30"
-                          : "bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100/80 border-gray-400/70"
+                        season.title === activeSeason
+                          ? "bg-primary text-white border-primary"
+                          : "bg-white text-black hover:bg-gray-50 border-gray-300"
                       }
-                      focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2
                     `}
                   >
                     {getSeasonDisplayName(season)}
@@ -366,23 +372,14 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
               {/* Episodes container */}
               <div
                 ref={scrollContainerRef}
-                className="flex overflow-x-auto pb-6 gap-4 snap-x-enhanced scrollbar-hide px-2 sm:px-4 md:px-16"
+                className="flex overflow-x-auto pb-6 gap-4 snap-x snap-mandatory overscroll-x-contain scrollbar-hide px-2 sm:px-4 md:px-16"
                 onScroll={handleScroll}
-                style={{
-                  scrollSnapType: "x mandatory",
-                  WebkitOverflowScrolling: "touch",
-                  overscrollBehaviorX: "contain",
-                }}
               >
                 {episodes.map((episode, idx) => (
                   <Link
                     key={`episode-${idx}`}
                     href={getEpisodeUrl(episode)}
-                    className="group flex-shrink-0 w-[90vw] max-w-xs sm:w-[360px] md:w-[320px] snap-start-enhanced block cursor-pointer"
-                    style={{
-                      scrollSnapAlign: "start",
-                      scrollSnapStop: "always",
-                    }}
+                    className="group flex-shrink-0 w-[90vw] max-w-xs sm:w-[360px] md:w-[320px] snap-start snap-always block cursor-pointer"
                   >
                     <div className="bg-white rounded-2xl shadow-lg border border-gray-200/70 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-gray-900/20 hover:-translate-y-1 group-hover:border-primary/40 ring-1 ring-gray-100/70">
                       <div className="aspect-video bg-gradient-to-br from-gray-300 to-gray-400 relative overflow-hidden">

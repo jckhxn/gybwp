@@ -346,13 +346,13 @@ export function getSeasonByTitle(seasons: Season[], title: string): Season | nul
 }
 
 export function getSeasonIdentifier(seasons: Season[], identifier: string): Season | null {
-  // Try shortCode first, then title for backwards compatibility
-  return getSeasonByShortCode(seasons, identifier) || getSeasonByTitle(seasons, identifier);
+  // Use title for season identification
+  return getSeasonByTitle(seasons, identifier);
 }
 
 export function getSeasonForUrl(season: Season): string {
-  // Always use shortCode for URLs
-  return season.shortCode;
+  // Use title for URLs
+  return season.title;
 }
 
 export function getSeasonDisplayName(season: Season): string {

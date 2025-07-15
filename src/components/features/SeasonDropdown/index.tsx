@@ -24,12 +24,14 @@ interface SeasonDropdownProps {
   setActiveSeason: React.Dispatch<React.SetStateAction<any>>;
   seasons?: Season[]; // Optional prop for custom seasons
   activeSeason?: string | null; // Optional prop for current active season
+  defaultSeason?: Season | null; // Optional prop for default season
 }
 
 export default function SeasonDropdown({
   setActiveSeason,
   seasons,
   activeSeason,
+  defaultSeason,
 }: SeasonDropdownProps) {
   // Only fetch seasons from API if not provided as prop
   const {
@@ -47,9 +49,11 @@ export default function SeasonDropdown({
   useEffect(() => {
     // Only fire once and if no active season is already set
     if (seasonsData && seasonsData.length > 0 && !activeSeason) {
-      setActiveSeason(getSeasonForUrl(seasonsData[0]));
+      // Use default season if provided, otherwise use first season
+      const initialSeason = defaultSeason || seasonsData[0];
+      setActiveSeason(getSeasonForUrl(initialSeason));
     }
-  }, [seasonsData, setActiveSeason, activeSeason]);
+  }, [seasonsData, setActiveSeason, activeSeason, defaultSeason]);
 
   // Get display value for the current active season
   const getDisplayValue = () => {
