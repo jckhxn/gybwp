@@ -13,6 +13,12 @@ import {
 } from "@/src/lib/utils";
 import { Badge } from "@/src/components/ui/badge";
 import { getComponentId } from "@/src/lib/sectionId";
+import { 
+  Season, 
+  getSeasonIdentifier, 
+  getSeasonForUrl, 
+  getSeasonDisplayName 
+} from "@/src/lib/utils";
 
 // Define interface for episode object based on the schema
 interface Episode {
@@ -62,7 +68,7 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
 
   const [activeSeason, setActiveSeason] = useState<string | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
-  const [seasons, setSeasons] = useState<any[]>([]);
+  const [seasons, setSeasons] = useState<Season[]>([]);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
   const [activeEpisodeIndex, setActiveEpisodeIndex] = useState(0);
@@ -79,8 +85,8 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
     return "/episodes"; // Fallback to episodes listing
   };
 
-  // Define Season interface
-  interface Season {
+  // Define Season interface to match the utils Season type
+  interface LocalSeason {
     title: string;
     number: number;
     _id: string;
@@ -89,7 +95,7 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [seasonsData, setSeasonsData] = useState<Season[]>([]);
   useEffect(() => {
-    client.fetch(ALL_SEASONS_QUERY).then(setSeasonsData);
+    client.fetch(ALL_SEASONS_QUERY).then((data) => setSeasonsData(data));
   }, []);
 
   const [data, setData] = useState(null);
@@ -98,13 +104,17 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
   useEffect(() => {
     if (activeSeason) {
       setIsLoading(true);
+      // Find the season to get the identifier that works with the query
+      const season = getSeasonIdentifier(seasons, activeSeason);
+      const queryIdentifier = season ? season.title : activeSeason; // Use title for query compatibility
+      
       client
-        .fetch(EPISODES_BY_SEASON_QUERY, { name: activeSeason })
+        .fetch(EPISODES_BY_SEASON_QUERY, { name: queryIdentifier })
         .then((res) => setData(res))
         .catch((err) => setError(err))
         .finally(() => setIsLoading(false));
     }
-  }, [activeSeason]);
+  }, [activeSeason, seasons]);
 
   // Set episodes when data changes
   useEffect(() => {
@@ -130,7 +140,7 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
     if (seasonsData && Array.isArray(seasonsData) && seasonsData.length > 0) {
       setSeasons(seasonsData);
       if (!activeSeason) {
-        setActiveSeason(seasonsData[0].title);
+        setActiveSeason(getSeasonForUrl(seasonsData[0]));
       }
     }
   }, [seasonsData, activeSeason]);
@@ -276,18 +286,18 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
                   <button
                     key={season._id}
                     type="button"
-                    onClick={() => setActiveSeason(season.title)}
+                    onClick={() => setActiveSeason(getSeasonForUrl(season))}
                     className={`
                       relative px-3 py-2.5 text-sm font-medium whitespace-nowrap rounded-xl transition-all duration-200 ease-in-out flex-shrink-0 shadow-lg border backdrop-blur-sm
                       ${
-                        season.title === activeSeason
+                        getSeasonForUrl(season) === activeSeason
                           ? "bg-primary text-white shadow-lg shadow-primary/30 scale-105 border-primary/30"
                           : "bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100/80 border-gray-400/70"
                       }
                       focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2
                     `}
                   >
-                    {season.title}
+                    {getSeasonDisplayName(season)}
                   </button>
                 ))}
               </div>

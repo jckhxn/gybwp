@@ -18,6 +18,10 @@ import { AboutMission } from "@/src/components/sections/about/AboutMission";
 import { AboutHost } from "@/src/components/sections/about/AboutHost";
 import { AboutTestimonials } from "@/src/components/sections/about/AboutTestimonials";
 import { AboutListenConnect } from "@/src/components/sections/about/AboutListenConnect";
+// Import Episodes page sections
+import { EpisodesPageBuilder } from "@/src/components/sections/episodes/EpisodesPageBuilder";
+import { EpisodesHero } from "@/src/components/sections/episodes/EpisodesHero";
+import { EpisodesDirectory } from "@/src/components/sections/episodes/EpisodesDirectory";
 
 const sectionComponents: Record<string, any> = {
   homeHero: HomeHero,
@@ -36,6 +40,9 @@ const sectionComponents: Record<string, any> = {
   aboutHost: AboutHost,
   aboutTestimonials: AboutTestimonials,
   aboutListenConnect: AboutListenConnect,
+  episodesPageBuilder: EpisodesPageBuilder,
+  episodesHero: EpisodesHero,
+  episodesDirectory: EpisodesDirectory,
 };
 
 export function SectionRenderer(props: {
@@ -90,6 +97,16 @@ export function SectionRenderer(props: {
   }
   if (section._type === "aboutListenConnect") {
     return <AboutListenConnect section={section} />;
+  }
+  // Episodes page components manage their own IDs
+  if (section._type === "episodesPageBuilder") {
+    return <EpisodesPageBuilder section={section} />;
+  }
+  if (section._type === "episodesHero") {
+    return <EpisodesHero section={section} />;
+  }
+  if (section._type === "episodesDirectory") {
+    return <EpisodesDirectory section={section} />;
   }
   return (
     <div id={componentId}>

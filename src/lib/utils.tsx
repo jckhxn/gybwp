@@ -327,3 +327,35 @@ export function formatDurationCompact(
     return `${minutes}m`;
   }
 }
+
+// Season helper types
+export interface Season {
+  _id: string;
+  title: string;
+  shortCode: string;
+  sponsors?: any[];
+}
+
+// Helper functions for season shortCode/title conversion
+export function getSeasonByShortCode(seasons: Season[], shortCode: string): Season | null {
+  return seasons.find(season => season.shortCode === shortCode) || null;
+}
+
+export function getSeasonByTitle(seasons: Season[], title: string): Season | null {
+  return seasons.find(season => season.title === title) || null;
+}
+
+export function getSeasonIdentifier(seasons: Season[], identifier: string): Season | null {
+  // Try shortCode first, then title for backwards compatibility
+  return getSeasonByShortCode(seasons, identifier) || getSeasonByTitle(seasons, identifier);
+}
+
+export function getSeasonForUrl(season: Season): string {
+  // Always use shortCode for URLs
+  return season.shortCode;
+}
+
+export function getSeasonDisplayName(season: Season): string {
+  // Always use title for display
+  return season.title;
+}

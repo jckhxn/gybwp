@@ -113,9 +113,7 @@ const PodcastPlayer = forwardRef<PlayerHandle, PodcastPlayerProps>(
             youtubePlayerRef.current.playVideo();
             setIsPlaying(true);
           }
-        } catch (error) {
-          console.error("Error seeking:", error);
-        }
+        } catch (error) {}
       },
       getCurrentTime: () => {
         if (

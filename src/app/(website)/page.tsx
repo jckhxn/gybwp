@@ -8,8 +8,8 @@ export default async function IndexRoute() {
   if (!data) {
     // If there's no homepage build, return error with message
     // Sanity not found route, otherwise nextjs route.
-    const notFound = await loadPage("not-found");
-    if (!notFound) return notFound();
+    const notFoundPage = await loadPage("not-found");
+    if (!notFoundPage) return notFound();
   }
 
   return <Page data={data} />;

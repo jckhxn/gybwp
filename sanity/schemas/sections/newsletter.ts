@@ -76,7 +76,7 @@ export default defineType({
       type: "string",
       initialValue: "Joined by business leaders from:",
     }),
-    defineField({
+    {
       name: "joinedByBrands",
       title: "Joined By Brands",
       type: "array",
@@ -87,7 +87,7 @@ export default defineType({
         "CEO Weekly",
         "+ 100s more",
       ],
-    }),
+    },
     defineField({
       name: "linkedInUrl",
       title: "LinkedIn Subscribe URL",

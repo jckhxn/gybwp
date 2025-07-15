@@ -13,9 +13,6 @@ import { Button } from "@/src/components/ui/button";
 import { client } from "@/data/sanity/client";
 import { FEATURED_ARTICLES_QUERY } from "@/data/sanity/queries";
 import {
-  fetchOpenGraphImage,
-  testImageLink,
-  validateAndFetchImage,
   urlFor,
   formatDate,
 } from "@/src/lib/utils";
@@ -48,7 +45,7 @@ export function FeaturedNews({ section }: FeaturedNewsProps) {
     readMoreText = "View All News",
     readMoreLink = "/news",
   } = section;
-  const [featuredArticles, setFeaturedArticles] = useState([]);
+  const [featuredArticles, setFeaturedArticles] = useState<any[]>([]);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -59,7 +56,7 @@ export function FeaturedNews({ section }: FeaturedNewsProps) {
       .then((res) => {
         if (res) {
           // Process the featured articles
-          const articlesWithDefaults = res.map((article) => {
+          const articlesWithDefaults = res.map((article: any) => {
             const excerpt =
               article.excerpt ||
               article.description ||
@@ -102,7 +99,7 @@ export function FeaturedNews({ section }: FeaturedNewsProps) {
   // Use consistent styling for section-based component
 
   // Helper function to get image URL from a Sanity image object
-  const getImageUrl = (article) => {
+  const getImageUrl = (article: any) => {
     // If the image is a Sanity image object
     if (article.image && article.image.asset) {
       return urlFor(article.image).url();
@@ -116,7 +113,7 @@ export function FeaturedNews({ section }: FeaturedNewsProps) {
   };
 
   // Helper function to format dates properly - just use the string directly
-  const formatArticleDate = (dateString) => {
+  const formatArticleDate = (dateString: any) => {
     if (!dateString) return "Recent";
 
     try {
@@ -129,7 +126,7 @@ export function FeaturedNews({ section }: FeaturedNewsProps) {
   };
 
   // Helper to get publication name
-  const getPublicationName = (article) => {
+  const getPublicationName = (article: any) => {
     return article.publication || article.company || "Featured";
   };
 

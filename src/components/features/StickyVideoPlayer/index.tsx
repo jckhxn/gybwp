@@ -62,30 +62,19 @@ export default function StickyVideoPlayer({
       const shouldBeSticky = rect.top < 0 && rect.bottom < 0;
 
       if (isSticky !== shouldBeSticky) {
-        console.log(
-          `Transitioning to ${shouldBeSticky ? "sticky" : "normal"} mode`
-        );
-
         // Capture current state before transition
         if (playerRef.current) {
           try {
             const time = playerRef.current.getCurrentTime();
             const playing = playerRef.current.isPlaying;
-            console.log(`Capturing state: time=${time}, playing=${playing}`);
-            console.log(`Player state details:`, {
-              time,
-              playing,
-              playerExists: !!playerRef.current,
-            });
+
             setCurrentTime(time);
             setWasPlaying(playing);
           } catch (error) {
-            console.log("Error capturing state:", error);
             // Ensure we don't accidentally resume if there's an error
             setWasPlaying(false);
           }
         } else {
-          console.log("No player ref available, setting wasPlaying to false");
           setWasPlaying(false);
         }
 
@@ -108,36 +97,22 @@ export default function StickyVideoPlayer({
   useEffect(() => {
     if (isChildPlayerReady && playerRef.current) {
       if (isFirstLoad) {
-        console.log("First load - keeping player paused");
-        setIsFirstLoad(false);
         return;
       }
 
       if (hasTransitioned) {
-        console.log(
-          `Restoring state: time=${currentTime}, wasPlaying=${wasPlaying}`
-        );
-
         setTimeout(() => {
           if (playerRef.current) {
-            console.log("Seeking to", currentTime);
-            console.log(`Restoration details:`, {
-              currentTime,
-              wasPlaying,
-              playerExists: !!playerRef.current,
-            });
-
             // Always seek without auto-play first
             playerRef.current.seekTo(currentTime, false);
 
             // Add extra safety check - only play if it was DEFINITELY playing before
             if (wasPlaying === true) {
-              console.log("wasPlaying is TRUE - will resume playback");
               setTimeout(() => {
                 if (playerRef.current) {
                   playerRef.current.play();
                   setIsCurrentlyPlaying(true);
-                  console.log("Resuming playback");
+
                   // Notify parent of play state change immediately
                   if (onPlayStateChange) {
                     onPlayStateChange(true);
@@ -145,13 +120,11 @@ export default function StickyVideoPlayer({
                 }
               }, 100);
             } else {
-              console.log("wasPlaying is FALSE or undefined - staying paused");
               // Explicitly pause to ensure it stays paused
               setTimeout(() => {
                 if (playerRef.current) {
                   playerRef.current.pause();
                   setIsCurrentlyPlaying(false);
-                  console.log("Explicitly paused player");
                 }
               }, 200);
               // Ensure parent knows we're paused
@@ -217,7 +190,6 @@ export default function StickyVideoPlayer({
       ref={playerRef}
       videoId={videoId}
       onPlayerReady={() => {
-        console.log(`Player ready in ${isSticky ? "sticky" : "normal"} mode`);
         setIsChildPlayerReady(true);
 
         // Update parent component with new player ref
@@ -231,7 +203,6 @@ export default function StickyVideoPlayer({
             const currentlyPlaying = playerRef.current.isPlaying;
             setIsCurrentlyPlaying(currentlyPlaying);
             onPlayStateChange(currentlyPlaying);
-            console.log(`Initial state sync: playing=${currentlyPlaying}`);
           }
         }, 100);
       }}
