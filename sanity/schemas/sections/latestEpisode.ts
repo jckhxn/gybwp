@@ -37,6 +37,44 @@ export default defineType({
       to: [{ type: "episode" }],
       hidden: ({ parent }) => parent?.showAutomatic,
     },
+    {
+      name: "primaryButton",
+      type: "object",
+      title: "Primary Button",
+      fields: [
+        defineField({
+          name: "text",
+          type: "string",
+          title: "Button Text",
+          initialValue: "Listen Now",
+        }),
+        defineField({
+          name: "componentLink",
+          type: "componentLink",
+          title: "Component Link",
+          description: "Advanced linking options for the primary button",
+        }),
+      ],
+    },
+    {
+      name: "secondaryButton",
+      type: "object",
+      title: "Secondary Button",
+      fields: [
+        defineField({
+          name: "text",
+          type: "string",
+          title: "Button Text",
+          initialValue: "Show Notes",
+        }),
+        defineField({
+          name: "componentLink",
+          type: "componentLink",
+          title: "Component Link",
+          description: "Advanced linking options for the secondary button",
+        }),
+      ],
+    },
   ],
   preview: {
     select: {
