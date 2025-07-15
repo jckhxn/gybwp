@@ -108,7 +108,12 @@ export const EPISODES_DETAILS_QUERY = groq`*[_type == "episode" && uuid == $uuid
 }`;
 
 // Get all seasons
-export const ALL_SEASONS_QUERY = groq`*[_type == "season"]|order(_createdAt desc)`;
+export const ALL_SEASONS_QUERY = groq`*[_type == "season"]|order(_createdAt desc){
+  _id,
+  title,
+  shortCode,
+  sponsors
+}`;
 // Gets the latest season
 export const INITIAL_SEASON_EPISODES_QUERY = groq`{
 
@@ -116,8 +121,8 @@ export const INITIAL_SEASON_EPISODES_QUERY = groq`{
 }
 `;
 
-// Get episodes by season Name - updated to include pathname
-export const EPISODES_BY_SEASON_QUERY = groq`*[_type == "episode" && season->title == $name] | order(_createdAt desc) {
+// Get episodes by season Name or shortCode - updated to include pathname
+export const EPISODES_BY_SEASON_QUERY = groq`*[_type == "episode" && (season->title == $name || season->shortCode == $name)] | order(_createdAt desc) {
   ...,
   "uuid": coalesce(uuid, youtube.uuid),
   pathname,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { client } from "@/src/lib/sanity-utils";
 import {
   EPISODES_BY_SEASON_QUERY,
@@ -16,13 +16,16 @@ import {
   Filter,
   Grid,
   List,
-  Play,
-  Calendar,
-  Users,
-  LayoutGrid,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
+import { getComponentId } from "@/src/lib/sectionId";
+import { 
+  Season, 
+  getSeasonIdentifier, 
+  getSeasonForUrl, 
+  getSeasonDisplayName 
+} from "@/src/lib/utils";
 
 // Utility function for safe data access
 const safeguardEpisodeData = (episode: any) => {
@@ -38,7 +41,36 @@ const safeguardEpisodeData = (episode: any) => {
   };
 };
 
-export function EpisodesPage() {
+interface EpisodesDirectoryProps {
+  section: {
+    _type: "episodesDirectory";
+    _key?: string;
+    sectionId?: string;
+    enableSearch?: boolean;
+    enableFilters?: boolean;
+    enableViewModes?: boolean;
+    defaultSort?: "newest" | "oldest" | "episode";
+    itemsPerPageGrid?: number;
+    itemsPerPageList?: number;
+    showSeasonFilter?: boolean;
+  };
+  // Callback to pass stats back to hero
+  onStatsUpdate?: (totalEpisodes: number, totalSeasons: number) => void;
+}
+
+export function EpisodesDirectory({ section, onStatsUpdate }: EpisodesDirectoryProps) {
+  const componentId = getComponentId(section, "episodes-directory");
+  
+  const {
+    enableSearch = true,
+    enableFilters = true,
+    enableViewModes = true,
+    defaultSort = "newest",
+    itemsPerPageGrid = 12,
+    itemsPerPageList = 8,
+    showSeasonFilter = true,
+  } = section;
+
   // Define the Episode type based on what EpisodeCard expects
   type YoutubeData = {
     title?: string;
@@ -56,23 +88,23 @@ export function EpisodesPage() {
     youtube?: YoutubeData;
     seasonNumber?: number;
     episodeNumber?: number;
-    guests?: Array<{ name?: string }>; // Made name optional to match real data
+    guests?: Array<{ name?: string }>;
   };
 
-  const [activeSeason, setActiveSeason] = useState<string | null>(null);
-  const [allSeasons, setAllSeasons] = useState<any[]>([]);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Initialize state from URL parameters
+  const [activeSeason, setActiveSeason] = useState<string | null>(searchParams.get("season") || null);
+  const [allSeasons, setAllSeasons] = useState<Season[]>([]);
   const [data, setData] = useState<Episode[]>([]);
   const [allEpisodes, setAllEpisodes] = useState<Episode[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "episode">(
-    "newest"
-  );
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
+  const [viewMode, setViewMode] = useState<"grid" | "list">((searchParams.get("view") as "grid" | "list") || "grid");
+  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "episode">((searchParams.get("sort") as "newest" | "oldest" | "episode") || defaultSort);
   const [showFilters, setShowFilters] = useState(false);
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
   // Get page from query string
   const pageFromQuery = parseInt(searchParams.get("page") || "1", 10);
@@ -90,9 +122,9 @@ export function EpisodesPage() {
         setAllSeasons(seasonsData);
         setAllEpisodes(episodesData);
 
-        // Set first season as active by default
-        if (seasonsData && seasonsData.length > 0) {
-          setActiveSeason(seasonsData[0].title);
+        // Set first season as active by default only if no season is currently active
+        if (seasonsData && seasonsData.length > 0 && !activeSeason) {
+          setActiveSeason(getSeasonForUrl(seasonsData[0]));
         }
       } catch (err) {
         setError(err as Error);
@@ -102,28 +134,43 @@ export function EpisodesPage() {
     };
 
     loadData();
-  }, []);
+  }, []); // Only run once on mount
+
+  // Update stats when data changes
+  useEffect(() => {
+    if (onStatsUpdate && allEpisodes.length > 0 && allSeasons.length > 0) {
+      onStatsUpdate(allEpisodes.length, allSeasons.length);
+    }
+  }, [allEpisodes, allSeasons, onStatsUpdate]);
 
   // Load episodes for active season
   useEffect(() => {
-    if (activeSeason) {
+    if (activeSeason && showSeasonFilter) {
+      // Find the season to get the identifier that works with the query
+      const season = getSeasonIdentifier(allSeasons, activeSeason);
+      const queryIdentifier = season ? season.title : activeSeason; // Use title for query compatibility
+      
       client
-        .fetch(EPISODES_BY_SEASON_QUERY, { name: activeSeason })
+        .fetch(EPISODES_BY_SEASON_QUERY, { name: queryIdentifier })
         .then((res) => {
           // Safeguard the data before setting it
           const safeguardedData = res.map(safeguardEpisodeData);
           setData(safeguardedData);
         })
         .catch((err) => setError(err));
+    } else if (!showSeasonFilter) {
+      // If season filter is disabled, show all episodes
+      const safeguardedData = allEpisodes.map(safeguardEpisodeData);
+      setData(safeguardedData);
     }
-  }, [activeSeason]);
+  }, [activeSeason, allEpisodes, allSeasons, showSeasonFilter]);
 
   // Filter and sort episodes
   const filteredAndSortedEpisodes = useMemo(() => {
     let episodes = [...data];
 
     // Filter by search term with robust error handling
-    if (searchTerm) {
+    if (searchTerm && enableSearch) {
       const searchTermLower = searchTerm.toLowerCase();
       episodes = episodes.filter((episode) => {
         try {
@@ -168,12 +215,12 @@ export function EpisodesPage() {
     });
 
     return episodes;
-  }, [data, searchTerm, sortBy]);
+  }, [data, searchTerm, sortBy, enableSearch]);
 
   // Use pagination hook
   const pagination = usePagination({
     data: filteredAndSortedEpisodes,
-    itemsPerPage: viewMode === "grid" ? 12 : 8, // Fewer items for list view
+    itemsPerPage: viewMode === "grid" ? itemsPerPageGrid : itemsPerPageList,
     initialPage: pageFromQuery,
     scrollToTop: false,
   });
@@ -190,181 +237,146 @@ export function EpisodesPage() {
     pagination.goToPage(page);
   };
 
-  // Reset pagination when filters change
+  // Update URL and reset pagination when filters change
   useEffect(() => {
     pagination.reset();
-    // Remove ?page= from URL when filters change
-    const params = new URLSearchParams(Array.from(searchParams.entries()));
-    params.delete("page");
-    router.replace(`?${params.toString()}`);
-    // Only depend on things that should trigger a reset
-  }, [searchTerm, sortBy, activeSeason, viewMode]);
+    // Update URL with current filter state
+    const params = new URLSearchParams();
+    if (searchTerm) params.set("search", searchTerm);
+    if (activeSeason) {
+      // Always use shortCode for URLs, but support backwards compatibility
+      const season = getSeasonIdentifier(allSeasons, activeSeason);
+      if (season) {
+        params.set("season", getSeasonForUrl(season));
+      } else {
+        params.set("season", activeSeason);
+      }
+    }
+    if (viewMode !== "grid") params.set("view", viewMode);
+    if (sortBy !== defaultSort) params.set("sort", sortBy);
+    // Don't include page parameter to reset pagination
+    
+    const queryString = params.toString();
+    const newUrl = queryString ? `?${queryString}` : window.location.pathname;
+    router.replace(newUrl, { scroll: false });
+  }, [searchTerm, sortBy, activeSeason, viewMode, defaultSort, allSeasons]);
 
-  const totalEpisodes = allEpisodes.length;
   const currentSeasonEpisodes = data.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50/70 to-white">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-gray-50/70 to-white py-16 md:py-20 lg:py-24">
-        <div className="container mx-auto px-6">
-          <div className="text-center max-w-4xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="flex justify-center mb-6"
-            >
-              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 px-4 py-2 text-sm font-medium text-primary border border-primary/30">
-                <Play className="h-4 w-4" />
-                Episode Library
-              </div>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-6 leading-[1.1]"
-            >
-              Browse Our Episodes
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed max-w-3xl mx-auto"
-            >
-              Explore our complete library of business insights, leadership
-              strategies, and growth tactics
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-wrap justify-center gap-6 text-sm text-gray-500"
-            >
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                <span>{totalEpisodes} Total Episodes</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <LayoutGrid className="h-4 w-4" />
-                <span>{allSeasons.length} Seasons</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                <span>Expert Guests</span>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </div>
-
+    <div id={componentId}>
       {/* Controls Section */}
       <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
         <div className="container mx-auto px-6 py-4">
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             {/* Left side - Season and Search */}
             <div className="flex flex-col sm:flex-row gap-4 items-center flex-1">
-              <SeasonDropdown 
-                setActiveSeason={setActiveSeason} 
-                activeSeason={activeSeason}
-                seasons={allSeasons}
-              />
-
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search episodes, topics, or guests..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+              {showSeasonFilter && (
+                <SeasonDropdown 
+                  setActiveSeason={setActiveSeason} 
+                  activeSeason={activeSeason}
+                  seasons={allSeasons}
                 />
-              </div>
+              )}
+
+              {enableSearch && (
+                <div className="relative flex-1 max-w-md">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search episodes, topics, or guests..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                  />
+                </div>
+              )}
             </div>
 
             {/* Right side - View controls */}
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
-                  showFilters
-                    ? "bg-primary/10 text-primary"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-              >
-                <Filter className="h-4 w-4" />
-                <span className="hidden sm:inline">Filters</span>
-              </button>
+              {enableFilters && (
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                    showFilters
+                      ? "bg-primary/10 text-primary"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                >
+                  <Filter className="h-4 w-4" />
+                  <span className="hidden sm:inline">Filters</span>
+                </button>
+              )}
 
-              <div className="flex border border-gray-300 rounded-lg overflow-hidden">
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-2 transition-colors ${
-                    viewMode === "grid"
-                      ? "bg-primary text-white"
-                      : "bg-white text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  <Grid className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => setViewMode("list")}
-                  className={`p-2 transition-colors ${
-                    viewMode === "list"
-                      ? "bg-primary text-white"
-                      : "bg-white text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  <List className="h-4 w-4" />
-                </button>
-              </div>
+              {enableViewModes && (
+                <div className="flex border border-gray-300 rounded-lg overflow-hidden">
+                  <button
+                    onClick={() => setViewMode("grid")}
+                    className={`p-2 transition-colors ${
+                      viewMode === "grid"
+                        ? "bg-primary text-white"
+                        : "bg-white text-gray-600 hover:bg-gray-50"
+                    }`}
+                  >
+                    <Grid className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => setViewMode("list")}
+                    className={`p-2 transition-colors ${
+                      viewMode === "list"
+                        ? "bg-primary text-white"
+                        : "bg-white text-gray-600 hover:bg-gray-50"
+                    }`}
+                  >
+                    <List className="h-4 w-4" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
           {/* Filters Panel */}
-          <AnimatePresence>
-            {showFilters && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-4 pt-4 border-t border-slate-200"
-              >
-                <div className="flex flex-wrap gap-4 items-center">
-                  <div className="flex items-center gap-2">
-                    <label className="text-sm font-medium text-slate-700">
-                      Sort by:
-                    </label>
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as any)}
-                      className="px-3 py-1 border border-slate-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                      <option value="newest">Newest First</option>
-                      <option value="oldest">Oldest First</option>
-                      <option value="episode">Episode Number</option>
-                    </select>
-                  </div>
+          {enableFilters && (
+            <AnimatePresence>
+              {showFilters && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mt-4 pt-4 border-t border-slate-200"
+                >
+                  <div className="flex flex-wrap gap-4 items-center">
+                    <div className="flex items-center gap-2">
+                      <label className="text-sm font-medium text-slate-700">
+                        Sort by:
+                      </label>
+                      <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value as any)}
+                        className="px-3 py-1 border border-slate-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="episode">Episode Number</option>
+                      </select>
+                    </div>
 
-                  <div className="text-sm text-slate-600">
-                    {pagination.totalItems} of {currentSeasonEpisodes} episodes
-                    {searchTerm && ` matching "${searchTerm}"`}
-                    {pagination.totalPages > 1 && (
-                      <span className="ml-2">
-                        (Page {pagination.currentPage} of{" "}
-                        {pagination.totalPages})
-                      </span>
-                    )}
+                    <div className="text-sm text-slate-600">
+                      {pagination.totalItems} of {currentSeasonEpisodes} episodes
+                      {searchTerm && ` matching "${searchTerm}"`}
+                      {pagination.totalPages > 1 && (
+                        <span className="ml-2">
+                          (Page {pagination.currentPage} of{" "}
+                          {pagination.totalPages})
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
         </div>
       </div>
 
@@ -446,7 +458,7 @@ export function EpisodesPage() {
                   : "No episodes found for this season."}
               </p>
             </div>
-            {searchTerm && (
+            {searchTerm && enableSearch && (
               <button
                 onClick={() => setSearchTerm("")}
                 className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"

@@ -174,6 +174,121 @@ export interface FeaturedNewsSection extends BaseSection {
   readMoreLink?: string;
 }
 
+export interface AboutHeroSection extends BaseSection {
+  _type: "aboutHero";
+  badgeText?: string;
+  title?: string;
+  subtitle?: string;
+  platforms?: Array<{
+    name: string;
+    url: string;
+    icon?: string;
+  }>;
+}
+
+export interface AboutMissionSection extends BaseSection {
+  _type: "aboutMission";
+  heading?: string;
+  text?: string;
+  bullets?: string[];
+  image?: {
+    asset?: {
+      url?: string;
+    };
+    alt?: string;
+  };
+}
+
+export interface AboutHostSection extends BaseSection {
+  _type: "aboutHost";
+  host?: string;
+  hostImage?: {
+    asset?: {
+      url?: string;
+    };
+    alt?: string;
+  };
+  hostBio?: string;
+  heading?: string;
+  subtext?: string;
+  hostJourney?: string;
+  socialLinks?: Array<{
+    label: string;
+    href: string;
+    icon?: string;
+  }>;
+}
+
+export interface AboutTestimonialsSection extends BaseSection {
+  _type: "aboutTestimonials";
+  heading?: string;
+  testimonials?: Array<{
+    name: string;
+    text: string;
+  }>;
+}
+
+export interface AboutListenConnectSection extends BaseSection {
+  _type: "aboutListenConnect";
+  heading?: string;
+  text?: string;
+  platforms?: Array<{
+    name: string;
+    url: string;
+    icon?: string;
+  }>;
+}
+
+export interface EpisodesPageBuilderSection extends BaseSection {
+  _type: "episodesPageBuilder";
+  heroSection?: {
+    _type: "episodesHero";
+    _key?: string;
+    sectionId?: string;
+    badgeText?: string;
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    showStats?: boolean;
+    totalEpisodes?: number;
+    totalSeasons?: number;
+  };
+  directorySection?: {
+    _type: "episodesDirectory";
+    _key?: string;
+    sectionId?: string;
+    enableSearch?: boolean;
+    enableFilters?: boolean;
+    enableViewModes?: boolean;
+    defaultSort?: "newest" | "oldest" | "episode";
+    itemsPerPageGrid?: number;
+    itemsPerPageList?: number;
+    showSeasonFilter?: boolean;
+  };
+}
+
+export interface EpisodesHeroSection extends BaseSection {
+  _type: "episodesHero";
+  badgeText?: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  showStats?: boolean;
+  totalEpisodes?: number;
+  totalSeasons?: number;
+}
+
+export interface EpisodesDirectorySection extends BaseSection {
+  _type: "episodesDirectory";
+  enableSearch?: boolean;
+  enableFilters?: boolean;
+  enableViewModes?: boolean;
+  defaultSort?: "newest" | "oldest" | "episode";
+  itemsPerPageGrid?: number;
+  itemsPerPageList?: number;
+  showSeasonFilter?: boolean;
+}
+
 export type Section =
   | HomeHeroSection
   | PersonHeroSection
@@ -183,7 +298,15 @@ export type Section =
   | ConsultingServicesSection
   | ConsultingCTASection
   | NewsletterSection
-  | FeaturedNewsSection;
+  | FeaturedNewsSection
+  | AboutHeroSection
+  | AboutMissionSection
+  | AboutHostSection
+  | AboutTestimonialsSection
+  | AboutListenConnectSection
+  | EpisodesPageBuilderSection
+  | EpisodesHeroSection
+  | EpisodesDirectorySection;
 
 export interface EpisodeType {
   _id: string;

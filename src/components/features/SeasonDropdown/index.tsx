@@ -13,10 +13,16 @@ import {
 import { ALL_SEASONS_QUERY } from "@/src/lib/queries";
 import { client } from "@/src/lib/sanity-utils";
 import useSWR from "swr";
+import { 
+  Season, 
+  getSeasonIdentifier, 
+  getSeasonForUrl, 
+  getSeasonDisplayName 
+} from "@/src/lib/utils";
 
 interface SeasonDropdownProps {
   setActiveSeason: React.Dispatch<React.SetStateAction<any>>;
-  seasons?: any[]; // Optional prop for custom seasons
+  seasons?: Season[]; // Optional prop for custom seasons
   activeSeason?: string | null; // Optional prop for current active season
 }
 
@@ -40,10 +46,17 @@ export default function SeasonDropdown({
   // Immediately set active season so episodes can be fetched.
   useEffect(() => {
     // Only fire once and if no active season is already set
-    if (seasonsData && !activeSeason) {
-      setActiveSeason(seasonsData[0].title);
+    if (seasonsData && seasonsData.length > 0 && !activeSeason) {
+      setActiveSeason(getSeasonForUrl(seasonsData[0]));
     }
   }, [seasonsData, setActiveSeason, activeSeason]);
+
+  // Get display value for the current active season
+  const getDisplayValue = () => {
+    if (!activeSeason || !seasonsData) return "";
+    const season = getSeasonIdentifier(seasonsData, activeSeason);
+    return season ? getSeasonDisplayName(season) : activeSeason;
+  };
 
   return (
     <Select
@@ -67,14 +80,14 @@ export default function SeasonDropdown({
             Seasons
           </SelectLabel>
 
-          {seasonsData?.map(({ title }: { title: string }, idx: number) => (
+          {seasonsData?.map((season: Season, idx: number) => (
             <SelectItem
-              aria-label={title}
+              aria-label={getSeasonDisplayName(season)}
               key={idx}
-              value={title}
+              value={getSeasonForUrl(season)}
               className="!text-gray-900 focus:!bg-gray-100 hover:!bg-gray-50 !cursor-pointer data-[highlighted]:!bg-gray-100 data-[highlighted]:!text-gray-900"
             >
-              {title}
+              {getSeasonDisplayName(season)}
             </SelectItem>
           ))}
         </SelectGroup>

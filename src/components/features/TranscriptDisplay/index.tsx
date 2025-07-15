@@ -51,31 +51,9 @@ export const TranscriptDisplay: React.FC<TranscriptDisplayProps> = ({
       (speaker: any) => speaker._id === ref._ref
     );
 
-    console.log(`Resolving ${type}:`, {
-      refId: ref._ref,
-      speakerList,
-      resolved,
-      allSpeakers,
-    });
-
     return resolved;
   };
-  // Debug logging
-  console.log("TranscriptDisplay props:", {
-    transcript: transcript?.length,
-    transcriptSegments: transcriptSegments?.length,
-    hasTranscript: !!transcript,
-    hasTranscriptSegments: !!transcriptSegments,
-    allSpeakers,
-  });
 
-  if (transcript && transcript.length > 0) {
-    console.log("Sample transcript item:", transcript[0]);
-  }
-
-  if (transcriptSegments && transcriptSegments.length > 0) {
-    console.log("Sample transcript segment:", transcriptSegments[0]);
-  }
   // Function to convert timestamp to seconds for YouTube seeking
   const timestampToSeconds = (timestamp: string): number => {
     const parts = timestamp.split(":").map(Number);
@@ -137,23 +115,6 @@ export const TranscriptDisplay: React.FC<TranscriptDisplayProps> = ({
         children,
         value,
       }: PortableTextMarkComponentProps<SpeakerAnnotation>) => {
-        // Debug logging to see what we're getting
-        console.log(
-          "Speaker annotation value:",
-          JSON.stringify(value, null, 2)
-        );
-        console.log("Speaker annotation children:", children);
-        if (value?.hostRef)
-          console.log(
-            "hostRef details:",
-            JSON.stringify(value.hostRef, null, 2)
-          );
-        if (value?.guestRef)
-          console.log(
-            "guestRef details:",
-            JSON.stringify(value.guestRef, null, 2)
-          );
-
         const renderSpeakerContent = () => (
           <span className="inline-flex items-center px-2 py-1 mx-1 text-xs font-medium rounded-md bg-green-100 text-green-800 border border-green-300 hover:bg-green-200">
             @ {children}
@@ -196,7 +157,6 @@ export const TranscriptDisplay: React.FC<TranscriptDisplayProps> = ({
 
         // If it's a host with a slug, make it a link to /guest/[slug] (redirect logic will handle it)
         if (value?.type === "host" && resolvedHost?.slug?.current) {
-          console.log("Host with slug found:", resolvedHost);
           return (
             <Link
               href={`/guest/${encodeURIComponent(resolvedHost.slug.current)}`}
@@ -280,17 +240,11 @@ export const TranscriptDisplay: React.FC<TranscriptDisplayProps> = ({
                         typeof segment.speaker === "object"
                       ) {
                         const speaker = segment.speaker;
-                        console.log("Structured segment speaker:", speaker);
+
                         switch (speaker.type) {
                           case "host":
                             const hostName = speaker.hostRef?.name || "Host";
                             const hostSlug = speaker.hostRef?.slug?.current;
-
-                            console.log("Structured host:", {
-                              hostName,
-                              hostSlug,
-                              hostRef: speaker.hostRef,
-                            });
 
                             if (hostSlug) {
                               return (
@@ -309,12 +263,6 @@ export const TranscriptDisplay: React.FC<TranscriptDisplayProps> = ({
                           case "guest":
                             const guestName = speaker.guestRef?.name || "Guest";
                             const guestSlug = speaker.guestRef?.slug?.current;
-
-                            console.log("Structured guest:", {
-                              guestName,
-                              guestSlug,
-                              guestRef: speaker.guestRef,
-                            });
 
                             if (guestSlug) {
                               return (

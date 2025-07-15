@@ -20,6 +20,9 @@ import aboutMission from "./aboutMission";
 import aboutHost from "./aboutHost";
 import aboutTestimonials from "./aboutTestimonials";
 import aboutListenConnect from "./aboutListenConnect";
+import episodesPageBuilder from "./episodesPageBuilder";
+import episodesHero from "./episodesHero";
+import episodesDirectory from "./episodesDirectory";
 
 export const sections = [
   homeHero,
@@ -44,4 +47,7 @@ export const sections = [
   aboutHost,
   aboutTestimonials,
   aboutListenConnect,
+  episodesPageBuilder,
+  episodesHero,
+  episodesDirectory,
 ];
