@@ -19,6 +19,7 @@ export default function Error({
     console.error(error);
   }, [error]);
 
+  
   return (
     <Section className="bg-light">
       <div className="container flex items-center min-h-[80vh] px-6 py-12 mx-auto">

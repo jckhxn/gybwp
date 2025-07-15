@@ -37,7 +37,16 @@ interface Episode {
   };
 }
 
-export const LatestEpisode = () => {
+interface LatestEpisodeProps {
+  section?: {
+    title?: string;
+    description?: string;
+    showAutomatic?: boolean;
+    specificEpisode?: any;
+  };
+}
+
+export const LatestEpisode = ({ section }: LatestEpisodeProps = {}) => {
   const [latestEpisode, setLatestEpisode] = useState<Episode | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -64,44 +73,44 @@ export const LatestEpisode = () => {
 
   if (isLoading) {
     return (
-      <section className="w-full py-12 md:py-16 bg-gradient-to-br from-gray-50/50 via-white to-gray-50/50">
-        <div className="container mx-auto px-6 max-w-4xl">
-          <div className="flex flex-col items-center text-center space-y-8 animate-pulse">
+      <section className="w-full py-8 md:py-16 bg-gradient-to-br from-gray-50/50 via-white to-gray-50/50">
+        <div className="container mx-auto px-3 sm:px-6 max-w-4xl">
+          <div className="flex flex-col items-center text-center space-y-6 sm:space-y-8 animate-pulse">
             {/* Header skeleton */}
-            <div className="space-y-3">
-              <div className="w-28 h-6 bg-gray-300 rounded-full mx-auto"></div>
-              <div className="space-y-2">
-                <div className="h-8 bg-gray-300 rounded w-80 mx-auto"></div>
-                <div className="h-8 bg-gray-300 rounded w-64 mx-auto"></div>
+            <div className="space-y-2 sm:space-y-3">
+              <div className="w-20 h-5 bg-gray-300 rounded-full mx-auto"></div>
+              <div className="space-y-1 sm:space-y-2">
+                <div className="h-7 bg-gray-300 rounded w-60 mx-auto"></div>
+                <div className="h-7 bg-gray-300 rounded w-44 mx-auto"></div>
               </div>
-              <div className="h-5 bg-gray-200 rounded w-48 mx-auto"></div>
+              <div className="h-4 bg-gray-200 rounded w-32 mx-auto"></div>
             </div>
 
             {/* Large thumbnail skeleton */}
             <div className="relative">
-              <div className="w-80 h-80 sm:w-96 sm:h-96 lg:w-[420px] lg:h-[420px] bg-gray-200 rounded-2xl"></div>
-              <div className="absolute -top-3 -right-3 w-16 h-7 bg-gray-300 rounded-full"></div>
+              <div className="w-60 h-60 sm:w-80 sm:h-80 lg:w-[420px] lg:h-[420px] bg-gray-200 rounded-2xl"></div>
+              <div className="absolute -top-2 -right-2 w-12 h-6 bg-gray-300 rounded-full"></div>
             </div>
 
             {/* Content skeleton */}
-            <div className="space-y-6 max-w-2xl mx-auto w-full">
-              <div className="flex gap-3 justify-center">
-                <div className="h-8 bg-gray-200 rounded-full w-24"></div>
-                <div className="h-8 bg-gray-200 rounded-full w-20"></div>
+            <div className="space-y-4 sm:space-y-6 max-w-xs sm:max-w-2xl mx-auto w-full">
+              <div className="flex gap-2 sm:gap-3 justify-center">
+                <div className="h-7 bg-gray-200 rounded-full w-20"></div>
+                <div className="h-7 bg-gray-200 rounded-full w-16"></div>
               </div>
-              <div className="space-y-2">
-                <div className="h-4 bg-gray-200 rounded w-full"></div>
-                <div className="h-4 bg-gray-200 rounded w-5/6 mx-auto"></div>
-                <div className="h-4 bg-gray-200 rounded w-4/5 mx-auto"></div>
+              <div className="space-y-1 sm:space-y-2">
+                <div className="h-3 bg-gray-200 rounded w-full"></div>
+                <div className="h-3 bg-gray-200 rounded w-4/5 mx-auto"></div>
+                <div className="h-3 bg-gray-200 rounded w-3/5 mx-auto"></div>
               </div>
-              <div className="flex gap-2 justify-center">
-                <div className="h-6 bg-gray-200 rounded-full w-16"></div>
-                <div className="h-6 bg-gray-200 rounded-full w-20"></div>
-                <div className="h-6 bg-gray-200 rounded-full w-14"></div>
+              <div className="flex gap-1 sm:gap-2 justify-center">
+                <div className="h-5 bg-gray-200 rounded-full w-12"></div>
+                <div className="h-5 bg-gray-200 rounded-full w-16"></div>
+                <div className="h-5 bg-gray-200 rounded-full w-10"></div>
               </div>
-              <div className="flex gap-3 justify-center">
-                <div className="h-11 bg-gray-300 rounded-xl w-32"></div>
-                <div className="h-11 bg-gray-200 rounded-xl w-28"></div>
+              <div className="flex gap-2 sm:gap-3 justify-center">
+                <div className="h-9 bg-gray-300 rounded-xl w-24"></div>
+                <div className="h-9 bg-gray-200 rounded-xl w-20"></div>
               </div>
             </div>
           </div>
@@ -203,27 +212,27 @@ export const LatestEpisode = () => {
   };
 
   return (
-    <section className="w-full py-12 md:py-16 bg-gradient-to-br from-gray-50/50 via-white to-gray-50/50 relative overflow-hidden">
+    <section className="w-full py-8 md:py-16 bg-gradient-to-br from-gray-50/50 via-white to-gray-50/50 relative overflow-hidden">
       {/* Subtle background decoration */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/3 rounded-full blur-3xl" />
-        <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-primary/3 rounded-full blur-3xl" />
+        <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/3 rounded-full blur-3xl" />
+        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-primary/3 rounded-full blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-6 max-w-4xl relative">
+      <div className="container mx-auto px-3 sm:px-6 max-w-4xl relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="flex flex-col items-center text-center space-y-8"
+          className="flex flex-col items-center text-center space-y-6 sm:space-y-8"
         >
           {/* Header Section */}
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             <motion.span
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="inline-block bg-primary text-white px-4 py-1.5 rounded-full font-semibold text-sm tracking-wide uppercase"
+              className="inline-block bg-primary text-white px-3 sm:px-4 py-1 rounded-full font-semibold text-xs sm:text-sm tracking-wide uppercase"
             >
               Latest Episode
             </motion.span>
@@ -232,7 +241,7 @@ export const LatestEpisode = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight max-w-3xl mx-auto"
+              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight max-w-xs sm:max-w-3xl mx-auto break-words"
             >
               {formatEpisodeTitle(
                 latestEpisode.title ||
@@ -246,7 +255,7 @@ export const LatestEpisode = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-primary font-medium text-lg"
+                className="text-primary font-medium text-base sm:text-lg"
               >
                 Featuring {getGuestNames(latestEpisode)}
               </motion.div>
@@ -261,7 +270,7 @@ export const LatestEpisode = () => {
             className="relative group"
           >
             {/* Main thumbnail container - large and centered */}
-            <div className="relative w-80 h-80 sm:w-96 sm:h-96 lg:w-[420px] lg:h-[420px] rounded-2xl overflow-hidden shadow-xl shadow-black/5 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-black/10">
+            <div className="relative w-[85vw] max-w-xs sm:w-80 sm:h-80 lg:w-[420px] lg:h-[420px] aspect-square rounded-2xl overflow-hidden shadow-xl shadow-black/5 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-black/10">
               <Image
                 src={getThumbnail(latestEpisode)}
                 alt={latestEpisode.title || "Latest episode thumbnail"}
@@ -279,9 +288,9 @@ export const LatestEpisode = () => {
                 aria-label="Listen to latest episode"
                 className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               >
-                <div className="w-20 h-20 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/20 transition-all duration-300 hover:scale-110">
+                <div className="w-14 h-14 sm:w-20 sm:h-20 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/20 transition-all duration-300 hover:scale-110">
                   <Play
-                    className="h-9 w-9 text-primary ml-0.5"
+                    className="h-7 w-7 sm:h-9 sm:w-9 text-primary ml-0.5"
                     fill="currentColor"
                   />
                 </div>
@@ -290,32 +299,32 @@ export const LatestEpisode = () => {
 
             {/* Episode number badge */}
             {getEpisodeNumber(latestEpisode) && (
-              <div className="absolute -top-3 -right-3 bg-primary text-white text-sm font-bold px-3 py-1.5 rounded-full shadow-lg border-2 border-white">
+              <div className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 bg-primary text-white text-xs sm:text-sm font-bold px-2 sm:px-3 py-1 rounded-full shadow-lg border-2 border-white">
                 Ep. {getEpisodeNumber(latestEpisode)}
               </div>
             )}
 
             {/* Subtle glow effect */}
-            <div className="absolute -z-10 -inset-6 bg-gradient-to-br from-primary/5 to-transparent rounded-2xl blur-xl opacity-60" />
+            <div className="absolute -z-10 -inset-3 sm:-inset-6 bg-gradient-to-br from-primary/5 to-transparent rounded-2xl blur-xl opacity-60" />
           </motion.div>
 
           {/* Content Section */}
-          <div className="space-y-6 max-w-2xl mx-auto">
+          <div className="space-y-4 sm:space-y-6 max-w-xs sm:max-w-2xl mx-auto">
             {/* Episode metadata */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="flex flex-wrap items-center justify-center gap-4 text-gray-600"
+              className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-gray-600"
             >
-              <span className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full text-sm">
+              <span className="flex items-center gap-1.5 bg-gray-100 px-2.5 py-1 rounded-full text-xs sm:text-sm">
                 <Calendar className="h-4 w-4" />
                 <span className="font-medium">
                   {formatEpisodeDate(latestEpisode.publishedAt)}
                 </span>
               </span>
               {getDuration(latestEpisode) && (
-                <span className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full text-sm">
+                <span className="flex items-center gap-1.5 bg-gray-100 px-2.5 py-1 rounded-full text-xs sm:text-sm">
                   <Clock className="h-4 w-4" />
                   <span className="font-medium">
                     {getDuration(latestEpisode)}
@@ -329,7 +338,7 @@ export const LatestEpisode = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="text-gray-700 text-base leading-relaxed"
+              className="text-gray-700 text-sm sm:text-base leading-relaxed"
             >
               {latestEpisode.blurb ||
                 latestEpisode.youtube?.blurb ||
@@ -342,14 +351,14 @@ export const LatestEpisode = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.7 }}
-                className="flex flex-wrap justify-center gap-2"
+                className="flex flex-wrap justify-center gap-1 sm:gap-2"
               >
                 {getTags(latestEpisode)
                   .slice(0, 4)
                   .map((tag: any, i: number) => (
                     <span
                       key={i}
-                      className="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full font-medium border border-primary/20"
+                      className="bg-primary/10 text-primary text-xs px-2.5 py-1 rounded-full font-medium border border-primary/20"
                     >
                       {tag}
                     </span>
@@ -362,11 +371,11 @@ export const LatestEpisode = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
-              className="flex flex-col sm:flex-row gap-3 justify-center pt-2"
+              className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center pt-2 w-full"
             >
               <Link
                 href={getEpisodeLink(latestEpisode)}
-                className="group inline-flex items-center justify-center rounded-xl bg-primary hover:bg-primary-light text-white px-6 py-3 text-base font-semibold shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="group inline-flex items-center justify-center rounded-xl bg-primary hover:bg-primary-light text-white w-full sm:w-auto px-4 sm:px-6 py-3 text-base font-semibold shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary/50"
               >
                 <Play className="h-4 w-4 mr-2" fill="currentColor" />
                 Listen Now
@@ -374,7 +383,7 @@ export const LatestEpisode = () => {
               </Link>
               <Link
                 href={getEpisodeLink(latestEpisode)}
-                className="group inline-flex items-center justify-center rounded-xl bg-white hover:bg-gray-50 text-gray-900 px-6 py-3 text-base font-medium border border-gray-200 hover:border-gray-300 shadow-md transition-all duration-300 hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-gray-300"
+                className="group inline-flex items-center justify-center rounded-xl bg-white hover:bg-gray-50 text-gray-900 w-full sm:w-auto px-4 sm:px-6 py-3 text-base font-medium border border-gray-200 hover:border-gray-300 shadow-md transition-all duration-300 hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-gray-300"
               >
                 Show Notes
                 <ArrowRight className="ml-2 h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
@@ -386,11 +395,11 @@ export const LatestEpisode = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.9 }}
-              className="pt-4"
+              className="pt-2 sm:pt-4"
             >
               <ScrollToSection
                 targetId="episodes"
-                className="inline-flex items-center text-primary hover:text-primary-light transition-colors gap-2 font-medium group text-sm"
+                className="inline-flex items-center text-primary hover:text-primary-light transition-colors gap-2 font-medium group text-xs sm:text-sm"
               >
                 Browse all episodes
                 <ArrowRight className="h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />

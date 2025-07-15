@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 import React, { useEffect, useState } from "react";
 
@@ -22,9 +21,13 @@ import {
 } from "@/src/lib/utils";
 import { SanityImage } from "@/src/lib/utils";
 import { motion } from "framer-motion";
+import { getComponentId } from "@/src/lib/sectionId";
 
 interface FeaturedNewsProps {
-  section?: {
+  section: {
+    _type: "featuredNews";
+    _key?: string;
+    sectionId?: string;
     title?: string;
     subtitle?: string;
     maxItems?: number;
@@ -32,17 +35,19 @@ interface FeaturedNewsProps {
     readMoreText?: string;
     readMoreLink?: string;
   };
-  color?: "light" | "secondary";
-  hideHeading?: boolean;
-  hideBadge?: boolean;
 }
 
-const FeaturedNews = ({
-  section,
-  color = "light",
-  hideHeading = false,
-  hideBadge = false,
-}: FeaturedNewsProps) => {
+export function FeaturedNews({ section }: FeaturedNewsProps) {
+  const componentId = getComponentId(section, "featured-news");
+  
+  const {
+    title = "Latest News",
+    subtitle,
+    maxItems = 3,
+    showReadMore = true,
+    readMoreText = "View All News",
+    readMoreLink = "/news",
+  } = section;
   const [featuredArticles, setFeaturedArticles] = useState([]);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -94,8 +99,7 @@ const FeaturedNews = ({
     );
   }
 
-  const bgColor = color === "secondary" ? "bg-gray-50" : "bg-off-white";
-  const textColor = color === "light" ? "text-gray-800" : "text-gray-100";
+  // Use consistent styling for section-based component
 
   // Helper function to get image URL from a Sanity image object
   const getImageUrl = (article) => {
@@ -130,7 +134,8 @@ const FeaturedNews = ({
   };
 
   return (
-    <div className="container mx-auto px-2 sm:px-4 md:px-6">
+    <section id={componentId} className="w-full py-12 md:py-16 lg:py-20 bg-off-white rounded-xl mt-8 mb-6">
+      <div className="container mx-auto px-2 sm:px-4 md:px-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -138,17 +143,22 @@ const FeaturedNews = ({
         className="flex flex-col items-center justify-center space-y-2 sm:space-y-4 text-center mb-6 sm:mb-12"
       >
         <div className="space-y-1 sm:space-y-2">
-          {!hideBadge && (
-            <div className="inline-flex items-center rounded-full bg-primary/20 px-2 sm:px-4 py-0.5 sm:py-1.5 text-xs sm:text-sm font-medium text-primary">
-              Industry Recognition
-            </div>
-          )}
+          <div className="inline-flex items-center rounded-full bg-primary/20 px-2 sm:px-4 py-0.5 sm:py-1.5 text-xs sm:text-sm font-medium text-primary">
+            Industry Recognition
+          </div>
           <h2 className="text-lg sm:text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
-            Featured In
+            {title}
           </h2>
-          <p className="max-w-[95vw] sm:max-w-[800px] text-gray-600 text-sm sm:text-base md:text-lg mt-1 sm:mt-2">
+          {subtitle && (
+            <p className="max-w-[95vw] sm:max-w-[800px] text-gray-600 text-sm sm:text-base md:text-lg mt-1 sm:mt-2">
+              {subtitle}
+            </p>
+          )}
+          {!subtitle && (
+            <p className="max-w-[95vw] sm:max-w-[800px] text-gray-600 text-sm sm:text-base md:text-lg mt-1 sm:mt-2">
             GYBWP has been recognized by leading publications and media outlets.
-          </p>
+            </p>
+          )}
         </div>
 
         {/* Decorative separator */}
@@ -284,17 +294,18 @@ const FeaturedNews = ({
         </div>
       )}
 
-      <div className="flex justify-center mt-6 sm:mt-12">
-        <Link
-          href="/news"
-          className="group inline-flex items-center gap-1 sm:gap-2 text-xs sm:text-base text-primary hover:text-primary-light transition-colors duration-300"
-        >
-          View all news and articles
-          <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
-        </Link>
+      {showReadMore && (
+        <div className="flex justify-center mt-6 sm:mt-12">
+          <Link
+            href={readMoreLink}
+            className="group inline-flex items-center gap-1 sm:gap-2 text-xs sm:text-base text-primary hover:text-primary-light transition-colors duration-300"
+          >
+            {readMoreText}
+            <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+        </div>
+      )}
       </div>
-    </div>
+    </section>
   );
-};
-
-export default FeaturedNews;
+}
