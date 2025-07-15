@@ -9,8 +9,9 @@ import { LATEST_EPISODE, PODCAST_DETAILS_QUERY } from "@/src/lib/queries";
 import { formatDate } from "@/src/lib/utils";
 import { formatEpisodeTitle } from "@/src/lib/formatTitle";
 import { motion } from "framer-motion";
-import { Calendar, Clock, ArrowRight, Play } from "lucide-react";
+import { Calendar, Clock, ArrowRight, Play, Headphones } from "lucide-react";
 import { getComponentId } from "@/src/lib/sectionId";
+import { SmartButton } from "@/src/components/ui/SmartButton";
 
 // Define interface for the episode data
 interface Episode {
@@ -47,6 +48,14 @@ interface LatestEpisodeProps {
     description?: string;
     showAutomatic?: boolean;
     specificEpisode?: any;
+    primaryButton?: {
+      text?: string;
+      componentLink?: any;
+    };
+    secondaryButton?: {
+      text?: string;
+      componentLink?: any;
+    };
   };
 }
 
@@ -61,6 +70,8 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
     description,
     showAutomatic = true,
     specificEpisode,
+    primaryButton = { text: "Listen Now", componentLink: null },
+    secondaryButton = { text: "Show Notes", componentLink: null },
   } = section;
 
   useEffect(() => {
@@ -239,40 +250,54 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
   };
 
   return (
-    <section id={componentId} className="pt-14 pb-10 md:pt-20 md:pb-16 relative">
-      {/* Subtle divider at top */}
-      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+    <section id={componentId} className="relative w-full py-16 md:py-24 bg-gradient-to-br from-slate-50 via-white to-slate-50 overflow-hidden">
+      {/* Modern background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-accent/10 to-primary/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-secondary/5 to-accent/5 rounded-full blur-3xl" />
+      </div>
 
-      <section className="w-full py-8 md:py-16 bg-gradient-to-br from-gray-50/50 via-white to-gray-50/50 relative overflow-hidden">
-        {/* Subtle background decoration */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/3 rounded-full blur-3xl" />
-          <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-primary/3 rounded-full blur-3xl" />
-        </div>
+      {/* Grid pattern overlay */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9IiNhZGE0YWMiIGZpbGwtb3BhY2l0eT0iMC4xIi8+Cjwvc3ZnPg==')] opacity-30" />
 
-        <div className="container mx-auto px-3 sm:px-6 max-w-4xl relative">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col items-center text-center space-y-6 sm:space-y-8"
-          >
-            {/* Header Section */}
-            <div className="space-y-2 sm:space-y-3">
-              <motion.span
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="inline-block bg-primary text-white px-3 sm:px-4 py-1 rounded-full font-semibold text-xs sm:text-sm tracking-wide uppercase"
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center"
+        >
+          {/* Left Column - Content */}
+          <div className="order-2 lg:order-1 space-y-8">
+            {/* Header */}
+            <div className="space-y-4">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="flex items-center gap-3"
               >
-                {title}
-              </motion.span>
+                <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-light rounded-xl flex items-center justify-center shadow-lg">
+                  <Play className="w-6 h-6 text-white" fill="currentColor" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-primary font-semibold text-sm tracking-wider uppercase">
+                    {title}
+                  </span>
+                  {getEpisodeNumber(latestEpisode) && (
+                    <span className="text-gray-500 text-xs font-medium">
+                      Episode {getEpisodeNumber(latestEpisode)}
+                    </span>
+                  )}
+                </div>
+              </motion.div>
 
               <motion.h1
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight max-w-xs sm:max-w-3xl mx-auto break-words"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight"
               >
                 {formatEpisodeTitle(
                   latestEpisode.title ||
@@ -283,164 +308,192 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
 
               {getGuestNames(latestEpisode) && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3 }}
-                  className="text-primary font-medium text-base sm:text-lg"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="flex items-center gap-2 text-lg text-primary font-medium"
                 >
+                  <div className="w-2 h-2 bg-primary rounded-full" />
                   Featuring {getGuestNames(latestEpisode)}
                 </motion.div>
               )}
             </div>
 
-            {/* Large Thumbnail Section */}
+            {/* Episode Metadata */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="relative group"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="flex flex-wrap gap-4"
             >
-              {/* Main thumbnail container - large and centered */}
-              <div className="relative w-[85vw] max-w-xs sm:w-80 sm:h-80 lg:w-[420px] lg:h-[420px] aspect-square rounded-2xl overflow-hidden shadow-xl shadow-black/5 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-black/10">
-                <Image
-                  src={getThumbnail(latestEpisode)}
-                  alt={latestEpisode.title || "Latest episode thumbnail"}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  priority
-                />
-
-                {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                {/* Play button overlay */}
-                <Link
-                  href={getEpisodeLink(latestEpisode)}
-                  aria-label="Listen to latest episode"
-                  className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                >
-                  <div className="w-14 h-14 sm:w-20 sm:h-20 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/20 transition-all duration-300 hover:scale-110">
-                    <Play
-                      className="h-7 w-7 sm:h-9 sm:w-9 text-primary ml-0.5"
-                      fill="currentColor"
-                    />
-                  </div>
-                </Link>
+              <div className="flex items-center gap-2 bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full border border-gray-200 shadow-sm">
+                <Calendar className="w-4 h-4 text-gray-600" />
+                <span className="text-sm font-medium text-gray-700">
+                  {formatEpisodeDate(latestEpisode.publishedAt)}
+                </span>
               </div>
-
-              {/* Episode number badge */}
-              {getEpisodeNumber(latestEpisode) && (
-                <div className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 bg-primary text-white text-xs sm:text-sm font-bold px-2 sm:px-3 py-1 rounded-full shadow-lg border-2 border-white">
-                  Ep. {getEpisodeNumber(latestEpisode)}
+              {getDuration(latestEpisode) && (
+                <div className="flex items-center gap-2 bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full border border-gray-200 shadow-sm">
+                  <Clock className="w-4 h-4 text-gray-600" />
+                  <span className="text-sm font-medium text-gray-700">
+                    {getDuration(latestEpisode)}
+                  </span>
                 </div>
               )}
-
-              {/* Subtle glow effect */}
-              <div className="absolute -z-10 -inset-3 sm:-inset-6 bg-gradient-to-br from-primary/5 to-transparent rounded-2xl blur-xl opacity-60" />
             </motion.div>
 
-            {/* Content Section */}
-            <div className="space-y-4 sm:space-y-6 max-w-xs sm:max-w-2xl mx-auto">
-              {/* Episode metadata */}
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="text-gray-600 text-lg leading-relaxed"
+            >
+              {latestEpisode.blurb ||
+                latestEpisode.youtube?.blurb ||
+                description ||
+                "Tune in to our latest episode where we discuss important topics and insights with industry experts."}
+            </motion.p>
+
+            {/* Tags */}
+            {getTags(latestEpisode).length > 0 && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-gray-600"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.7 }}
+                className="flex flex-wrap gap-2"
               >
-                <span className="flex items-center gap-1.5 bg-gray-100 px-2.5 py-1 rounded-full text-xs sm:text-sm">
-                  <Calendar className="h-4 w-4" />
-                  <span className="font-medium">
-                    {formatEpisodeDate(latestEpisode.publishedAt)}
-                  </span>
-                </span>
-                {getDuration(latestEpisode) && (
-                  <span className="flex items-center gap-1.5 bg-gray-100 px-2.5 py-1 rounded-full text-xs sm:text-sm">
-                    <Clock className="h-4 w-4" />
-                    <span className="font-medium">
-                      {getDuration(latestEpisode)}
+                {getTags(latestEpisode)
+                  .slice(0, 4)
+                  .map((tag: any, i: number) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full border border-primary/20 hover:bg-primary/20 transition-colors"
+                    >
+                      {tag}
                     </span>
-                  </span>
-                )}
+                  ))}
               </motion.div>
+            )}
 
-              {/* Description */}
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                className="text-gray-700 text-sm sm:text-base leading-relaxed"
+            {/* Action Buttons */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="flex flex-col sm:flex-row gap-3 pt-4"
+            >
+              <SmartButton
+                data={{
+                  ...primaryButton,
+                  link: primaryButton.componentLink ? undefined : getEpisodeLink(latestEpisode),
+                  componentLink: primaryButton.componentLink,
+                }}
+                className="group relative h-14 px-8 text-base font-semibold text-white overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-primary-light shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center gap-3 justify-center"
               >
-                {latestEpisode.blurb ||
-                  latestEpisode.youtube?.blurb ||
-                  description ||
-                  "Tune in to our latest episode where we discuss important topics and insights with industry experts."}
-              </motion.p>
+                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out"></span>
+                <Play className="w-5 h-5 relative z-10" fill="currentColor" />
+                <span className="relative z-10">{primaryButton.text}</span>
+                <ArrowRight className="w-4 h-4 relative z-10 transform transition-transform duration-300 group-hover:translate-x-1" />
+              </SmartButton>
 
-              {/* Tags */}
-              {getTags(latestEpisode).length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.7 }}
-                  className="flex flex-wrap justify-center gap-1 sm:gap-2"
+              {secondaryButton && (
+                <SmartButton
+                  data={{
+                    ...secondaryButton,
+                    link: secondaryButton.componentLink ? undefined : getEpisodeLink(latestEpisode),
+                    componentLink: secondaryButton.componentLink,
+                  }}
+                  className="group h-14 px-8 text-base font-medium text-gray-700 bg-white/80 backdrop-blur-sm hover:bg-white border-2 border-gray-200 hover:border-gray-300 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 flex items-center gap-3 justify-center"
                 >
-                  {getTags(latestEpisode)
-                    .slice(0, 4)
-                    .map((tag: any, i: number) => (
-                      <span
-                        key={i}
-                        className="bg-primary/10 text-primary text-xs px-2.5 py-1 rounded-full font-medium border border-primary/20"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                </motion.div>
+                  <Headphones className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  <span>{secondaryButton.text}</span>
+                </SmartButton>
               )}
+            </motion.div>
 
-              {/* Action buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.8 }}
-                className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center pt-2 w-full"
+            {/* Browse Episodes Link */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.9 }}
+              className="pt-4"
+            >
+              <ScrollToSection
+                targetId="episodes"
+                className="inline-flex items-center text-primary hover:text-primary-light transition-colors gap-2 font-medium group"
               >
-                <Link
-                  href={getEpisodeLink(latestEpisode)}
-                  className="group inline-flex items-center justify-center rounded-xl bg-primary hover:bg-primary-light text-white w-full sm:w-auto px-4 sm:px-6 py-3 text-base font-semibold shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary/50"
-                >
-                  <Play className="h-4 w-4 mr-2" fill="currentColor" />
-                  Listen Now
-                  <ArrowRight className="ml-2 h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
-                <Link
-                  href={getEpisodeLink(latestEpisode)}
-                  className="group inline-flex items-center justify-center rounded-xl bg-white hover:bg-gray-50 text-gray-900 w-full sm:w-auto px-4 sm:px-6 py-3 text-base font-medium border border-gray-200 hover:border-gray-300 shadow-md transition-all duration-300 hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-gray-300"
-                >
-                  Show Notes
-                  <ArrowRight className="ml-2 h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
-              </motion.div>
+                Browse all episodes
+                <ArrowRight className="w-4 h-4 transform transition-transform duration-300 group-hover:translate-x-1" />
+              </ScrollToSection>
+            </motion.div>
+          </div>
 
-              {/* Browse all episodes link */}
+          {/* Right Column - Episode Artwork */}
+          <div className="order-1 lg:order-2">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative group"
+            >
+              {/* Main image container */}
+              <div className="relative aspect-square max-w-lg mx-auto">
+                {/* Decorative elements */}
+                <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-2xl opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+                <div className="absolute -inset-2 bg-gradient-to-br from-white/40 to-white/20 rounded-2xl backdrop-blur-sm" />
+                
+                {/* Episode image */}
+                <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl group-hover:shadow-3xl transition-all duration-500">
+                  <Image
+                    src={getThumbnail(latestEpisode)}
+                    alt={latestEpisode.title || "Latest episode thumbnail"}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    priority
+                  />
+                  
+                  {/* Overlay gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
+                  {/* Play button overlay */}
+                  <Link
+                    href={getEpisodeLink(latestEpisode)}
+                    aria-label="Listen to latest episode"
+                    className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
+                  >
+                    <div className="w-20 h-20 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-2xl border-4 border-white/20 transition-all duration-300 hover:scale-110 hover:bg-white">
+                      <Play
+                        className="w-8 h-8 text-primary ml-1"
+                        fill="currentColor"
+                      />
+                    </div>
+                  </Link>
+                </div>
+
+                {/* Episode number badge */}
+                {getEpisodeNumber(latestEpisode) && (
+                  <div className="absolute -top-3 -right-3 bg-gradient-to-r from-primary to-primary-light text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg border-2 border-white">
+                    Episode {getEpisodeNumber(latestEpisode)}
+                  </div>
+                )}
+              </div>
+
+              {/* Floating elements */}
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.9 }}
-                className="pt-2 sm:pt-4"
-              >
-                <ScrollToSection
-                  targetId="episodes"
-                  className="inline-flex items-center text-primary hover:text-primary-light transition-colors gap-2 font-medium group text-xs sm:text-sm"
-                >
-                  Browse all episodes
-                  <ArrowRight className="h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
-                </ScrollToSection>
-              </motion.div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+                animate={{ y: [0, -10, 0] }}
+                transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+                className="absolute -top-8 -left-8 w-16 h-16 bg-gradient-to-br from-accent/20 to-secondary/20 rounded-2xl backdrop-blur-sm hidden lg:block"
+              />
+              <motion.div
+                animate={{ y: [0, 10, 0] }}
+                transition={{ repeat: Infinity, duration: 8, ease: "easeInOut", delay: 2 }}
+                className="absolute -bottom-6 -right-6 w-12 h-12 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl backdrop-blur-sm hidden lg:block"
+              />
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
     </section>
   );
 }
