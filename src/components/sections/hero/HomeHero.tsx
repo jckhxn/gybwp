@@ -65,10 +65,10 @@ export function HomeHero({ section }: HomeHeroProps) {
   return (
     <section
       id={componentId}
-      className="w-full pt-16 md:pt-24 lg:pt-28 pb-4 md:pb-6 lg:pb-8 bg-gradient-to-br from-main-dark via-main to-main-light relative overflow-hidden"
+      className="w-full pt-8 md:pt-24 lg:pt-28 pb-4 md:pb-6 lg:pb-8 bg-gradient-to-br from-main-dark via-main to-main-light relative overflow-hidden"
     >
       {/* Pattern overlay for texture */}
-      <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGRkZGRkYiIGZpbGwtb3BhY2l0eT0iMSI+PHBhdGggZD0iTTM2IDM0aDR2MWgtNHpNNDAgMzJoNHYxaC00ek0zMiAzN2g0djFoLTR6TTM2IDM5aDR2MWgtNHpNNDAgNDFoNHYxaC00ek0zMiA0NGg0djFoLTR6TTM2IDQ2aDR2MWgtNHoiLz48L2c+PC9nPjwvc3ZnPg==')] mix-blend-overlay"></div>
+      <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGRkZGRkYiIGZpbGwtb3BhY2l0eT0iMSI+PHBhdGggZD0iTTM2IDM0aDR2MWgtNHpNNDAgMzJoNHYxaC00ek0zMiAzN2g0djFoLTR6TTM2IDM5aDR2MWgtNHpNNDAgNDFoNHYxaC00ek0zMiA0NGg0djFoLTR6TTM2IDQ2aDR2MWgtNHoiLz48L2c+PC9nPjwvc3ZnPg==')] mix-blend-overlay pointer-events-none sm:block hidden"></div>
 
       {/* Enhanced animated floating shapes */}
       <motion.div
@@ -116,7 +116,7 @@ export function HomeHero({ section }: HomeHeroProps) {
                   {badgeText}
                 </span>
               </div>
-              <h1 className="text-white text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight font-sans bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              <h1 className="text-white text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight font-sans bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent break-words">
                 {title}
               </h1>
             </motion.div>
@@ -125,7 +125,7 @@ export function HomeHero({ section }: HomeHeroProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-gray-200 text-xl md:text-2xl max-w-[600px] leading-relaxed"
+              className="text-gray-200 text-base sm:text-xl md:text-2xl max-w-[95vw] sm:max-w-[600px] leading-relaxed"
             >
               {description}
             </motion.p>
@@ -134,11 +134,11 @@ export function HomeHero({ section }: HomeHeroProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4 mt-6"
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 w-full items-center justify-center"
             >
               <SmartButton
                 data={primaryButton}
-                className="group relative h-14 px-8 text-base font-medium text-white overflow-hidden rounded-lg bg-gradient-to-r from-primary to-primary-light shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center gap-2"
+                className="group relative h-12 sm:h-14 w-auto max-w-xs px-6 sm:px-8 text-base font-medium text-white overflow-hidden rounded-lg bg-gradient-to-r from-primary to-primary-light shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center gap-2 justify-center text-center"
               >
                 {/* Shimmer effect on hover */}
                 <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out"></span>
@@ -149,7 +149,7 @@ export function HomeHero({ section }: HomeHeroProps) {
               {secondaryButton && (
                 <SmartButton
                   data={secondaryButton}
-                  className="group h-14 px-8 text-base font-medium text-white bg-transparent border-2 border-white/30 rounded-lg transition-all duration-300 hover:bg-white/10 hover:border-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-1 flex items-center gap-2"
+                  className="group h-12 sm:h-14 w-auto max-w-xs px-6 sm:px-8 text-base font-medium text-white bg-transparent border-2 border-white/30 rounded-lg transition-all duration-300 hover:bg-white/10 hover:border-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-1 flex items-center gap-2 justify-center text-center"
                 >
                   <Headphones className="inline-block w-5 h-5 group-hover:scale-110 transition-transform" />
                   {secondaryButton.text}
@@ -201,16 +201,16 @@ export function HomeHero({ section }: HomeHeroProps) {
               </motion.div>
             )}
           </div>
-          <div className="lg:w-1/2 flex justify-center lg:justify-end relative">
+          <div className="lg:w-1/2 flex justify-center lg:justify-end relative mt-8 sm:mt-0">
             {/* Enhanced Host Badge */}
-            <div className="absolute bottom-6 right-6 z-20 bg-black/70 backdrop-blur-xl px-6 py-4 rounded-xl shadow-xl border border-primary/20 ring-1 ring-white/10">
-              <div className="flex items-center gap-4">
-                <div className="w-[3px] h-14 bg-gradient-to-b from-primary to-primary-light rounded-full"></div>
+            <div className="absolute bottom-2 right-2 sm:bottom-6 sm:right-6 z-20 bg-black/70 backdrop-blur-xl px-3 py-2 sm:px-6 sm:py-4 rounded-xl shadow-xl border border-primary/20 ring-1 ring-white/10 max-w-[90vw]">
+              <div className="flex items-center gap-2 sm:gap-4">
+                <div className="w-[2px] sm:w-[3px] h-10 sm:h-14 bg-gradient-to-b from-primary to-primary-light rounded-full"></div>
                 <div>
                   <p className="text-gray-300 text-xs uppercase tracking-wider font-medium">
                     {safeHostBadge.label}
                   </p>
-                  <p className="text-white font-bold text-xl">
+                  <p className="text-white font-bold text-base sm:text-xl">
                     {safeHostBadge.name}
                   </p>
                   <p className="text-gray-400 text-xs mt-1">
@@ -226,8 +226,8 @@ export function HomeHero({ section }: HomeHeroProps) {
               className="relative"
             >
               {/* Decorative elements */}
-              <div className="absolute -top-6 -left-6 w-40 h-40 rounded-full bg-primary/20 blur-3xl"></div>
-              <div className="absolute -bottom-8 -right-8 w-48 h-48 rounded-full bg-accent/20 blur-3xl"></div>
+              <div className="absolute -top-4 -left-4 w-24 h-24 sm:w-40 sm:h-40 rounded-full bg-primary/20 blur-3xl"></div>
+              <div className="absolute -bottom-4 -right-4 w-28 h-28 sm:w-48 sm:h-48 rounded-full bg-accent/20 blur-3xl"></div>
               <motion.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{
@@ -240,15 +240,15 @@ export function HomeHero({ section }: HomeHeroProps) {
                 <div className="absolute -inset-1 bg-gradient-to-r from-primary/50 to-secondary/50 rounded-2xl blur-xl opacity-30"></div>
                 <Image
                   alt="Growing Your Business With People Podcast"
-                  className="relative z-10 rounded-2xl shadow-2xl object-cover border border-white/10"
-                  height={750}
+                  className="relative z-10 rounded-2xl shadow-2xl object-cover border border-white/10 max-w-full h-auto"
+                  height={400}
+                  width={600}
                   src={
                     backgroundImage
                       ? getHeroImageUrl(backgroundImage, 1600)
                       : heroImage
                   }
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
-                  width={600}
+                  sizes="(max-width: 768px) 90vw, (max-width: 1200px) 50vw, 600px"
                   priority={true}
                   quality={100}
                   style={{ objectFit: "cover" }}

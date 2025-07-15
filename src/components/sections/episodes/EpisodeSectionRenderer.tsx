@@ -16,42 +16,46 @@ interface EpisodeSectionRendererProps {
   index?: number;
 }
 
+const sectionComponents: Record<string, any> = {
+  episodeHero: (props: any) => <EpisodeHero {...props} />, // pass section, episode
+  episodePlayer: (props: any) => <EpisodePlayer {...props} />, // pass section, episode
+  episodeOverview: (props: any) => (
+    <EpisodeOverview data={props.section} episode={props.episode} />
+  ), // pass section, episode
+  episodeTranscript: (props: any) => (
+    <EpisodeTranscript data={props.section} episode={props.episode} />
+  ), // pass section, episode
+  episodeGuests: (props: any) => (
+    <EpisodeGuests data={props.section} episode={props.episode} />
+  ), // pass section, episode
+  episodeSponsors: (props: any) => (
+    <EpisodeSponsors data={props.section} episode={props.episode} />
+  ), // pass section, episode
+  relatedEpisodes: (props: any) => (
+    <RelatedEpisodes data={props.section} episode={props.episode} />
+  ), // pass section, episode
+  subscribeSection: (props: any) => <SubscribeSection data={props.section} />, // pass section
+  newsletter: (props: any) => <NewsletterSection section={props.section} />, // pass section
+  consultingCTA: (props: any) => <ConsultingCTA section={props.section} />, // pass section
+};
+
 export function EpisodeSectionRenderer({
   section,
   episode,
   index,
 }: EpisodeSectionRendererProps) {
-  switch (section._type) {
-    case "episodeHero":
-      return <EpisodeHero section={section} episode={episode} />;
-    case "episodePlayer":
-      return <EpisodePlayer section={section} episode={episode} />;
-    case "episodeOverview":
-      return <EpisodeOverview data={section} episode={episode} />;
-    case "episodeTranscript":
-      return <EpisodeTranscript data={section} episode={episode} />;
-    case "episodeGuests":
-      return <EpisodeGuests data={section} episode={episode} />;
-    case "episodeSponsors":
-      return <EpisodeSponsors data={section} episode={episode} />;
-    case "relatedEpisodes":
-      return <RelatedEpisodes data={section} episode={episode} />;
-    case "subscribeSection":
-      return <SubscribeSection data={section} />;
-    case "newsletter":
-      return <NewsletterSection section={section} />;
-    case "consultingCTA":
-      return <ConsultingCTA section={section} />;
-    default:
-      console.warn(
-        `Episode section type "${section._type}" not found in registry`
-      );
-      return (
-        <div className="p-8 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-red-600">
-            Unknown episode section type: <code>{section._type}</code>
-          </p>
-        </div>
-      );
+  const SectionComponent = sectionComponents[section._type];
+  if (!SectionComponent) {
+    console.warn(
+      `Episode section type "${section._type}" not found in registry`
+    );
+    return (
+      <div className="p-8 bg-red-50 border border-red-200 rounded-lg">
+        <p className="text-red-600">
+          Unknown episode section type: <code>{section._type}</code>
+        </p>
+      </div>
+    );
   }
+  return <SectionComponent section={section} episode={episode} index={index} />;
 }

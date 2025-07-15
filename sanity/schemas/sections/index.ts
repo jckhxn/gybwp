@@ -15,6 +15,11 @@ import episodeGuests from "./episodeGuests";
 import episodeSponsors from "./episodeSponsors";
 import relatedEpisodes from "./relatedEpisodes";
 import subscribeSection from "./subscribeSection";
+import aboutHero from "./aboutHero";
+import aboutMission from "./aboutMission";
+import aboutHost from "./aboutHost";
+import aboutTestimonials from "./aboutTestimonials";
+import aboutListenConnect from "./aboutListenConnect";
 
 export const sections = [
   homeHero,
@@ -34,4 +39,9 @@ export const sections = [
   episodeSponsors,
   relatedEpisodes,
   subscribeSection,
+  aboutHero,
+  aboutMission,
+  aboutHost,
+  aboutTestimonials,
+  aboutListenConnect,
 ];

@@ -14,7 +14,10 @@ export default async function DynamicPage({
     const page = await loadPage(pathname);
 
     if (!page) {
-      return notFound();
+      // Sanity not found route, otherwise nextjs route.
+
+      const notFound = await loadPage("not-found");
+      if (!notFound) return notFound();
     }
 
     return <Page data={page} />;

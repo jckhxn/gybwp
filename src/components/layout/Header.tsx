@@ -57,7 +57,7 @@ const Navigation = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className="md:hidden bg-gray-900 rounded-full shadow border border-gray-800"
             onClick={handleMobileHamburgerClick}
           >
             <svg
@@ -66,7 +66,7 @@ const Navigation = () => {
               height="24"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="white"
+              stroke="#fff"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -93,7 +93,7 @@ const Navigation = () => {
       {mobileNavOpen && (
         <div className="fixed inset-0 top-16 z-40 md:hidden">
           <div
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm"
+            className="fixed inset-0 bg-white/20 backdrop-blur-sm"
             onClick={handleMobileHamburgerClick}
           />
           <div className="relative bg-white border-b border-gray-200 shadow-lg">

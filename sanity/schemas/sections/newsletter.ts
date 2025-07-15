@@ -9,7 +9,8 @@ export default defineType({
       name: "sectionId",
       title: "Section ID",
       type: "string",
-      description: "Optional custom ID for this section. Will auto-generate from schema name if not provided.",
+      description:
+        "Optional custom ID for this section. Will auto-generate from schema name if not provided.",
     }),
     defineField({
       name: "title",
@@ -55,6 +56,56 @@ export default defineType({
         ],
       },
       initialValue: "gray",
+    }),
+    defineField({
+      name: "pillLabel",
+      title: "Pill Label",
+      type: "string",
+      initialValue: "Never Miss an Episode",
+    }),
+    defineField({
+      name: "supportingText",
+      title: "Supporting Text",
+      type: "string",
+      initialValue:
+        "Connect with like-minded business leaders and get weekly insights delivered straight to your inbox.",
+    }),
+    defineField({
+      name: "joinedByText",
+      title: "Joined By Text",
+      type: "string",
+      initialValue: "Joined by business leaders from:",
+    }),
+    defineField({
+      name: "joinedByBrands",
+      title: "Joined By Brands",
+      type: "array",
+      of: [{ type: "string" }],
+      initialValue: [
+        "LinkedIn",
+        "Wall Street Journal",
+        "CEO Weekly",
+        "+ 100s more",
+      ],
+    }),
+    defineField({
+      name: "linkedInUrl",
+      title: "LinkedIn Subscribe URL",
+      type: "string",
+      initialValue:
+        "https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7049506606413213696",
+    }),
+    defineField({
+      name: "linkedInCta",
+      title: "LinkedIn CTA Text",
+      type: "string",
+      initialValue: "Subscribe on LinkedIn",
+    }),
+    defineField({
+      name: "privacyNotice",
+      title: "Privacy Notice",
+      type: "string",
+      initialValue: "Your data is secure. We never share your information.",
     }),
   ],
   preview: {

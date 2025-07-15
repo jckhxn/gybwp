@@ -35,10 +35,23 @@ interface Episode {
   };
 }
 
+interface BrowseEpisodesProps {
+  section?: {
+    title?: string;
+    subtitle?: string;
+    showFeatured?: boolean;
+    episodesPerPage?: number;
+    showFilters?: boolean;
+  };
+  hideHeading?: boolean;
+  hideBackground?: boolean;
+}
+
 export const BrowseEpisodes = ({
+  section,
   hideHeading = false,
   hideBackground = false,
-} = {}) => {
+}: BrowseEpisodesProps = {}) => {
   const [activeSeason, setActiveSeason] = useState<string | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [seasons, setSeasons] = useState<any[]>([]);
@@ -208,10 +221,10 @@ export const BrowseEpisodes = ({
       }
     >
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
-        <div className="flex flex-col items-center gap-6 md:gap-8 text-center">
+        <div className="flex flex-col items-center gap-4 md:gap-8 text-center">
           {!hideHeading && (
-            <div className="space-y-4 max-w-3xl">
-              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 px-4 py-2 text-sm font-medium text-primary border border-primary/30">
+            <div className="space-y-3 max-w-3xl">
+              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 px-3 py-1 text-xs font-medium text-primary border border-primary/30">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -222,24 +235,21 @@ export const BrowseEpisodes = ({
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
+                  className="w-4 h-4"
                 >
-                  <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-                  <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                  <line x1="12" x2="12" y1="19" y2="22" />
-                  <line x1="8" x2="16" y1="22" y2="22" />
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M8 12h8" />
                 </svg>
-                All Episodes
+                Browse Episodes
               </div>
-              <div className="space-y-3">
-                <h2 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                  Browse Our Episodes
-                </h2>
-                <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
-                  Discover our curated library of conversations with industry
-                  leaders, innovators, and experts who are shaping the future of
-                  business.
-                </p>
-              </div>
+              <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight">
+                Browse Our Episodes
+              </h2>
+              <p className="text-base sm:text-lg text-muted-foreground">
+                Discover our curated library of conversations with industry
+                leaders, innovators, and experts who are shaping the future of
+                business.
+              </p>
             </div>
           )}
 
@@ -330,7 +340,7 @@ export const BrowseEpisodes = ({
               {/* Episodes container */}
               <div
                 ref={scrollContainerRef}
-                className="flex overflow-x-auto pb-8 gap-6 snap-x-enhanced scrollbar-hide px-4 md:px-16"
+                className="flex overflow-x-auto pb-6 gap-4 snap-x-enhanced scrollbar-hide px-2 sm:px-4 md:px-16"
                 onScroll={handleScroll}
                 style={{
                   scrollSnapType: "x mandatory",
@@ -342,7 +352,7 @@ export const BrowseEpisodes = ({
                   <Link
                     key={`episode-${idx}`}
                     href={getEpisodeUrl(episode)}
-                    className="group flex-shrink-0 w-[85vw] sm:w-[360px] md:w-[320px] snap-start-enhanced block cursor-pointer"
+                    className="group flex-shrink-0 w-[90vw] max-w-xs sm:w-[360px] md:w-[320px] snap-start-enhanced block cursor-pointer"
                     style={{
                       scrollSnapAlign: "start",
                       scrollSnapStop: "always",
@@ -463,17 +473,18 @@ export const BrowseEpisodes = ({
               )}
 
               {/* Mobile scroll indicator dots */}
-              <div className="flex justify-center gap-2 mt-6 md:hidden">
+              <div className="flex justify-center gap-2 mt-4 md:hidden">
                 {episodes.map((_, idx) => (
                   <button
                     key={`dot-${idx}`}
                     onClick={() => scrollToEpisode(idx)}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
                       idx === activeEpisodeIndex
-                        ? "bg-primary w-6"
+                        ? "bg-primary w-7"
                         : "bg-gray-300 hover:bg-gray-400"
                     }`}
                     aria-label={`Go to episode ${idx + 1}`}
+                    style={{ minWidth: 12, minHeight: 12 }}
                   />
                 ))}
               </div>
