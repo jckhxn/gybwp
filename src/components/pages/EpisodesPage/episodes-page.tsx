@@ -198,7 +198,15 @@ export function EpisodesPage() {
     params.delete("page");
     router.replace(`?${params.toString()}`);
     // Only depend on things that should trigger a reset
-  }, [searchTerm, sortBy, activeSeason, viewMode]);
+  }, [
+    searchTerm,
+    sortBy,
+    activeSeason,
+    viewMode,
+    pagination,
+    router,
+    searchParams,
+  ]);
 
   const totalEpisodes = allEpisodes.length;
   const currentSeasonEpisodes = data.length;
@@ -269,8 +277,8 @@ export function EpisodesPage() {
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             {/* Left side - Season and Search */}
             <div className="flex flex-col sm:flex-row gap-4 items-center flex-1">
-              <SeasonDropdown 
-                setActiveSeason={setActiveSeason} 
+              <SeasonDropdown
+                setActiveSeason={setActiveSeason}
                 activeSeason={activeSeason}
                 seasons={allSeasons}
               />

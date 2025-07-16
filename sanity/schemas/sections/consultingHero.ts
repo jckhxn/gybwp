@@ -30,26 +30,6 @@ export default defineType({
       initialValue: "Transform your organization through strategic talent solutions. With 28+ years of experience and over 1 million successful hires, we help businesses grow through their most important investment: people.",
     }),
     defineField({
-      name: "stats",
-      type: "array",
-      title: "Statistics",
-      of: [
-        {
-          type: "object",
-          fields: [
-            defineField({ name: "number", type: "string", title: "Number" }),
-            defineField({ name: "label", type: "string", title: "Label" }),
-          ],
-        },
-      ],
-      initialValue: [
-        { number: "28+", label: "Years of Experience" },
-        { number: "1M+", label: "Professionals Hired" },
-        { number: "70+", label: "Countries Served" },
-        { number: "200k+", label: "Annual Hires Supported" },
-      ],
-    }),
-    defineField({
       name: "showCalendarCTA",
       title: "Show Calendar CTA",
       type: "boolean",
@@ -67,18 +47,6 @@ export default defineType({
       title: "Calendar Button Text",
       type: "string",
       initialValue: "Schedule Your 30-Minute Strategy Call",
-      hidden: ({ parent }) => !parent?.showCalendarCTA,
-    }),
-    defineField({
-      name: "calendarFeatures",
-      title: "Calendar Features",
-      type: "array",
-      of: [{ type: "string" }],
-      initialValue: [
-        "Free consultation",
-        "Instant booking",
-        "No commitment required",
-      ],
       hidden: ({ parent }) => !parent?.showCalendarCTA,
     }),
     {
@@ -140,14 +108,6 @@ export default defineType({
       options: {
         hotspot: true,
       },
-      fields: [
-        defineField({
-          name: "alt",
-          type: "string",
-          title: "Alt Text",
-          initialValue: "Consulting Services",
-        }),
-      ],
     }),
   ],
   preview: {
