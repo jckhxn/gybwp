@@ -38,90 +38,12 @@ export default defineType({
       description: "Optional additional paragraph content",
     }),
     defineField({
-      name: "keyBenefits",
-      title: "Key Benefits",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            defineField({
-              name: "title",
-              title: "Benefit Title",
-              type: "string",
-              validation: (Rule: any) => Rule.required(),
-            }),
-            defineField({
-              name: "description",
-              title: "Description",
-              type: "text",
-              validation: (Rule: any) => Rule.required(),
-            }),
-            defineField({
-              name: "icon",
-              title: "Icon",
-              type: "string",
-              description: "Icon identifier (target, award, lightbulb)",
-              options: {
-                list: [
-                  { title: "Target", value: "target" },
-                  { title: "Award", value: "award" },
-                  { title: "Lightbulb", value: "lightbulb" },
-                ],
-              },
-              initialValue: "target",
-            }),
-          ],
-          preview: {
-            select: {
-              title: "title",
-              description: "description",
-              icon: "icon",
-            },
-            // INSERT_YOUR_REWRITE_HERE
-            prepare({ title, description, icon }) {
-              return {
-                title: title || "Benefit",
-                subtitle: description || "Benefit description",
-                media: icon ? ` ${icon}` : "",
-              };
-            },
-          },
-        },
-      ],
-      initialValue: [
-        {
-          icon: "target",
-          title: "Maximizing Organizational Performance",
-          description: "Strategic talent alignment with business objectives",
-        },
-        {
-          icon: "award",
-          title: "Leadership and Talent Development",
-          description: "Building capability and succession planning",
-        },
-        {
-          icon: "lightbulb",
-          title: "Creating High-Performance Cultures",
-          description: "Fostering innovation and sustainable growth",
-        },
-      ],
-    }),
-    defineField({
       name: "philosophyImage",
       title: "Philosophy Image",
       type: "image",
       options: {
         hotspot: true,
       },
-      fields: [
-        defineField({
-          name: "alt",
-          type: "string",
-          title: "Alt Text",
-          initialValue: "Business transformation through people",
-        }),
-      ],
     }),
   ],
   preview: {

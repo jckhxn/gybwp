@@ -10,7 +10,6 @@ export { SectionRenderer } from "./sections";
 
 // Pages
 export { default as AboutPage } from "./pages/AboutPage";
-export { default as ConsultingPage } from "./pages/ConsultingPage";
 
 // Features
 export { default as EpisodeDetails } from "./features/EpisodeDetails";
