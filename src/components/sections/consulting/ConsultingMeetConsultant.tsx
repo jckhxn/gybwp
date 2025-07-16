@@ -40,7 +40,9 @@ const FALLBACK_STATS = [
   { number: "28+", label: "Years Experience" },
 ];
 
-export function ConsultingMeetConsultant({ section }: ConsultingMeetConsultantProps) {
+export function ConsultingMeetConsultant({
+  section,
+}: ConsultingMeetConsultantProps) {
   const componentId = getComponentId(section, "meet-consultant");
   const stats = section.stats || FALLBACK_STATS;
 
@@ -62,7 +64,10 @@ export function ConsultingMeetConsultant({ section }: ConsultingMeetConsultantPr
             <div className="relative rounded-2xl overflow-hidden">
               {section.profileImage?.asset ? (
                 <Image
-                  src={urlFor(section.profileImage).width(600).height(600).url()}
+                  src={urlFor(section.profileImage)
+                    .width(600)
+                    .height(600)
+                    .url()}
                   alt={section.profileImage.alt || "Jeffrey Lackey, Sr."}
                   width={600}
                   height={600}
@@ -77,16 +82,19 @@ export function ConsultingMeetConsultant({ section }: ConsultingMeetConsultantPr
                 </div>
               )}
             </div>
-            
+
             {testimonial && (
               <div className="absolute -bottom-6 -right-6 bg-white rounded-xl p-6 shadow-xl max-w-sm">
                 <div className="flex items-center gap-1 mb-3">
                   {[...Array(testimonial.rating || 5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    <Star
+                      key={i}
+                      className="w-4 h-4 fill-yellow-400 text-yellow-400"
+                    />
                   ))}
                 </div>
                 <p className="text-gray-700 text-sm mb-3 line-clamp-3">
-                  "{testimonial.text}"
+                  &ldquo;{testimonial.text}&rdquo;
                 </p>
                 <div className="text-xs text-gray-500">
                   <span className="font-medium">{testimonial.author}</span>
@@ -103,7 +111,10 @@ export function ConsultingMeetConsultant({ section }: ConsultingMeetConsultantPr
 
           <div className="space-y-8">
             <div className="space-y-4">
-              <Badge variant="secondary" className="bg-blue-100 text-blue-800 px-4 py-2">
+              <Badge
+                variant="secondary"
+                className="bg-blue-100 text-blue-800 px-4 py-2"
+              >
                 {section.badgeText || "Meet Your Consultant"}
               </Badge>
               <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
@@ -116,21 +127,22 @@ export function ConsultingMeetConsultant({ section }: ConsultingMeetConsultantPr
 
             <div className="space-y-6">
               <p className="text-gray-300 text-lg leading-relaxed">
-                {section.bio || 
-                  "With over 28 years of experience in strategic talent acquisition, Jeffrey stays ahead of technology and innovation trends to provide cutting-edge solutions for businesses worldwide. His thought leadership and deep industry expertise have helped organizations across 70+ countries build world-class teams."
-                }
+                {section.bio ||
+                  "With over 28 years of experience in strategic talent acquisition, Jeffrey stays ahead of technology and innovation trends to provide cutting-edge solutions for businesses worldwide. His thought leadership and deep industry expertise have helped organizations across 70+ countries build world-class teams."}
               </p>
-              
+
               <p className="text-gray-300 text-lg leading-relaxed">
-                {section.companyDescription || 
-                  "JKL Advisors specializes in connecting exceptional talent with forward-thinking companies, leveraging innovative recruitment strategies and a deep understanding of global markets to drive sustainable growth through people."
-                }
+                {section.companyDescription ||
+                  "JKL Advisors specializes in connecting exceptional talent with forward-thinking companies, leveraging innovative recruitment strategies and a deep understanding of global markets to drive sustainable growth through people."}
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-6">
               {stats.map((stat, index) => (
-                <div key={index} className="bg-gray-800 rounded-lg p-6 text-center">
+                <div
+                  key={index}
+                  className="bg-gray-800 rounded-lg p-6 text-center"
+                >
                   <div className="text-2xl md:text-3xl font-bold text-white mb-2">
                     {stat.number}
                   </div>
