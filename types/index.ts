@@ -154,6 +154,50 @@ export interface ConsultingCTASection extends BaseSection {
   showContactForm?: boolean;
 }
 
+export interface ConsultingHeroSection extends BaseSection {
+  _type: "consultingHero";
+  badgeText?: string;
+  title?: string;
+  description?: string;
+  heroImage?: any;
+  showCalendarCTA?: boolean;
+  calendarUrl?: string;
+  calendarButtonText?: string;
+  primaryButton?: any;
+  secondaryButton?: any;
+  tertiaryButton?: any;
+}
+
+export interface ConsultingPhilosophySection extends BaseSection {
+  _type: "consultingPhilosophy";
+  badgeText?: string;
+  title?: string;
+  subtitle?: string;
+  content?: string;
+  philosophyImage?: any;
+}
+
+export interface ConsultingContactSection extends BaseSection {
+  _type: "consultingContact";
+  badgeText?: string;
+  title?: string;
+  description?: string;
+  showCalendarCTA?: boolean;
+  calendarUrl?: string;
+  calendarButtonText?: string;
+  showContactForm?: boolean;
+}
+
+export interface ConsultingMeetConsultantSection extends BaseSection {
+  _type: "consultingMeetConsultant";
+  badgeText?: string;
+  name?: string;
+  title?: string;
+  bio?: string;
+  companyDescription?: string;
+  profileImage?: any;
+}
+
 export interface NewsletterSection extends BaseSection {
   _type: "newsletter";
   title?: string;
@@ -297,6 +341,10 @@ export type Section =
   | PersonProfileSection
   | ConsultingServicesSection
   | ConsultingCTASection
+  | ConsultingHeroSection
+  | ConsultingPhilosophySection
+  | ConsultingContactSection
+  | ConsultingMeetConsultantSection
   | NewsletterSection
   | FeaturedNewsSection
   | AboutHeroSection

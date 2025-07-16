@@ -149,7 +149,7 @@ export function EpisodesDirectory({
     };
 
     loadData();
-  }, []); // Only run once on mount
+  }, [activeSeason]); // Include activeSeason dependency
 
   // Update stats when data changes
   useEffect(() => {
@@ -183,10 +183,6 @@ export function EpisodesDirectory({
     allEpisodes,
     allSeasons,
     showSeasonFilter,
-    getSeasonIdentifier,
-    client,
-    EPISODES_BY_SEASON_QUERY,
-    safeguardEpisodeData,
     setData,
     setError,
   ]);
@@ -293,8 +289,6 @@ export function EpisodesDirectory({
     defaultSort,
     allSeasons,
     router,
-    getSeasonIdentifier,
-    getSeasonForUrl,
   ]);
 
   const currentSeasonEpisodes = data.length;
