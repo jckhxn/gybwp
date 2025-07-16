@@ -50,18 +50,6 @@ export default defineType({
       hidden: ({ parent }) => !parent?.showCalendarCTA,
     }),
     defineField({
-      name: "calendarFeatures",
-      title: "Calendar Features",
-      type: "array",
-      of: [{ type: "string" }],
-      initialValue: [
-        "Free consultation",
-        "Instant booking",
-        "No commitment required",
-      ],
-      hidden: ({ parent }) => !parent?.showCalendarCTA,
-    }),
-    defineField({
       name: "showContactForm",
       title: "Show Contact Form",
       type: "boolean",

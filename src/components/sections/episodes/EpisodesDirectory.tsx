@@ -11,20 +11,15 @@ import SeasonDropdown from "@/src/components/features/SeasonDropdown";
 import EpisodeCard from "@/src/components/features/EpisodeCard";
 import { PaginationControls } from "@/src/components/features/PaginationControls";
 import { usePagination } from "@/src/lib/usePagination";
-import {
-  Search,
-  Filter,
-  Grid,
-  List,
-} from "lucide-react";
+import { Search, Filter, Grid, List } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getComponentId } from "@/src/lib/sectionId";
-import { 
-  Season, 
-  getSeasonIdentifier, 
-  getSeasonForUrl, 
-  getSeasonDisplayName 
+import {
+  Season,
+  getSeasonIdentifier,
+  getSeasonForUrl,
+  getSeasonDisplayName,
 } from "@/src/lib/utils";
 
 // Utility function for safe data access
@@ -58,9 +53,12 @@ interface EpisodesDirectoryProps {
   onStatsUpdate?: (totalEpisodes: number, totalSeasons: number) => void;
 }
 
-export function EpisodesDirectory({ section, onStatsUpdate }: EpisodesDirectoryProps) {
+export function EpisodesDirectory({
+  section,
+  onStatsUpdate,
+}: EpisodesDirectoryProps) {
   const componentId = getComponentId(section, "episodes-directory");
-  
+
   const {
     enableSearch = true,
     enableFilters = true,
@@ -94,20 +92,37 @@ export function EpisodesDirectory({ section, onStatsUpdate }: EpisodesDirectoryP
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // Get page from query string (always derive from URL)
+  const pageFromQuery = parseInt(searchParams.get("page") || "1", 10);
+  const [currentPage, setCurrentPage] = useState(pageFromQuery);
+
+  // Keep currentPage in sync with URL
+  useEffect(() => {
+    if (pageFromQuery !== currentPage) {
+      setCurrentPage(pageFromQuery);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageFromQuery]);
+
   // Initialize state from URL parameters
-  const [activeSeason, setActiveSeason] = useState<string | null>(searchParams.get("season") || null);
+  const [activeSeason, setActiveSeason] = useState<string | null>(
+    searchParams.get("season") || null
+  );
   const [allSeasons, setAllSeasons] = useState<Season[]>([]);
   const [data, setData] = useState<Episode[]>([]);
   const [allEpisodes, setAllEpisodes] = useState<Episode[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
-  const [viewMode, setViewMode] = useState<"grid" | "list">((searchParams.get("view") as "grid" | "list") || "grid");
-  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "episode">((searchParams.get("sort") as "newest" | "oldest" | "episode") || defaultSort);
+  const [searchTerm, setSearchTerm] = useState(
+    searchParams.get("search") || ""
+  );
+  const [viewMode, setViewMode] = useState<"grid" | "list">(
+    (searchParams.get("view") as "grid" | "list") || "grid"
+  );
+  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "episode">(
+    (searchParams.get("sort") as "newest" | "oldest" | "episode") || defaultSort
+  );
   const [showFilters, setShowFilters] = useState(false);
-
-  // Get page from query string
-  const pageFromQuery = parseInt(searchParams.get("page") || "1", 10);
 
   // Load all seasons and episodes on mount
   useEffect(() => {
@@ -149,7 +164,7 @@ export function EpisodesDirectory({ section, onStatsUpdate }: EpisodesDirectoryP
       // Find the season to get the identifier that works with the query
       const season = getSeasonIdentifier(allSeasons, activeSeason);
       const queryIdentifier = season ? season.title : activeSeason; // Use title for query compatibility
-      
+
       client
         .fetch(EPISODES_BY_SEASON_QUERY, { name: queryIdentifier })
         .then((res) => {
@@ -163,7 +178,18 @@ export function EpisodesDirectory({ section, onStatsUpdate }: EpisodesDirectoryP
       const safeguardedData = allEpisodes.map(safeguardEpisodeData);
       setData(safeguardedData);
     }
-  }, [activeSeason, allEpisodes, allSeasons, showSeasonFilter]);
+  }, [
+    activeSeason,
+    allEpisodes,
+    allSeasons,
+    showSeasonFilter,
+    getSeasonIdentifier,
+    client,
+    EPISODES_BY_SEASON_QUERY,
+    safeguardEpisodeData,
+    setData,
+    setError,
+  ]);
 
   // Filter and sort episodes
   const filteredAndSortedEpisodes = useMemo(() => {
@@ -217,11 +243,12 @@ export function EpisodesDirectory({ section, onStatsUpdate }: EpisodesDirectoryP
     return episodes;
   }, [data, searchTerm, sortBy, enableSearch]);
 
-  // Use pagination hook
+  // Use pagination hook (controlled)
   const pagination = usePagination({
     data: filteredAndSortedEpisodes,
     itemsPerPage: viewMode === "grid" ? itemsPerPageGrid : itemsPerPageList,
-    initialPage: pageFromQuery,
+    currentPage,
+    setCurrentPage,
     scrollToTop: false,
   });
 
@@ -234,13 +261,12 @@ export function EpisodesDirectory({ section, onStatsUpdate }: EpisodesDirectoryP
       params.delete("page");
     }
     router.push(`?${params.toString()}`);
-    pagination.goToPage(page);
+    // setCurrentPage(page); // Not needed, will sync from URL
   };
 
   // Update URL and reset pagination when filters change
   useEffect(() => {
-    pagination.reset();
-    // Update URL with current filter state
+    // Update URL with current filter state, always reset to page 1
     const params = new URLSearchParams();
     if (searchTerm) params.set("search", searchTerm);
     if (activeSeason) {
@@ -254,12 +280,22 @@ export function EpisodesDirectory({ section, onStatsUpdate }: EpisodesDirectoryP
     }
     if (viewMode !== "grid") params.set("view", viewMode);
     if (sortBy !== defaultSort) params.set("sort", sortBy);
-    // Don't include page parameter to reset pagination
-    
+    // Always reset to page 1
     const queryString = params.toString();
     const newUrl = queryString ? `?${queryString}` : window.location.pathname;
     router.replace(newUrl, { scroll: false });
-  }, [searchTerm, sortBy, activeSeason, viewMode, defaultSort, allSeasons]);
+    // setCurrentPage(1); // Not needed, will sync from URL
+  }, [
+    searchTerm,
+    sortBy,
+    activeSeason,
+    viewMode,
+    defaultSort,
+    allSeasons,
+    router,
+    getSeasonIdentifier,
+    getSeasonForUrl,
+  ]);
 
   const currentSeasonEpisodes = data.length;
 
@@ -272,8 +308,8 @@ export function EpisodesDirectory({ section, onStatsUpdate }: EpisodesDirectoryP
             {/* Left side - Season and Search */}
             <div className="flex flex-col sm:flex-row gap-4 items-center flex-1">
               {showSeasonFilter && (
-                <SeasonDropdown 
-                  setActiveSeason={setActiveSeason} 
+                <SeasonDropdown
+                  setActiveSeason={setActiveSeason}
                   activeSeason={activeSeason}
                   seasons={allSeasons}
                 />
@@ -363,7 +399,8 @@ export function EpisodesDirectory({ section, onStatsUpdate }: EpisodesDirectoryP
                     </div>
 
                     <div className="text-sm text-slate-600">
-                      {pagination.totalItems} of {currentSeasonEpisodes} episodes
+                      {pagination.totalItems} of {currentSeasonEpisodes}{" "}
+                      episodes
                       {searchTerm && ` matching "${searchTerm}"`}
                       {pagination.totalPages > 1 && (
                         <span className="ml-2">

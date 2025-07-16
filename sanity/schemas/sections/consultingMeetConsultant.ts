@@ -42,76 +42,12 @@ export default defineType({
       initialValue: "JKL Advisors specializes in connecting exceptional talent with forward-thinking companies, leveraging innovative recruitment strategies and a deep understanding of global markets to drive sustainable growth through people.",
     }),
     defineField({
-      name: "stats",
-      title: "Statistics",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            defineField({ name: "number", type: "string", title: "Number" }),
-            defineField({ name: "label", type: "string", title: "Label" }),
-          ],
-        },
-      ],
-      initialValue: [
-        { number: "1M+", label: "Professionals Hired" },
-        { number: "28+", label: "Years Experience" },
-      ],
-    }),
-    defineField({
       name: "profileImage",
       title: "Profile Image",
       type: "image",
       options: {
         hotspot: true,
       },
-      fields: [
-        defineField({
-          name: "alt",
-          type: "string",
-          title: "Alt Text",
-          initialValue: "Jeffrey Lackey, Sr.",
-        }),
-      ],
-    }),
-    defineField({
-      name: "testimonial",
-      title: "Testimonial",
-      type: "object",
-      fields: [
-        defineField({
-          name: "text",
-          title: "Testimonial Text",
-          type: "text",
-          initialValue: "Jeffrey's strategic approach to talent acquisition has transformed our organization. His deep understanding of global markets and innovative recruitment strategies have been invaluable.",
-        }),
-        defineField({
-          name: "author",
-          title: "Author Name",
-          type: "string",
-          initialValue: "Sarah Chen",
-        }),
-        defineField({
-          name: "position",
-          title: "Author Position",
-          type: "string",
-          initialValue: "CEO",
-        }),
-        defineField({
-          name: "company",
-          title: "Company",
-          type: "string",
-          initialValue: "TechVision Global",
-        }),
-        defineField({
-          name: "rating",
-          title: "Star Rating",
-          type: "number",
-          initialValue: 5,
-          validation: (Rule) => Rule.min(1).max(5),
-        }),
-      ],
     }),
   ],
   preview: {

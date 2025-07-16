@@ -17,34 +17,6 @@ export default defineType({
       title: "Heading",
       initialValue: "What Listeners Say",
     }),
-    defineField({
-      name: "testimonials",
-      type: "array",
-      title: "Testimonials",
-      of: [
-        {
-          type: "object",
-          fields: [
-            defineField({ name: "name", type: "string", title: "Name" }),
-            defineField({ name: "text", type: "text", title: "Testimonial Text" }),
-          ],
-        },
-      ],
-      initialValue: [
-        {
-          name: "Sarah K.",
-          text: "Incredible guests and actionable advice. This podcast is a must-listen for any leader!"
-        },
-        {
-          name: "Mike D.",
-          text: "Jeff's approach is authentic and insightful. I always walk away with something new."
-        },
-        {
-          name: "Priya S.",
-          text: "The best podcast for people-first leadership. Highly recommended!"
-        }
-      ],
-    }),
   ],
   preview: {
     select: {

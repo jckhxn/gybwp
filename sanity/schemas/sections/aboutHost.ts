@@ -22,15 +22,6 @@ export default defineType({
       type: "image",
       title: "Host Image",
       options: { hotspot: true },
-      fields: [
-        defineField({
-          name: "alt",
-          type: "string",
-          title: "Alt Text",
-          description: "Important for accessibility and SEO.",
-          initialValue: "Jeff Lackey - Host",
-        }),
-      ],
     }),
     defineField({
       name: "hostBio",
@@ -55,31 +46,6 @@ export default defineType({
       type: "text",
       title: "Host Journey",
       initialValue: "Jeff's leadership journey includes roles at Fortune 100 companies, startups, and everything in between. He's on a mission to help you grow your business—with people.",
-    }),
-    defineField({
-      name: "socialLinks",
-      type: "array",
-      title: "Social Links",
-      of: [
-        {
-          type: "object",
-          fields: [
-            defineField({ name: "label", type: "string", title: "Platform Name" }),
-            defineField({ name: "href", type: "url", title: "Profile URL" }),
-            defineField({ name: "icon", type: "string", title: "Icon (optional)" }),
-          ],
-        },
-      ],
-      initialValue: [
-        {
-          label: "LinkedIn",
-          href: "https://www.linkedin.com/in/jeff-lackey-gybwp/"
-        },
-        {
-          label: "Twitter",
-          href: "https://twitter.com/jefflackey"
-        }
-      ],
     }),
   ],
   preview: {
