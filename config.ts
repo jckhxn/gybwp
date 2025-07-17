@@ -9,7 +9,7 @@ const config = {
     studioUrl: "/dash",
   },
   youtube: {
-    apiKey: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY || "",
+    apiKey: process.env.NEXT_YOUTUBE_API_KEY || "",
     channelId: process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID || "",
   },
   siteName: "Growing Your Business With People",
