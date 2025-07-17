@@ -10,6 +10,13 @@ CLAUDE.md
 # Personal files
 Notes.md
 
+# Documentation and local files
+docs/
+migrations/
+Todo.md
+README.md
+*.md
+
 #Sanity dataset 
 
 # Sanity Scripts
