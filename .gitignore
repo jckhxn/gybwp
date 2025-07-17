@@ -14,8 +14,8 @@ Notes.md
 docs/
 migrations/
 Todo.md
-README.md
 *.md
+!README.md
 
 #Sanity dataset 
 
