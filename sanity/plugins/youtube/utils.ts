@@ -57,6 +57,7 @@ export type YoutubeVideoData = {
   thumbnail?: string;
   seasonNumber: number;
   episodeNumber: number;
+  uuid: string;
 };
 
 export type YoutubeChannelVideo = {

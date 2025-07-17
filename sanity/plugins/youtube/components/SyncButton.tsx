@@ -1,16 +1,17 @@
 import { Button } from "@sanity/ui";
 import { useState, RefObject } from "react";
+import { YoutubeVideoData } from "../utils";
 
 interface YoutubeFetcherProps {
   inputRef: RefObject<HTMLInputElement>;
   onVideoFetch?: (videoUrl: string) => void;
-  validateAndSubmit: () => void;
+  onSubmit: (data: YoutubeVideoData) => void;
 }
 
 const YoutubeFetcher = ({
   inputRef,
   onVideoFetch,
-  validateAndSubmit,
+  onSubmit,
 }: YoutubeFetcherProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,56 +21,26 @@ const YoutubeFetcher = ({
     setError(null);
 
     try {
-      const channelId = process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID;
-      const apiKey = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
-
-      if (!channelId || !apiKey) {
-        throw new Error("Missing YouTube API configuration");
+      const response = await fetch("/api/youtube/latest");
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch latest video");
       }
 
-      // Fetch the uploads playlist ID
-      const channelResponse = await fetch(
-        `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${apiKey}`
-      );
+      const videoData = await response.json();
+      const latestVideoUrl = `https://www.youtube.com/watch?v=${videoData.id}`;
 
-      if (!channelResponse.ok) {
-        throw new Error("Failed to fetch channel data");
-      }
-
-      const channelData = await channelResponse.json();
-      const uploadsPlaylistId =
-        channelData.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
-
-      if (!uploadsPlaylistId) {
-        throw new Error("Could not find uploads playlist");
-      }
-
-      // Fetch the latest video
-      const videoResponse = await fetch(
-        `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=1&playlistId=${uploadsPlaylistId}&key=${apiKey}`
-      );
-
-      if (!videoResponse.ok) {
-        throw new Error("Failed to fetch video data");
-      }
-
-      const videoData = await videoResponse.json();
-      const videoId = videoData.items?.[0]?.snippet?.resourceId?.videoId;
-
-      if (!videoId) {
-        throw new Error("No videos found");
-      }
-
-      const latestVideoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-
-      // Update input and trigger validation
+      // Update input field for display purposes
       if (inputRef.current) {
         inputRef.current.value = latestVideoUrl;
         const event = new Event("change", { bubbles: true });
         inputRef.current.dispatchEvent(event);
         onVideoFetch?.(latestVideoUrl);
-        setTimeout(validateAndSubmit, 100);
       }
+
+      // Directly submit the video data
+      onSubmit(videoData);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "An unknown error occurred"

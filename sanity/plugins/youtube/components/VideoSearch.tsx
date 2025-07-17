@@ -105,7 +105,7 @@ export function VideoSearch(props: {
         <YoutubeFetcher
           inputRef={inputRef}
           onVideoFetch={handleVideoFetch}
-          validateAndSubmit={submit}
+          onSubmit={props.onSubmit}
         />
       </Flex>
     </FormField>

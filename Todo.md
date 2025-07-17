@@ -1,10 +1,14 @@
-Fix Vercel deployment issues
+Get rid of files on github like scripts, .md files lol
+
+Rich Results shows
+"url": "https://gybwp.com/episodes/null",
+
 Move away from routes file
 wire all homepage components to page builder
 Move pages to page builder schema
 Move all assets to Sanity, including hardcoded values or static data/routes
 Fix notfound redirect if sanity not found page not found, found found
-Mobile styling fix
+
 See if SEO,JSON,Metadata is passed in abstracted schema
 Figure out best way to pass above via schema
 Modular pages
