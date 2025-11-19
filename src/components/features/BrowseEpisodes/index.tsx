@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { CalendarDays, Clock } from "lucide-react";
+import { CalendarDays, Clock, Play } from "lucide-react";
 import { client } from "@/src/lib/sanity-utils";
 import { ALL_SEASONS_QUERY, EPISODES_BY_SEASON_QUERY } from "@/src/lib/queries";
 import {
@@ -21,6 +21,7 @@ interface Episode {
     current?: string;
   };
   youtube?: {
+    id?: string;
     title?: string;
     episodeNumber?: number;
     seasonNumber?: number;
@@ -58,6 +59,12 @@ export const BrowseEpisodes = ({
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
   const [activeEpisodeIndex, setActiveEpisodeIndex] = useState(0);
+  const [hoveredEpisode, setHoveredEpisode] = useState<string | null>(null);
+  const [loadedVideos, setLoadedVideos] = useState<Set<string>>(new Set());
+  const [visibleEpisodes, setVisibleEpisodes] = useState<Set<string>>(new Set());
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const episodeRefs = useRef<Map<string, HTMLElement>>(new Map());
 
   // Helper function to get episode URL - prioritize pathname over UUID
   const getEpisodeUrl = (episode: Episode): string => {
@@ -70,6 +77,115 @@ export const BrowseEpisodes = ({
     }
     return "/episodes"; // Fallback to episodes listing
   };
+
+  // Helper function to generate YouTube embed URL
+  const getYouTubeEmbedUrl = (videoId: string): string => {
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&loop=1&playlist=${videoId}`;
+  };
+
+  // Intersection Observer setup for performance
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          setVisibleEpisodes(prev => {
+            const newVisibleEpisodes = new Set(prev);
+            
+            entries.forEach((entry) => {
+              const episodeId = entry.target.getAttribute('data-episode-id');
+              if (episodeId) {
+                if (entry.isIntersecting) {
+                  newVisibleEpisodes.add(episodeId);
+                } else {
+                  newVisibleEpisodes.delete(episodeId);
+                  // Clean up hover state and loaded videos if episode is no longer visible
+                  if (hoveredEpisode === episodeId) {
+                    setHoveredEpisode(null);
+                  }
+                  // Clean up loaded videos for better memory management
+                  setLoadedVideos(prevLoaded => {
+                    const newLoaded = new Set<string>();
+                    prevLoaded.forEach(id => {
+                      if (id !== episodeId) {
+                        newLoaded.add(id);
+                      }
+                    });
+                    return newLoaded;
+                  });
+                }
+              }
+            });
+            
+            return newVisibleEpisodes;
+          });
+        },
+        {
+          root: null,
+          rootMargin: '50px',
+          threshold: 0.1,
+        }
+      );
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [visibleEpisodes, hoveredEpisode]);
+
+  // Observe episode elements
+  const setEpisodeRef = useCallback((episodeId: string, element: HTMLElement | null) => {
+    if (element) {
+      episodeRefs.current.set(episodeId, element);
+      if (observerRef.current) {
+        observerRef.current.observe(element);
+      }
+    } else {
+      const oldElement = episodeRefs.current.get(episodeId);
+      if (oldElement && observerRef.current) {
+        observerRef.current.unobserve(oldElement);
+      }
+      episodeRefs.current.delete(episodeId);
+    }
+  }, []);
+
+  // Debounced hover handlers - now with visibility check
+  const handleMouseEnter = useCallback((episodeId: string, youtubeId?: string) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    
+    hoverTimeoutRef.current = setTimeout(() => {
+      if (youtubeId && visibleEpisodes.has(episodeId)) {
+        setHoveredEpisode(episodeId);
+        setLoadedVideos(prev => {
+          const newLoaded = new Set(prev);
+          newLoaded.add(episodeId);
+          return newLoaded;
+        });
+      }
+    }, 300); // Debounce hover by 300ms
+  }, [visibleEpisodes]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    
+    hoverTimeoutRef.current = setTimeout(() => {
+      setHoveredEpisode(null);
+    }, 200); // Small delay before hiding video
+  }, []);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Define Season interface
   interface Season {
@@ -217,35 +333,38 @@ export const BrowseEpisodes = ({
       className={
         hideBackground
           ? "w-full py-2"
-          : "w-full py-12 md:py-16 lg:py-20 bg-gradient-to-b from-gray-50/70 to-white relative"
+          : "w-full py-12 md:py-16 lg:py-20 bg-gray-50 relative"
       }
     >
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         <div className="flex flex-col items-center gap-4 md:gap-8 text-center">
           {!hideHeading && (
             <div className="space-y-3 max-w-3xl">
-              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 px-3 py-1 text-xs font-medium text-primary border border-primary/30">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-4 h-4"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M8 12h8" />
-                </svg>
-                Browse Episodes
+              <div className="authority-badge inline-flex items-center gap-3 rounded-full px-6 py-3 text-sm font-semibold shadow-professional">
+                <div className="relative">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-4 h-4"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M8 12h8" />
+                  </svg>
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                </div>
+                <span className="tracking-wide">Browse Episodes</span>
               </div>
-              <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-main">
                 Browse Our Episodes
               </h2>
-              <p className="text-base sm:text-lg text-muted-foreground">
+              <p className="text-base sm:text-lg text-gray-700 leading-relaxed max-w-2xl">
                 Discover our curated library of conversations with industry
                 leaders, innovators, and experts who are shaping the future of
                 business.
@@ -262,13 +381,13 @@ export const BrowseEpisodes = ({
                     type="button"
                     onClick={() => setActiveSeason(season.title)}
                     className={`
-                      relative px-3 py-2.5 text-sm font-medium whitespace-nowrap rounded-xl transition-all duration-200 ease-in-out flex-shrink-0 shadow-lg border backdrop-blur-sm
+                      relative px-4 py-3 text-sm font-semibold whitespace-nowrap rounded-xl transition-all duration-300 ease-out flex-shrink-0 border backdrop-blur-sm
                       ${
                         season.title === activeSeason
-                          ? "bg-primary text-white shadow-lg shadow-primary/30 scale-105 border-primary/30"
-                          : "bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100/80 border-gray-400/70"
+                          ? "bg-primary text-white shadow-executive hover:shadow-premium hover:-translate-y-1 border-primary/30 scale-105"
+                          : "glass-card text-gray-700 hover:text-main hover:bg-white/90 border-white/30 hover:shadow-professional-lg hover:-translate-y-0.5"
                       }
-                      focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2
+                      focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2
                     `}
                   >
                     {season.title}
@@ -317,7 +436,7 @@ export const BrowseEpisodes = ({
               {showLeftArrow && (
                 <button
                   onClick={scrollLeft}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-gray-50 rounded-full p-3 shadow-xl border border-gray-300/80 hidden md:flex items-center justify-center transition-all duration-200 hover:scale-105 hover:shadow-2xl group"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-20 glass-card hover:bg-white/90 rounded-full p-4 shadow-professional hover:shadow-executive hidden md:flex items-center justify-center transition-all duration-300 hover:-translate-y-1 group"
                   aria-label="Scroll left"
                 >
                   <svg
@@ -330,7 +449,7 @@ export const BrowseEpisodes = ({
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="text-gray-700 group-hover:text-primary transition-colors duration-200"
+                    className="text-gray-700 group-hover:text-primary transition-colors duration-300 group-hover:scale-110"
                   >
                     <path d="m15 18-6-6 6-6" />
                   </svg>
@@ -357,9 +476,14 @@ export const BrowseEpisodes = ({
                       scrollSnapAlign: "start",
                       scrollSnapStop: "always",
                     }}
+                    data-episode-id={episode._id}
+                    ref={(el) => setEpisodeRef(episode._id, el)}
+                    onMouseEnter={() => handleMouseEnter(episode._id, episode.youtube?.id)}
+                    onMouseLeave={handleMouseLeave}
                   >
-                    <div className="bg-white rounded-2xl shadow-lg border border-gray-200/70 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-gray-900/20 hover:-translate-y-1 group-hover:border-primary/40 ring-1 ring-gray-100/70">
-                      <div className="aspect-video bg-gradient-to-br from-gray-300 to-gray-400 relative overflow-hidden">
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group-hover:shadow-lg group-hover:border-gray-200 transition-all duration-300 group-hover:-translate-y-1">
+                      <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
+                        {/* Static thumbnail image */}
                         <Image
                           src={
                             episode.youtube?.thumbnail ||
@@ -368,53 +492,71 @@ export const BrowseEpisodes = ({
                           width={360}
                           height={200}
                           alt={`${episode.youtube?.title || `Episode ${episode.youtube?.episodeNumber}`} cover`}
-                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          className={`h-full w-full object-cover transition-all duration-500 ${
+                            hoveredEpisode === episode._id && episode.youtube?.id ? 'opacity-0' : 'opacity-100'
+                          }`}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent"></div>
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                          <div className="p-4 bg-white/95 backdrop-blur-sm rounded-full shadow-xl transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="text-primary"
-                            >
-                              <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                            </svg>
+                        
+                        {/* YouTube video iframe - only render when hovered and has video ID */}
+                        {hoveredEpisode === episode._id && episode.youtube?.id && loadedVideos.has(episode._id) && visibleEpisodes.has(episode._id) && (
+                          <iframe
+                            src={getYouTubeEmbedUrl(episode.youtube.id)}
+                            className="absolute inset-0 w-full h-full transition-opacity duration-500 opacity-100"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            loading="lazy"
+                            title={`${episode.youtube.title} - Video Preview`}
+                            aria-label={`Auto-playing video preview for ${episode.youtube.title}`}
+                          />
+                        )}
+                        
+                        {/* Gradient overlays */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
+                        
+                        {/* Play button overlay - only show when not playing video */}
+                        {!(hoveredEpisode === episode._id && episode.youtube?.id) && (
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                            <div className="bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                              <Play className="w-6 h-6 text-gray-800 ml-0.5" fill="currentColor" />
+                            </div>
                           </div>
-                        </div>
+                        )}
+                        
+                        {/* Episode number badge */}
+                        {episode.youtube?.episodeNumber && (
+                          <div className="absolute top-3 left-3">
+                            <div className="bg-black/60 backdrop-blur-sm text-white text-xs font-medium px-2 py-1 rounded-full">
+                              EP {episode.youtube.episodeNumber}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <div className="p-6">
+                      <div className="p-5">
                         <div className="space-y-3">
                           <h3 className="font-semibold text-lg leading-tight text-gray-900 group-hover:text-primary transition-colors duration-200 line-clamp-2">
                             {episode.youtube?.title ||
                               `Episode ${episode.youtube?.episodeNumber}`}
                           </h3>
-                          <p className="text-gray-700 text-sm leading-relaxed line-clamp-2">
+                          <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
                             {episode.youtube?.blurb ||
                               "Dive into insights and strategies that will transform your approach to business leadership and growth."}
                           </p>
                         </div>
 
-                        <div className="flex items-center gap-4 text-xs text-gray-700 mt-4 pt-4 border-t border-gray-300">
-                          <div className="flex items-center gap-1.5">
-                            <CalendarDays className="w-3.5 h-3.5" />
-                            <span className="font-medium">
+                        <div className="flex items-center gap-3 text-xs text-gray-500 mt-4">
+                          <div className="flex items-center gap-1">
+                            <CalendarDays className="w-3 h-3" />
+                            <span>
                               {episode.youtube?.publishedAt
                                 ? formatDate(episode.youtube.publishedAt)
                                 : ""}
                             </span>
                           </div>
-                          <div className="w-1.5 h-1.5 rounded-full bg-gray-500"></div>
-                          <div className="flex items-center gap-1.5">
-                            <Clock className="w-3.5 h-3.5" />
-                            <span className="font-medium">
+                          <div className="w-1 h-1 rounded-full bg-gray-400"></div>
+                          <div className="flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            <span>
                               {formatDurationCompact(
                                 episode.youtube?.duration || episode.duration,
                                 "30m"
@@ -423,13 +565,13 @@ export const BrowseEpisodes = ({
                           </div>
                         </div>
 
-                        <div className="mt-4 pt-2">
-                          <div className="inline-flex items-center text-primary font-medium text-sm group-hover:text-primary/80 transition-colors duration-200">
-                            Listen Now
+                        <div className="mt-4 pt-3 border-t border-gray-100">
+                          <div className="inline-flex items-center text-primary font-medium text-sm group-hover:text-primary-600 transition-all duration-200">
+                            <span>Watch Episode</span>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
+                              width="14"
+                              height="14"
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
@@ -452,7 +594,7 @@ export const BrowseEpisodes = ({
               {showRightArrow && (
                 <button
                   onClick={scrollRight}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-gray-50 rounded-full p-3 shadow-xl border border-gray-300/80 hidden md:flex items-center justify-center transition-all duration-200 hover:scale-105 hover:shadow-2xl group"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-20 glass-card hover:bg-white/90 rounded-full p-4 shadow-professional hover:shadow-executive hidden md:flex items-center justify-center transition-all duration-300 hover:-translate-y-1 group"
                   aria-label="Scroll right"
                 >
                   <svg
@@ -465,7 +607,7 @@ export const BrowseEpisodes = ({
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="text-gray-700 group-hover:text-primary transition-colors duration-200"
+                    className="text-gray-700 group-hover:text-primary transition-colors duration-300 group-hover:scale-110"
                   >
                     <path d="m9 18 6-6-6-6" />
                   </svg>
@@ -521,12 +663,12 @@ export const BrowseEpisodes = ({
             </div>
           )}
 
-          <div className="mt-8">
+          <div className="mt-12">
             <Link
               href="/episodes"
-              className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary/90 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-primary/25 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
+              className="group inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-primary via-primary-light to-primary px-10 py-4 text-lg font-bold text-white shadow-executive transition-all duration-300 hover:shadow-premium hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 min-w-[240px] justify-center"
             >
-              Explore All Episodes
+              <span className="tracking-wide">Explore All Episodes</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -537,7 +679,7 @@ export const BrowseEpisodes = ({
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="transition-transform duration-200 group-hover:translate-x-1"
+                className="transition-transform duration-300 group-hover:translate-x-2 group-hover:scale-110"
               >
                 <path d="M5 12h14"></path>
                 <path d="m12 5 7 7-7 7"></path>

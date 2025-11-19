@@ -50,30 +50,38 @@ export function AboutListenConnect({ section }: AboutListenConnectProps) {
   ];
 
   return (
-    <section id={componentId} className="w-full py-16 md:py-20 bg-gradient-to-br from-primary/20 via-secondary/10 to-white">
-      <div className="container mx-auto px-6 max-w-5xl flex flex-col items-center text-center gap-8">
-        <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-          {heading}
-        </h2>
-        <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-          Subscribe on your favorite platform, or{" "}
-          <Link
-            href="/consulting"
-            className="text-primary underline hover:text-primary/80"
-          >
-            contact us
-          </Link>{" "}
-          to get in touch.
-        </p>
-        <div className="flex flex-wrap gap-4 justify-center mt-4">
-          {safePlatforms.map((platform, index) => (
-            <PlatformBadge
-              key={index}
-              href={platform.url}
-              label={platform.name}
-              icon={platform.name === "Contact" ? <MailIcon className="h-4 w-4" /> : <Podcast className="h-4 w-4" />}
-            />
-          ))}
+    <section id={componentId} className="w-full py-20 md:py-24 bg-white">
+      <div className="container mx-auto px-6 max-w-6xl">
+        <div className="card-executive p-12 text-center space-y-10">
+          <div className="space-y-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20 shadow-professional">
+              <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium text-primary">Connect With Us</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-main">
+              {heading}
+            </h2>
+          </div>
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+            Subscribe on your favorite platform, or{" "}
+            <Link
+              href="/consulting"
+              className="text-primary font-semibold hover:text-primary/80 underline decoration-2 underline-offset-4 hover:decoration-primary/50 transition-all duration-200"
+            >
+              contact us
+            </Link>{" "}
+            to get in touch.
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            {safePlatforms.map((platform, index) => (
+              <PlatformBadge
+                key={index}
+                href={platform.url}
+                label={platform.name}
+                icon={platform.name === "Contact" ? <MailIcon className="h-5 w-5" /> : <Podcast className="h-5 w-5" />}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -92,11 +100,14 @@ function PlatformBadge({
   return (
     <Link
       href={href}
-      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-secondary/10 hover:from-primary/20 hover:to-secondary/20 text-primary hover:text-primary/80 rounded-lg border border-primary/20 hover:border-primary/30 transition-all duration-200"
+      className="glass-card group flex flex-col items-center justify-center p-6 rounded-xl border border-primary/20 hover:border-primary/40 hover:shadow-professional transition-all duration-300 hover:-translate-y-1"
       target={href.startsWith("http") ? "_blank" : undefined}
       rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
     >
-      {icon || <Podcast className="h-4 w-4" />} {label}
+      <div className="text-primary group-hover:text-primary/80 group-hover:scale-110 transition-all duration-200 mb-3">
+        {icon || <Podcast className="h-5 w-5" />}
+      </div>
+      <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors duration-200">{label}</span>
     </Link>
   );
 }

@@ -57,40 +57,34 @@ export function ConsultingPhilosophy({ section }: ConsultingPhilosophyProps) {
   const keyBenefits = section.keyBenefits || FALLBACK_BENEFITS;
 
   return (
-    <section id={componentId} className="py-20 lg:py-32">
-      <div className="container px-4 md:px-6">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+    <section id={componentId} className="py-24 lg:py-32 bg-gray-50">
+      <div className="container px-6 md:px-8 max-w-7xl mx-auto">
+        <div className="card-executive p-12 grid gap-16 lg:grid-cols-2 lg:gap-20 items-center">
           <div className="space-y-8">
-            <div className="space-y-4">
-              <Badge
-                variant="outline"
-                className="bg-orange-50 text-orange-700 border-orange-200"
-              >
-                {section.badgeText || "Our Philosophy"}
-              </Badge>
-              <h2 className="text-3xl md:text-5xl font-bold text-gray-900">
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 px-6 py-3 bg-secondary/10 rounded-full border border-secondary/20 shadow-professional">
+                <div className="w-2 h-2 bg-secondary rounded-full animate-pulse"></div>
+                <span className="text-sm font-semibold text-secondary">
+                  {section.badgeText || "Our Philosophy"}
+                </span>
+              </div>
+              <h2 className="text-4xl md:text-6xl font-bold text-main leading-tight">
                 {section.title || "People Are Your Greatest Investment"}
               </h2>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                {section.description ||
-                  "Within the Consulting practice of JKL Advisors, we help CEOs and business leaders grow their business with the biggest and most important investment - People!"}
-              </p>
-              {section.content && (
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  {section.content}
+              <div className="space-y-4">
+                <p className="text-xl md:text-2xl text-gray-700 leading-relaxed font-medium">
+                  {section.description ||
+                    "Within the Consulting practice of JKL Advisors, we help CEOs and business leaders grow their business with the biggest and most important investment - People!"}
                 </p>
-              )}
-              {!section.content && (
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  Unlike financial accounting that treats people as expenses, we
-                  believe people are a special asset type that anticipates
-                  growth. We need to treat our people like an investment to lead
-                  our companies to exponential and sustainable growth.
-                </p>
-              )}
+                <blockquote className="border-l-4 border-secondary pl-6 py-4 bg-secondary/5">
+                  <p className="text-lg text-gray-600 leading-relaxed italic">
+                    {section.content || "Unlike financial accounting that treats people as expenses, we believe people are a special asset type that anticipates growth. We need to treat our people like an investment to lead our companies to exponential and sustainable growth."}
+                  </p>
+                </blockquote>
+              </div>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-8">
               {keyBenefits.map((benefit, index) => {
                 const IconComponent =
                   benefit.icon &&
@@ -99,15 +93,17 @@ export function ConsultingPhilosophy({ section }: ConsultingPhilosophyProps) {
                     : Target;
 
                 return (
-                  <div key={index} className="flex gap-4">
-                    <div className="text-blue-600 mt-1">
-                      <IconComponent className="w-6 h-6" />
+                  <div key={index} className="flex gap-5 group">
+                    <div className="flex-shrink-0">
+                      <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center shadow-professional group-hover:scale-110 transition-transform duration-300">
+                        <IconComponent className="w-6 h-6 text-white" />
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors duration-200">
                         {benefit.title}
                       </h3>
-                      <p className="text-gray-600">{benefit.description}</p>
+                      <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-200">{benefit.description}</p>
                     </div>
                   </div>
                 );
@@ -115,8 +111,9 @@ export function ConsultingPhilosophy({ section }: ConsultingPhilosophyProps) {
             </div>
           </div>
 
-          <div className="relative">
-            <div className="relative rounded-2xl overflow-hidden shadow-xl">
+          <div className="relative group">
+            <div className="absolute -inset-4 bg-secondary/10 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
+            <div className="relative rounded-2xl overflow-hidden shadow-executive border border-white/20">
               {section.philosophyImage?.asset ? (
                 <Image
                   src={urlFor(section.philosophyImage)
@@ -129,14 +126,15 @@ export function ConsultingPhilosophy({ section }: ConsultingPhilosophyProps) {
                   }
                   width={600}
                   height={400}
-                  className="w-full h-auto"
+                  className="w-full h-auto group-hover:scale-105 transition-transform duration-500"
                 />
               ) : (
-                <div className="w-full h-96 bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
-                  <div className="text-orange-600 text-center">
-                    <div className="text-6xl mb-4">💡</div>
-                    <p className="text-xl font-semibold">People Investment</p>
-                    <p className="text-sm">Your Greatest Asset</p>
+                <div className="w-full h-96 bg-secondary/20 flex items-center justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-secondary/15"></div>
+                  <div className="relative text-center z-10">
+                    <div className="text-8xl mb-6 opacity-80">💡</div>
+                    <p className="text-2xl font-bold text-gray-800 mb-2">People Investment</p>
+                    <p className="text-lg text-gray-600">Your Greatest Asset</p>
                   </div>
                 </div>
               )}

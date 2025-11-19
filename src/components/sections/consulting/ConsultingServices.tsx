@@ -82,16 +82,19 @@ export function ConsultingServices({ section }: ConsultingServicesProps) {
   const services = section.services || FALLBACK_SERVICES;
 
   return (
-    <section id={componentId} className="py-20 lg:py-32 bg-gray-50">
-      <div className="container px-4 md:px-6">
-        <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-4">
-            {section.badgeText || "Our Services"}
-          </Badge>
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
+    <section id={componentId} className="py-24 lg:py-32 bg-gradient-to-br from-off-white via-white to-gray-50/30">
+      <div className="container px-6 md:px-8 max-w-7xl mx-auto">
+        <div className="text-center mb-20 space-y-6">
+          <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full border border-primary/20 shadow-professional">
+            <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+            <span className="text-sm font-semibold text-primary">
+              {section.badgeText || "Our Services"}
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-main to-main-light bg-clip-text text-transparent leading-tight">
             {section.title || "Comprehensive Talent Solutions"}
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed font-medium">
             {section.description || 
               "From strategic planning to execution, we provide end-to-end consulting services that drive sustainable business growth through people."
             }
@@ -107,28 +110,31 @@ export function ConsultingServices({ section }: ConsultingServicesProps) {
             return (
               <div
                 key={index}
-                className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100"
+                className="card-executive p-8 group hover:shadow-executive transition-all duration-300 hover:-translate-y-2 relative overflow-hidden"
               >
-                <div className="text-blue-600 mb-4">
-                  <IconComponent className="w-8 h-8" />
+                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-primary/10 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative">
+                  <div className="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center mb-6 shadow-professional group-hover:scale-110 transition-transform duration-300">
+                    <IconComponent className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-primary transition-colors duration-200">
+                    {service.title}
+                  </h3>
+                  <p className="text-gray-600 mb-6 leading-relaxed">{service.description}</p>
+                  {service.features && (
+                    <ul className="space-y-3">
+                      {service.features.map((feature, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-start gap-3 text-sm text-gray-700 group-hover:text-gray-800 transition-colors duration-200"
+                        >
+                          <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0 group-hover:scale-125 transition-transform duration-200"></div>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
-                  {service.title}
-                </h3>
-                <p className="text-gray-600 mb-4">{service.description}</p>
-                {service.features && (
-                  <ul className="space-y-2">
-                    {service.features.map((feature, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-start gap-2 text-sm text-gray-700"
-                      >
-                        <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </div>
             );
           })}

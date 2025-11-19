@@ -142,8 +142,8 @@ export default function EpisodeSlider() {
         )}
       </div>
       <div className="px-2 md:px-0 relative">
-        <div className="absolute left-0 top-0 h-full w-8 bg-gradient-to-r from-white/90 to-transparent pointer-events-none z-10" />
-        <div className="absolute right-0 top-0 h-full w-8 bg-gradient-to-l from-white/90 to-transparent pointer-events-none z-10" />
+        <div className="absolute left-0 top-0 h-full w-8 bg-white/50 pointer-events-none z-10" />
+        <div className="absolute right-0 top-0 h-full w-8 bg-white/50 pointer-events-none z-10" />
         {!isLoading ? (
           <>
             {data.length > 0 ? (

@@ -1,18 +1,33 @@
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
+  const baseUrl = "https://gybwp.com";
+
   return {
     rules: [
       {
+        userAgent: "*",
+        allow: "/",
+        disallow: [
+          "/dash*", // Sanity Studio
+          "/api/*", // API routes
+          "/_next/*", // Next.js internal
+          "/studio*", // Alternative studio path
+        ],
+      },
+      // Special rules for search engine bots
+      {
         userAgent: "Googlebot",
-        allow: ["/"],
-        disallow: "/dash/",
+        allow: "/",
+        disallow: ["/dash*", "/api/*", "/studio*"],
       },
       {
         userAgent: ["Applebot", "Bingbot"],
-        disallow: ["/dash"],
+        allow: "/",
+        disallow: ["/dash*", "/api/*", "/studio*"],
       },
     ],
-    sitemap: "https://gybwp.com/sitemap.xml",
+    sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
   };
 }

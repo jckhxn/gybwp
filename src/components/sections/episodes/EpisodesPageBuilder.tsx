@@ -68,7 +68,7 @@ export function EpisodesPageBuilder({ section }: EpisodesPageBuilderProps) {
   };
 
   return (
-    <div id={componentId} className="min-h-screen bg-gradient-to-b from-gray-50/70 to-white">
+    <div id={componentId} className="min-h-screen bg-gray-50">
       <EpisodesHero 
         section={heroSection}
         actualTotalEpisodes={totalEpisodes}

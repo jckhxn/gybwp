@@ -62,24 +62,25 @@ export function ConsultingHero({ section }: ConsultingHeroProps) {
   return (
     <section
       id={componentId}
-      className="relative bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 py-20 lg:py-32"
+      className="relative bg-main py-24 lg:py-32 overflow-hidden"
     >
-      <div className="absolute inset-0 bg-black/20"></div>
-      <div className="container relative px-4 md:px-6">
+      <div className="absolute inset-0 bg-black/10"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.1),transparent_50%)] opacity-30"></div>
+      <div className="container relative px-6 md:px-8 max-w-7xl mx-auto">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           <div className="space-y-8">
             <div className="space-y-4">
-              <Badge
-                variant="secondary"
-                className="bg-blue-100 text-blue-800 px-4 py-2"
-              >
-                {section.badgeText || "JKL Advisors Consulting"}
-              </Badge>
-              <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+              <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/95 backdrop-blur-sm rounded-full border border-white/30 shadow-professional">
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                <span className="text-sm font-semibold text-primary">
+                  {section.badgeText || "JKL Advisors Consulting"}
+                </span>
+              </div>
+              <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-tight tracking-tight">
                 {section.title || (
                   <>
                     Empowering Your Business with
-                    <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                    <span className="text-secondary">
                       {" "}
                       People
                     </span>
@@ -92,26 +93,26 @@ export function ConsultingHero({ section }: ConsultingHeroProps) {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-2xl md:text-3xl font-bold text-white">
+                <div key={index} className="glass-card p-6 text-center group hover:shadow-executive transition-all duration-300 hover:-translate-y-1">
+                  <div className="text-3xl md:text-4xl font-bold text-white group-hover:scale-110 transition-transform duration-200">
                     {stat.number}
                   </div>
-                  <div className="text-sm text-gray-300">{stat.label}</div>
+                  <div className="text-sm text-gray-200 font-medium mt-2 group-hover:text-white transition-colors duration-200">{stat.label}</div>
                 </div>
               ))}
             </div>
 
             {/* Calendar CTA */}
             {section.showCalendarCTA !== false && (
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
-                <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+              <div className="card-executive p-8 border border-white/20">
+                <div className="flex flex-col sm:flex-row gap-6 items-center justify-center">
                   <a
                     href={section.calendarUrl || "https://cal.com/jeffrey-lackey-sr/30min"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center bg-white text-gray-900 hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl text-lg"
+                    className="btn-executive group relative overflow-hidden px-10 py-4 text-lg font-semibold hover:scale-105 transition-all duration-300"
                   >
                     <svg
                       className="mr-3 w-6 h-6"
@@ -126,21 +127,25 @@ export function ConsultingHero({ section }: ConsultingHeroProps) {
                     </svg>
                     {section.calendarButtonText || "Schedule Your 30-Minute Strategy Call"}
                   </a>
-                  <div className="text-center sm:text-left">
+                  <div className="text-center sm:text-left space-y-2">
                     {section.calendarFeatures?.map((feature, index) => (
-                      <div key={index} className="text-sm text-gray-300 font-medium">
-                        ✓ {feature}
+                      <div key={index} className="flex items-center gap-2 text-sm text-gray-200 font-medium">
+                        <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
+                        {feature}
                       </div>
                     )) || (
                       <>
-                        <div className="text-sm text-gray-300 font-medium">
-                          ✓ Free consultation
+                        <div className="flex items-center gap-2 text-sm text-gray-200 font-medium">
+                          <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
+                          Free consultation
                         </div>
-                        <div className="text-sm text-gray-300 font-medium">
-                          ✓ Instant booking
+                        <div className="flex items-center gap-2 text-sm text-gray-200 font-medium">
+                          <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
+                          Instant booking
                         </div>
-                        <div className="text-sm text-gray-300 font-medium">
-                          ✓ No commitment required
+                        <div className="flex items-center gap-2 text-sm text-gray-200 font-medium">
+                          <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
+                          No commitment required
                         </div>
                       </>
                     )}
@@ -150,20 +155,20 @@ export function ConsultingHero({ section }: ConsultingHeroProps) {
             )}
 
             {(secondaryButton || tertiaryButton) && (
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-6">
                 {secondaryButton && (
                   <SmartButton
                     data={secondaryButton}
-                    className="inline-flex items-center justify-center bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 px-8 py-4 rounded-lg font-semibold transition-colors"
+                    className="glass-card inline-flex items-center justify-center border border-white/30 text-white hover:bg-white/20 hover:shadow-professional px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
                   >
                     {secondaryButton.text}
-                    <ArrowRight className="ml-2 w-5 h-5" />
+                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
                   </SmartButton>
                 )}
                 {tertiaryButton && (
                   <SmartButton
                     data={tertiaryButton}
-                    className="inline-flex items-center justify-center border border-white/20 text-white hover:bg-white/10 px-8 py-4 rounded-lg font-semibold transition-colors"
+                    className="inline-flex items-center justify-center border-2 border-white/40 text-white hover:bg-white/10 hover:border-white/60 px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
                   >
                     {tertiaryButton.text}
                   </SmartButton>
@@ -172,26 +177,27 @@ export function ConsultingHero({ section }: ConsultingHeroProps) {
             )}
           </div>
 
-          <div className="relative">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+          <div className="relative group">
+            <div className="absolute -inset-4 bg-white/10 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
+            <div className="relative card-executive rounded-2xl overflow-hidden shadow-executive border border-white/20">
               {section.heroImage?.asset ? (
                 <Image
                   src={urlFor(section.heroImage).width(600).height(400).url()}
                   alt={section.heroImage.alt || "Consulting Services"}
                   width={600}
                   height={400}
-                  className="w-full h-auto"
+                  className="w-full h-auto group-hover:scale-105 transition-transform duration-500"
                   priority
                 />
               ) : (
-                <div className="w-full h-96 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
-                  <div className="text-gray-400 text-center">
-                    <div className="text-4xl mb-2">🤝</div>
-                    <p>Consulting Services</p>
+                <div className="w-full h-96 bg-primary/20 flex items-center justify-center">
+                  <div className="text-white text-center">
+                    <div className="text-6xl mb-4 opacity-80">🤝</div>
+                    <p className="text-xl font-semibold">Consulting Services</p>
                   </div>
                 </div>
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              <div className="absolute inset-0 bg-black/20"></div>
             </div>
           </div>
         </div>

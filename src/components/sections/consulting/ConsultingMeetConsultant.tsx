@@ -57,11 +57,13 @@ export function ConsultingMeetConsultant({
   const testimonial = section.testimonial || defaultTestimonial;
 
   return (
-    <section id={componentId} className="bg-gray-900 py-20 lg:py-32">
-      <div className="container px-4 md:px-6">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
-          <div className="relative">
-            <div className="relative rounded-2xl overflow-hidden">
+    <section id={componentId} className="bg-gradient-to-br from-main/95 via-gray-900 to-primary/90 py-24 lg:py-32 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.1),transparent_50%)] opacity-20"></div>
+      <div className="container px-6 md:px-8 max-w-7xl mx-auto relative">
+        <div className="grid gap-16 lg:grid-cols-2 lg:gap-20 items-center">
+          <div className="relative group">
+            <div className="absolute -inset-6 bg-gradient-to-r from-white/20 via-secondary/20 to-white/20 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
+            <div className="relative card-executive rounded-2xl overflow-hidden shadow-executive border border-white/20">
               {section.profileImage?.asset ? (
                 <Image
                   src={urlFor(section.profileImage)
@@ -71,38 +73,35 @@ export function ConsultingMeetConsultant({
                   alt={section.profileImage.alt || "Jeffrey Lackey, Sr."}
                   width={600}
                   height={600}
-                  className="w-full h-auto object-cover"
+                  className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               ) : (
-                <div className="w-full h-96 bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
-                  <div className="text-gray-400 text-center">
-                    <div className="text-4xl mb-2">👤</div>
-                    <p>Professional Photo</p>
+                <div className="w-full h-96 bg-gradient-to-br from-primary/20 to-secondary/30 flex items-center justify-center">
+                  <div className="text-white text-center">
+                    <div className="text-6xl mb-4 opacity-80">👤</div>
+                    <p className="text-xl font-semibold">Professional Photo</p>
                   </div>
                 </div>
               )}
             </div>
 
             {testimonial && (
-              <div className="absolute -bottom-6 -right-6 bg-white rounded-xl p-6 shadow-xl max-w-sm">
-                <div className="flex items-center gap-1 mb-3">
+              <div className="absolute -bottom-8 -right-8 card-executive p-6 shadow-executive max-w-sm border border-white/20 backdrop-blur-sm">
+                <div className="flex items-center gap-1 mb-4">
                   {[...Array(testimonial.rating || 5)].map((_, i) => (
                     <Star
                       key={i}
-                      className="w-4 h-4 fill-yellow-400 text-yellow-400"
+                      className="w-5 h-5 fill-secondary text-secondary"
                     />
                   ))}
                 </div>
-                <p className="text-gray-700 text-sm mb-3 line-clamp-3">
+                <blockquote className="text-gray-700 text-sm mb-4 leading-relaxed italic">
                   &ldquo;{testimonial.text}&rdquo;
-                </p>
-                <div className="text-xs text-gray-500">
-                  <span className="font-medium">{testimonial.author}</span>
-                  {testimonial.position && (
-                    <span>, {testimonial.position}</span>
-                  )}
-                  {testimonial.company && (
-                    <span> at {testimonial.company}</span>
+                </blockquote>
+                <div className="text-xs text-gray-600">
+                  <div className="font-semibold text-primary">{testimonial.author}</div>
+                  {testimonial.position && testimonial.company && (
+                    <div>{testimonial.position} at {testimonial.company}</div>
                   )}
                 </div>
               </div>
@@ -110,43 +109,47 @@ export function ConsultingMeetConsultant({
           </div>
 
           <div className="space-y-8">
-            <div className="space-y-4">
-              <Badge
-                variant="secondary"
-                className="bg-blue-100 text-blue-800 px-4 py-2"
-              >
-                {section.badgeText || "Meet Your Consultant"}
-              </Badge>
-              <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/95 backdrop-blur-sm rounded-full border border-white/30 shadow-professional">
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                <span className="text-sm font-semibold text-primary">
+                  {section.badgeText || "Meet Your Consultant"}
+                </span>
+              </div>
+              <h2 className="text-5xl md:text-6xl font-extrabold text-white leading-tight tracking-tight">
                 {section.name || "Jeffrey Lackey, Sr."}
               </h2>
-              <p className="text-xl text-blue-400 font-medium">
+              <p className="text-2xl bg-gradient-to-r from-secondary via-white to-off-white bg-clip-text text-transparent font-semibold">
                 {section.title || "Global Strategic Talent Leader"}
               </p>
             </div>
 
-            <div className="space-y-6">
-              <p className="text-gray-300 text-lg leading-relaxed">
-                {section.bio ||
-                  "With over 28 years of experience in strategic talent acquisition, Jeffrey stays ahead of technology and innovation trends to provide cutting-edge solutions for businesses worldwide. His thought leadership and deep industry expertise have helped organizations across 70+ countries build world-class teams."}
-              </p>
+            <div className="space-y-8">
+              <div className="prose prose-lg text-gray-200 max-w-none">
+                <p className="text-xl leading-relaxed">
+                  {section.bio ||
+                    "With over 28 years of experience in strategic talent acquisition, Jeffrey stays ahead of technology and innovation trends to provide cutting-edge solutions for businesses worldwide. His thought leadership and deep industry expertise have helped organizations across 70+ countries build world-class teams."}
+                </p>
+              </div>
 
-              <p className="text-gray-300 text-lg leading-relaxed">
-                {section.companyDescription ||
-                  "JKL Advisors specializes in connecting exceptional talent with forward-thinking companies, leveraging innovative recruitment strategies and a deep understanding of global markets to drive sustainable growth through people."}
-              </p>
+              <blockquote className="border-l-4 border-secondary pl-6 py-4 bg-gradient-to-r from-white/5 to-transparent">
+                <p className="text-lg text-gray-300 leading-relaxed italic">
+                  {section.companyDescription ||
+                    "JKL Advisors specializes in connecting exceptional talent with forward-thinking companies, leveraging innovative recruitment strategies and a deep understanding of global markets to drive sustainable growth through people."}
+                </p>
+              </blockquote>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-8">
               {stats.map((stat, index) => (
                 <div
                   key={index}
-                  className="bg-gray-800 rounded-lg p-6 text-center"
+                  className="glass-card p-8 text-center group hover:shadow-executive transition-all duration-300 hover:-translate-y-1 border border-white/20"
                 >
-                  <div className="text-2xl md:text-3xl font-bold text-white mb-2">
+                  <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-white to-secondary bg-clip-text text-transparent mb-3 group-hover:scale-110 transition-transform duration-200">
                     {stat.number}
                   </div>
-                  <div className="text-sm text-gray-400">{stat.label}</div>
+                  <div className="text-sm text-gray-200 font-medium group-hover:text-white transition-colors duration-200">{stat.label}</div>
                 </div>
               ))}
             </div>

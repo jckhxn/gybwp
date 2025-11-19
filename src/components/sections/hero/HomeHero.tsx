@@ -65,7 +65,7 @@ export function HomeHero({ section }: HomeHeroProps) {
   return (
     <section
       id={componentId}
-      className="w-full pt-8 md:pt-24 lg:pt-28 pb-4 md:pb-6 lg:pb-8 bg-gradient-to-br from-main-dark via-main to-main-light relative overflow-hidden"
+      className="w-full pt-8 md:pt-24 lg:pt-28 pb-4 md:pb-6 lg:pb-8 bg-main relative overflow-hidden"
     >
       {/* Pattern overlay for texture */}
       <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGRkZGRkYiIGZpbGwtb3BhY2l0eT0iMSI+PHBhdGggZD0iTTM2IDM0aDR2MWgtNHpNNDAgMzJoNHYxaC00ek0zMiAzN2g0djFoLTR6TTM2IDM5aDR2MWgtNHpNNDAgNDFoNHYxaC00ek0zMiA0NGg0djFoLTR6TTM2IDQ2aDR2MWgtNHoiLz48L2c+PC9nPjwvc3ZnPg==')] mix-blend-overlay pointer-events-none sm:block hidden"></div>
@@ -109,14 +109,17 @@ export function HomeHero({ section }: HomeHeroProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="flex flex-col gap-3"
+              className="flex flex-col gap-4"
             >
-              <div className="inline-flex items-center rounded-full bg-primary/20 backdrop-blur-sm px-4 py-1.5 w-fit">
-                <span className="text-primary-light font-semibold tracking-widest uppercase text-sm md:text-base">
-                  {badgeText}
-                </span>
+              <div className="inline-flex items-center rounded-full px-6 py-3 w-fit bg-white/95 backdrop-blur-sm shadow-professional border border-white/30">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                  <span className="text-main font-bold tracking-wide uppercase text-sm md:text-base">
+                    {badgeText}
+                  </span>
+                </div>
               </div>
-              <h1 className="text-white text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight font-sans bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent break-words">
+              <h1 className="text-white text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight font-sans break-words">
                 {title}
               </h1>
             </motion.div>
@@ -134,25 +137,24 @@ export function HomeHero({ section }: HomeHeroProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 w-full items-center justify-center"
+              className="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-6 w-full items-center justify-start"
             >
               <SmartButton
                 data={primaryButton}
-                className="group relative h-12 sm:h-14 w-auto max-w-xs px-6 sm:px-8 text-base font-medium text-white overflow-hidden rounded-lg bg-gradient-to-r from-primary to-primary-light shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center gap-2 justify-center text-center"
+                className="group relative h-14 sm:h-16 w-auto min-w-[200px] px-8 sm:px-10 text-base font-semibold text-white rounded-xl bg-primary shadow-lg transition-all duration-200 hover:shadow-xl hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center gap-3 justify-center"
               >
-                {/* Shimmer effect on hover */}
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out"></span>
-                <Play className="inline-block w-5 h-5 relative z-10" />
-                <span className="relative z-10">{primaryButton.text}</span>
+                {/* Enhanced shimmer effect */}
+                <Play className="inline-block w-5 h-5 relative z-10 group-hover:scale-110 transition-transform" />
+                <span className="relative z-10 font-bold tracking-wide">{primaryButton.text}</span>
               </SmartButton>
 
               {secondaryButton && (
                 <SmartButton
                   data={secondaryButton}
-                  className="group h-12 sm:h-14 w-auto max-w-xs px-6 sm:px-8 text-base font-medium text-white bg-transparent border-2 border-white/30 rounded-lg transition-all duration-300 hover:bg-white/10 hover:border-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-1 flex items-center gap-2 justify-center text-center"
+                  className="group glass-dark h-14 sm:h-16 w-auto min-w-[180px] px-8 sm:px-10 text-base font-semibold text-white border-2 border-white/20 rounded-xl transition-all duration-300 hover:bg-white/10 hover:border-white/40 hover:shadow-glass-lg hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-1 flex items-center gap-3 justify-center backdrop-blur-md"
                 >
                   <Headphones className="inline-block w-5 h-5 group-hover:scale-110 transition-transform" />
-                  {secondaryButton.text}
+                  <span className="font-bold tracking-wide">{secondaryButton.text}</span>
                 </SmartButton>
               )}
             </motion.div>
@@ -168,31 +170,33 @@ export function HomeHero({ section }: HomeHeroProps) {
                 <p className="text-gray-300 mb-4 font-medium">
                   {platformsHeading}
                 </p>
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-wrap gap-3">
                   {safePlatforms.map((platform, index) => (
                     <Link
                       key={index}
                       href={platform.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-all py-2.5 px-5 rounded-full shadow-md hover:scale-105 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-primary backdrop-blur-sm"
+                      className="bg-gray-800 hover:bg-gray-700 group flex items-center gap-2 transition-all duration-300 py-2 px-4 rounded-full text-white text-sm font-medium border border-gray-600 hover:border-gray-500 focus-visible:ring-2 focus-visible:ring-white"
                     >
-                      <Image
-                        src={
-                          platform.logoImage
-                            ? getImageUrlClient(platform.logoImage, {
-                                width: 48,
-                                height: 48,
-                                quality: 100,
-                              })
-                            : "/social-logos/default.png"
-                        }
-                        alt={platform.name}
-                        width={24}
-                        height={24}
-                        className="w-6 h-6"
-                      />
-                      <span className="text-white font-medium">
+                      <div className="relative">
+                        <Image
+                          src={
+                            platform.logoImage
+                              ? getImageUrlClient(platform.logoImage, {
+                                  width: 48,
+                                  height: 48,
+                                  quality: 100,
+                                })
+                              : "/social-logos/default.png"
+                          }
+                          alt={platform.name}
+                          width={20}
+                          height={20}
+                          className="w-5 h-5"
+                        />
+                      </div>
+                      <span className="font-medium">
                         {platform.name}
                       </span>
                     </Link>
@@ -237,7 +241,7 @@ export function HomeHero({ section }: HomeHeroProps) {
                 }}
                 className="relative z-10"
               >
-                <div className="absolute -inset-1 bg-gradient-to-r from-primary/50 to-secondary/50 rounded-2xl blur-xl opacity-30"></div>
+                <div className="absolute -inset-1 bg-primary/20 rounded-2xl blur-xl opacity-30"></div>
                 <Image
                   alt="Growing Your Business With People Podcast"
                   className="relative z-10 rounded-2xl shadow-2xl object-cover border border-white/10 max-w-full h-auto"

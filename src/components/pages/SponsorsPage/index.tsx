@@ -39,7 +39,7 @@ const SponsorsPageComponent = () => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
+      <div className="min-h-screen bg-slate-50">
         <div className="container mx-auto px-6 py-20">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-900 mx-auto"></div>
@@ -55,7 +55,7 @@ const SponsorsPageComponent = () => {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
+      <div className="min-h-screen bg-slate-50">
         <div className="container mx-auto px-6 py-20">
           <div className="text-center">
             <p className="text-red-600">
@@ -69,10 +69,10 @@ const SponsorsPageComponent = () => {
 
   if (data) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
+      <div className="min-h-screen bg-slate-50">
         {/* Hero Section */}
         <div className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/5 to-slate-900/10"></div>
+          <div className="absolute inset-0 bg-slate-900/8"></div>
           <div className="relative container mx-auto px-6 py-20 lg:py-32">
             <div className="text-center max-w-4xl mx-auto">
               <div className="flex justify-center mb-6">
@@ -82,7 +82,7 @@ const SponsorsPageComponent = () => {
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">
                 Our Amazing{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <span className="text-blue-600">
                   Sponsors
                 </span>
               </h1>
@@ -134,7 +134,7 @@ const SponsorsPageComponent = () => {
             </div>
 
             {/* Call to Action */}
-            <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-8 md:p-12 text-center text-white">
+            <div className="bg-slate-900 rounded-2xl p-8 md:p-12 text-center text-white">
               <h3 className="text-2xl md:text-3xl font-bold mb-4">
                 Interested in Sponsoring?
               </h3>

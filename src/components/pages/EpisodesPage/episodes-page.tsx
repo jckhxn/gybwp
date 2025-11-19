@@ -212,9 +212,9 @@ export function EpisodesPage() {
   const currentSeasonEpisodes = data.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50/70 to-white">
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-gray-50/70 to-white py-16 md:py-20 lg:py-24">
+      <div className="relative overflow-hidden bg-gray-50 py-16 md:py-20 lg:py-24">
         <div className="container mx-auto px-6">
           <div className="text-center max-w-4xl mx-auto">
             <motion.div
@@ -223,7 +223,7 @@ export function EpisodesPage() {
               transition={{ duration: 0.6 }}
               className="flex justify-center mb-6"
             >
-              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 px-4 py-2 text-sm font-medium text-primary border border-primary/30">
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary border border-primary/30">
                 <Play className="h-4 w-4" />
                 Episode Library
               </div>
@@ -233,7 +233,7 @@ export function EpisodesPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-6 leading-[1.1]"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 mb-6 leading-[1.1]"
             >
               Browse Our Episodes
             </motion.h1>

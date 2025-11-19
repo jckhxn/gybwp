@@ -35,6 +35,12 @@ export default defineType({
         },
       },
     },
+    defineField({
+      name: "seo",
+      title: "SEO Settings",
+      type: "seoMetadata",
+      description: "Search engine optimization settings for this page",
+    }),
   ],
   preview: {
     select: {

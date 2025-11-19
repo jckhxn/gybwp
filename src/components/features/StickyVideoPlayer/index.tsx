@@ -272,7 +272,7 @@ export default function StickyVideoPlayer({
 
             {/* Title overlay */}
             {title && (
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 pointer-events-none">
+              <div className="absolute bottom-0 left-0 right-0 bg-black/70 p-4 pointer-events-none">
                 <p className="text-white text-sm font-medium truncate">
                   {title}
                 </p>

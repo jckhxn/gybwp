@@ -41,11 +41,11 @@ export default function SubscribeSection({ data }: SubscribeSectionProps) {
   if (!data?.showSubscribe) return null;
 
   return (
-    <div className="relative bg-gradient-to-br from-primary/5 via-white to-secondary/5 rounded-xl border border-gray-200 shadow-lg overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary"></div>
+    <div className="relative bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-1 bg-primary"></div>
       <div className="p-8">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl mb-4">
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-primary/20 rounded-xl mb-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-7 w-7 text-primary"

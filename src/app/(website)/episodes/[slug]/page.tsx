@@ -11,6 +11,9 @@ import EpisodeDetails from "@/src/components/features/EpisodeDetails";
 import { loadEpisode } from "@/data/sanity";
 import processMetadata from "@/src/lib/processMetadata";
 import { formatEpisodeTitle } from "@/src/lib/formatTitle";
+import { generateEpisodeMetadata } from "@/src/lib/metadata";
+import { generatePodcastEpisodeStructuredData } from "@/src/lib/structured-data";
+import JSONLD from "@/src/components/SEO/jsonld";
 
 // Import redirect map for legacy UUID support
 import redirectMap from "@/uuid-to-pathname-redirects.json";
@@ -61,7 +64,32 @@ export default async function Page({ params, searchParams }: PageProps) {
     throw new Error("Episode not found");
   }
 
-  return <EpisodeDetails data={initial} />;
+  // Generate structured data for SEO
+  const structuredData = generatePodcastEpisodeStructuredData({
+    title: initial.youtube?.title || initial.title || "Episode",
+    description: initial.youtube?.description || initial.blurb,
+    url: initial.pathname?.current || `/episodes/${slug}`,
+    episodeNumber: initial.episodeNumber || initial.youtube?.episodeNumber,
+    seasonNumber: initial.seasonNumber || initial.youtube?.seasonNumber,
+    publishedAt: initial.youtube?.publishedAt || initial.publishedAt,
+    duration: initial.youtube?.duration || initial.duration,
+    youtubeId: initial.youtube?.videoId || initial.youtube?.id,
+    uuid: initial.uuid || slug,
+    blurb: initial.blurb,
+    guests: initial.guests?.map((guest: any) => ({
+      name: guest.name,
+      title: guest.guestProfile?.title,
+      about: guest.guestProfile?.bio,
+    })),
+    keywords: initial.seo?.keywords || [],
+  });
+
+  return (
+    <>
+      <JSONLD data={structuredData} id="episode-jsonld" />
+      <EpisodeDetails data={initial} />
+    </>
+  );
 }
 
 export async function generateMetadata({
@@ -107,72 +135,8 @@ export async function generateMetadata({
       };
     }
 
-    // Extract episode data
-    const title = episode.episodeName || episode.youtube?.title || "Episode";
-    const description =
-      episode.blurb ||
-      episode.youtube?.blurb ||
-      "Listen to this episode of Growing Your Business With People.";
-    const image =
-      episode.image ||
-      episode.youtube?.thumbnail ||
-      "https://gybwp.com/images/logo.webp";
-    const publishedAt = episode.youtube?.publishedAt || episode.publishedAt;
-    const updatedAt = episode._updatedAt || publishedAt;
-    const seasonNumber = episode.seasonNumber || episode.youtube?.seasonNumber;
-    const episodeNumber =
-      episode.episodeNumber || episode.youtube?.episodeNumber;
-    const duration = episode.youtube?.duration || episode.duration;
-    const youtubeId = episode.youtube?.id;
-
-    // Build episode URL - use pathname if available, otherwise construct from slug
-    const episodeUrl = episode.pathname?.current
-      ? `https://gybwp.com${episode.pathname.current}`
-      : `https://gybwp.com/episodes/${slug}`;
-
-    const youtubeUrl = youtubeId
-      ? `https://www.youtube.com/watch?v=${youtubeId}`
-      : null;
-
-    // Use clean episode title without episode/season prefix
-    const rawTitle = title;
-    const fullTitle = formatEpisodeTitle(rawTitle);
-
-    return {
-      title: fullTitle,
-      description,
-      openGraph: {
-        title: fullTitle,
-        description,
-        url: episodeUrl,
-        type: "article",
-        publishedTime: publishedAt,
-        modifiedTime: updatedAt,
-        siteName: "Growing Your Business With People",
-        locale: "en_US",
-        images: [image],
-        ...(youtubeId && {
-          videos: [
-            {
-              url: `https://www.youtube.com/watch?v=${youtubeId}`,
-              width: 1280,
-              height: 720,
-              type: "video/mp4",
-            },
-          ],
-        }),
-      },
-      twitter: {
-        card: "summary_large_image",
-        title: fullTitle,
-        description,
-        images: [image],
-        site: "@gybwpodcast",
-      },
-      alternates: {
-        canonical: episodeUrl,
-      },
-    };
+    // Use our new metadata generation utility
+    return generateEpisodeMetadata(episode);
   } catch (error) {
     console.error("Error generating metadata:", error);
     return {

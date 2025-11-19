@@ -18,6 +18,7 @@ import transcriptSegment from "./transcriptSegment";
 
 // Import object types
 import componentLink from "./objects/componentLink";
+import seoMetadata from "./objects/seoMetadata";
 
 const schemas = [
   // Core document types (migrated from legacy)
@@ -42,6 +43,7 @@ const schemas = [
 
   // Object types
   componentLink,
+  seoMetadata,
 ];
 
 export default schemas;

@@ -179,7 +179,7 @@ export function FeaturedNews({ section }: FeaturedNewsProps) {
         </div>
 
         {/* Decorative separator */}
-        <div className="w-12 sm:w-20 h-1 bg-gradient-to-r from-primary to-secondary rounded-full my-1 sm:my-2"></div>
+        <div className="w-12 sm:w-20 h-1 bg-primary rounded-full my-1 sm:my-2"></div>
       </motion.div>
 
       {featuredArticles.length > 0 ? (
@@ -198,7 +198,7 @@ export function FeaturedNews({ section }: FeaturedNewsProps) {
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="relative h-full overflow-hidden rounded-2xl shadow-lg border border-gray-100 bg-white hover:shadow-xl transition-shadow duration-300"
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20 group-hover:via-black/60 transition-opacity duration-300 z-10"></div>
+                <div className="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition-opacity duration-300 z-10"></div>
 
                 <div className="relative aspect-[16/9] md:aspect-[16/11] overflow-hidden">
                   <Image

@@ -232,7 +232,7 @@ const SponsorsDetailPageComponent = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-gray-600">Loading sponsor details...</p>
@@ -243,7 +243,7 @@ const SponsorsDetailPageComponent = () => {
 
   if (error || !sponsor) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center max-w-md mx-auto p-8">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg
@@ -278,9 +278,9 @@ const SponsorsDetailPageComponent = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50/70 to-white">
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-gray-50/70 to-white py-16 md:py-20 lg:py-24">
+      <div className="relative overflow-hidden bg-gray-50 py-16 md:py-20 lg:py-24">
         <div className="container mx-auto px-6">
           {/* Back Button */}
           <div className="mb-8">
@@ -304,7 +304,7 @@ const SponsorsDetailPageComponent = () => {
                 className="relative w-64 h-64 rounded-2xl overflow-hidden shadow-xl"
                 style={{ backgroundColor: sponsor.bgColor || "#f8f9fa" }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-transparent"></div>
+                <div className="absolute inset-0 bg-black/5"></div>
                 <div className="relative w-full h-full flex items-center justify-center p-6">
                   <Image
                     src={
@@ -327,7 +327,7 @@ const SponsorsDetailPageComponent = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-6 leading-[1.1]"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 mb-6 leading-[1.1]"
             >
               {sponsor.name}
             </motion.h1>
@@ -338,7 +338,7 @@ const SponsorsDetailPageComponent = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="flex justify-center mb-8"
             >
-              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 px-4 py-2 text-sm font-medium text-primary border border-primary/30">
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary border border-primary/30">
                 <Star className="h-4 w-4" />
                 {sponsor.tier ? `${sponsor.tier} Sponsor` : "Valued Sponsor"}
               </div>
@@ -367,7 +367,7 @@ const SponsorsDetailPageComponent = () => {
                   href={sponsor.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 px-8 py-4 text-base font-medium bg-gradient-to-r from-primary to-primary-light hover:from-primary-light hover:to-primary text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                  className="inline-flex items-center gap-3 px-8 py-4 text-base font-medium bg-primary hover:bg-primary/90 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 >
                   <Globe className="h-5 w-5" />
                   Visit Website
@@ -559,11 +559,11 @@ const SponsorsDetailPageComponent = () => {
           <>
             {/* Section Header */}
             <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 px-4 py-2 text-sm font-medium text-primary border border-primary/20 mb-6">
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary border border-primary/20 mb-6">
                 <Users className="h-4 w-4" />
                 Sponsored Content
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-gray-900">
                 Episodes Sponsored by {sponsor.name}
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">

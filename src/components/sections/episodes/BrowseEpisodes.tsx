@@ -1,9 +1,21 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { CalendarDays, Clock } from "lucide-react";
+import { CalendarDays, Clock, Play, ChevronRight } from "lucide-react";
+import {
+  StoryImage,
+  StoryAuthor,
+  StoryOverlay,
+} from "@/src/components/ui/kibo-ui/stories";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/src/components/ui/carousel";
 import { client } from "@/src/lib/sanity-utils";
 import { ALL_SEASONS_QUERY, EPISODES_BY_SEASON_QUERY } from "@/src/lib/queries";
 import {
@@ -28,6 +40,7 @@ interface Episode {
     current?: string;
   };
   youtube?: {
+    id?: string;
     title?: string;
     episodeNumber?: number;
     seasonNumber?: number;
@@ -69,9 +82,12 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
   const [activeSeason, setActiveSeason] = useState<string | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [seasons, setSeasons] = useState<Season[]>([]);
-  const [showLeftArrow, setShowLeftArrow] = useState(false);
-  const [showRightArrow, setShowRightArrow] = useState(false);
-  const [activeEpisodeIndex, setActiveEpisodeIndex] = useState(0);
+  const [hoveredEpisode, setHoveredEpisode] = useState<string | null>(null);
+  const [loadedVideos, setLoadedVideos] = useState<Set<string>>(new Set());
+  const [visibleEpisodes, setVisibleEpisodes] = useState<Set<string>>(new Set());
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const episodeRefs = useRef<Map<string, HTMLElement>>(new Map());
 
   // Helper function to get episode URL - prioritize pathname over UUID
   const getEpisodeUrl = (episode: Episode): string => {
@@ -85,6 +101,113 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
     return "/episodes"; // Fallback to episodes listing
   };
 
+  // Helper function to generate YouTube embed URL
+  const getYouTubeEmbedUrl = (videoId: string): string => {
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&loop=1&playlist=${videoId}`;
+  };
+
+
+  // Custom YouTube Story component for autoplay on hover
+  const StoryYouTube = ({ 
+    episode, 
+    isHovered, 
+    isVisible, 
+    isLoaded 
+  }: { 
+    episode: Episode;
+    isHovered: boolean;
+    isVisible: boolean;
+    isLoaded: boolean;
+  }) => {
+    return (
+      <>
+        {/* Static thumbnail image */}
+        <StoryImage
+          src={episode.youtube?.thumbnail || `/placeholder.svg?height=200&width=360&text=Episode ${episode.youtube?.episodeNumber}`}
+          alt={`${episode.youtube?.title || `Episode ${episode.youtube?.episodeNumber}`} cover`}
+          className={`transition-opacity duration-500 ${
+            isHovered && episode.youtube?.id ? 'opacity-0' : 'opacity-100'
+          }`}
+        />
+        
+        {/* YouTube video iframe - only render when hovered */}
+        {isHovered && episode.youtube?.id && isLoaded && isVisible && (
+          <iframe
+            src={getYouTubeEmbedUrl(episode.youtube.id)}
+            className="absolute inset-0 w-full h-full transition-opacity duration-500 opacity-100 z-10"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            loading="lazy"
+            title={`${episode.youtube.title} - Video Preview`}
+            aria-label={`Auto-playing video preview for ${episode.youtube.title}`}
+          />
+        )}
+        
+        {/* Play button overlay - only show when not playing video */}
+        {!(isHovered && episode.youtube?.id) && (
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+            <div className="bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
+              <Play className="w-6 h-6 text-gray-800 ml-0.5" fill="currentColor" />
+            </div>
+          </div>
+        )}
+        
+        {/* Episode number badge */}
+        {episode.youtube?.episodeNumber && (
+          <div className="absolute top-3 left-3 z-20">
+            <div className="bg-black/80 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-full border border-white/20 shadow-lg">
+              EP {episode.youtube.episodeNumber}
+            </div>
+          </div>
+        )}
+        
+        {/* Gradient overlay for text readability */}
+        <StoryOverlay side="bottom" className="from-black/70 to-transparent h-24" />
+        
+        {/* Episode info */}
+        <StoryAuthor className="p-4 z-20">
+          <div className="bg-black/30 backdrop-blur-sm rounded-lg p-3 space-y-3">
+            <h3 className="font-semibold text-sm leading-tight text-white line-clamp-2">
+              {episode.youtube?.title || `Episode ${episode.youtube?.episodeNumber}`}
+            </h3>
+            
+            <div className="flex items-center gap-2 text-xs text-white/90">
+              <div className="flex items-center gap-1">
+                <CalendarDays className="w-3 h-3" />
+                <span>
+                  {episode.youtube?.publishedAt
+                    ? formatDate(episode.youtube.publishedAt)
+                    : ""}
+                </span>
+              </div>
+              <div className="w-1 h-1 rounded-full bg-white/60"></div>
+              <div className="flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                <span>
+                  {formatDurationCompact(
+                    episode.youtube?.duration || episode.duration,
+                    "30m"
+                  )}
+                </span>
+              </div>
+            </div>
+
+            {/* View Details Link */}
+            <Link 
+              href={getEpisodeUrl(episode)}
+              className="inline-flex items-center gap-1 text-xs font-medium text-white/90 hover:text-white transition-colors group"
+              onClick={(e) => e.stopPropagation()}
+            >
+              View Details
+              <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          </div>
+        </StoryAuthor>
+      </>
+    );
+  };
+
   // Define Season interface to match the utils Season type
   interface LocalSeason {
     title: string;
@@ -92,11 +215,114 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
     _id: string;
   }
 
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [seasonsData, setSeasonsData] = useState<Season[]>([]);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Intersection Observer setup for performance
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          setVisibleEpisodes(prev => {
+            const newVisibleEpisodes = new Set(prev);
+            
+            entries.forEach((entry) => {
+              const episodeId = entry.target.getAttribute('data-episode-id');
+              if (episodeId) {
+                if (entry.isIntersecting) {
+                  newVisibleEpisodes.add(episodeId);
+                } else {
+                  newVisibleEpisodes.delete(episodeId);
+                  // Clean up hover state and loaded videos if episode is no longer visible
+                  if (hoveredEpisode === episodeId) {
+                    setHoveredEpisode(null);
+                  }
+                  // Clean up loaded videos for better memory management
+                  setLoadedVideos(prevLoaded => {
+                    const newLoaded = new Set<string>();
+                    prevLoaded.forEach(id => {
+                      if (id !== episodeId) {
+                        newLoaded.add(id);
+                      }
+                    });
+                    return newLoaded;
+                  });
+                }
+              }
+            });
+            
+            return newVisibleEpisodes;
+          });
+        },
+        {
+          root: null,
+          rootMargin: '50px',
+          threshold: 0.1,
+        }
+      );
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [visibleEpisodes, hoveredEpisode]);
+
+  // Observe episode elements
+  const setEpisodeRef = useCallback((episodeId: string, element: HTMLElement | null) => {
+    if (element) {
+      episodeRefs.current.set(episodeId, element);
+      if (observerRef.current) {
+        observerRef.current.observe(element);
+      }
+    } else {
+      const oldElement = episodeRefs.current.get(episodeId);
+      if (oldElement && observerRef.current) {
+        observerRef.current.unobserve(oldElement);
+      }
+      episodeRefs.current.delete(episodeId);
+    }
+  }, []);
+
+  // Debounced hover handlers - now with visibility check
+  const handleMouseEnter = useCallback((episodeId: string, youtubeId?: string) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    
+    hoverTimeoutRef.current = setTimeout(() => {
+      if (youtubeId && visibleEpisodes.has(episodeId)) {
+        setHoveredEpisode(episodeId);
+        setLoadedVideos(prev => {
+          const newLoaded = new Set(prev);
+          newLoaded.add(episodeId);
+          return newLoaded;
+        });
+      }
+    }, 300); // Optimized debounce timing
+  }, [visibleEpisodes]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    
+    hoverTimeoutRef.current = setTimeout(() => {
+      setHoveredEpisode(null);
+    }, 200); // Small delay before hiding video
+  }, []);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Load seasons on component mount
   useEffect(() => {
@@ -121,18 +347,14 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
       // Use the activeSeason directly as it's now the title
       const queryIdentifier = activeSeason;
       
-      console.log('Fetching episodes for season:', queryIdentifier);
-      
       client
         .fetch(EPISODES_BY_SEASON_QUERY, { name: queryIdentifier })
         .then((res) => {
-          console.log('Episodes fetched:', res);
           setData(res);
           setError(null);
           setIsLoading(false);
         })
         .catch((err) => {
-          console.error('Error fetching episodes:', err);
           setError(err);
           setData(null);
           setIsLoading(false);
@@ -143,103 +365,9 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
   // Set episodes when data changes
   useEffect(() => {
     if (data && Array.isArray(data)) {
-      // Remove the slice to show all episodes
       setEpisodes(data);
-
-      // Reset scroll states when episodes change
-      setShowLeftArrow(false); // Left arrow should be hidden initially
-
-      // Only check right arrow on next render after episodes are updated
-      setTimeout(() => {
-        const container = scrollContainerRef.current;
-        if (container) {
-          setShowRightArrow(container.scrollWidth > container.clientWidth);
-        }
-      }, 0);
     }
   }, [data]);
-
-  // Ensure snap behavior is properly applied
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (container && episodes.length > 0) {
-      // Snap behavior is now handled by Tailwind classes
-      container.classList.add('snap-x', 'snap-mandatory', 'overscroll-x-contain');
-    }
-  }, [episodes]);
-
-  // Check if arrows should be shown
-  useEffect(() => {
-    const checkForScrollbar = () => {
-      const container = scrollContainerRef.current;
-      if (container) {
-        setShowRightArrow(container.scrollWidth > container.clientWidth);
-      }
-    };
-
-    checkForScrollbar();
-    window.addEventListener("resize", checkForScrollbar);
-
-    return () => window.removeEventListener("resize", checkForScrollbar);
-  }, [episodes]);
-
-  // Handle scroll event with improved detection of active slide
-  const handleScroll = () => {
-    const container = scrollContainerRef.current;
-    if (container) {
-      const isAtStart = container.scrollLeft === 0;
-      const isAtEnd =
-        container.scrollLeft + container.clientWidth >=
-        container.scrollWidth - 10;
-
-      setShowLeftArrow(!isAtStart);
-      setShowRightArrow(!isAtEnd);
-
-      // Calculate which episode is most visible in the viewport
-      if (episodes.length > 0) {
-        const cardWidth = container.scrollWidth / episodes.length;
-        const centerPosition = container.scrollLeft + container.clientWidth / 2;
-        const activeIndex = Math.min(
-          Math.floor(centerPosition / cardWidth),
-          episodes.length - 1
-        );
-        setActiveEpisodeIndex(activeIndex);
-      }
-    }
-  };
-
-  // Scroll handlers
-  const scrollLeft = () => {
-    if (scrollContainerRef.current && episodes.length > 0) {
-      const container = scrollContainerRef.current;
-      const cardWidth = container.scrollWidth / episodes.length;
-      const scrollAmount = Math.max(cardWidth, 320); // Use card width or minimum 320px
-      container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollContainerRef.current && episodes.length > 0) {
-      const container = scrollContainerRef.current;
-      const cardWidth = container.scrollWidth / episodes.length;
-      const scrollAmount = Math.max(cardWidth, 320); // Use card width or minimum 320px
-      container.scrollBy({ left: scrollAmount, behavior: "smooth" });
-    }
-  };
-
-  // Scroll to a specific episode
-  const scrollToEpisode = (index: number) => {
-    if (scrollContainerRef.current && episodes.length > 0) {
-      const container = scrollContainerRef.current;
-      const cardWidth = container.scrollWidth / episodes.length;
-      const targetScrollPosition = cardWidth * index;
-
-      container.scrollTo({
-        left: targetScrollPosition,
-        behavior: "smooth",
-      });
-    }
-  };
 
   return (
     <section
@@ -345,172 +473,42 @@ export function BrowseEpisodes({ section }: BrowseEpisodesProps) {
             </div>
           ) : episodes.length > 0 ? (
             <div className="w-full relative">
-              {/* Left arrow */}
-              {showLeftArrow && (
-                <button
-                  onClick={scrollLeft}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-gray-50 rounded-full p-3 shadow-xl border border-gray-300/80 hidden md:flex items-center justify-center transition-all duration-200 hover:scale-105 hover:shadow-2xl group"
-                  aria-label="Scroll left"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-gray-700 group-hover:text-primary transition-colors duration-200"
-                  >
-                    <path d="m15 18-6-6 6-6" />
-                  </svg>
-                </button>
-              )}
-
-              {/* Episodes container */}
-              <div
-                ref={scrollContainerRef}
-                className="flex overflow-x-auto pb-6 gap-4 snap-x snap-mandatory overscroll-x-contain scrollbar-hide px-2 sm:px-4 md:px-16"
-                onScroll={handleScroll}
+              <Carousel 
+                className="w-full max-w-none" 
+                opts={{ 
+                  align: "start", 
+                  loop: false, 
+                  dragFree: true, 
+                  containScroll: "trimSnaps",
+                  slidesToScroll: 1
+                }}
               >
-                {episodes.map((episode, idx) => (
-                  <Link
-                    key={`episode-${idx}`}
-                    href={getEpisodeUrl(episode)}
-                    className="group flex-shrink-0 w-[90vw] max-w-xs sm:w-[360px] md:w-[320px] snap-start snap-always block cursor-pointer"
-                  >
-                    <div className="bg-white rounded-2xl shadow-lg border border-gray-200/70 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-gray-900/20 hover:-translate-y-1 group-hover:border-primary/40 ring-1 ring-gray-100/70">
-                      <div className="aspect-video bg-gradient-to-br from-gray-300 to-gray-400 relative overflow-hidden">
-                        <Image
-                          src={
-                            episode.youtube?.thumbnail ||
-                            `/placeholder.svg?height=200&width=360&text=Episode ${episode.youtube?.episodeNumber}`
-                          }
-                          width={360}
-                          height={200}
-                          alt={`${episode.youtube?.title || `Episode ${episode.youtube?.episodeNumber}`} cover`}
-                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                <CarouselContent className="-ml-4 gap-4 px-4">
+                  {episodes.map((episode, idx) => (
+                    <CarouselItem 
+                      key={`episode-${idx}`}
+                      className="min-w-0 shrink-0 grow-0 basis-auto pl-4"
+                    >
+                      <div
+                        className="group relative overflow-hidden rounded-xl bg-gray-100/40 dark:bg-gray-800/40 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg w-[280px] md:w-[320px] aspect-[4/5] min-h-[350px]"
+                        data-episode-id={episode._id}
+                        ref={(el) => setEpisodeRef(episode._id, el)}
+                        onMouseEnter={() => handleMouseEnter(episode._id, episode.youtube?.id)}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        <StoryYouTube
+                          episode={episode}
+                          isHovered={hoveredEpisode === episode._id}
+                          isVisible={visibleEpisodes.has(episode._id)}
+                          isLoaded={loadedVideos.has(episode._id)}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent"></div>
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                          <div className="p-4 bg-white/95 backdrop-blur-sm rounded-full shadow-xl transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="text-primary"
-                            >
-                              <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                            </svg>
-                          </div>
-                        </div>
                       </div>
-                      <div className="p-6">
-                        <div className="space-y-3">
-                          <h3 className="font-semibold text-lg leading-tight text-gray-900 group-hover:text-primary transition-colors duration-200 line-clamp-2">
-                            {episode.youtube?.title ||
-                              `Episode ${episode.youtube?.episodeNumber}`}
-                          </h3>
-                          <p className="text-gray-700 text-sm leading-relaxed line-clamp-2">
-                            {episode.youtube?.blurb ||
-                              "Dive into insights and strategies that will transform your approach to business leadership and growth."}
-                          </p>
-                        </div>
-
-                        <div className="flex items-center gap-4 text-xs text-gray-700 mt-4 pt-4 border-t border-gray-300">
-                          <div className="flex items-center gap-1.5">
-                            <CalendarDays className="w-3.5 h-3.5" />
-                            <span className="font-medium">
-                              {episode.youtube?.publishedAt
-                                ? formatDate(episode.youtube.publishedAt)
-                                : ""}
-                            </span>
-                          </div>
-                          <div className="w-1.5 h-1.5 rounded-full bg-gray-500"></div>
-                          <div className="flex items-center gap-1.5">
-                            <Clock className="w-3.5 h-3.5" />
-                            <span className="font-medium">
-                              {formatDurationCompact(
-                                episode.youtube?.duration || episode.duration,
-                                "30m"
-                              )}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="mt-4 pt-2">
-                          <div className="inline-flex items-center text-primary font-medium text-sm group-hover:text-primary/80 transition-colors duration-200">
-                            Listen Now
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="ml-1 transition-transform duration-200 group-hover:translate-x-0.5"
-                            >
-                              <path d="m9 18 6-6-6-6" />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-
-              {/* Right arrow */}
-              {showRightArrow && (
-                <button
-                  onClick={scrollRight}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-gray-50 rounded-full p-3 shadow-xl border border-gray-300/80 hidden md:flex items-center justify-center transition-all duration-200 hover:scale-105 hover:shadow-2xl group"
-                  aria-label="Scroll right"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-gray-700 group-hover:text-primary transition-colors duration-200"
-                  >
-                    <path d="m9 18 6-6-6-6" />
-                  </svg>
-                </button>
-              )}
-
-              {/* Mobile scroll indicator dots */}
-              <div className="flex justify-center gap-2 mt-4 md:hidden">
-                {episodes.map((_, idx) => (
-                  <button
-                    key={`dot-${idx}`}
-                    onClick={() => scrollToEpisode(idx)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                      idx === activeEpisodeIndex
-                        ? "bg-primary w-7"
-                        : "bg-gray-300 hover:bg-gray-400"
-                    }`}
-                    aria-label={`Go to episode ${idx + 1}`}
-                    style={{ minWidth: 12, minHeight: 12 }}
-                  />
-                ))}
-              </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="-left-12 top-1/2 -translate-y-1/2 flex items-center justify-center" />
+                <CarouselNext className="-right-12 top-1/2 -translate-y-1/2 flex items-center justify-center" />
+              </Carousel>
             </div>
           ) : (
             <div className="w-full text-center py-16">

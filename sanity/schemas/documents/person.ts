@@ -164,6 +164,12 @@ export default defineType({
         "Link to a specific page and section (useful for hosts to link to their about section)",
       hidden: ({ document }: any) => document?.role !== "host-consultant",
     }),
+    defineField({
+      name: "seo",
+      title: "SEO Settings",
+      type: "seoMetadata",
+      description: "Search engine optimization settings for this person's page",
+    }),
   ],
   preview: {
     select: {

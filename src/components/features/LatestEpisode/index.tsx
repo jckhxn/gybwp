@@ -73,7 +73,7 @@ export const LatestEpisode = ({ section }: LatestEpisodeProps = {}) => {
 
   if (isLoading) {
     return (
-      <section className="w-full py-8 md:py-16 bg-gradient-to-br from-gray-50/50 via-white to-gray-50/50">
+      <section className="w-full py-8 md:py-16 bg-gray-50">
         <div className="container mx-auto px-3 sm:px-6 max-w-4xl">
           <div className="flex flex-col items-center text-center space-y-6 sm:space-y-8 animate-pulse">
             {/* Header skeleton */}
@@ -121,7 +121,7 @@ export const LatestEpisode = ({ section }: LatestEpisodeProps = {}) => {
 
   if (error || !latestEpisode) {
     return (
-      <section className="w-full py-12 md:py-16 bg-gradient-to-br from-gray-50/50 via-white to-gray-50/50">
+      <section className="w-full py-12 md:py-16 bg-gray-50">
         <div className="container mx-auto px-6 max-w-2xl text-center">
           <div className="space-y-4">
             <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto flex items-center justify-center">
@@ -212,7 +212,7 @@ export const LatestEpisode = ({ section }: LatestEpisodeProps = {}) => {
   };
 
   return (
-    <section className="w-full py-8 md:py-16 bg-gradient-to-br from-gray-50/50 via-white to-gray-50/50 relative overflow-hidden">
+    <section className="w-full py-8 md:py-16 bg-gray-50 relative overflow-hidden">
       {/* Subtle background decoration */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/3 rounded-full blur-3xl" />
@@ -280,7 +280,7 @@ export const LatestEpisode = ({ section }: LatestEpisodeProps = {}) => {
               />
 
               {/* Gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-black/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               {/* Play button overlay */}
               <Link
@@ -305,7 +305,7 @@ export const LatestEpisode = ({ section }: LatestEpisodeProps = {}) => {
             )}
 
             {/* Subtle glow effect */}
-            <div className="absolute -z-10 -inset-3 sm:-inset-6 bg-gradient-to-br from-primary/5 to-transparent rounded-2xl blur-xl opacity-60" />
+            <div className="absolute -z-10 -inset-3 sm:-inset-6 bg-primary/5 rounded-2xl blur-xl opacity-60" />
           </motion.div>
 
           {/* Content Section */}

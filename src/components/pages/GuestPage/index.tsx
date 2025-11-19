@@ -26,6 +26,9 @@ import { loadQuery } from "@/data/sanity/loadQuery";
 import { ComponentLinkData } from "@/src/components/ui/ComponentLink";
 import { buildComponentLinkUrl } from "@/src/lib/componentLink";
 import type { EpisodeType } from "@/types";
+import { generatePersonMetadata } from "@/src/lib/metadata";
+import { generatePersonStructuredData } from "@/src/lib/structured-data";
+import JSONLD from "@/src/components/SEO/jsonld";
 
 // Type for guest data returned by GUEST_DETAIL_QUERY
 interface GuestDataType {
@@ -94,14 +97,13 @@ export async function generateMetadata({
     };
   }
 
-  return {
-    title: `${guestData.name} - Guest | Growing Your Business With People`,
-    description:
-      guestData.guestProfile?.bio || `Guest profile for ${guestData.name}`,
-    openGraph: {
-      images: [guestData.guestProfile?.profileImage || "/placeholder.svg"],
-    },
-  };
+  // Use our new metadata generation utility
+  return generatePersonMetadata({
+    name: guestData.name,
+    role: "guest",
+    guestProfile: guestData.guestProfile,
+    pathname: { current: `/guest/${slug}` },
+  });
 }
 
 export default async function GuestPage({
@@ -142,8 +144,27 @@ export default async function GuestPage({
   const latestEpisode = guestData.episodes?.[0];
   const allEpisodesForSidebar = guestData.episodes?.slice(0, 4); // Show up to 4 episodes total
 
+  // Generate structured data for SEO
+  const structuredData = generatePersonStructuredData({
+    name: guestData.name,
+    title: guestData.guestProfile?.title,
+    about: guestData.guestProfile?.bio,
+    image: guestData.guestProfile?.profileImage 
+      ? urlFor(guestData.guestProfile.profileImage).url()
+      : undefined,
+    website: guestData.guestProfile?.website,
+    socialLinks: guestData.guestProfile?.socialLinks,
+    episodes: guestData.episodes?.map(episode => ({
+      title: episode.title,
+      url: `/episode/${episode.uuid}`,
+      publishedAt: episode.date,
+    })),
+  });
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <>
+      <JSONLD data={structuredData} id="person-jsonld" />
+      <div className="min-h-screen bg-gray-50">
       <div className="container max-w-7xl py-12 mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="grid gap-12 lg:grid-cols-3 lg:gap-16">
@@ -354,6 +375,7 @@ export default async function GuestPage({
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

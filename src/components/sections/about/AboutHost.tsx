@@ -60,9 +60,9 @@ export function AboutHost({ section }: AboutHostProps) {
   const imageAlt = hostImage?.alt || "Jeff Lackey - Host";
 
   return (
-    <section id={componentId} className="w-full py-16 md:py-20 bg-gradient-to-br from-primary/10 via-secondary/10 to-white">
-      <div className="container mx-auto px-6 max-w-5xl grid md:grid-cols-2 gap-12 items-center">
-        <div className="flex flex-col items-center text-center bg-white rounded-2xl p-8 border border-gray-200/70 shadow-lg">
+    <section id={componentId} className="w-full py-20 md:py-24 bg-gradient-to-br from-off-white via-white to-gray-50/30">
+      <div className="container mx-auto px-6 max-w-6xl grid md:grid-cols-2 gap-16 items-center">
+        <div className="card-executive flex flex-col items-center text-center p-10">
           <div className="relative mb-6">
             <div className="absolute -inset-3 bg-gradient-to-r from-primary/20 via-secondary/10 to-primary/20 rounded-full blur-lg opacity-30"></div>
             <Image
@@ -91,14 +91,24 @@ export function AboutHost({ section }: AboutHostProps) {
             </div>
           </div>
         </div>
-        <div className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-            {heading}
-          </h2>
-          <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
-            {subtext}
-          </p>
-          <p className="text-base text-gray-500">{hostJourney}</p>
+        <div className="space-y-8">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full border border-primary/20 shadow-professional">
+              <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium text-primary">Leadership Authority</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-main to-main-light bg-clip-text text-transparent">
+              {heading}
+            </h2>
+          </div>
+          <blockquote className="card-executive p-8 border-l-4 border-primary bg-gradient-to-br from-primary/5 to-transparent">
+            <p className="text-xl md:text-2xl text-gray-700 leading-relaxed font-medium italic">
+              {subtext}
+            </p>
+          </blockquote>
+          <div className="prose prose-lg text-gray-600 max-w-none">
+            <p className="leading-relaxed">{hostJourney}</p>
+          </div>
         </div>
       </div>
     </section>
@@ -117,7 +127,7 @@ function SocialLink({
   return (
     <Link
       href={href}
-      className="inline-flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-primary/10 text-primary rounded-lg border border-primary/10 hover:border-primary/20 transition-all duration-200"
+      className="glass-card hover:shadow-professional inline-flex items-center justify-center w-12 h-12 text-primary hover:text-white hover:bg-primary/90 rounded-full border border-primary/20 transition-all duration-300 hover:scale-105"
       target="_blank"
       rel="noopener noreferrer"
     >

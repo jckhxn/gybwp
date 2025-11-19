@@ -43,28 +43,44 @@ export function AboutMission({ section }: AboutMissionProps) {
   const imageAlt = image?.alt || "Podcast Blueprint";
 
   return (
-    <section id={componentId} className="w-full py-16 md:py-20 bg-gradient-to-r from-secondary/10 via-white to-primary/10">
-      <div className="container mx-auto px-6 max-w-5xl grid md:grid-cols-2 gap-12 items-center">
-        <div className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-            {heading}
-          </h2>
-          <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
-            {text}
-          </p>
-          <ul className="list-disc pl-6 text-gray-700 space-y-2">
-            {safeBullets.map((item, i) => <li key={i}>{item}</li>)}
-          </ul>
-        </div>
-        <div className="flex justify-center">
-          <Image
-            src={imageUrl}
-            alt={imageAlt}
-            className="rounded-2xl shadow-2xl border border-gray-200/50 w-full max-w-md"
-            width={400}
-            height={300}
-            style={{ objectFit: "cover" }}
-          />
+    <section id={componentId} className="w-full py-20 md:py-24 bg-white">
+      <div className="container mx-auto px-6 max-w-6xl">
+        <div className="card-executive p-12 grid md:grid-cols-2 gap-16 items-center">
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20 shadow-professional">
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-primary">Our Mission</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-main">
+                {heading}
+              </h2>
+            </div>
+            <p className="text-xl md:text-2xl text-gray-700 leading-relaxed font-medium">
+              {text}
+            </p>
+            <div className="space-y-4">
+              {safeBullets.map((item, i) => (
+                <div key={i} className="flex items-start gap-4 group">
+                  <div className="flex-shrink-0 w-2 h-2 bg-primary rounded-full mt-3 group-hover:scale-125 transition-transform duration-200"></div>
+                  <p className="text-gray-700 leading-relaxed text-lg group-hover:text-gray-900 transition-colors duration-200">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="relative group">
+            <div className="absolute -inset-4 bg-primary/15 rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+            <div className="relative">
+              <Image
+                src={imageUrl}
+                alt={imageAlt}
+                className="card-executive rounded-2xl shadow-professional border-0 w-full max-w-md group-hover:shadow-executive transition-all duration-300"
+                width={400}
+                height={300}
+                style={{ objectFit: "cover" }}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>

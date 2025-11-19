@@ -131,6 +131,7 @@ export const EPISODES_BY_SEASON_QUERY = groq`*[_type == "episode" && season->tit
   "episodeNumber": coalesce(episodeNumber, youtube.episodeNumber),
   "publishedAt": youtube.publishedAt,
   youtube {
+    id,
     title,
     episodeNumber,
     seasonNumber,

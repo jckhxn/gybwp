@@ -45,44 +45,45 @@ export function SponsorCard({ sponsor, size = "medium" }: SponsorCardProps) {
   const getTierColor = (tier?: string) => {
     switch (tier?.toLowerCase()) {
       case "platinum":
-        return "bg-gray-800 text-white";
+        return "bg-gray-800 text-white shadow-sm";
       case "gold":
-        return "bg-yellow-500 text-white";
+        return "bg-yellow-500 text-white shadow-sm";
       case "silver":
-        return "bg-gray-400 text-white";
+        return "bg-gray-400 text-white shadow-sm";
       case "bronze":
-        return "bg-orange-600 text-white";
+        return "bg-orange-600 text-white shadow-sm";
       default:
-        return "bg-gray-200 text-gray-700";
+        return "bg-primary/10 text-primary border border-primary/20";
     }
   };
 
   const content = (
     <div
-      className={`group bg-white rounded-xl border border-gray-100 hover:shadow-xl transition-shadow shadow-lg ${cardClasses[size]} flex flex-col`}
+      className={`group card-executive hover:shadow-executive transition-shadow duration-200 ${cardClasses[size]} flex flex-col relative overflow-hidden`}
     >
+      <div className="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
       {/* Logo Container */}
       <div
-        className={`${sizeClasses[size]} relative overflow-hidden rounded-lg bg-white border border-gray-100 flex items-center justify-center mb-4`}
+        className={`${sizeClasses[size]} relative overflow-hidden rounded-lg bg-gray-50 border border-gray-200/50 flex items-center justify-center mb-4 shadow-sm group-hover:shadow-md transition-shadow duration-200`}
       >
         <Image
           src={logoUrl || "/placeholder-logo.png"}
           alt={`${sponsor.name} logo`}
           fill
-          className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+          className="object-contain p-4 group-hover:scale-105 transition-transform duration-200"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
         />
       </div>
 
       {/* Content */}
       {size !== "small" && (
-        <div className="flex-1 flex flex-col">
-          <h3 className="font-semibold text-gray-900 text-center text-sm md:text-base leading-tight mb-2">
+        <div className="flex-1 flex flex-col relative z-10">
+          <h3 className="font-bold text-gray-900 text-center text-sm md:text-base leading-tight mb-3">
             {sponsor.name}
           </h3>
 
           {sponsor.description && size === "large" && (
-            <p className="text-xs md:text-sm text-gray-600 text-center line-clamp-2 mb-3 flex-1">
+            <p className="text-xs md:text-sm text-gray-600 text-center line-clamp-2 mb-4 flex-1 leading-relaxed">
               {sponsor.description}
             </p>
           )}
@@ -90,7 +91,7 @@ export function SponsorCard({ sponsor, size = "medium" }: SponsorCardProps) {
           {sponsor.tier && (
             <div className="flex justify-center">
               <span
-                className={`inline-block px-2 py-1 text-xs rounded-full font-medium ${getTierColor(sponsor.tier)}`}
+                className={`inline-block px-3 py-1.5 text-xs rounded-full font-semibold ${getTierColor(sponsor.tier)}`}
               >
                 {sponsor.tier.charAt(0).toUpperCase() + sponsor.tier.slice(1)}
               </span>
@@ -105,7 +106,7 @@ export function SponsorCard({ sponsor, size = "medium" }: SponsorCardProps) {
     return (
       <Link
         href={sponsorUrl}
-        className="block hover:scale-[1.02] transition-transform duration-300"
+        className="block hover:scale-[1.02] transition-transform duration-200"
       >
         {content}
       </Link>
@@ -118,7 +119,7 @@ export function SponsorCard({ sponsor, size = "medium" }: SponsorCardProps) {
         href={sponsor.website}
         target="_blank"
         rel="noopener noreferrer"
-        className="block hover:scale-[1.02] transition-transform duration-300"
+        className="block hover:scale-[1.02] transition-transform duration-200"
       >
         {content}
       </Link>

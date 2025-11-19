@@ -41,11 +41,17 @@ export function AboutTestimonials({ section }: AboutTestimonialsProps) {
   ];
 
   return (
-    <section id={componentId} className="w-full py-16 md:py-20 bg-gradient-to-r from-primary/5 via-secondary/10 to-white">
-      <div className="container mx-auto px-6 max-w-5xl">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-          {heading}
-        </h2>
+    <section id={componentId} className="w-full py-20 md:py-24 bg-gray-50">
+      <div className="container mx-auto px-6 max-w-6xl">
+        <div className="text-center mb-16 space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20 shadow-professional mx-auto">
+            <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+            <span className="text-sm font-medium text-primary">Listener Reviews</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-main">
+            {heading}
+          </h2>
+        </div>
         <div className="grid md:grid-cols-3 gap-8">
           {safeTestimonials.map((testimonial, index) => (
             <TestimonialCard key={index} name={testimonial.name} text={testimonial.text} />
@@ -58,20 +64,28 @@ export function AboutTestimonials({ section }: AboutTestimonialsProps) {
 
 function TestimonialCard({ name, text }: { name: string; text: string }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl shadow-md p-6 flex flex-col items-center text-center">
-      <div className="mb-3">
-        <svg
-          className="h-8 w-8 text-primary"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-        >
-          <path d="M17.657 16.657A8 8 0 1 1 12 4v4a4 4 0 1 0 4 4h4a8 8 0 0 1-2.343 4.657z" />
-        </svg>
+    <div className="card-executive p-8 flex flex-col items-center text-center group hover:shadow-executive transition-all duration-300 hover:-translate-y-1">
+      <div className="mb-6 relative">
+        <div className="absolute -inset-2 bg-primary/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="relative w-12 h-12 bg-primary rounded-full flex items-center justify-center shadow-professional">
+          <svg
+            className="h-6 w-6 text-white"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M11.192 15.757c0-.88-.23-1.618-.69-2.217-.326-.412-.768-.683-1.327-.812-.55-.128-1.07-.137-1.54-.028-.16-.95.1-1.956.76-3.022.66-1.065 1.515-1.867 2.558-2.403L9.373 5c-.8.396-1.56.898-2.26 1.505-.71.607-1.34 1.305-1.9 2.094s-.98 1.68-1.25 2.69-.346 2.04-.217 3.1c.168 1.4.62 2.52 1.356 3.35.735.84 1.652 1.26 2.748 1.26.965 0 1.766-.29 2.4-.878.628-.576.94-1.365.94-2.368l.002.003zm9.124 0c0-.88-.23-1.618-.69-2.217-.326-.412-.768-.683-1.327-.812-.55-.128-1.07-.137-1.54-.028-.16-.95.1-1.956.76-3.022.66-1.065 1.515-1.867 2.558-2.403L18.497 5c-.8.396-1.56.898-2.26 1.505-.71.607-1.34 1.305-1.9 2.094s-.98 1.68-1.25 2.69-.346 2.04-.217 3.1c.168 1.4.62 2.52 1.356 3.35.735.84 1.652 1.26 2.748 1.26.965 0 1.766-.29 2.4-.878.628-.576.94-1.365.94-2.368l.002.003z"/>
+          </svg>
+        </div>
       </div>
-      <p className="text-gray-700 text-base mb-2">{text}</p>
-      <span className="text-sm text-gray-500 font-medium">{name}</span>
+      <blockquote className="text-gray-700 text-lg leading-relaxed mb-6 font-medium italic">
+        &ldquo;{text}&rdquo;
+      </blockquote>
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+          <span className="text-primary font-semibold text-sm">{name.charAt(0)}</span>
+        </div>
+        <span className="text-gray-600 font-semibold">{name}</span>
+      </div>
     </div>
   );
 }

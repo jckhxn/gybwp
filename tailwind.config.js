@@ -5,6 +5,7 @@ module.exports = {
     "./src/pages/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
     "./src/**/*.{js,ts,jsx,tsx}",
+    "./remotion/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -52,35 +53,46 @@ module.exports = {
         accent: "#FF6F61", // Coral accent color for CTAs and highlights
         "accent-light": "#FF8D82", // Lighter variant for hover effects
       },
+      
+      // Clean shadows for subtle depth
+      boxShadow: {
+        'professional': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        'professional-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        'executive': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+      },
+      
+      // Clean border radius values
+      borderRadius: {
+        'xl': '12px',
+        '2xl': '16px',
+        '3xl': '24px',
+      },
       animation: {
         bounce: "bounce 1s infinite",
         fadeIn: "fadeIn 0.5s ease-in-out",
-        shimmer: "shimmer 2s infinite",
         slideUp: "slideUp 0.6s ease-out",
         scaleIn: "scaleIn 0.5s ease-out",
         pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "pulse-slow": "pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        float: "float 6s ease-in-out infinite",
+        "fade-in": "fadeIn 0.3s ease-out",
+        "slide-in": "slideIn 0.4s ease-out",
       },
       keyframes: {
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
-        shimmer: {
-          "100%": { transform: "translateX(100%)" },
-        },
         slideUp: {
           "0%": { transform: "translateY(10px)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
         },
+        slideIn: {
+          "0%": { transform: "translateX(-10px)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
         scaleIn: {
           "0%": { transform: "scale(0.95)", opacity: "0" },
           "100%": { transform: "scale(1)", opacity: "1" },
-        },
-        float: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
         },
       },
     },
