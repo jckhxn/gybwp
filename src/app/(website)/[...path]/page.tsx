@@ -2,6 +2,9 @@ import { notFound } from "next/navigation";
 import { loadPage } from "@/data/sanity";
 import { Page } from "@/src/components/Page";
 
+// Enable ISR with 1 hour revalidation
+export const revalidate = 3600;
+
 export default async function DynamicPage({
   params,
 }: {

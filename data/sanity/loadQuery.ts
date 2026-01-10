@@ -29,7 +29,7 @@ export async function loadQuery<QueryResponse>({
 
   const options = {
     filterResponse: false,
-    useCdn: false,
+    useCdn: !isDraftMode, // Use CDN in production for better performance
     resultSourceMap: isDraftMode ? "withKeyArraySelector" : false,
     token: isDraftMode ? token : undefined,
     perspective,

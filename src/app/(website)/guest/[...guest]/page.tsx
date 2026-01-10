@@ -1,6 +1,9 @@
 import React from "react";
 import GuestPage from "@/src/components/pages/GuestPage";
 
+// Enable ISR with 1 hour revalidation
+export const revalidate = 3600;
+
 type PageProps = {
   params: Promise<{ guest: string | string[] }>;
 };

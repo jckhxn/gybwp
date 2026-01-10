@@ -6,7 +6,7 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const ip = request.ip || request.headers.get("x-forwarded-for") || "unknown";
+  const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
 
   // Block specific malicious patterns found in your logs
   const blockedPatterns = [

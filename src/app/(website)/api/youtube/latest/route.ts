@@ -44,11 +44,6 @@ export async function GET() {
     const channelId = process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID;
     const apiKey = process.env.NEXT_YOUTUBE_API_KEY;
 
-    console.log("Environment check:", {
-      channelId: channelId ? "✓ Present" : "✗ Missing",
-      apiKey: apiKey ? "✓ Present" : "✗ Missing"
-    });
-
     if (!channelId || !apiKey) {
       return NextResponse.json(
         { error: "Missing YouTube API configuration" },

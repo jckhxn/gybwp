@@ -86,7 +86,6 @@ export function fetchVideoData(
   return fetch(url)
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
       const snippet = data?.items?.[0]?.snippet;
       const contentDetails = data?.items?.[0]?.contentDetails;
 

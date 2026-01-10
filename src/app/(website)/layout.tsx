@@ -94,10 +94,8 @@ export default async function RootLayout({
                   if (payload.source === "mutation") {
                     if (payload.document.slug?.current) {
                       const tag = `${payload.document._type}:${payload.document.slug.current}`;
-                      console.log("Revalidate slug", tag);
                       await revalidateTag(tag);
                     }
-                    console.log("Revalidate tag", payload.document._type);
                     return revalidateTag(payload.document._type);
                   }
                   await revalidatePath("/", "layout");

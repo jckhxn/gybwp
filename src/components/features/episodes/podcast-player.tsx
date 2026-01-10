@@ -8,6 +8,7 @@ import {
   useImperativeHandle,
   useCallback,
 } from "react";
+import dynamic from "next/dynamic";
 import {
   Play,
   Pause,
@@ -18,7 +19,12 @@ import {
   Maximize,
   Minimize,
 } from "lucide-react";
-import EpisodeSlider from "@/src/components/ui/EpisodeSlider";
+
+// Lazy load EpisodeSlider
+const EpisodeSlider = dynamic(() => import("../../ui/EpisodeSlider.tsx"), {
+  ssr: false
+});
+
 import { Button } from "@/src/components/ui/button";
 import { Slider } from "@/src/components/ui/slider";
 

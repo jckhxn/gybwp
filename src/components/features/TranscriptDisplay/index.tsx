@@ -143,7 +143,6 @@ export const TranscriptDisplay: React.FC<TranscriptDisplayProps> = ({
 
         // If it's a guest with a slug, make it a link
         if (value?.type === "guest" && resolvedGuest?.slug?.current) {
-          console.log("Guest with slug found:", resolvedGuest);
           return (
             <Link
               href={`/guest/${encodeURIComponent(resolvedGuest.slug.current)}`}

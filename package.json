@@ -7,10 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migration:uuid-to-slug": "npx tsx migrations/uuid-to-slug-migration.ts",
-    "video": "remotion studio src/remotion/index.ts",
-    "video:render": "remotion render src/remotion/index.ts IntroVideo out/intro.mp4",
-    "video:preview": "remotion preview src/remotion/index.ts"
+    "migration:uuid-to-slug": "npx tsx migrations/uuid-to-slug-migration.ts"
   },
   "dependencies": {
     "@netlify/plugin-nextjs": "^4.38.1",
@@ -27,12 +24,6 @@
     "@radix-ui/react-tabs": "^1.1.7",
     "@radix-ui/react-toast": "^1.2.13",
     "@reduxjs/toolkit": "^1.9.5",
-    "@remotion/cli": "^4.0.327",
-    "@remotion/eslint-config": "^4.0.327",
-    "@remotion/player": "^4.0.327",
-    "@remotion/renderer": "^4.0.327",
-    "@remotion/studio": "^4.0.327",
-    "@remotion/tailwind": "^4.0.327",
     "@sanity/client": "^7.6.0",
     "@sanity/image-url": "^1.0.2",
     "@sanity/preview-url-secret": "^2.1.11",
@@ -44,6 +35,7 @@
     "@types/node": "18.15.11",
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
+    "@vercel/og": "^0.8.6",
     "autoprefixer": "^10.4.14",
     "axios": "^1.5.0",
     "class-variance-authority": "^0.7.1",

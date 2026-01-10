@@ -4,6 +4,7 @@
 import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import routes from "@/src/app/(website)/routes";
 import { SanityDocument } from "sanity";
 
@@ -41,7 +42,16 @@ import {
   RelatedEpisodes,
   type PlayerHandle,
 } from "@/src/components/features/episodes";
-import StickyVideoPlayer from "@/src/components/features/StickyVideoPlayer";
+
+// Lazy load StickyVideoPlayer for better performance
+const StickyVideoPlayer = dynamic(
+  () => import("@/src/components/features/StickyVideoPlayer"),
+  {
+    loading: () => <div className="w-full h-96 bg-gray-900 animate-pulse rounded-lg" />,
+    ssr: false
+  }
+);
+
 import {
   formatDate,
   formatDescriptionText,

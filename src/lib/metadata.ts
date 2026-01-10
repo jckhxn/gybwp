@@ -206,14 +206,30 @@ export function generateEpisodeMetadata(episodeData: EpisodeData): Metadata {
 
   const path = episodeData.pathname?.current || "";
 
-  return generateMetadata(
-    {
-      ...episodeData,
-      seo: {
-        ...episodeData.seo,
-        keywords: combinedKeywords,
+  // Generate dynamic OG image URL
+  const guestNames = episodeData.guests?.map(g => g.name).filter(Boolean).join(" & ") || "";
+  const thumbnail = episodeData.youtube?.thumbnail || "";
+  const ogImageUrl = `${SITE_CONFIG.siteUrl}/api/og/episode?${new URLSearchParams({
+    title: episodeTitle,
+    ...(guestNames && { guests: guestNames }),
+    ...(thumbnail && { thumbnail }),
+  }).toString()}`;
+
+  // Override the OG image with dynamic one
+  const metadataWithDynamicOG = {
+    ...episodeData,
+    seo: {
+      ...episodeData.seo,
+      keywords: combinedKeywords,
+      openGraph: {
+        ...episodeData.seo?.openGraph,
+        image: null, // Clear static image so we can use dynamic one
       }
-    },
+    }
+  };
+
+  const baseMetadata = generateMetadata(
+    metadataWithDynamicOG,
     {
       type: "video.episode",
       fallbackTitle: episodeTitle,
@@ -221,6 +237,26 @@ export function generateEpisodeMetadata(episodeData: EpisodeData): Metadata {
       path,
     }
   );
+
+  // Override images with dynamic OG image
+  return {
+    ...baseMetadata,
+    openGraph: {
+      ...baseMetadata.openGraph,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: episodeTitle,
+        },
+      ],
+    },
+    twitter: {
+      ...baseMetadata.twitter,
+      images: [ogImageUrl],
+    },
+  };
 }
 
 /**
@@ -285,14 +321,46 @@ export function generatePersonMetadata(personData: PersonData): Metadata {
 export function generatePageMetadata(pageData: PageData): Metadata {
   const pageTitle = pageData.seo?.metaTitle || 
     `${pageData.title} - ${SITE_CONFIG.siteName}`;
+  
+  const pageDescription = pageData.seo?.metaDescription || SITE_CONFIG.defaultDescription;
 
   const path = pageData.pathname?.current || "";
 
-  return generateMetadata(pageData, {
+  // Generate dynamic OG image for pages
+  const ogImageUrl = `${SITE_CONFIG.siteUrl}/api/og/page?${new URLSearchParams({
+    title: pageTitle,
+    description: pageDescription,
+  }).toString()}`;
+
+  const baseMetadata = generateMetadata(pageData, {
     type: "website",
     fallbackTitle: pageTitle,
     path,
   });
+
+  // Override with dynamic OG image if no custom image is set
+  if (!pageData.seo?.openGraph?.image) {
+    return {
+      ...baseMetadata,
+      openGraph: {
+        ...baseMetadata.openGraph,
+        images: [
+          {
+            url: ogImageUrl,
+            width: 1200,
+            height: 630,
+            alt: pageTitle,
+          },
+        ],
+      },
+      twitter: {
+        ...baseMetadata.twitter,
+        images: [ogImageUrl],
+      },
+    };
+  }
+
+  return baseMetadata;
 }
 
 /**

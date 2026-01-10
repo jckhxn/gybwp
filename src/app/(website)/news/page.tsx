@@ -1,27 +1,20 @@
 // @ts-nocheck
-"use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 // components
 import Articles from "@/src/components/features/Articles";
 import FeaturedNews from "@/src/components/features/FeaturedNews";
 import { client } from "@/data/sanity/client";
 import { FEATURED_ARTICLES_QUERY } from "@/data/sanity/queries";
 
-//
-//
-//
-//
-// DO NOT TOUCH THIS FILE UNLESS YOU'RE A DEV
+// Enable ISR with 1 hour revalidation
+export const revalidate = 3600;
 
-const NewsPageComponent = () => {
-  const [featuredIds, setFeaturedIds] = useState([]);
-
-  useEffect(() => {
-    client.fetch(FEATURED_ARTICLES_QUERY).then((articles) => {
-      const ids = Array.isArray(articles) ? articles.map((a) => a._id) : [];
-      setFeaturedIds(ids);
-    });
-  }, []);
+const NewsPageComponent = async () => {
+  // Fetch featured articles on the server
+  const featuredArticles = await client.fetch(FEATURED_ARTICLES_QUERY);
+  const featuredIds = Array.isArray(featuredArticles) 
+    ? featuredArticles.map((a) => a._id) 
+    : [];
 
   return (
     <>

@@ -31,7 +31,7 @@ const PAGES_QUERY = groq`
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     // Load dynamic content
-    const [episodes, persons, pages] = await Promise.all([
+    const [episodesData, personsData, pagesData] = await Promise.all([
       loadQuery({
         query: EPISODES_QUERY,
       }),
@@ -42,6 +42,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         query: PAGES_QUERY,
       }),
     ]);
+
+    // Extract data from loadQuery results
+    const episodes = Array.isArray(episodesData) ? episodesData : [];
+    const persons = Array.isArray(personsData) ? personsData : [];
+    const pages = Array.isArray(pagesData) ? pagesData : [];
 
     const sitemapEntries: MetadataRoute.Sitemap = [];
 

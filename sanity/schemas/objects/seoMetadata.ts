@@ -21,7 +21,7 @@ export default defineType({
       validation: (Rule) => 
         Rule.max(160).warning("Description should be under 160 characters for optimal display in search results"),
     }),
-    defineField({
+    {
       name: "keywords",
       title: "Keywords", 
       type: "array",
@@ -30,7 +30,7 @@ export default defineType({
       options: {
         layout: "tags",
       },
-    }),
+    },
     defineField({
       name: "noIndex",
       title: "No Index",
@@ -51,25 +51,25 @@ export default defineType({
       type: "url",
       description: "Canonical URL for this page (optional, leave empty to use current page URL)",
     }),
-    defineField({
+    {
       name: "openGraph",
       title: "Open Graph",
       type: "object",
       description: "Settings for social media sharing",
       fields: [
-        defineField({
+        {
           name: "title",
           title: "OG Title",
           type: "string",
           description: "Title for social media (leave empty to use meta title or page title)",
-        }),
-        defineField({
+        },
+        {
           name: "description",
           title: "OG Description", 
           type: "text",
           description: "Description for social media (leave empty to use meta description)",
-        }),
-        defineField({
+        },
+        {
           name: "image",
           title: "OG Image",
           type: "image",
@@ -77,8 +77,8 @@ export default defineType({
           options: {
             hotspot: true,
           },
-        }),
-        defineField({
+        },
+        {
           name: "type",
           title: "OG Type",
           type: "string",
@@ -92,20 +92,20 @@ export default defineType({
             ],
           },
           initialValue: "website",
-        }),
+        },
       ],
       options: {
         collapsible: true,
         collapsed: true,
       },
-    }),
-    defineField({
+    },
+    {
       name: "twitter",
       title: "Twitter Card",
       type: "object",
       description: "Settings for Twitter sharing",
       fields: [
-        defineField({
+        {
           name: "cardType",
           title: "Card Type",
           type: "string",
@@ -117,25 +117,25 @@ export default defineType({
             ],
           },
           initialValue: "summary_large_image",
-        }),
-        defineField({
+        },
+        {
           name: "site",
           title: "Twitter Site",
           type: "string",
           description: "Twitter handle for the site (e.g., @gybwp_podcast)",
-        }),
-        defineField({
+        },
+        {
           name: "creator",
           title: "Twitter Creator",
           type: "string", 
           description: "Twitter handle for the content creator",
-        }),
+        },
       ],
       options: {
         collapsible: true,
         collapsed: true,
       },
-    }),
+    },
   ],
   options: {
     collapsible: true,

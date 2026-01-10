@@ -18,6 +18,9 @@ import JSONLD from "@/src/components/SEO/jsonld";
 // Import redirect map for legacy UUID support
 import redirectMap from "@/uuid-to-pathname-redirects.json";
 
+// Enable ISR with 1 hour revalidation
+export const revalidate = 3600;
+
 type PageProps = {
   params: Promise<{ slug: string }>;
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;

@@ -136,10 +136,6 @@ export default async function GuestPage({
     throw new Error(`Guest with slug "${slug}" not found`);
   }
 
-  // For now, let's just display the basic guest info without episodes
-  console.log("Successfully found guest:", guestData);
-  console.log("Episodes:", guestData.episodes);
-
   // Extract latest episode (first item) and all episodes for the sidebar
   const latestEpisode = guestData.episodes?.[0];
   const allEpisodesForSidebar = guestData.episodes?.slice(0, 4); // Show up to 4 episodes total
