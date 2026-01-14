@@ -85,8 +85,11 @@ export const ALL_EPISODES = groq`*[_type == "episode"] | order(_createdAt desc) 
   _createdAt
 }`;
 
-// Get the latest episode document with all needed fields
-export const LATEST_EPISODE = groq`*[_type == "episode"] | order(_createdAt desc)[0] {
+// Get the featured episode or latest episode as fallback
+export const LATEST_EPISODE = groq`coalesce(
+  *[_type == "episode" && featured == true][0],
+  *[_type == "episode"] | order(_createdAt desc)[0]
+) {
   ...,
   "uuid": coalesce(uuid, youtube.uuid),
   pathname,
@@ -96,7 +99,8 @@ export const LATEST_EPISODE = groq`*[_type == "episode"] | order(_createdAt desc
   "title": coalesce(title, youtube.title),
   "blurb": coalesce(blurb, youtube.blurb),
   "publishedAt": coalesce(publishedAt, youtube.publishedAt),
-  youtube
+  youtube,
+  featured
 }`;
 
 // Get episode details
@@ -107,13 +111,24 @@ export const EPISODES_DETAILS_QUERY = groq`*[_type == "episode" && uuid == $uuid
   url,
 }`;
 
-// Get all seasons
-export const ALL_SEASONS_QUERY = groq`*[_type == "season"]|order(_createdAt desc){
+// Get all seasons - prioritize featured season first
+export const ALL_SEASONS_QUERY = groq`*[_type == "season"] | order(featuredSeason desc, _createdAt desc){
   _id,
   title,
   shortCode,
-  sponsors
+  sponsors,
+  featuredSeason
 }`;
+
+// Get featured season
+export const FEATURED_SEASON_QUERY = groq`*[_type == "season" && featuredSeason == true][0]{
+  _id,
+  title,
+  shortCode,
+  sponsors,
+  featuredSeason
+}`;
+
 // Gets the latest season
 export const INITIAL_SEASON_EPISODES_QUERY = groq`{
 
@@ -145,6 +160,33 @@ export const EPISODES_BY_SEASON_QUERY = groq`*[_type == "episode" && season->tit
     keyTakeaways
   }
 }`;
+
+// Get episodes from the featured season
+export const FEATURED_SEASON_EPISODES_QUERY = groq`*[_type == "episode" && season->featuredSeason == true] | order(youtube.publishedAt desc) {
+  ...,
+  "uuid": coalesce(uuid, youtube.uuid),
+  pathname,
+  "image": coalesce(image, youtube.thumbnail),
+  "seasonNumber": coalesce(seasonNumber, youtube.seasonNumber),
+  "episodeNumber": coalesce(episodeNumber, youtube.episodeNumber),
+  "publishedAt": youtube.publishedAt,
+  youtube {
+    id,
+    title,
+    episodeNumber,
+    seasonNumber,
+    thumbnail,
+    uuid,
+    publishedAt,
+    blurb,
+    duration
+  },
+  details {
+    keyTakeaways
+  },
+  featured
+}`;
+
 // Get episodes homepage - updated to include pathname and use proper ordering
 export const SEASON_EPISODES_QUERY = groq`*[_type == "episode" && coalesce(seasonNumber,youtube.seasonNumber) == $seasonNumber] | order(_createdAt desc) {
   ...,

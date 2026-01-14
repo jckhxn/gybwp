@@ -334,18 +334,28 @@ export interface Season {
   title: string;
   shortCode: string;
   sponsors?: any[];
+  featuredSeason?: boolean;
 }
 
 // Helper functions for season shortCode/title conversion
-export function getSeasonByShortCode(seasons: Season[], shortCode: string): Season | null {
-  return seasons.find(season => season.shortCode === shortCode) || null;
+export function getSeasonByShortCode(
+  seasons: Season[],
+  shortCode: string
+): Season | null {
+  return seasons.find((season) => season.shortCode === shortCode) || null;
 }
 
-export function getSeasonByTitle(seasons: Season[], title: string): Season | null {
-  return seasons.find(season => season.title === title) || null;
+export function getSeasonByTitle(
+  seasons: Season[],
+  title: string
+): Season | null {
+  return seasons.find((season) => season.title === title) || null;
 }
 
-export function getSeasonIdentifier(seasons: Season[], identifier: string): Season | null {
+export function getSeasonIdentifier(
+  seasons: Season[],
+  identifier: string
+): Season | null {
   // Use title for season identification
   return getSeasonByTitle(seasons, identifier);
 }

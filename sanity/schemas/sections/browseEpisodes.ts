@@ -9,7 +9,8 @@ export default defineType({
       name: "sectionId",
       title: "Section ID",
       type: "string",
-      description: "Optional custom ID for this section. Will auto-generate from schema name if not provided.",
+      description:
+        "Optional custom ID for this section. Will auto-generate from schema name if not provided.",
     }),
     defineField({
       name: "title",
@@ -39,6 +40,14 @@ export default defineType({
       name: "showFilters",
       title: "Show Category Filters",
       type: "boolean",
+      initialValue: true,
+    }),
+    defineField({
+      name: "showFeaturedSeason",
+      title: "Show Featured Season by Default",
+      type: "boolean",
+      description:
+        "When enabled, the carousel will display the featured season first (if one is set)",
       initialValue: true,
     }),
   ],

@@ -82,5 +82,33 @@ export default defineType({
       type: "array",
       of: [{ type: "reference", to: [{ type: "sponsor" }] }],
     },
+    defineField({
+      name: "featuredSeason",
+      title: "Featured Season",
+      type: "boolean",
+      description:
+        "Mark this as the featured season. Only one season can be featured at a time. Featured season appears first in Browse Episodes carousel.",
+      initialValue: false,
+      validation: (Rule) =>
+        Rule.custom(async (value, context) => {
+          if (!value) return true;
+
+          const { getClient } = context;
+          const client = getClient({ apiVersion: "2024-01-01" });
+          const currentDocId = context.document?._id?.replace(/^drafts\./, "");
+
+          // Check if another season is already featured
+          const featuredSeasons = await client.fetch(
+            `*[_type == "season" && featuredSeason == true && _id != $id]{_id, title}`,
+            { id: currentDocId }
+          );
+
+          if (featuredSeasons && featuredSeasons.length > 0) {
+            return `Only one season can be featured at a time. "${featuredSeasons[0].title}" is currently featured. Please unmark it first.`;
+          }
+
+          return true;
+        }),
+    }),
   ],
 });

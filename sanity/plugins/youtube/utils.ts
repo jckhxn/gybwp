@@ -79,7 +79,8 @@ export function fetchVideoData(
   id: string,
   apiKey: string
 ): Promise<YoutubeVideoData | null> {
-  const url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${id}&key=${apiKey}`;
+  // Use server-side API route instead of direct YouTube API call
+  const url = `/api/youtube/video?id=${id}`;
   // @ts-ignore
   return fetch(url)
     .then((res) => res.json())
@@ -110,18 +111,18 @@ export function fetchVideoData(
 
 export function deriveVideoId(input: string): string | null {
   if (
-    /^https?:\/\/(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9_-]{11}($|&|#)/.test(
+    /^https?:\/\/(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9_-]+($|&|#)/.test(
       input
     )
   ) {
     return new URL(input).searchParams.get("v");
   }
 
-  if (/^https?:\/\/youtu\.be\/[a-zA-Z0-9_-]{11}(?:\?.*)?$/.test(input)) {
+  if (/^https?:\/\/youtu\.be\/[a-zA-Z0-9_-]+(?:\?.*)?$/.test(input)) {
     return new URL(input).pathname.split("/")[1];
   }
 
-  if (/^[a-zA-Z0-9_-]{11}$/.test(input)) {
+  if (/^[a-zA-Z0-9_-]+$/.test(input)) {
     return input;
   }
 

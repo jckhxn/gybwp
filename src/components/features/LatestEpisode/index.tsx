@@ -52,23 +52,23 @@ export const LatestEpisode = ({ section }: LatestEpisodeProps = {}) => {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const fetchLatestEpisode = async () => {
+    const fetchFeaturedEpisode = async () => {
       try {
-        // Fetch the latest episode directly using the updated LATEST_EPISODE query
-        const latestEpisodeData = await client.fetch(LATEST_EPISODE);
+        // Fetch the featured episode (or latest if no featured episode)
+        const episodeData = await client.fetch(LATEST_EPISODE);
 
-        if (latestEpisodeData) {
-          setLatestEpisode(latestEpisodeData);
+        if (episodeData) {
+          setLatestEpisode(episodeData);
         }
       } catch (err) {
         setError(err as Error);
-        console.error("Error fetching latest episode:", err);
+        console.error("Error fetching featured episode:", err);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchLatestEpisode();
+    fetchFeaturedEpisode();
   }, []);
 
   if (isLoading) {
@@ -140,11 +140,11 @@ export const LatestEpisode = ({ section }: LatestEpisodeProps = {}) => {
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-gray-900">
-              Unable to load the latest episode
+              Unable to load the featured episode
             </h2>
             <p className="text-gray-600 max-w-md mx-auto">
-              We&apos;re having trouble loading the latest episode. Please check
-              back in a few moments.
+              We&apos;re having trouble loading the featured episode. Please
+              check back in a few moments.
             </p>
             <button
               onClick={() => window.location.reload()}
@@ -234,7 +234,7 @@ export const LatestEpisode = ({ section }: LatestEpisodeProps = {}) => {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="inline-block bg-primary text-white px-3 sm:px-4 py-1 rounded-full font-semibold text-xs sm:text-sm tracking-wide uppercase"
             >
-              Latest Episode
+              Featured Episode
             </motion.span>
 
             <motion.h1
@@ -246,7 +246,7 @@ export const LatestEpisode = ({ section }: LatestEpisodeProps = {}) => {
               {formatEpisodeTitle(
                 latestEpisode.title ||
                   latestEpisode.episodeName ||
-                  "Latest Episode"
+                  "Featured Episode"
               ).replace(/\.$/, "")}
             </motion.h1>
 
@@ -273,7 +273,7 @@ export const LatestEpisode = ({ section }: LatestEpisodeProps = {}) => {
             <div className="relative w-[85vw] max-w-xs sm:w-80 sm:h-80 lg:w-[420px] lg:h-[420px] aspect-square rounded-2xl overflow-hidden shadow-xl shadow-black/5 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-black/10">
               <Image
                 src={getThumbnail(latestEpisode)}
-                alt={latestEpisode.title || "Latest episode thumbnail"}
+                alt={latestEpisode.title || "Featured episode thumbnail"}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
                 priority
@@ -285,7 +285,7 @@ export const LatestEpisode = ({ section }: LatestEpisodeProps = {}) => {
               {/* Play button overlay */}
               <Link
                 href={getEpisodeLink(latestEpisode)}
-                aria-label="Listen to latest episode"
+                aria-label="Listen to featured episode"
                 className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               >
                 <div className="w-14 h-14 sm:w-20 sm:h-20 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/20 transition-all duration-300 hover:scale-110">
@@ -342,7 +342,7 @@ export const LatestEpisode = ({ section }: LatestEpisodeProps = {}) => {
             >
               {latestEpisode.blurb ||
                 latestEpisode.youtube?.blurb ||
-                "Tune in to our latest episode where we discuss important topics and insights with industry experts."}
+                "Tune in to our featured episode where we discuss important topics and insights with industry experts."}
             </motion.p>
 
             {/* Tags */}

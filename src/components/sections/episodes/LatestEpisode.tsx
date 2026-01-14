@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ScrollToSection } from "@/src/components/shared/ScrollToSection";
@@ -28,6 +28,7 @@ interface Episode {
   publishedAt?: string;
   blurb?: string;
   youtube?: {
+    id?: string;
     title?: string;
     episodeName?: string;
     episodeNumber?: number;
@@ -64,15 +65,55 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
   const [latestEpisode, setLatestEpisode] = useState<Episode | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const {
-    title = "Latest Episode",
+    title = "Featured Episode",
     description,
     showAutomatic = true,
     specificEpisode,
     primaryButton = { text: "Listen Now", componentLink: null },
     secondaryButton = { text: "Show Notes", componentLink: null },
   } = section;
+
+  // Helper function to generate YouTube embed URL
+  const getYouTubeEmbedUrl = (
+    videoId: string,
+    muted: boolean = true
+  ): string => {
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=${muted ? 1 : 0}&controls=0&modestbranding=1&rel=0&showinfo=0&loop=1&playlist=${videoId}`;
+  };
+
+  // Hover handlers - immediate on enter, delayed on leave
+  const handleMouseEnter = useCallback(() => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setIsHovered(true);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    hoverTimeoutRef.current = setTimeout(() => {
+      setIsHovered(false);
+      setIsMuted(true); // Reset mute state when leaving
+      hoverTimeoutRef.current = null;
+    }, 150);
+  }, []);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const fetchLatestEpisode = async () => {
@@ -101,10 +142,13 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
 
   if (isLoading) {
     return (
-      <section id={componentId} className="pt-14 pb-10 md:pt-20 md:pb-16 relative">
+      <section
+        id={componentId}
+        className="pt-14 pb-10 md:pt-20 md:pb-16 relative"
+      >
         {/* Subtle divider at top */}
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
-        
+
         <section className="w-full py-8 md:py-16 bg-gradient-to-br from-gray-50/50 via-white to-gray-50/50">
           <div className="container mx-auto px-3 sm:px-6 max-w-4xl">
             <div className="flex flex-col items-center text-center space-y-6 sm:space-y-8 animate-pulse">
@@ -154,10 +198,13 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
 
   if (error || !latestEpisode) {
     return (
-      <section id={componentId} className="pt-14 pb-10 md:pt-20 md:pb-16 relative">
+      <section
+        id={componentId}
+        className="pt-14 pb-10 md:pt-20 md:pb-16 relative"
+      >
         {/* Subtle divider at top */}
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
-        
+
         <section className="w-full py-12 md:py-16 bg-gradient-to-br from-gray-50/50 via-white to-gray-50/50">
           <div className="container mx-auto px-6 max-w-2xl text-center">
             <div className="space-y-4">
@@ -177,11 +224,11 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
                 </svg>
               </div>
               <h2 className="text-2xl font-bold text-gray-900">
-                Unable to load the latest episode
+                Unable to load the featured episode
               </h2>
               <p className="text-gray-600 max-w-md mx-auto">
-                We&apos;re having trouble loading the latest episode. Please check
-                back in a few moments.
+                We&apos;re having trouble loading the featured episode. Please
+                check back in a few moments.
               </p>
               <button
                 onClick={() => window.location.reload()}
@@ -250,7 +297,10 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
   };
 
   return (
-    <section id={componentId} className="relative w-full py-16 md:py-24 bg-gradient-to-br from-slate-50 via-white to-slate-50 overflow-hidden">
+    <section
+      id={componentId}
+      className="relative w-full py-16 md:py-24 bg-gradient-to-br from-slate-50 via-white to-slate-50 overflow-hidden"
+    >
       {/* Modern background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full blur-3xl" />
@@ -302,7 +352,7 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
                 {formatEpisodeTitle(
                   latestEpisode.title ||
                     latestEpisode.episodeName ||
-                    "Latest Episode"
+                    "Featured Episode"
                 ).replace(/\.$/, "")}
               </motion.h1>
 
@@ -352,7 +402,7 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
               {latestEpisode.blurb ||
                 latestEpisode.youtube?.blurb ||
                 description ||
-                "Tune in to our latest episode where we discuss important topics and insights with industry experts."}
+                "Tune in to our featured episode where we discuss important topics and insights with industry experts."}
             </motion.p>
 
             {/* Tags */}
@@ -386,7 +436,9 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
               <SmartButton
                 data={{
                   ...primaryButton,
-                  link: primaryButton.componentLink ? undefined : getEpisodeLink(latestEpisode),
+                  link: primaryButton.componentLink
+                    ? undefined
+                    : getEpisodeLink(latestEpisode),
                   componentLink: primaryButton.componentLink,
                 }}
                 className="group relative h-14 px-8 text-base font-semibold text-white overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-primary-light shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center gap-3 justify-center"
@@ -401,7 +453,9 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
                 <SmartButton
                   data={{
                     ...secondaryButton,
-                    link: secondaryButton.componentLink ? undefined : getEpisodeLink(latestEpisode),
+                    link: secondaryButton.componentLink
+                      ? undefined
+                      : getEpisodeLink(latestEpisode),
                     componentLink: secondaryButton.componentLink,
                   }}
                   className="group h-14 px-8 text-base font-medium text-gray-700 bg-white/80 backdrop-blur-sm hover:bg-white border-2 border-gray-200 hover:border-gray-300 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 flex items-center gap-3 justify-center"
@@ -436,44 +490,129 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative group"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
               {/* Main image container */}
               <div className="relative aspect-square max-w-lg mx-auto">
                 {/* Decorative elements */}
                 <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-2xl opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
                 <div className="absolute -inset-2 bg-gradient-to-br from-white/40 to-white/20 rounded-2xl backdrop-blur-sm" />
-                
-                {/* Episode image */}
+
+                {/* Episode image/video container */}
                 <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl group-hover:shadow-3xl transition-all duration-500">
+                  {/* Static thumbnail */}
                   <Image
                     src={getThumbnail(latestEpisode)}
-                    alt={latestEpisode.title || "Latest episode thumbnail"}
+                    alt={latestEpisode.title || "Featured episode thumbnail"}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    className={`object-cover transition-all duration-500 ${
+                      isHovered && latestEpisode.youtube?.id
+                        ? "opacity-0"
+                        : "opacity-100 group-hover:scale-105"
+                    }`}
                     priority
                   />
-                  
-                  {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  
-                  {/* Play button overlay */}
-                  <Link
-                    href={getEpisodeLink(latestEpisode)}
-                    aria-label="Listen to latest episode"
-                    className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
-                  >
-                    <div className="w-20 h-20 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-2xl border-4 border-white/20 transition-all duration-300 hover:scale-110 hover:bg-white">
-                      <Play
-                        className="w-8 h-8 text-primary ml-1"
-                        fill="currentColor"
+
+                  {/* YouTube video iframe - only render when hovered */}
+                  {isHovered && latestEpisode.youtube?.id && (
+                    <>
+                      <iframe
+                        key={`video-${latestEpisode._id}-${isMuted ? "muted" : "unmuted"}`}
+                        src={getYouTubeEmbedUrl(
+                          latestEpisode.youtube.id,
+                          isMuted
+                        )}
+                        className="absolute inset-0 w-full h-full transition-opacity duration-500 opacity-100 pointer-events-none"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        title={`${latestEpisode.title || "Episode"} - Video Preview`}
+                        aria-label={`Auto-playing video preview for ${latestEpisode.title}`}
                       />
-                    </div>
-                  </Link>
+
+                      {/* Unmute/Mute button */}
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsMuted(!isMuted);
+                        }}
+                        className="absolute top-4 right-4 z-30 bg-black/70 hover:bg-black/90 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-200 hover:scale-110 shadow-lg"
+                        aria-label={isMuted ? "Unmute video" : "Mute video"}
+                      >
+                        {isMuted ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M11 5 6 9H2v6h4l5 4z" />
+                            <line x1="22" x2="16" y1="9" y2="15" />
+                            <line x1="16" x2="22" y1="9" y2="15" />
+                          </svg>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M11 5 6 9H2v6h4l5 4z" />
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                          </svg>
+                        )}
+                      </button>
+                    </>
+                  )}
+
+                  {/* Overlay gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+                  {/* Play button overlay - only show when not playing video */}
+                  {!(isHovered && latestEpisode.youtube?.id) && (
+                    <Link
+                      href={getEpisodeLink(latestEpisode)}
+                      aria-label="Listen to featured episode"
+                      className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
+                    >
+                      <div className="w-20 h-20 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-2xl border-4 border-white/20 transition-all duration-300 hover:scale-110 hover:bg-white">
+                        <Play
+                          className="w-8 h-8 text-primary ml-1"
+                          fill="currentColor"
+                        />
+                      </div>
+                    </Link>
+                  )}
+
+                  {/* View Details link when video is playing */}
+                  {isHovered && latestEpisode.youtube?.id && (
+                    <Link
+                      href={getEpisodeLink(latestEpisode)}
+                      className="absolute bottom-4 left-4 right-4 z-20 bg-black/60 hover:bg-black/80 backdrop-blur-sm text-white py-3 px-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 font-medium"
+                    >
+                      <Play className="w-4 h-4" fill="currentColor" />
+                      View Full Episode
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  )}
                 </div>
 
                 {/* Episode number badge */}
                 {getEpisodeNumber(latestEpisode) && (
-                  <div className="absolute -top-3 -right-3 bg-gradient-to-r from-primary to-primary-light text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg border-2 border-white">
+                  <div className="absolute -top-3 -right-3 bg-gradient-to-r from-primary to-primary-light text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg border-2 border-white z-20">
                     Episode {getEpisodeNumber(latestEpisode)}
                   </div>
                 )}
@@ -482,12 +621,21 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
               {/* Floating elements */}
               <motion.div
                 animate={{ y: [0, -10, 0] }}
-                transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 6,
+                  ease: "easeInOut",
+                }}
                 className="absolute -top-8 -left-8 w-16 h-16 bg-gradient-to-br from-accent/20 to-secondary/20 rounded-2xl backdrop-blur-sm hidden lg:block"
               />
               <motion.div
                 animate={{ y: [0, 10, 0] }}
-                transition={{ repeat: Infinity, duration: 8, ease: "easeInOut", delay: 2 }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 8,
+                  ease: "easeInOut",
+                  delay: 2,
+                }}
                 className="absolute -bottom-6 -right-6 w-12 h-12 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl backdrop-blur-sm hidden lg:block"
               />
             </motion.div>

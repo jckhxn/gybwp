@@ -57,9 +57,12 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   const initial = await loadEpisode(identifier, slug);
 
-  // If episode found by UUID, redirect to pathname
+  // If episode found by UUID, redirect to pathname (only if it's different)
   if (initial && isUuidFormat && initial.pathname?.current) {
-    redirect(initial.pathname.current);
+    const currentPath = `/episodes/${slug}`;
+    if (initial.pathname.current !== currentPath) {
+      redirect(initial.pathname.current);
+    }
   }
 
   // If no episode found, return 404
