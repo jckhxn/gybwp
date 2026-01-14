@@ -66,7 +66,8 @@ export interface PageData extends BasePageData {
 const SITE_CONFIG = {
   siteName: "Growing Your Business With People",
   siteUrl: "https://gybwp.com",
-  defaultDescription: "The podcast for CEOs and business leaders focusing on growth through investing in their teams.",
+  defaultDescription:
+    "The podcast for CEOs and business leaders focusing on growth through investing in their teams.",
   defaultImage: "/images/logo.webp",
   twitterSite: "@gybwp_podcast",
   author: "Jeffrey Lackey",
@@ -92,18 +93,18 @@ export function generateMetadata(
   } = options;
 
   // Build canonical URL
-  const canonicalUrl = data.seo?.canonical || 
+  const canonicalUrl =
+    data.seo?.canonical ||
     `${SITE_CONFIG.siteUrl}${path || data.pathname?.current || ""}`;
 
   // Determine title
-  const title = data.seo?.metaTitle || 
-    fallbackTitle || 
-    data.title || 
-    SITE_CONFIG.siteName;
+  const title =
+    data.seo?.metaTitle || fallbackTitle || data.title || SITE_CONFIG.siteName;
 
   // Determine description
-  const description = data.seo?.metaDescription || 
-    fallbackDescription || 
+  const description =
+    data.seo?.metaDescription ||
+    fallbackDescription ||
     SITE_CONFIG.defaultDescription;
 
   // Handle Open Graph image
@@ -130,7 +131,7 @@ export function generateMetadata(
     description,
     keywords,
     robots: robotsString,
-    
+
     // Open Graph
     openGraph: {
       type: data.seo?.openGraph?.type || type,
@@ -173,28 +174,30 @@ export function generateMetadata(
  * Generates episode-specific metadata
  */
 export function generateEpisodeMetadata(episodeData: EpisodeData): Metadata {
-  const episodeTitle = episodeData.seo?.metaTitle || 
-    episodeData.youtube?.title || 
-    episodeData.title || 
+  const episodeTitle =
+    episodeData.seo?.metaTitle ||
+    episodeData.youtube?.title ||
+    episodeData.title ||
     "Episode";
 
   // Create episode description with guest information
-  let episodeDescription = episodeData.seo?.metaDescription || 
-    episodeData.youtube?.description;
+  let episodeDescription =
+    episodeData.seo?.metaDescription || episodeData.youtube?.description;
 
   if (!episodeDescription && episodeData.guests?.length) {
     const guestNames = episodeData.guests
-      .map(guest => guest.name)
+      .map((guest) => guest.name)
       .filter(Boolean)
       .join(", ");
-    
+
     episodeDescription = `Join Jeff Lackey in conversation with ${guestNames}. ${SITE_CONFIG.defaultDescription}`;
   }
 
   // Add category to keywords if present
   const categoryKeywords = episodeData.category ? [episodeData.category] : [];
-  const guestKeywords = episodeData.guests?.map(guest => guest.name).filter(Boolean) || [];
-  
+  const guestKeywords =
+    episodeData.guests?.map((guest) => guest.name).filter(Boolean) || [];
+
   const combinedKeywords = [
     ...(episodeData.seo?.keywords || []),
     ...categoryKeywords,
@@ -202,18 +205,24 @@ export function generateEpisodeMetadata(episodeData: EpisodeData): Metadata {
     "podcast episode",
     "business podcast",
     "leadership podcast",
-  ].filter(Boolean);
+  ].filter((k): k is string => Boolean(k));
 
   const path = episodeData.pathname?.current || "";
 
   // Generate dynamic OG image URL
-  const guestNames = episodeData.guests?.map(g => g.name).filter(Boolean).join(" & ") || "";
+  const guestNames =
+    episodeData.guests
+      ?.map((g) => g.name)
+      .filter(Boolean)
+      .join(" & ") || "";
   const thumbnail = episodeData.youtube?.thumbnail || "";
-  const ogImageUrl = `${SITE_CONFIG.siteUrl}/api/og/episode?${new URLSearchParams({
-    title: episodeTitle,
-    ...(guestNames && { guests: guestNames }),
-    ...(thumbnail && { thumbnail }),
-  }).toString()}`;
+  const ogImageUrl = `${SITE_CONFIG.siteUrl}/api/og/episode?${new URLSearchParams(
+    {
+      title: episodeTitle,
+      ...(guestNames && { guests: guestNames }),
+      ...(thumbnail && { thumbnail }),
+    }
+  ).toString()}`;
 
   // Override the OG image with dynamic one
   const metadataWithDynamicOG = {
@@ -224,19 +233,16 @@ export function generateEpisodeMetadata(episodeData: EpisodeData): Metadata {
       openGraph: {
         ...episodeData.seo?.openGraph,
         image: null, // Clear static image so we can use dynamic one
-      }
-    }
+      },
+    },
   };
 
-  const baseMetadata = generateMetadata(
-    metadataWithDynamicOG,
-    {
-      type: "video.episode",
-      fallbackTitle: episodeTitle,
-      fallbackDescription: episodeDescription,
-      path,
-    }
-  );
+  const baseMetadata = generateMetadata(metadataWithDynamicOG, {
+    type: "video.episode",
+    fallbackTitle: episodeTitle,
+    fallbackDescription: episodeDescription,
+    path,
+  });
 
   // Override images with dynamic OG image
   return {
@@ -263,19 +269,20 @@ export function generateEpisodeMetadata(episodeData: EpisodeData): Metadata {
  * Generates person-specific metadata
  */
 export function generatePersonMetadata(personData: PersonData): Metadata {
-  const personTitle = personData.seo?.metaTitle || 
-    `${personData.name} - ${SITE_CONFIG.siteName}`;
+  const personTitle =
+    personData.seo?.metaTitle || `${personData.name} - ${SITE_CONFIG.siteName}`;
 
   // Use bio as description if available
   const bio = personData.guestProfile?.bio || personData.consultingProfile?.bio;
   let personDescription = personData.seo?.metaDescription;
-  
+
   if (!personDescription && bio) {
     personDescription = bio.length > 160 ? `${bio.substring(0, 157)}...` : bio;
   }
 
   if (!personDescription) {
-    const roleTitle = personData.guestProfile?.title || 
+    const roleTitle =
+      personData.guestProfile?.title ||
       (personData.role === "host-consultant" ? "Host & Consultant" : "Guest");
     personDescription = `${personData.name}, ${roleTitle} on ${SITE_CONFIG.siteName} podcast.`;
   }
@@ -304,7 +311,7 @@ export function generatePersonMetadata(personData: PersonData): Metadata {
       seo: {
         ...personData.seo,
         keywords: combinedKeywords,
-      }
+      },
     },
     {
       type: "profile",
@@ -319,10 +326,11 @@ export function generatePersonMetadata(personData: PersonData): Metadata {
  * Generates page-specific metadata
  */
 export function generatePageMetadata(pageData: PageData): Metadata {
-  const pageTitle = pageData.seo?.metaTitle || 
-    `${pageData.title} - ${SITE_CONFIG.siteName}`;
-  
-  const pageDescription = pageData.seo?.metaDescription || SITE_CONFIG.defaultDescription;
+  const pageTitle =
+    pageData.seo?.metaTitle || `${pageData.title} - ${SITE_CONFIG.siteName}`;
+
+  const pageDescription =
+    pageData.seo?.metaDescription || SITE_CONFIG.defaultDescription;
 
   const path = pageData.pathname?.current || "";
 
@@ -370,8 +378,9 @@ export function generateHomepageMetadata(): Metadata {
   return {
     title: `${SITE_CONFIG.siteName} | Business Leadership Podcast`,
     description: SITE_CONFIG.defaultDescription,
-    keywords: "business podcast, leadership podcast, CEO podcast, entrepreneurship, team building, business growth, people management",
-    
+    keywords:
+      "business podcast, leadership podcast, CEO podcast, entrepreneurship, team building, business growth, people management",
+
     openGraph: {
       type: "website",
       title: SITE_CONFIG.siteName,

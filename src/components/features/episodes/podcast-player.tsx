@@ -21,8 +21,8 @@ import {
 } from "lucide-react";
 
 // Lazy load EpisodeSlider
-const EpisodeSlider = dynamic(() => import("../../ui/EpisodeSlider.tsx"), {
-  ssr: false
+const EpisodeSlider = dynamic(() => import("../../ui/EpisodeSlider"), {
+  ssr: false,
 });
 
 import { Button } from "@/src/components/ui/button";

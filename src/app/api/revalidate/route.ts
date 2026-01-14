@@ -5,12 +5,9 @@ export async function POST(request: NextRequest) {
   try {
     // Verify the secret token to prevent unauthorized revalidation
     const secret = request.nextUrl.searchParams.get("secret");
-    
+
     if (secret !== process.env.SANITY_REVALIDATE_SECRET) {
-      return NextResponse.json(
-        { message: "Invalid secret" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
     }
 
     const body = await request.json();
@@ -41,7 +38,8 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Revalidation error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
       { message: "Error revalidating", error: errorMessage },
       { status: 500 }

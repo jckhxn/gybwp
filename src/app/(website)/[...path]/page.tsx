@@ -4,6 +4,7 @@ import { Page } from "@/src/components/Page";
 
 // Enable ISR with 1 hour revalidation
 export const revalidate = 3600;
+import { isBlockedPath } from "@/src/app/(website)/lib/security";
 
 export default async function DynamicPage({
   params,
@@ -12,6 +13,13 @@ export default async function DynamicPage({
 }) {
   const { path } = await params;
   const pathname = path ? `/${path.join("/")}` : "/";
+
+  // BLOCK MALICIOUS PATHS IMMEDIATELY
+  if (isBlockedPath(pathname)) {
+    console.log(`🛡️ Blocked malicious path at page level: ${pathname}`);
+    notFound();
+    return;
+  }
 
   try {
     const page = await loadPage(pathname);
@@ -40,6 +48,13 @@ export async function generateMetadata({
 }) {
   const { path } = await params;
   const pathname = path ? `/${path.join("/")}` : "/";
+
+  // BLOCK MALICIOUS PATHS - Don't even generate metadata
+  if (isBlockedPath(pathname)) {
+    return {
+      title: "Page Not Found",
+    };
+  }
 
   try {
     const page = await loadPage(pathname);

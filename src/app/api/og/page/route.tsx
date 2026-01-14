@@ -4,11 +4,14 @@ export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
   const { ImageResponse } = await import("@vercel/og");
-  
+
   try {
     const { searchParams } = new URL(request.url);
-    const title = searchParams.get("title") || "Growing Your Business With People";
-    const description = searchParams.get("description") || "Leadership insights and business growth strategies";
+    const title =
+      searchParams.get("title") || "Growing Your Business With People";
+    const description =
+      searchParams.get("description") ||
+      "Leadership insights and business growth strategies";
 
     return new ImageResponse(
       (
@@ -21,7 +24,8 @@ export async function GET(request: NextRequest) {
             alignItems: "center",
             justifyContent: "center",
             backgroundColor: "#0F172A",
-            backgroundImage: "linear-gradient(135deg, #0F172A 0%, #1E293B 100%)",
+            backgroundImage:
+              "linear-gradient(135deg, #0F172A 0%, #1E293B 100%)",
             padding: "80px",
           }}
         >

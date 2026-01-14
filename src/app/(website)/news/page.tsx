@@ -12,8 +12,8 @@ export const revalidate = 3600;
 const NewsPageComponent = async () => {
   // Fetch featured articles on the server
   const featuredArticles = await client.fetch(FEATURED_ARTICLES_QUERY);
-  const featuredIds = Array.isArray(featuredArticles) 
-    ? featuredArticles.map((a) => a._id) 
+  const featuredIds = Array.isArray(featuredArticles)
+    ? featuredArticles.map((a) => a._id)
     : [];
 
   return (

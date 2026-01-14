@@ -62,10 +62,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const staticPages = [
       { url: "/episodes", priority: 0.9, changeFrequency: "daily" as const },
       { url: "/about", priority: 0.8, changeFrequency: "monthly" as const },
-      { url: "/consulting", priority: 0.8, changeFrequency: "monthly" as const },
+      {
+        url: "/consulting",
+        priority: 0.8,
+        changeFrequency: "monthly" as const,
+      },
     ];
 
-    staticPages.forEach(page => {
+    staticPages.forEach((page) => {
       sitemapEntries.push({
         url: `${SITE_URL}${page.url}`,
         lastModified: new Date(),
@@ -77,7 +81,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Episode pages - high priority for recent episodes
     episodes?.forEach((episode: any, index: number) => {
       const isRecent = index < 10; // First 10 episodes are recent
-      
+
       sitemapEntries.push({
         url: `${SITE_URL}${episode.url}`,
         lastModified: new Date(episode.lastModified),
@@ -89,7 +93,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Person pages - priority based on role
     persons?.forEach((person: any) => {
       const isHost = person.role === "host-consultant";
-      
+
       sitemapEntries.push({
         url: `${SITE_URL}${person.url}`,
         lastModified: new Date(person.lastModified),
@@ -111,7 +115,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return sitemapEntries;
   } catch (error) {
     console.error("Error generating sitemap:", error);
-    
+
     // Return minimal sitemap on error
     return [
       {

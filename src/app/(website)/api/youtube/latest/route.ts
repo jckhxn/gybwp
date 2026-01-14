@@ -7,7 +7,7 @@ function formatDuration(duration: string) {
   const match = duration.match(regex);
   const hours = match && match[1] ? parseInt(match[1], 10) : 0;
   const minutes = match && match[2] ? parseInt(match[2], 10) : 0;
-  
+
   if (hours > 0) {
     return `${hours}H ${minutes}m`;
   } else {
@@ -61,10 +61,12 @@ export async function GET() {
       console.error("YouTube API Error:", {
         status: channelResponse.status,
         statusText: channelResponse.statusText,
-        response: errorText
+        response: errorText,
       });
       return NextResponse.json(
-        { error: `Failed to fetch channel data: ${channelResponse.status} ${channelResponse.statusText}` },
+        {
+          error: `Failed to fetch channel data: ${channelResponse.status} ${channelResponse.statusText}`,
+        },
         { status: 500 }
       );
     }
@@ -96,10 +98,7 @@ export async function GET() {
     const videoId = videoData.items?.[0]?.snippet?.resourceId?.videoId;
 
     if (!videoId) {
-      return NextResponse.json(
-        { error: "No videos found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "No videos found" }, { status: 404 });
     }
 
     // Fetch detailed video data
@@ -138,7 +137,7 @@ export async function GET() {
       duration: formatDuration(contentDetails.duration),
       seasonNumber: getSeasonNumber(snippet.title),
       episodeNumber: getEpisodeNumber(snippet.title),
-      uuid: generateEpisodePathname(snippet.title).replace('/episode/', ''),
+      uuid: generateEpisodePathname(snippet.title).replace("/episode/", ""),
     };
 
     return NextResponse.json(latestVideoData);

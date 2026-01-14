@@ -145,12 +145,12 @@ export default async function GuestPage({
     name: guestData.name,
     title: guestData.guestProfile?.title,
     about: guestData.guestProfile?.bio,
-    image: guestData.guestProfile?.profileImage 
+    image: guestData.guestProfile?.profileImage
       ? urlFor(guestData.guestProfile.profileImage).url()
       : undefined,
     website: guestData.guestProfile?.website,
     socialLinks: guestData.guestProfile?.socialLinks,
-    episodes: guestData.episodes?.map(episode => ({
+    episodes: guestData.episodes?.map((episode) => ({
       title: episode.title,
       url: `/episode/${episode.uuid}`,
       publishedAt: episode.date,
@@ -161,216 +161,216 @@ export default async function GuestPage({
     <>
       <JSONLD data={structuredData} id="person-jsonld" />
       <div className="min-h-screen bg-gray-50">
-      <div className="container max-w-7xl py-12 mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Hero Section */}
-        <div className="grid gap-12 lg:grid-cols-3 lg:gap-16">
-          {/* Left Column - Video Player and Episode Info */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Latest Episode Player */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-              {latestEpisode ? (
-                <div className="space-y-6 p-6">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Badge
-                        variant="secondary"
-                        className="bg-primary/10 text-primary"
-                      >
-                        Latest Episode
-                      </Badge>
-                    </div>
-                    <h1 className="text-2xl font-bold text-gray-900">
-                      {latestEpisode.title}
-                    </h1>
-                    <div className="flex items-center gap-6 text-sm text-gray-600">
+        <div className="container max-w-7xl py-12 mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Hero Section */}
+          <div className="grid gap-12 lg:grid-cols-3 lg:gap-16">
+            {/* Left Column - Video Player and Episode Info */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Latest Episode Player */}
+              <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+                {latestEpisode ? (
+                  <div className="space-y-6 p-6">
+                    <div className="space-y-3">
                       <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4" />
-                        {latestEpisode.duration}
+                        <Badge
+                          variant="secondary"
+                          className="bg-primary/10 text-primary"
+                        >
+                          Latest Episode
+                        </Badge>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <CalendarDays className="h-4 w-4" />
-                        {latestEpisode.date &&
-                          format(new Date(latestEpisode.date), "MMM d, yyyy")}
+                      <h1 className="text-2xl font-bold text-gray-900">
+                        {latestEpisode.title}
+                      </h1>
+                      <div className="flex items-center gap-6 text-sm text-gray-600">
+                        <div className="flex items-center gap-2">
+                          <Clock className="h-4 w-4" />
+                          {latestEpisode.duration}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CalendarDays className="h-4 w-4" />
+                          {latestEpisode.date &&
+                            format(new Date(latestEpisode.date), "MMM d, yyyy")}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Video Player */}
-                  <div className="rounded-xl overflow-hidden aspect-video shadow-md">
-                    {latestEpisode.youtube?.id ? (
-                      <PodcastPlayer videoId={latestEpisode.youtube.id} />
-                    ) : (
-                      <div className="bg-gray-200 h-full flex items-center justify-center">
-                        <span className="text-gray-500">
-                          Video not available
-                        </span>
+                    {/* Video Player */}
+                    <div className="rounded-xl overflow-hidden aspect-video shadow-md">
+                      {latestEpisode.youtube?.id ? (
+                        <PodcastPlayer videoId={latestEpisode.youtube.id} />
+                      ) : (
+                        <div className="bg-gray-200 h-full flex items-center justify-center">
+                          <span className="text-gray-500">
+                            Video not available
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Episode Description */}
+                    {latestEpisode.description && (
+                      <div className="p-4 bg-gray-50 rounded-lg">
+                        <p className="text-gray-700 leading-relaxed">
+                          {latestEpisode.description}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Episode Link */}
+                    {latestEpisode.uuid && (
+                      <div className="flex justify-center pt-2">
+                        <Link
+                          href={`/episode/${encodeURIComponent(latestEpisode.uuid)}`}
+                          className="inline-flex items-center justify-center rounded-lg text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 py-2"
+                        >
+                          View Full Episode Details
+                        </Link>
                       </div>
                     )}
                   </div>
+                ) : (
+                  <div className="bg-gray-200 h-60 rounded-lg flex items-center justify-center">
+                    <span className="text-gray-500">No episodes found</span>
+                  </div>
+                )}
+              </div>
+            </div>
 
-                  {/* Episode Description */}
-                  {latestEpisode.description && (
-                    <div className="p-4 bg-gray-50 rounded-lg">
+            {/* Right Column - Guest Profile */}
+            <div className="space-y-8">
+              <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+                <div className="p-8">
+                  <div className="flex items-center gap-6 mb-6">
+                    <Avatar className="w-20 h-20 border-4 border-primary/20 shadow-lg">
+                      <AvatarImage
+                        src={
+                          urlFor(guestData.guestProfile?.profileImage).url() ||
+                          "/placeholder.svg"
+                        }
+                        alt={guestData.name}
+                      />
+                      <AvatarFallback className="text-xl font-bold">
+                        {guestData.name
+                          .split(" ")
+                          .map((n: string) => n[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900 mb-1">
+                        {guestData.name}
+                      </h2>
+                      {guestData.guestProfile?.title && (
+                        <p className="text-lg text-primary font-medium">
+                          {guestData.guestProfile.title}
+                        </p>
+                      )}
+                      {guestData.guestProfile?.company && (
+                        <p className="text-gray-600">
+                          {guestData.guestProfile.company}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {guestData.guestProfile?.bio && (
+                    <div className="mb-6">
+                      <h4 className="text-lg font-semibold text-gray-900 mb-3">
+                        About
+                      </h4>
                       <p className="text-gray-700 leading-relaxed">
-                        {latestEpisode.description}
+                        {guestData.guestProfile.bio}
                       </p>
                     </div>
                   )}
 
-                  {/* Episode Link */}
-                  {latestEpisode.uuid && (
-                    <div className="flex justify-center pt-2">
-                      <Link
-                        href={`/episode/${encodeURIComponent(latestEpisode.uuid)}`}
-                        className="inline-flex items-center justify-center rounded-lg text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 py-2"
+                  {guestData.guestProfile?.website && (
+                    <div className="pt-4 border-t border-gray-100">
+                      <a
+                        href={guestData.guestProfile.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-primary text-primary hover:bg-primary hover:text-white h-10 px-6 py-2"
                       >
-                        View Full Episode Details
-                      </Link>
+                        Visit Website
+                      </a>
                     </div>
                   )}
                 </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold text-gray-900">
+                Episodes featuring {guestData.name}
+              </h3>
+              {allEpisodesForSidebar && allEpisodesForSidebar.length > 0 ? (
+                <div className="space-y-4">
+                  {allEpisodesForSidebar.map(
+                    (episode: EpisodeType, index: number) => (
+                      <Link
+                        key={episode.uuid || index}
+                        href={`/episode/${encodeURIComponent(episode.uuid)}`}
+                        className="block"
+                      >
+                        <div className="p-5 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-all duration-200 cursor-pointer hover:border-primary/30 group">
+                          <div className="flex gap-4">
+                            {episode.image && (
+                              <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
+                                <Image
+                                  src={episode.image}
+                                  alt={episode.title}
+                                  width={80}
+                                  height={80}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                                />
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-start justify-between mb-2">
+                                <h4 className="font-semibold text-lg line-clamp-2 group-hover:text-primary transition-colors">
+                                  {episode.title}
+                                </h4>
+                                {episode.number && (
+                                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full ml-2 flex-shrink-0 font-medium">
+                                    #{episode.number}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                                {episode.description}
+                              </p>
+                              <div className="flex items-center gap-4 text-xs text-gray-500">
+                                <div className="flex items-center gap-1">
+                                  <Clock className="h-3 w-3" />
+                                  {episode.duration}
+                                </div>
+                                {episode.date && (
+                                  <div className="flex items-center gap-1">
+                                    <CalendarDays className="h-3 w-3" />
+                                    {format(
+                                      new Date(episode.date),
+                                      "MMM d, yyyy"
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    )
+                  )}
+                </div>
               ) : (
-                <div className="bg-gray-200 h-60 rounded-lg flex items-center justify-center">
-                  <span className="text-gray-500">No episodes found</span>
+                <div className="flex items-center justify-center h-40 text-gray-500 bg-white rounded-xl border border-gray-200">
+                  <p>No episodes found</p>
                 </div>
               )}
             </div>
           </div>
-
-          {/* Right Column - Guest Profile */}
-          <div className="space-y-8">
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="p-8">
-                <div className="flex items-center gap-6 mb-6">
-                  <Avatar className="w-20 h-20 border-4 border-primary/20 shadow-lg">
-                    <AvatarImage
-                      src={
-                        urlFor(guestData.guestProfile?.profileImage).url() ||
-                        "/placeholder.svg"
-                      }
-                      alt={guestData.name}
-                    />
-                    <AvatarFallback className="text-xl font-bold">
-                      {guestData.name
-                        .split(" ")
-                        .map((n: string) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-1">
-                      {guestData.name}
-                    </h2>
-                    {guestData.guestProfile?.title && (
-                      <p className="text-lg text-primary font-medium">
-                        {guestData.guestProfile.title}
-                      </p>
-                    )}
-                    {guestData.guestProfile?.company && (
-                      <p className="text-gray-600">
-                        {guestData.guestProfile.company}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {guestData.guestProfile?.bio && (
-                  <div className="mb-6">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-3">
-                      About
-                    </h4>
-                    <p className="text-gray-700 leading-relaxed">
-                      {guestData.guestProfile.bio}
-                    </p>
-                  </div>
-                )}
-
-                {guestData.guestProfile?.website && (
-                  <div className="pt-4 border-t border-gray-100">
-                    <a
-                      href={guestData.guestProfile.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-primary text-primary hover:bg-primary hover:text-white h-10 px-6 py-2"
-                    >
-                      Visit Website
-                    </a>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-gray-900">
-              Episodes featuring {guestData.name}
-            </h3>
-            {allEpisodesForSidebar && allEpisodesForSidebar.length > 0 ? (
-              <div className="space-y-4">
-                {allEpisodesForSidebar.map(
-                  (episode: EpisodeType, index: number) => (
-                    <Link
-                      key={episode.uuid || index}
-                      href={`/episode/${encodeURIComponent(episode.uuid)}`}
-                      className="block"
-                    >
-                      <div className="p-5 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-all duration-200 cursor-pointer hover:border-primary/30 group">
-                        <div className="flex gap-4">
-                          {episode.image && (
-                            <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
-                              <Image
-                                src={episode.image}
-                                alt={episode.title}
-                                width={80}
-                                height={80}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                              />
-                            </div>
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between mb-2">
-                              <h4 className="font-semibold text-lg line-clamp-2 group-hover:text-primary transition-colors">
-                                {episode.title}
-                              </h4>
-                              {episode.number && (
-                                <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full ml-2 flex-shrink-0 font-medium">
-                                  #{episode.number}
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                              {episode.description}
-                            </p>
-                            <div className="flex items-center gap-4 text-xs text-gray-500">
-                              <div className="flex items-center gap-1">
-                                <Clock className="h-3 w-3" />
-                                {episode.duration}
-                              </div>
-                              {episode.date && (
-                                <div className="flex items-center gap-1">
-                                  <CalendarDays className="h-3 w-3" />
-                                  {format(
-                                    new Date(episode.date),
-                                    "MMM d, yyyy"
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  )
-                )}
-              </div>
-            ) : (
-              <div className="flex items-center justify-center h-40 text-gray-500 bg-white rounded-xl border border-gray-200">
-                <p>No episodes found</p>
-              </div>
-            )}
-          </div>
         </div>
-      </div>
       </div>
     </>
   );

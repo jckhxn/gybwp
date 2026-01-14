@@ -47,8 +47,10 @@ import {
 const StickyVideoPlayer = dynamic(
   () => import("@/src/components/features/StickyVideoPlayer"),
   {
-    loading: () => <div className="w-full h-96 bg-gray-900 animate-pulse rounded-lg" />,
-    ssr: false
+    loading: () => (
+      <div className="w-full h-96 bg-gray-900 animate-pulse rounded-lg" />
+    ),
+    ssr: false,
   }
 );
 

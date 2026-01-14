@@ -9,21 +9,26 @@ export default defineType({
       name: "metaTitle",
       title: "Meta Title",
       type: "string",
-      description: "Title for search engines (50-60 characters). Leave empty to use default title.",
-      validation: (Rule) => 
-        Rule.max(60).warning("Title should be under 60 characters for optimal display in search results"),
+      description:
+        "Title for search engines (50-60 characters). Leave empty to use default title.",
+      validation: (Rule) =>
+        Rule.max(60).warning(
+          "Title should be under 60 characters for optimal display in search results"
+        ),
     }),
     defineField({
       name: "metaDescription",
       title: "Meta Description",
       type: "text",
       description: "Description for search engines (150-160 characters)",
-      validation: (Rule) => 
-        Rule.max(160).warning("Description should be under 160 characters for optimal display in search results"),
+      validation: (Rule) =>
+        Rule.max(160).warning(
+          "Description should be under 160 characters for optimal display in search results"
+        ),
     }),
     {
       name: "keywords",
-      title: "Keywords", 
+      title: "Keywords",
       type: "array",
       of: [{ type: "string" }],
       description: "Keywords for SEO (optional, use sparingly)",
@@ -41,7 +46,7 @@ export default defineType({
     defineField({
       name: "noFollow",
       title: "No Follow",
-      type: "boolean", 
+      type: "boolean",
       description: "Prevent search engines from following links on this page",
       initialValue: false,
     }),
@@ -49,7 +54,8 @@ export default defineType({
       name: "canonical",
       title: "Canonical URL",
       type: "url",
-      description: "Canonical URL for this page (optional, leave empty to use current page URL)",
+      description:
+        "Canonical URL for this page (optional, leave empty to use current page URL)",
     }),
     {
       name: "openGraph",
@@ -61,19 +67,22 @@ export default defineType({
           name: "title",
           title: "OG Title",
           type: "string",
-          description: "Title for social media (leave empty to use meta title or page title)",
+          description:
+            "Title for social media (leave empty to use meta title or page title)",
         },
         {
           name: "description",
-          title: "OG Description", 
+          title: "OG Description",
           type: "text",
-          description: "Description for social media (leave empty to use meta description)",
+          description:
+            "Description for social media (leave empty to use meta description)",
         },
         {
           name: "image",
           title: "OG Image",
           type: "image",
-          description: "Image for social media sharing (1200x630px recommended)",
+          description:
+            "Image for social media sharing (1200x630px recommended)",
           options: {
             hotspot: true,
           },
@@ -127,7 +136,7 @@ export default defineType({
         {
           name: "creator",
           title: "Twitter Creator",
-          type: "string", 
+          type: "string",
           description: "Twitter handle for the content creator",
         },
       ],
