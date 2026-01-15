@@ -133,6 +133,7 @@ export type StoryImageProps = ComponentProps<"img"> & {
 
 export const StoryImage = ({ className, alt, ...props }: StoryImageProps) => (
   // biome-ignore lint/performance/noImgElement: "Kibo UI is framework agnostic"
+  // eslint-disable-next-line @next/next/no-img-element
   <img
     alt={alt}
     className={cn(

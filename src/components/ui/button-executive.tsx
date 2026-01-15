@@ -10,7 +10,7 @@ export interface ExecutiveButtonProps extends ButtonProps {
 }
 
 const ExecutiveButton = React.forwardRef<HTMLButtonElement, ExecutiveButtonProps>(
-  ({ className, variant = "primary", size = "executive", children, ...props }, ref) => {
+  ({ className, variant = "primary", size = "lg", children, ...props }, ref) => {
     return (
       <Button
         className={cn(
