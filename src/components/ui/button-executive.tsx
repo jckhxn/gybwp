@@ -57,7 +57,7 @@ export const AuthorityButton = React.forwardRef<HTMLButtonElement, ExecutiveButt
   ({ className, children, ...props }, ref) => {
     return (
       <ExecutiveButton
-        variant="authority"
+        variant="primary"
         className={cn(className)}
         ref={ref}
         {...props}
