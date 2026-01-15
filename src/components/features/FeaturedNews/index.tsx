@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Section, SectionHeading } from "@/src/components/shared";
 import defaultImageSrc from "public/images/logo.webp";
 
-import { ExternalLink, ArrowRight, Clock, Calendar } from "lucide-react";
+import { ExternalLink, ArrowRight, Clock, Calendar, Sparkles } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 // SWR
 import { client } from "@/data/sanity/client";
@@ -73,19 +73,19 @@ const FeaturedNews = ({
 
   if (isLoading) {
     return (
-      <div className="w-full py-12">
+      <div className="w-full py-12 bg-surface-50">
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center text-center mb-10">
-            <div className="h-6 w-32 bg-gray-200 rounded mb-4"></div>
-            <div className="h-8 w-64 bg-gray-300 rounded mb-8"></div>
+            <div className="h-6 w-32 bg-surface-200 rounded-full mb-4 animate-pulse"></div>
+            <div className="h-8 w-64 bg-surface-200 rounded-xl mb-8 animate-pulse"></div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[1, 2, 3].map((i) => (
               <div key={i} className="animate-pulse">
-                <div className="h-48 bg-gray-200 rounded-lg mb-4"></div>
-                <div className="h-6 w-3/4 bg-gray-300 rounded mb-3"></div>
-                <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                <div className="h-48 bg-surface-200 rounded-2xl mb-4"></div>
+                <div className="h-6 w-3/4 bg-surface-200 rounded mb-3"></div>
+                <div className="h-4 bg-surface-100 rounded mb-2"></div>
+                <div className="h-4 bg-surface-100 rounded w-5/6"></div>
               </div>
             ))}
           </div>
@@ -93,9 +93,6 @@ const FeaturedNews = ({
       </div>
     );
   }
-
-  const bgColor = color === "secondary" ? "bg-gray-50" : "bg-off-white";
-  const textColor = color === "light" ? "text-gray-800" : "text-gray-100";
 
   // Helper function to get image URL from a Sanity image object
   const getImageUrl = (article) => {
@@ -130,48 +127,53 @@ const FeaturedNews = ({
   };
 
   return (
-    <div className="container mx-auto px-2 sm:px-4 md:px-6">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="flex flex-col items-center justify-center space-y-2 sm:space-y-4 text-center mb-6 sm:mb-12"
-      >
-        <div className="space-y-1 sm:space-y-2">
-          {!hideBadge && (
-            <div className="inline-flex items-center rounded-full bg-primary/20 px-2 sm:px-4 py-0.5 sm:py-1.5 text-xs sm:text-sm font-medium text-primary">
-              Industry Recognition
-            </div>
-          )}
-          <h2 className="text-lg sm:text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
-            Featured In
-          </h2>
-          <p className="max-w-[95vw] sm:max-w-[800px] text-gray-600 text-sm sm:text-base md:text-lg mt-1 sm:mt-2">
-            GYBWP has been recognized by leading publications and media outlets.
-          </p>
-        </div>
+    <div className="bg-surface-50 py-16 lg:py-24">
+      <div className="container mx-auto px-4 sm:px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
+        >
+          <div className="space-y-2">
+            {!hideBadge && (
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary border border-primary/20">
+                <Sparkles className="h-4 w-4" />
+                Industry Recognition
+              </div>
+            )}
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-surface-900">
+              Featured In
+            </h2>
+            <p className="max-w-2xl text-surface-600 text-base md:text-lg mt-2">
+              GYBWP has been recognized by leading publications and media outlets.
+            </p>
+          </div>
 
-        {/* Decorative separator */}
-        <div className="w-12 sm:w-20 h-1 bg-primary rounded-full my-1 sm:my-2"></div>
-      </motion.div>
+          {/* Decorative separator */}
+          <div className="w-20 h-1 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
+        </motion.div>
 
       {featuredArticles.length > 0 ? (
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-6 md:gap-8"
+          className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8"
         >
           {/* Featured article (spans 7 columns) */}
           {featuredArticles[0] && (
             <div className="md:col-span-7 group">
               <motion.div
                 initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="relative h-full overflow-hidden rounded-2xl shadow-lg border border-gray-100 bg-white hover:shadow-xl transition-shadow duration-300"
+                className="relative h-full overflow-hidden rounded-2xl shadow-medium border border-surface-200 bg-white hover:shadow-elevated transition-all duration-300"
               >
-                <div className="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition-opacity duration-300 z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-surface-900/80 via-surface-900/40 to-transparent group-hover:from-surface-900/90 transition-all duration-300 z-10"></div>
 
                 <div className="relative aspect-[16/9] md:aspect-[16/11] overflow-hidden">
                   <Image
@@ -184,22 +186,22 @@ const FeaturedNews = ({
                   />
                 </div>
 
-                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-6 md:p-8 text-white z-20">
-                  <div className="flex flex-wrap items-center gap-1 sm:gap-3 mb-1 sm:mb-3">
-                    <div className="bg-primary/90 px-2 sm:px-3 py-1 text-xs font-medium rounded-full">
+                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 text-white z-20">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3">
+                    <div className="bg-primary px-3 py-1.5 text-xs font-medium rounded-full text-white">
                       {getPublicationName(featuredArticles[0])}
                     </div>
-                    <div className="text-xs flex items-center opacity-90 text-white">
+                    <div className="text-xs flex items-center text-white/80">
                       <Calendar className="h-3 w-3 mr-1" />
                       {formatArticleDate(featuredArticles[0].date)}
                     </div>
                   </div>
 
-                  <h3 className="text-lg sm:text-2xl md:text-3xl font-bold mb-1 sm:mb-3 text-white group-hover:text-primary-light transition-colors duration-300 line-clamp-3 sm:line-clamp-2">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 text-white group-hover:text-primary transition-colors duration-300 line-clamp-2">
                     {featuredArticles[0].title}
                   </h3>
 
-                  <p className="text-gray-50 text-xs sm:text-base line-clamp-2 mb-2 sm:mb-6 hidden sm:block">
+                  <p className="text-white/80 text-sm sm:text-base line-clamp-2 mb-4 hidden sm:block">
                     {featuredArticles[0].excerpt}
                   </p>
 
@@ -207,10 +209,10 @@ const FeaturedNews = ({
                     href={featuredArticles[0].link || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 sm:gap-2 text-white bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 rounded-lg px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-base"
+                    className="inline-flex items-center gap-2 text-white bg-white/20 backdrop-blur-sm hover:bg-primary transition-all duration-300 rounded-xl px-4 py-2.5 text-sm font-medium"
                   >
                     Read Article
-                    <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <ExternalLink className="h-4 w-4" />
                   </Link>
                 </div>
               </motion.div>
@@ -218,14 +220,15 @@ const FeaturedNews = ({
           )}
 
           {/* Secondary articles (spans 5 columns) */}
-          <div className="md:col-span-5 flex flex-col gap-2 sm:gap-8">
+          <div className="md:col-span-5 flex flex-col gap-6">
             {featuredArticles.slice(1, 3).map((article, idx) => (
               <motion.div
                 key={article._id || `article-${idx}`}
                 initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.4 + idx * 0.2 }}
-                className="group relative overflow-hidden rounded-xl shadow-md border border-gray-100 bg-white hover:shadow-lg transition-all duration-300"
+                className="group relative overflow-hidden rounded-2xl shadow-soft border border-surface-200 bg-white hover:shadow-medium transition-all duration-300"
               >
                 <Link
                   href={article.link || "#"}
@@ -234,39 +237,39 @@ const FeaturedNews = ({
                   className="block h-full"
                 >
                   <div className="flex flex-col sm:flex-row h-full">
-                    <div className="relative w-full sm:w-2/5 md:w-1/3 aspect-[16/9] sm:aspect-auto">
+                    <div className="relative w-full sm:w-2/5 md:w-1/3 aspect-[16/9] sm:aspect-auto overflow-hidden">
                       <Image
                         src={getImageUrl(article)}
                         alt={article.title || "Article thumbnail"}
                         fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105 max-w-full h-auto"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 640px) 100vw, (max-width: 768px) 40vw, 33vw"
                       />
                     </div>
 
-                    <div className="p-3 sm:p-5 flex flex-col flex-grow">
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="text-xs text-primary font-medium">
+                    <div className="p-4 sm:p-5 flex flex-col flex-grow">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-xs text-primary font-medium bg-primary/10 px-2 py-1 rounded-full">
                           {getPublicationName(article)}
                         </div>
 
-                        <div className="flex items-center text-xs text-gray-500">
+                        <div className="flex items-center text-xs text-surface-500">
                           <Calendar className="h-3 w-3 mr-1" />
                           {formatArticleDate(article.date)}
                         </div>
                       </div>
 
-                      <h3 className="text-sm sm:text-lg font-bold text-gray-800 mb-1 sm:mb-2 group-hover:text-primary transition-colors duration-300 line-clamp-2">
+                      <h3 className="text-base sm:text-lg font-bold text-surface-900 mb-2 group-hover:text-primary transition-colors duration-300 line-clamp-2">
                         {article.title}
                       </h3>
 
-                      <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 mb-1 sm:mb-3 flex-grow hidden sm:block">
+                      <p className="text-sm text-surface-600 line-clamp-2 mb-3 flex-grow hidden sm:block">
                         {article.excerpt}
                       </p>
 
-                      <div className="flex items-center justify-end mt-auto pt-1 sm:pt-2">
-                        <span className="flex items-center text-xs sm:text-sm text-primary group-hover:underline">
-                          Read more <ArrowRight className="ml-1 h-3 w-3" />
+                      <div className="flex items-center justify-end mt-auto pt-2">
+                        <span className="flex items-center text-sm text-primary font-medium group-hover:underline">
+                          Read more <ArrowRight className="ml-1 h-4 w-4" />
                         </span>
                       </div>
                     </div>
@@ -277,21 +280,28 @@ const FeaturedNews = ({
           </div>
         </motion.div>
       ) : (
-        <div className="text-center py-4 sm:py-10">
-          <p className="text-muted-foreground text-xs sm:text-base">
+        <div className="text-center py-12">
+          <p className="text-surface-500">
             No featured articles available at this time.
           </p>
         </div>
       )}
 
-      <div className="flex justify-center mt-6 sm:mt-12">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="flex justify-center mt-12"
+      >
         <Link
           href="/news"
-          className="group inline-flex items-center gap-1 sm:gap-2 text-xs sm:text-base text-primary hover:text-primary-light transition-colors duration-300"
+          className="group inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors duration-300 font-medium"
         >
           View all news and articles
-          <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
+          <ArrowRight className="h-4 w-4 transform transition-transform duration-300 group-hover:translate-x-1" />
         </Link>
+      </motion.div>
       </div>
     </div>
   );

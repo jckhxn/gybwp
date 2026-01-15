@@ -2,8 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { getComponentId } from "@/src/lib/sectionId";
-import { MailIcon, Podcast } from "lucide-react";
+import { MailIcon, Podcast, Sparkles } from "lucide-react";
 
 interface AboutHeroProps {
   section: {
@@ -31,7 +32,6 @@ export function AboutHero({ section }: AboutHeroProps) {
     platforms
   } = section;
 
-  // Ensure platforms is always an array
   const safePlatforms = platforms || [
     {
       name: "Apple Podcasts",
@@ -52,37 +52,68 @@ export function AboutHero({ section }: AboutHeroProps) {
   ];
 
   return (
-    <section id={componentId} className="w-full py-24 bg-white">
-      <div className="container mx-auto px-6 max-w-6xl flex flex-col items-center text-center gap-10">
-        <div className="authority-badge inline-flex items-center gap-3 rounded-full px-6 py-3 text-sm font-semibold shadow-professional">
-          <div className="relative">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-              <line x1="12" x2="12" y1="19" y2="22" />
-              <line x1="8" x2="16" y1="22" y2="22" />
-            </svg>
-            <div className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+    <section id={componentId} className="relative w-full py-24 lg:py-32 bg-surface-900 overflow-hidden">
+      {/* Gradient mesh background */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900"></div>
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.4, 0.3] }}
+          transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+          className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]"
+        />
+        <motion.div
+          animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.3, 0.2] }}
+          transition={{ repeat: Infinity, duration: 10, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[100px]"
+        />
+      </div>
+
+      <div className="container relative z-10 mx-auto px-6 max-w-5xl flex flex-col items-center text-center gap-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span className="text-sm font-semibold text-white/90 uppercase tracking-wider">
+              {badgeText}
+            </span>
           </div>
-          <span className="tracking-wide">{badgeText}</span>
-        </div>
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-main leading-tight">
-          {title}
-        </h1>
-        <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-medium">
+        </motion.div>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-tight"
+        >
+          {title.split(" ").map((word, i) => (
+            <span key={i}>
+              {word === "People" ? (
+                <span className="text-gradient">{word}</span>
+              ) : (
+                word
+              )}{" "}
+            </span>
+          ))}
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-lg md:text-xl text-surface-300 max-w-3xl mx-auto leading-relaxed"
+        >
           {subtitle}
-        </p>
-        <div className="flex flex-wrap gap-6 justify-center mt-8">
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="flex flex-wrap gap-4 justify-center mt-4"
+        >
           {safePlatforms.map((platform, index) => (
             <PlatformBadge
               key={index}
@@ -91,7 +122,7 @@ export function AboutHero({ section }: AboutHeroProps) {
               icon={platform.name === "Contact" ? <MailIcon className="h-5 w-5" /> : <Podcast className="h-5 w-5" />}
             />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -109,14 +140,16 @@ function PlatformBadge({
   return (
     <Link
       href={href}
-      className="group glass-card inline-flex items-center gap-3 px-6 py-3 hover:bg-white/90 text-main hover:text-primary rounded-xl shadow-professional hover:shadow-professional-lg hover:-translate-y-0.5 transition-all duration-300 font-semibold text-sm"
+      className="group inline-flex items-center gap-3 px-5 py-3 bg-white/10 hover:bg-white/20 
+                 border border-white/20 hover:border-white/30 rounded-xl
+                 transition-all duration-300 hover:-translate-y-1"
       target={href.startsWith("http") ? "_blank" : undefined}
       rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
     >
-      <div className="group-hover:scale-110 transition-transform duration-300">
+      <div className="text-primary group-hover:scale-110 transition-transform duration-300">
         {icon || <Podcast className="h-5 w-5" />}
       </div>
-      <span className="tracking-wide">{label}</span>
+      <span className="text-sm font-medium text-white">{label}</span>
     </Link>
   );
 }

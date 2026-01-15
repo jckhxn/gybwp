@@ -294,9 +294,9 @@ export function EpisodesDirectory({
   const currentSeasonEpisodes = data.length;
 
   return (
-    <div id={componentId}>
+    <div id={componentId} className="bg-surface-50 min-h-screen">
       {/* Controls Section */}
-      <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
+      <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-surface-200 shadow-soft">
         <div className="container mx-auto px-6 py-4">
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             {/* Left side - Season and Search */}
@@ -311,13 +311,13 @@ export function EpisodesDirectory({
 
               {enableSearch && (
                 <div className="relative flex-1 max-w-md">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-surface-400" />
                   <input
                     type="text"
                     placeholder="Search episodes, topics, or guests..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 border border-surface-200 bg-white rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-surface-700 placeholder:text-surface-400"
                   />
                 </div>
               )}
@@ -328,10 +328,10 @@ export function EpisodesDirectory({
               {enableFilters && (
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all ${
                     showFilters
-                      ? "bg-primary/10 text-primary"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      ? "bg-primary/10 text-primary border border-primary/20"
+                      : "bg-surface-100 text-surface-600 hover:bg-surface-200 border border-transparent"
                   }`}
                 >
                   <Filter className="h-4 w-4" />
@@ -340,23 +340,23 @@ export function EpisodesDirectory({
               )}
 
               {enableViewModes && (
-                <div className="flex border border-gray-300 rounded-lg overflow-hidden">
+                <div className="flex border border-surface-200 rounded-xl overflow-hidden">
                   <button
                     onClick={() => setViewMode("grid")}
-                    className={`p-2 transition-colors ${
+                    className={`p-2.5 transition-all ${
                       viewMode === "grid"
                         ? "bg-primary text-white"
-                        : "bg-white text-gray-600 hover:bg-gray-50"
+                        : "bg-white text-surface-600 hover:bg-surface-50"
                     }`}
                   >
                     <Grid className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => setViewMode("list")}
-                    className={`p-2 transition-colors ${
+                    className={`p-2.5 transition-all ${
                       viewMode === "list"
                         ? "bg-primary text-white"
-                        : "bg-white text-gray-600 hover:bg-gray-50"
+                        : "bg-white text-surface-600 hover:bg-surface-50"
                     }`}
                   >
                     <List className="h-4 w-4" />
@@ -374,17 +374,17 @@ export function EpisodesDirectory({
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="mt-4 pt-4 border-t border-slate-200"
+                  className="mt-4 pt-4 border-t border-surface-200"
                 >
                   <div className="flex flex-wrap gap-4 items-center">
                     <div className="flex items-center gap-2">
-                      <label className="text-sm font-medium text-slate-700">
+                      <label className="text-sm font-medium text-surface-700">
                         Sort by:
                       </label>
                       <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value as any)}
-                        className="px-3 py-1 border border-slate-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="px-3 py-2 border border-surface-200 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white text-surface-700"
                       >
                         <option value="newest">Newest First</option>
                         <option value="oldest">Oldest First</option>
@@ -392,7 +392,7 @@ export function EpisodesDirectory({
                       </select>
                     </div>
 
-                    <div className="text-sm text-slate-600">
+                    <div className="text-sm text-surface-600">
                       {pagination.totalItems} of {currentSeasonEpisodes}{" "}
                       episodes
                       {searchTerm && ` matching "${searchTerm}"`}
@@ -415,8 +415,8 @@ export function EpisodesDirectory({
       <main className="container mx-auto px-6 py-12">
         {isLoading ? (
           <div className="text-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-slate-600">Loading episodes...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-surface-600">Loading episodes...</p>
           </div>
         ) : error ? (
           <div className="text-center py-20">
@@ -425,7 +425,7 @@ export function EpisodesDirectory({
             </p>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+              className="px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-all shadow-soft font-medium"
             >
               Retry
             </button>
@@ -436,8 +436,8 @@ export function EpisodesDirectory({
               layout
               className={
                 viewMode === "grid"
-                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
-                  : "space-y-6"
+                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                  : "space-y-4"
               }
             >
               <AnimatePresence mode="popLayout">
@@ -472,18 +472,20 @@ export function EpisodesDirectory({
                 totalItems={pagination.totalItems}
                 startIndex={pagination.startIndex}
                 endIndex={pagination.endIndex}
-                className="border-t border-gray-200 pt-8"
+                className="border-t border-surface-200 pt-8 mt-8"
               />
             )}
           </>
         ) : (
           <div className="text-center py-20">
-            <div className="mb-4">
-              <Search className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-slate-700 mb-2">
+            <div className="mb-6">
+              <div className="w-20 h-20 bg-surface-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Search className="h-10 w-10 text-surface-400" />
+              </div>
+              <h3 className="text-xl font-semibold text-surface-800 mb-2">
                 No episodes found
               </h3>
-              <p className="text-slate-600">
+              <p className="text-surface-600">
                 {searchTerm
                   ? `No episodes match "${searchTerm}". Try a different search term.`
                   : "No episodes found for this season."}
@@ -492,7 +494,7 @@ export function EpisodesDirectory({
             {searchTerm && enableSearch && (
               <button
                 onClick={() => setSearchTerm("")}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                className="px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-all shadow-soft font-medium"
               >
                 Clear Search
               </button>

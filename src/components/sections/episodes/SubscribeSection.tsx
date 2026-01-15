@@ -3,6 +3,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Bell, Headphones, Mail, ArrowRight } from "lucide-react";
 
 interface SubscribeSectionProps {
   data: {
@@ -41,38 +42,29 @@ export default function SubscribeSection({ data }: SubscribeSectionProps) {
   if (!data?.showSubscribe) return null;
 
   return (
-    <div className="relative bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1 bg-primary"></div>
-      <div className="p-8">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-primary/20 rounded-xl mb-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-7 w-7 text-primary"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 17h5l-5 5-5-5h5v-5a7.07 7.07 0 01-3-6C7 6.477 7.477 6 8 6s1 .477 1 1c0 .591.273 1.139.7 1.5L12 6l2.3 2.5c.427-.361.7-.909.7-1.5 0-.523.477-1 1-1s1 .477 1 1a7.07 7.07 0 01-3 6v5z"
-              />
-            </svg>
+    <div className="relative bg-white rounded-2xl border border-surface-100 shadow-medium overflow-hidden">
+      {/* Top accent line */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-primary-light to-primary"></div>
+      
+      <div className="p-8 md:p-10">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-5">
+            <Headphones className="w-8 h-8 text-primary" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">
+          <h3 className="text-2xl md:text-3xl font-bold text-surface-900 mb-3">
             {data.title || "Subscribe & Listen"}
           </h3>
-          <p className="text-gray-600 text-sm">
-            {data.subtitle || "Never miss an episode"}
+          <p className="text-surface-500 text-base max-w-md mx-auto">
+            {data.subtitle || "Never miss an episode of valuable leadership insights"}
           </p>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-10">
+          {/* Podcast Platforms */}
           {data.showPodcastPlatforms && (
             <div>
-              <h4 className="text-lg font-semibold text-gray-900 mb-4 text-center">
+              <h4 className="text-sm font-semibold text-surface-900 mb-5 text-center uppercase tracking-wider">
                 Listen on Your Favorite Platform
               </h4>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -82,18 +74,19 @@ export default function SubscribeSection({ data }: SubscribeSectionProps) {
                     href={platform.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex flex-col items-center p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md hover:border-primary/30 transition-all duration-200 group"
+                    className="group flex flex-col items-center p-5 bg-surface-50 rounded-xl border border-surface-100
+                               transition-all duration-300 hover:bg-white hover:shadow-medium hover:border-primary/20 hover:-translate-y-1"
                   >
-                    <div className="w-12 h-12 relative mb-2">
+                    <div className="w-12 h-12 relative mb-3">
                       <Image
                         src={platform.icon}
                         alt={platform.name}
                         width={48}
                         height={48}
-                        className="object-contain group-hover:scale-110 transition-transform duration-200"
+                        className="object-contain opacity-70 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110"
                       />
                     </div>
-                    <span className="text-sm font-medium text-gray-700 text-center group-hover:text-primary transition-colors">
+                    <span className="text-sm font-medium text-surface-600 text-center group-hover:text-primary transition-colors">
                       {platform.name}
                     </span>
                   </Link>
@@ -102,26 +95,40 @@ export default function SubscribeSection({ data }: SubscribeSectionProps) {
             </div>
           )}
 
+          {/* Newsletter */}
           {data.showNewsletter && (
-            <div className="pt-6 border-t border-gray-200">
-              <div className="bg-white rounded-lg p-6 border border-gray-200">
-                <h4 className="text-lg font-semibold text-gray-900 mb-2 text-center">
-                  Get Episode Updates
-                </h4>
-                <p className="text-gray-600 text-sm mb-4 text-center">
-                  Subscribe to our newsletter for episode notifications and
-                  exclusive content
+            <div className="pt-8 border-t border-surface-100">
+              <div className="bg-surface-50 rounded-2xl p-6 md:p-8">
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-primary" />
+                  </div>
+                  <h4 className="text-lg font-bold text-surface-900">
+                    Get Episode Updates
+                  </h4>
+                </div>
+                <p className="text-surface-500 text-sm mb-5 text-center max-w-sm mx-auto">
+                  Subscribe to our newsletter for new episode notifications and exclusive content
                 </p>
-                <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
                   <input
                     type="email"
                     placeholder="Enter your email"
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+                    className="flex-1 px-4 py-3 bg-white border border-surface-200 rounded-xl 
+                               text-surface-900 placeholder:text-surface-400
+                               transition-all duration-200
+                               focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none"
                   />
-                  <button className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium whitespace-nowrap">
-                    Subscribe
+                  <button 
+                    type="submit"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-xl
+                               shadow-soft transition-all duration-300 hover:bg-primary-dark hover:shadow-glow hover:-translate-y-0.5
+                               whitespace-nowrap"
+                  >
+                    <span>Subscribe</span>
+                    <ArrowRight className="w-4 h-4" />
                   </button>
-                </div>
+                </form>
               </div>
             </div>
           )}

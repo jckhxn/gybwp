@@ -1,6 +1,5 @@
 import React from "react";
-import { Badge } from "@/src/components/ui/badge";
-import { CheckCircle, Users, TrendingUp, Target, Award, Globe, Building, Lightbulb } from "lucide-react";
+import { CheckCircle, Users, TrendingUp, Target, Award, Globe, Building, Lightbulb, Sparkles } from "lucide-react";
 import { getComponentId } from "@/src/lib/sectionId";
 
 interface ConsultingServicesProps {
@@ -29,6 +28,13 @@ const ICON_MAP = {
   award: Award,
   lightbulb: Lightbulb,
 } as const;
+
+const ICON_COLORS = [
+  "from-primary to-primary-dark",
+  "from-secondary to-secondary-dark",
+  "from-accent to-accent-light",
+  "from-primary to-secondary",
+];
 
 const FALLBACK_SERVICES = [
   {
@@ -82,59 +88,76 @@ export function ConsultingServices({ section }: ConsultingServicesProps) {
   const services = section.services || FALLBACK_SERVICES;
 
   return (
-    <section id={componentId} className="py-24 lg:py-32 bg-gradient-to-br from-off-white via-white to-gray-50/30">
+    <section id={componentId} className="py-24 lg:py-32 bg-surface-50">
       <div className="container px-6 md:px-8 max-w-7xl mx-auto">
-        <div className="text-center mb-20 space-y-6">
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full border border-primary/20 shadow-professional">
-            <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+        {/* Header */}
+        <div className="text-center mb-16 space-y-6">
+          <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full border border-primary/20">
+            <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-semibold text-primary">
               {section.badgeText || "Our Services"}
             </span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-main to-main-light bg-clip-text text-transparent leading-tight">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-surface-900 leading-tight">
             {section.title || "Comprehensive Talent Solutions"}
           </h2>
-          <p className="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed font-medium">
+          <p className="text-xl text-surface-500 max-w-3xl mx-auto leading-relaxed">
             {section.description || 
               "From strategic planning to execution, we provide end-to-end consulting services that drive sustainable business growth through people."
             }
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        {/* Services Grid */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {services.map((service, index) => {
             const IconComponent = service.icon && ICON_MAP[service.icon as keyof typeof ICON_MAP] 
               ? ICON_MAP[service.icon as keyof typeof ICON_MAP]
               : Users;
+            const gradientColor = ICON_COLORS[index % ICON_COLORS.length];
             
             return (
               <div
                 key={index}
-                className="card-executive p-8 group hover:shadow-executive transition-all duration-300 hover:-translate-y-2 relative overflow-hidden"
+                className="group bg-white rounded-2xl p-6 border border-surface-200 shadow-soft hover:shadow-elevated transition-all duration-500 hover:-translate-y-2 hover:border-primary/20 relative overflow-hidden"
               >
-                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-primary/10 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                {/* Decorative gradient corner */}
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary/5 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
                 <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center mb-6 shadow-professional group-hover:scale-110 transition-transform duration-300">
-                    <IconComponent className="w-8 h-8 text-white" />
+                  {/* Icon */}
+                  <div className={`w-14 h-14 bg-gradient-to-br ${gradientColor} rounded-2xl flex items-center justify-center mb-5 shadow-soft group-hover:scale-110 group-hover:shadow-medium transition-all duration-300`}>
+                    <IconComponent className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-primary transition-colors duration-200">
+                  
+                  {/* Title */}
+                  <h3 className="text-lg font-bold text-surface-900 mb-3 group-hover:text-primary transition-colors duration-300">
                     {service.title}
                   </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">{service.description}</p>
+                  
+                  {/* Description */}
+                  <p className="text-surface-500 text-sm mb-5 leading-relaxed">
+                    {service.description}
+                  </p>
+                  
+                  {/* Features */}
                   {service.features && (
-                    <ul className="space-y-3">
+                    <ul className="space-y-2.5">
                       {service.features.map((feature, idx) => (
                         <li
                           key={idx}
-                          className="flex items-start gap-3 text-sm text-gray-700 group-hover:text-gray-800 transition-colors duration-200"
+                          className="flex items-start gap-2.5 text-sm text-surface-600 group-hover:text-surface-700 transition-colors duration-200"
                         >
-                          <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0 group-hover:scale-125 transition-transform duration-200"></div>
-                          {feature}
+                          <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                          <span>{feature}</span>
                         </li>
                       ))}
                     </ul>
                   )}
                 </div>
+                
+                {/* Bottom accent line */}
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
               </div>
             );
           })}

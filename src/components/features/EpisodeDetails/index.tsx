@@ -95,10 +95,10 @@ interface Sponsor {
 const SubscribeForm = () => (
   <div className="flex flex-col space-y-4">
     <div className="flex flex-col items-center gap-2 text-center sm:items-start sm:text-left">
-      <p className="text-lg font-medium">
+      <p className="text-lg font-medium text-surface-900">
         Join our community of purpose-driven entrepreneurs
       </p>
-      <p className="text-muted-foreground">
+      <p className="text-surface-500">
         Connect with like-minded business owners and get weekly insights
         directly on LinkedIn.
       </p>
@@ -107,7 +107,7 @@ const SubscribeForm = () => (
       href="https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7049506606413213696"
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center justify-center gap-3 rounded-lg bg-primary hover:bg-primary-dark px-8 py-3 text-base font-medium text-white shadow-lg hover:shadow-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+      className="inline-flex items-center justify-center gap-3 rounded-xl bg-primary hover:bg-primary-dark px-8 py-3 text-base font-medium text-white shadow-glow hover:shadow-glow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -121,7 +121,7 @@ const SubscribeForm = () => (
       </svg>
       Subscribe on LinkedIn
     </Link>
-    <p className="text-xs text-muted-foreground max-w-[400px] text-center sm:text-left">
+    <p className="text-xs text-surface-500 max-w-[400px] text-center sm:text-left">
       By subscribing, you&apos;ll receive our weekly newsletter and can easily
       engage with our content and community on the LinkedIn platform.
     </p>
@@ -140,12 +140,12 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   // Handle cases where episode data is missing or invalid
   if (!episode) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center">
+      <div className="min-h-screen bg-surface-900 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          <h1 className="text-2xl font-bold text-white mb-4">
             Episode Not Found
           </h1>
-          <p className="text-gray-600">
+          <p className="text-surface-400">
             The requested episode could not be loaded.
           </p>
         </div>
@@ -328,21 +328,24 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
         <JSONLD data={videoStructuredData} id="video-object-jsonld" />
       )}
 
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+      <div className="min-h-screen bg-surface-50">
         {/* Hero Section */}
-        <div className="relative bg-gradient-to-br from-primary/5 via-white to-secondary/5 border-b border-gray-100">
-          <div className="absolute inset-0 opacity-30">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]"></div>
+        <div className="relative bg-surface-900 overflow-hidden">
+          {/* Gradient mesh background */}
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900"></div>
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]"></div>
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[100px]"></div>
           </div>
 
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
+          <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 py-12">
             {/* Episode Navigation */}
             <div className="flex justify-between items-center mb-8">
               {episode?.prevEpisode ? (
                 <Link href={`${episode.prevEpisode}`}>
                   <Button
                     color="primary"
-                    className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-gray-200 hover:bg-white hover:shadow-sm transition-all px-4 py-2 rounded-lg text-sm font-medium"
+                    className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all px-4 py-2 rounded-xl text-sm font-medium text-white"
                   >
                     <ChevronLeft className="h-4 w-4" />
                     Previous Episode
@@ -351,7 +354,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
               ) : (
                 <Button
                   color="white"
-                  className="flex items-center gap-2 bg-white/50 backdrop-blur-sm border border-gray-200 opacity-50 px-4 py-2 rounded-lg text-sm font-medium"
+                  className="flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-white/10 opacity-50 px-4 py-2 rounded-xl text-sm font-medium text-white/50"
                   disabled
                 >
                   <ChevronLeft className="h-4 w-4" />
@@ -363,7 +366,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 <Link href={`${episode.nextEpisode}`}>
                   <Button
                     color="primary"
-                    className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-gray-200 hover:bg-white hover:shadow-sm transition-all px-4 py-2 rounded-lg text-sm font-medium"
+                    className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all px-4 py-2 rounded-xl text-sm font-medium text-white"
                   >
                     Next Episode
                     <ChevronRight className="h-4 w-4" />
@@ -372,7 +375,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
               ) : (
                 <Button
                   color="white"
-                  className="flex items-center gap-2 bg-white/50 backdrop-blur-sm border border-gray-200 opacity-50 px-4 py-2 rounded-lg text-sm font-medium"
+                  className="flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-white/10 opacity-50 px-4 py-2 rounded-xl text-sm font-medium text-white/50"
                   disabled
                 >
                   Next Episode
@@ -384,27 +387,27 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
             {/* Episode Header */}
             <div className="text-center max-w-4xl mx-auto">
               {(seasonNumber || episodeNumber) && (
-                <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary/15 to-secondary/15 px-4 py-2 text-sm font-medium text-primary border border-primary/20 mb-6">
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/20 px-4 py-2 text-sm font-semibold text-primary border border-primary/30 mb-6">
                   {seasonNumber && `Season ${seasonNumber}`}
                   {seasonNumber && episodeNumber && " • "}
                   {episodeNumber && `Episode ${episodeNumber}`}
                 </div>
               )}
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-6 text-white">
                 {title}
               </h1>
 
               {blurb && (
-                <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-8 max-w-3xl mx-auto">
+                <p className="text-lg md:text-xl text-surface-300 leading-relaxed mb-8 max-w-3xl mx-auto">
                   {blurb}
                 </p>
               )}
 
-              <div className="flex flex-wrap justify-center gap-6 text-gray-600 mb-8">
+              <div className="flex flex-wrap justify-center gap-6 text-surface-300 mb-8">
                 {publishedAt && (
                   <div className="flex items-center gap-2">
-                    <div className="p-2 bg-white rounded-full shadow-sm">
+                    <div className="p-2 bg-white/10 rounded-full">
                       <Calendar className="h-4 w-4 text-primary" />
                     </div>
                     <span className="font-medium">
@@ -414,7 +417,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 )}
                 {duration && (
                   <div className="flex items-center gap-2">
-                    <div className="p-2 bg-white rounded-full shadow-sm">
+                    <div className="p-2 bg-white/10 rounded-full">
                       <Clock className="h-4 w-4 text-primary" />
                     </div>
                     <span className="font-medium">
@@ -434,8 +437,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
               {/* Video Player - only show if video ID exists */}
               {episode?.youtube?.id ? (
                 <div className="relative">
-                  <div className="absolute -inset-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl blur-xl opacity-50"></div>
-                  <div className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                  <div className="absolute -inset-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-3xl blur-xl opacity-50"></div>
+                  <div className="relative bg-white rounded-2xl border border-surface-200 shadow-medium overflow-hidden">
                     <StickyVideoPlayer
                       videoId={episode.youtube.id}
                       title={title}
@@ -450,9 +453,9 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   </div>
                 </div>
               ) : (
-                <div className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden p-8 text-center">
-                  <div className="text-gray-500">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                <div className="relative bg-white rounded-2xl border border-surface-200 shadow-soft overflow-hidden p-8 text-center">
+                  <div className="text-surface-500">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-surface-100 rounded-full flex items-center justify-center">
                       <svg
                         className="w-8 h-8"
                         fill="currentColor"
@@ -465,10 +468,10 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                         />
                       </svg>
                     </div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    <h3 className="text-lg font-medium text-surface-900 mb-2">
                       Video Not Available
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-surface-600">
                       This episode doesn&apos;t have an associated video.
                     </p>
                   </div>
@@ -481,9 +484,9 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
               </div>
 
               {/* Jump to Section */}
-              <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+              <div className="bg-white rounded-2xl border border-surface-200 p-6 shadow-soft">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-primary/10 rounded-lg">
+                  <div className="p-2 bg-primary/10 rounded-xl">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5 text-primary"
@@ -499,7 +502,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-surface-900">
                     Quick Navigation
                   </h3>
                 </div>
@@ -508,7 +511,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   {description && (
                     <Button
                       color="primary"
-                      className="py-2 px-4 text-base font-medium border-2 border-primary text-primary bg-white rounded hover:bg-primary hover:text-white transition"
+                      className="py-2 px-4 text-sm font-medium border border-surface-200 text-surface-700 bg-white rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
                       onClick={() => {
                         const element = document.getElementById("overview");
                         if (element) {
@@ -533,7 +536,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   {takeaways && takeaways.length > 0 && (
                     <Button
                       color="primary"
-                      className="py-2 px-4 text-base font-medium border-2 border-primary text-primary bg-white rounded hover:bg-primary hover:text-white transition"
+                      className="py-2 px-4 text-sm font-medium border border-surface-200 text-surface-700 bg-white rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
                       onClick={() => {
                         const element =
                           document.getElementById("key-takeaways");
@@ -559,7 +562,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   {discussionTopics && discussionTopics.length > 0 && (
                     <Button
                       color="primary"
-                      className="py-2 px-4 text-base font-medium border-2 border-primary text-primary bg-white rounded hover:bg-primary hover:text-white transition"
+                      className="py-2 px-4 text-sm font-medium border border-surface-200 text-surface-700 bg-white rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
                       onClick={() => {
                         const element =
                           document.getElementById("discussion-topics");
@@ -585,7 +588,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   {highlights && highlights.length > 0 && (
                     <Button
                       color="primary"
-                      className="py-2 px-4 text-base font-medium border-2 border-primary text-primary bg-white rounded hover:bg-primary hover:text-white transition"
+                      className="py-2 px-4 text-sm font-medium border border-surface-200 text-surface-700 bg-white rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
                       onClick={() => {
                         const element =
                           document.getElementById("episode-highlights");
@@ -612,7 +615,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     (transcriptSegments && transcriptSegments.length > 0)) && (
                     <Button
                       color="primary"
-                      className="py-2 px-4 text-base font-medium border-2 border-primary text-primary bg-white rounded hover:bg-primary hover:text-white transition"
+                      className="py-2 px-4 text-sm font-medium border border-surface-200 text-surface-700 bg-white rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
                       onClick={() => {
                         const element = document.getElementById("transcript");
                         if (element) {
@@ -639,7 +642,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     episode.guests.length > 0 && (
                       <Button
                         color="primary"
-                        className="py-2 px-4 text-base font-medium border-2 border-primary text-primary bg-white rounded hover:bg-primary hover:text-white transition"
+                        className="py-2 px-4 text-sm font-medium border border-surface-200 text-surface-700 bg-white rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
                         onClick={() => {
                           const element =
                             document.getElementById("featured-guest");
@@ -666,11 +669,11 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
 
               {/* Decorative Separator */}
               <div className="flex items-center justify-center py-8">
-                <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent w-full max-w-md"></div>
-                <div className="mx-4 p-2 bg-white rounded-full border border-gray-200 shadow-sm">
+                <div className="h-px bg-gradient-to-r from-transparent via-surface-300 to-transparent w-full max-w-md"></div>
+                <div className="mx-4 p-2 bg-white rounded-full border border-surface-200 shadow-soft">
                   <div className="w-2 h-2 bg-primary rounded-full"></div>
                 </div>
-                <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent w-full max-w-md"></div>
+                <div className="h-px bg-gradient-to-r from-transparent via-surface-300 to-transparent w-full max-w-md"></div>
               </div>
 
               {/* Episode Content Sections */}
@@ -679,7 +682,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 {description && (
                   <div
                     id="overview"
-                    className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
+                    className="relative bg-white rounded-2xl border border-surface-200 shadow-soft overflow-hidden"
                   >
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary"></div>
                     <div className="p-8">
@@ -700,11 +703,11 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                             />
                           </svg>
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900">
+                        <h2 className="text-2xl font-bold text-surface-900">
                           Episode Overview
                         </h2>
                       </div>
-                      <div className="space-y-4 text-gray-700 leading-relaxed text-lg">
+                      <div className="space-y-4 text-surface-700 leading-relaxed text-lg">
                         {formatDescriptionText(description).map(
                           (paragraph, index) => (
                             <p key={index}>{paragraph}</p>
@@ -719,7 +722,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 {takeaways && takeaways.length > 0 && (
                   <div
                     id="key-takeaways"
-                    className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
+                    className="relative bg-white rounded-2xl border border-surface-200 shadow-soft overflow-hidden"
                   >
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500"></div>
                     <div className="p-8">
@@ -740,7 +743,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                             />
                           </svg>
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900">
+                        <h2 className="text-2xl font-bold text-surface-900">
                           Key Takeaways
                         </h2>
                       </div>
@@ -752,7 +755,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                                 {index + 1}
                               </span>
                             </div>
-                            <p className="text-gray-700 text-lg leading-relaxed">
+                            <p className="text-surface-700 text-lg leading-relaxed">
                               {takeaway}
                             </p>
                           </div>
@@ -766,7 +769,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 {discussionTopics && discussionTopics.length > 0 && (
                   <div
                     id="discussion-topics"
-                    className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
+                    className="relative bg-white rounded-2xl border border-surface-200 shadow-soft overflow-hidden"
                   >
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500"></div>
                     <div className="p-8">
@@ -787,7 +790,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                             />
                           </svg>
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900">
+                        <h2 className="text-2xl font-bold text-surface-900">
                           Discussion Topics
                         </h2>
                       </div>
@@ -798,10 +801,10 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                               key={index}
                               className="border-l-4 border-blue-400 pl-6"
                             >
-                              <h3 className="font-semibold text-xl text-gray-900 mb-2">
+                              <h3 className="font-semibold text-xl text-surface-900 mb-2">
                                 {topic.title || `Topic ${index + 1}`}
                               </h3>
-                              <p className="text-gray-700 text-lg leading-relaxed">
+                              <p className="text-surface-700 text-lg leading-relaxed">
                                 {topic.description || ""}
                               </p>
                             </div>
@@ -816,7 +819,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 {highlights && highlights.length > 0 && (
                   <div
                     id="episode-highlights"
-                    className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
+                    className="relative bg-white rounded-2xl border border-surface-200 shadow-soft overflow-hidden"
                   >
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-teal-500"></div>
                     <div className="p-8">
@@ -837,7 +840,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                             />
                           </svg>
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900">
+                        <h2 className="text-2xl font-bold text-surface-900">
                           Episode Highlights
                         </h2>
                       </div>
@@ -852,7 +855,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                               </div>
                               <div className="flex-grow flex flex-col">
                                 <div className="flex items-center gap-3 mb-2">
-                                  <h3 className="font-semibold text-xl text-gray-900">
+                                  <h3 className="font-semibold text-xl text-surface-900">
                                     {highlight.title ||
                                       `Highlight ${index + 1}`}
                                   </h3>
@@ -903,7 +906,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                                     </button>
                                   )}
                                 </div>
-                                <p className="text-gray-600 text-lg leading-relaxed">
+                                <p className="text-surface-600 text-lg leading-relaxed">
                                   {highlight.description ||
                                     "Click the timestamp to jump to this moment in the episode"}
                                 </p>
@@ -921,7 +924,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                   (transcriptSegments && transcriptSegments.length > 0)) && (
                   <div
                     id="transcript"
-                    className="relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
+                    className="relative bg-white rounded-2xl border border-surface-200 shadow-soft overflow-hidden"
                   >
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 to-indigo-500"></div>
                     <div className="p-8">
@@ -943,7 +946,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                               />
                             </svg>
                           </div>
-                          <h2 className="text-2xl font-bold text-gray-900">
+                          <h2 className="text-2xl font-bold text-surface-900">
                             Episode Transcript
                           </h2>
                         </div>
@@ -969,7 +972,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                         </Button>
                       </div>
 
-                      <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                      <div className="bg-surface-50 rounded-xl border border-surface-200 p-6">
                         <div className="max-h-80 overflow-y-scroll space-y-4 pr-2 transcript-scroll">
                           <TranscriptDisplay
                             transcript={transcript}
@@ -983,7 +986,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
 
                         {/* Scroll indicator */}
                         <div className="mt-4 text-center">
-                          <p className="text-xs text-gray-500 flex items-center justify-center gap-2">
+                          <p className="text-xs text-surface-500 flex items-center justify-center gap-2">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               className="h-3 w-3"
@@ -1016,9 +1019,9 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                 episode.guests.length > 0 && (
                   <div
                     id="featured-guest"
-                    className="bg-muted/20 dark:bg-muted/10 rounded-lg p-6"
+                    className="bg-surface-100 rounded-2xl p-6"
                   >
-                    <h2 className="text-xl font-semibold mb-4">
+                    <h2 className="text-xl font-semibold mb-4 text-surface-900">
                       Featured Guest{episode.guests.length > 1 ? "s" : ""}
                     </h2>
                     <div className="space-y-8">
@@ -1059,16 +1062,16 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                               </AvatarFallback>
                             </Avatar>
                             <div>
-                              <h3 className="text-lg font-semibold">
+                              <h3 className="text-lg font-semibold text-surface-900">
                                 {guest.name || "Guest Name"}
                               </h3>
                               {(guest.guestProfile?.title || guest.title) && (
-                                <p className="text-sm text-muted-foreground mb-2">
+                                <p className="text-sm text-surface-500 mb-2">
                                   {guest.guestProfile?.title || guest.title}
                                 </p>
                               )}
                               {(guest.guestProfile?.bio || guest.about) && (
-                                <p className="text-sm text-muted-foreground mb-4">
+                                <p className="text-sm text-surface-500 mb-4">
                                   {guest.guestProfile?.bio || guest.about}
                                 </p>
                               )}
@@ -1079,7 +1082,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                                   >
                                     <Button
                                       color="primary"
-                                      className="flex items-center gap-1 px-4 py-2 bg-primary text-white hover:bg-primary-dark rounded transition-all text-sm font-medium"
+                                      className="flex items-center gap-1 px-4 py-2 bg-primary text-white hover:bg-primary-dark rounded-xl transition-all text-sm font-medium"
                                     >
                                       More Details
                                     </Button>
@@ -1098,7 +1101,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
             {/* Sidebar */}
             <div className="space-y-8">
               {/* Subscribe Card */}
-              <div className="relative bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
+              <div className="relative bg-white rounded-2xl border border-surface-200 shadow-medium overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary"></div>
                 <div className="p-8">
                   <div className="text-center mb-6">
@@ -1118,10 +1121,10 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                         />
                       </svg>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h3 className="text-2xl font-bold text-surface-900 mb-2">
                       Subscribe to our Podcast
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-surface-600">
                       Never miss an episode and get insights directly from
                       business leaders
                     </p>
@@ -1129,8 +1132,8 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
 
                   <SubscribeForm />
 
-                  <div className="mt-8 pt-6 border-t border-gray-100">
-                    <p className="text-sm font-semibold text-gray-900 mb-4 text-center">
+                  <div className="mt-8 pt-6 border-t border-surface-100">
+                    <p className="text-sm font-semibold text-surface-900 mb-4 text-center">
                       Also available on:
                     </p>
                     <div className="grid grid-cols-1 gap-3">
@@ -1204,7 +1207,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
 
               {/* Sponsors Card - only shown if sponsors exist */}
               {sponsors && sponsors.length > 0 && (
-                <div className="relative bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
+                <div className="relative bg-white rounded-2xl border border-surface-200 shadow-medium overflow-hidden">
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-blue-500"></div>
                   <div className="p-8">
                     <div className="text-center mb-6">
@@ -1224,10 +1227,10 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                           />
                         </svg>
                       </div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                      <h3 className="text-2xl font-bold text-surface-900 mb-2">
                         Our Sponsors
                       </h3>
-                      <p className="text-gray-600 text-sm">
+                      <p className="text-surface-600 text-sm">
                         Supporting great content and community
                       </p>
                     </div>
@@ -1270,7 +1273,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                               )}
                               <div className="flex flex-col items-center text-center">
                                 {/* Logo Container */}
-                                <div className="w-28 h-20 sm:w-36 sm:h-24 relative rounded-lg overflow-hidden border border-gray-200 bg-white flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow duration-300">
+                                <div className="w-28 h-20 sm:w-36 sm:h-24 relative rounded-xl overflow-hidden border border-surface-200 bg-white flex items-center justify-center shadow-soft group-hover:shadow-medium transition-shadow duration-300">
                                   <Image
                                     src={
                                       sponsor.logo
@@ -1290,7 +1293,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                                 </div>
 
                                 {/* Sponsor Name - Always Visible */}
-                                <h4 className="mt-2 sm:mt-3 text-xs sm:text-sm font-medium text-gray-900 transition-colors duration-300 max-w-[112px] sm:max-w-[144px] truncate">
+                                <h4 className="mt-2 sm:mt-3 text-xs sm:text-sm font-medium text-surface-900 transition-colors duration-300 max-w-[112px] sm:max-w-[144px] truncate">
                                   {sponsor.name}
                                 </h4>
 
@@ -1317,7 +1320,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                           ) : (
                             /* Non-clickable sponsor */
                             <div className="flex flex-col items-center text-center">
-                              <div className="w-28 h-20 sm:w-36 sm:h-24 relative rounded-lg overflow-hidden border border-gray-200 bg-white flex items-center justify-center shadow-sm">
+                              <div className="w-28 h-20 sm:w-36 sm:h-24 relative rounded-xl overflow-hidden border border-surface-200 bg-white flex items-center justify-center shadow-soft">
                                 <Image
                                   src={
                                     sponsor.logo
@@ -1335,7 +1338,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                                 />
                               </div>
 
-                              <h4 className="mt-2 sm:mt-3 text-xs sm:text-sm font-medium text-gray-900 max-w-[112px] sm:max-w-[144px] truncate">
+                              <h4 className="mt-2 sm:mt-3 text-xs sm:text-sm font-medium text-surface-900 max-w-[112px] sm:max-w-[144px] truncate">
                                 {sponsor.name}
                               </h4>
 
@@ -1363,15 +1366,15 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                     </div>
 
                     {/* Support Message */}
-                    <div className="mt-8 pt-6 border-t border-gray-100 text-center">
-                      <p className="text-sm text-gray-600 mb-2">
+                    <div className="mt-8 pt-6 border-t border-surface-100 text-center">
+                      <p className="text-sm text-surface-600 mb-2">
                         Special thanks to our sponsors who help make this
                         podcast possible
                       </p>
                       {sponsors.some(
                         (s) => s.website || s.slug?.current || s.uuid
                       ) && (
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-surface-500">
                           Click on sponsor logos to learn more about them
                         </p>
                       )}
@@ -1382,7 +1385,7 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
 
               {/* Related Episodes */}
               {data.relatedEpisodes && (
-                <div className="bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden p-8 mt-12">
+                <div className="bg-white rounded-2xl border border-surface-200 shadow-medium overflow-hidden p-8 mt-12">
                   <div className="text-center mb-6">
                     <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl mb-4">
                       <svg
@@ -1400,10 +1403,10 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                         />
                       </svg>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h3 className="text-2xl font-bold text-surface-900 mb-2">
                       Related Episodes
                     </h3>
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-surface-600 text-sm">
                       More episodes you might enjoy
                     </p>
                   </div>

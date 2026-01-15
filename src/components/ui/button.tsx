@@ -5,36 +5,32 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/src/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap font-semibold transition-all duration-300 ease-smooth-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-gray-900 text-gray-50 hover:bg-gray-800",
-        destructive: "bg-red-500 text-gray-50 hover:bg-red-600",
-        outline: "border border-gray-200 bg-white hover:bg-gray-50 hover:text-gray-900",
-        secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",
-        ghost: "hover:bg-gray-100 hover:text-gray-900",
-        link: "text-gray-900 underline-offset-4 hover:underline",
-        // Clean single-color button variants
-        primary: "bg-primary text-white hover:bg-primary/90 focus-visible:ring-primary",
-        professional: "bg-main text-white hover:bg-main-dark focus-visible:ring-main",
-        premium: "bg-secondary text-white hover:bg-secondary/90 focus-visible:ring-secondary",
-        subtle: "bg-gray-50 text-gray-900 hover:bg-gray-100 border border-gray-200",
-        authority: "bg-white text-main border-2 border-primary hover:border-primary/80 hover:bg-primary/5",
+        default: "bg-surface-900 text-white rounded-xl shadow-soft hover:bg-surface-800 hover:shadow-medium hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-surface-900",
+        primary: "bg-primary text-white rounded-xl shadow-soft hover:bg-primary-dark hover:shadow-glow hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-primary",
+        secondary: "bg-secondary text-white rounded-xl shadow-soft hover:bg-secondary-dark hover:shadow-medium hover:-translate-y-0.5 focus-visible:ring-secondary",
+        destructive: "bg-red-500 text-white rounded-xl shadow-soft hover:bg-red-600 hover:shadow-medium focus-visible:ring-red-500",
+        outline: "bg-transparent text-surface-900 rounded-xl border-2 border-surface-200 hover:border-primary hover:text-primary hover:bg-primary/5 focus-visible:ring-primary",
+        subtle: "bg-surface-100 text-surface-900 rounded-xl hover:bg-surface-200 focus-visible:ring-surface-400",
+        ghost: "text-surface-600 rounded-xl hover:bg-surface-100 hover:text-surface-900 focus-visible:ring-surface-400",
+        link: "text-primary underline-offset-4 hover:underline focus-visible:ring-primary",
+        glass: "bg-white/10 text-white rounded-xl border border-white/20 backdrop-blur-sm hover:bg-white/20 hover:border-white/30 focus-visible:ring-white",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
-        // Clean sizes without excessive styling
-        executive: "h-12 px-8 py-3 text-base rounded-lg",
-        premium: "h-14 px-10 py-4 text-lg rounded-xl",
-        compact: "h-8 px-4 py-1 text-xs rounded-md",
+        default: "h-11 px-5 py-2.5 text-sm rounded-xl",
+        sm: "h-9 px-4 text-sm rounded-lg",
+        lg: "h-12 px-6 text-base rounded-xl",
+        xl: "h-14 px-8 text-base rounded-xl",
+        icon: "h-10 w-10 rounded-xl",
+        "icon-sm": "h-8 w-8 rounded-lg",
+        "icon-lg": "h-12 w-12 rounded-xl",
       },
     },
     defaultVariants: {
-      variant: "primary",
+      variant: "default",
       size: "default",
     },
   }

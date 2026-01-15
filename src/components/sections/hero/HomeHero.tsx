@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Play, Headphones } from "lucide-react";
+import { Play, Headphones, ArrowRight, Sparkles } from "lucide-react";
 import heroImage from "@/public/images/main-page-hero.webp";
 import { HomeHeroSection } from "@/types";
 import { SmartButton } from "@/src/components/ui/SmartButton";
@@ -65,109 +65,119 @@ export function HomeHero({ section }: HomeHeroProps) {
   return (
     <section
       id={componentId}
-      className="w-full pt-8 md:pt-24 lg:pt-28 pb-4 md:pb-6 lg:pb-8 bg-main relative overflow-hidden"
+      className="relative w-full min-h-[90vh] flex items-center bg-surface-900 overflow-hidden"
     >
-      {/* Pattern overlay for texture */}
-      <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGRkZGRkYiIGZpbGwtb3BhY2l0eT0iMSI+PHBhdGggZD0iTTM2IDM0aDR2MWgtNHpNNDAgMzJoNHYxaC00ek0zMiAzN2g0djFoLTR6TTM2IDM5aDR2MWgtNHpNNDAgNDFoNHYxaC00ek0zMiA0NGg0djFoLTR6TTM2IDQ2aDR2MWgtNHoiLz48L2c+PC9nPjwvc3ZnPg==')] mix-blend-overlay pointer-events-none sm:block hidden"></div>
+      {/* Gradient mesh background */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900"></div>
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.4, 0.3] }}
+          transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+          className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px]"
+        />
+        <motion.div
+          animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.3, 0.2] }}
+          transition={{ repeat: Infinity, duration: 10, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[100px]"
+        />
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+          transition={{ repeat: Infinity, duration: 12, ease: "easeInOut", delay: 2 }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[80px]"
+        />
+      </div>
 
-      {/* Enhanced animated floating shapes */}
-      <motion.div
-        animate={{
-          y: [0, 20, 0],
-          opacity: [0.5, 0.8, 0.5],
-        }}
-        transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-        className="absolute -top-20 left-1/4 w-64 h-64 rounded-full bg-primary/20 blur-3xl z-0"
-      />
-      <motion.div
-        animate={{
-          y: [0, -15, 0],
-          x: [0, 10, 0],
-          opacity: [0.3, 0.6, 0.3],
-        }}
-        transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }}
-        className="absolute top-1/2 -left-12 w-44 h-44 rounded-full bg-secondary/20 blur-2xl z-0"
-      />
-      <motion.div
-        animate={{
-          y: [0, 15, 0],
-          opacity: [0.2, 0.5, 0.2],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 10,
-          ease: "easeInOut",
-          delay: 2,
-        }}
-        className="absolute bottom-0 right-1/4 w-52 h-52 rounded-full bg-accent/10 blur-3xl z-0"
-      />
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 opacity-[0.03] pattern-grid"></div>
 
-      <div className="container mx-auto px-4 sm:px-6 md:px-14 relative z-10">
-        <div className="flex flex-col lg:flex-row lg:items-center gap-14 lg:gap-24">
-          <div className="lg:w-1/2 flex flex-col gap-8 mb-12 lg:mb-0">
+      <div className="container relative z-10 py-16 lg:py-32 max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Left Content */}
+          <div className="flex flex-col gap-8">
+            {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="flex flex-col gap-4"
             >
-              <div className="inline-flex items-center rounded-full px-6 py-3 w-fit bg-white/95 backdrop-blur-sm shadow-professional border border-white/30">
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-                  <span className="text-main font-bold tracking-wide uppercase text-sm md:text-base">
-                    {badgeText}
-                  </span>
-                </div>
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
+                <Sparkles className="w-4 h-4 text-primary" />
+                <span className="text-sm font-semibold text-white/90 uppercase tracking-wider">
+                  {badgeText}
+                </span>
               </div>
-              <h1 className="text-white text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight font-sans break-words">
-                {title}
+            </motion.div>
+
+            {/* Heading */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <h1 className="text-4xl sm:text-5xl lg:text-display-lg font-bold text-white leading-[1.1] tracking-tight">
+                {title.split(" ").map((word, i) => (
+                  <span key={i}>
+                    {word === "People" ? (
+                      <span className="text-gradient">{word}</span>
+                    ) : (
+                      word
+                    )}{" "}
+                  </span>
+                ))}
               </h1>
             </motion.div>
 
+            {/* Description */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-gray-200 text-base sm:text-xl md:text-2xl max-w-[95vw] sm:max-w-[600px] leading-relaxed"
+              className="text-lg sm:text-xl text-surface-300 leading-relaxed max-w-lg"
             >
               {description}
             </motion.p>
 
+            {/* Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-6 w-full items-center justify-start"
+              className="flex flex-wrap gap-4"
             >
               <SmartButton
                 data={primaryButton}
-                className="group relative h-14 sm:h-16 w-auto min-w-[200px] px-8 sm:px-10 text-base font-semibold text-white rounded-xl bg-primary shadow-lg transition-all duration-200 hover:shadow-xl hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center gap-3 justify-center"
+                className="group inline-flex items-center gap-3 px-8 py-4 bg-primary text-white font-semibold rounded-xl
+                           shadow-glow transition-all duration-300 ease-smooth-out
+                           hover:bg-primary-light hover:shadow-glow-lg hover:-translate-y-1"
               >
-                {/* Enhanced shimmer effect */}
-                <Play className="inline-block w-5 h-5 relative z-10 group-hover:scale-110 transition-transform" />
-                <span className="relative z-10 font-bold tracking-wide">{primaryButton.text}</span>
+                <Play className="w-5 h-5 fill-current" />
+                <span>{primaryButton.text}</span>
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </SmartButton>
 
               {secondaryButton && (
                 <SmartButton
                   data={secondaryButton}
-                  className="group glass-dark h-14 sm:h-16 w-auto min-w-[180px] px-8 sm:px-10 text-base font-semibold text-white border-2 border-white/20 rounded-xl transition-all duration-300 hover:bg-white/10 hover:border-white/40 hover:shadow-glass-lg hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-1 flex items-center gap-3 justify-center backdrop-blur-md"
+                  className="group inline-flex items-center gap-3 px-8 py-4 bg-white/10 text-white font-semibold rounded-xl
+                             border border-white/20 backdrop-blur-sm
+                             transition-all duration-300 ease-smooth-out
+                             hover:bg-white/20 hover:border-white/30 hover:-translate-y-1"
                 >
-                  <Headphones className="inline-block w-5 h-5 group-hover:scale-110 transition-transform" />
-                  <span className="font-bold tracking-wide">{secondaryButton.text}</span>
+                  <Headphones className="w-5 h-5" />
+                  <span>{secondaryButton.text}</span>
                 </SmartButton>
               )}
             </motion.div>
 
-            {/* PODCAST PLATFORMS */}
+            {/* Podcast Platforms */}
             {safePlatforms.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="pt-8"
+                className="pt-4"
               >
-                <p className="text-gray-300 mb-4 font-medium">
+                <p className="text-sm text-surface-400 mb-4 uppercase tracking-wider font-medium">
                   {platformsHeading}
                 </p>
                 <div className="flex flex-wrap gap-3">
@@ -177,26 +187,26 @@ export function HomeHero({ section }: HomeHeroProps) {
                       href={platform.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-gray-800 hover:bg-gray-700 group flex items-center gap-2 transition-all duration-300 py-2 px-4 rounded-full text-white text-sm font-medium border border-gray-600 hover:border-gray-500 focus-visible:ring-2 focus-visible:ring-white"
+                      className="group flex items-center gap-2 px-4 py-2.5 bg-white/5 hover:bg-white/10 
+                                 border border-white/10 hover:border-white/20 rounded-xl
+                                 transition-all duration-300"
                     >
-                      <div className="relative">
-                        <Image
-                          src={
-                            platform.logoImage
-                              ? getImageUrlClient(platform.logoImage, {
-                                  width: 48,
-                                  height: 48,
-                                  quality: 100,
-                                })
-                              : "/social-logos/default.png"
-                          }
-                          alt={platform.name}
-                          width={20}
-                          height={20}
-                          className="w-5 h-5"
-                        />
-                      </div>
-                      <span className="font-medium">
+                      <Image
+                        src={
+                          platform.logoImage
+                            ? getImageUrlClient(platform.logoImage, {
+                                width: 48,
+                                height: 48,
+                                quality: 100,
+                              })
+                            : "/social-logos/default.png"
+                        }
+                        alt={platform.name}
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 opacity-70 group-hover:opacity-100 transition-opacity"
+                      />
+                      <span className="text-sm font-medium text-surface-300 group-hover:text-white transition-colors">
                         {platform.name}
                       </span>
                     </Link>
@@ -205,61 +215,76 @@ export function HomeHero({ section }: HomeHeroProps) {
               </motion.div>
             )}
           </div>
-          <div className="lg:w-1/2 flex justify-center lg:justify-end relative mt-8 sm:mt-0">
-            {/* Enhanced Host Badge */}
-            <div className="absolute bottom-2 right-2 sm:bottom-6 sm:right-6 z-20 bg-black/70 backdrop-blur-xl px-3 py-2 sm:px-6 sm:py-4 rounded-xl shadow-xl border border-primary/20 ring-1 ring-white/10 max-w-[90vw]">
-              <div className="flex items-center gap-2 sm:gap-4">
-                <div className="w-[2px] sm:w-[3px] h-10 sm:h-14 bg-gradient-to-b from-primary to-primary-light rounded-full"></div>
-                <div>
-                  <p className="text-gray-300 text-xs uppercase tracking-wider font-medium">
-                    {safeHostBadge.label}
-                  </p>
-                  <p className="text-white font-bold text-base sm:text-xl">
-                    {safeHostBadge.name}
-                  </p>
-                  <p className="text-gray-400 text-xs mt-1">
-                    {safeHostBadge.title}
-                  </p>
-                </div>
-              </div>
-            </div>
+
+          {/* Right Content - Image */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, x: 20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative order-first lg:order-last"
+          >
+            {/* Decorative elements */}
+            <div className="absolute -top-8 -right-8 w-48 lg:w-72 h-48 lg:h-72 bg-primary/20 rounded-full blur-[80px]"></div>
+            <div className="absolute -bottom-8 -left-8 w-40 lg:w-60 h-40 lg:h-60 bg-secondary/20 rounded-full blur-[60px]"></div>
+            
+            {/* Main image container */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              animate={{ y: [0, -10, 0] }}
+              transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
               className="relative"
             >
-              {/* Decorative elements */}
-              <div className="absolute -top-4 -left-4 w-24 h-24 sm:w-40 sm:h-40 rounded-full bg-primary/20 blur-3xl"></div>
-              <div className="absolute -bottom-4 -right-4 w-28 h-28 sm:w-48 sm:h-48 rounded-full bg-accent/20 blur-3xl"></div>
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 10,
-                  ease: "easeInOut",
-                }}
-                className="relative z-10"
-              >
-                <div className="absolute -inset-1 bg-primary/20 rounded-2xl blur-xl opacity-30"></div>
+              {/* Glow effect behind image */}
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20 rounded-3xl blur-2xl opacity-60"></div>
+              
+              {/* Image frame */}
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10">
                 <Image
                   alt="Growing Your Business With People Podcast"
-                  className="relative z-10 rounded-2xl shadow-2xl object-cover border border-white/10 max-w-full h-auto"
-                  height={400}
+                  className="relative z-10 object-cover w-full h-auto"
+                  height={500}
                   width={600}
                   src={
                     backgroundImage
                       ? getHeroImageUrl(backgroundImage, 1600)
                       : heroImage
                   }
-                  sizes="(max-width: 768px) 90vw, (max-width: 1200px) 50vw, 600px"
+                  sizes="(max-width: 1200px) 50vw, 600px"
                   priority={true}
                   quality={100}
-                  style={{ objectFit: "cover" }}
                 />
+                
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-surface-900/40 via-transparent to-transparent"></div>
+              </div>
+              
+              {/* Host Badge - Floating card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                className="absolute -bottom-4 left-2 lg:-bottom-6 lg:-left-6 z-20"
+              >
+                <div className="bg-surface-900/95 backdrop-blur-md px-4 py-3 lg:px-6 lg:py-4 rounded-xl lg:rounded-2xl shadow-elevated border border-white/20">
+                  <div className="flex items-center gap-3 lg:gap-4">
+                    <div className="w-1 h-10 lg:h-12 bg-gradient-to-b from-primary to-primary-light rounded-full"></div>
+                    <div>
+                      <p className="text-xs text-surface-400 uppercase tracking-wider font-medium">
+                        {safeHostBadge.label}
+                      </p>
+                      <p className="text-base lg:text-lg font-bold text-white">
+                        {safeHostBadge.name}
+                      </p>
+                      <p className="text-xs lg:text-sm text-surface-300">
+                        {safeHostBadge.title}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </motion.div>
+              
+
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

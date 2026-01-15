@@ -8,6 +8,8 @@ import {
   usePagination,
   DOTS,
 } from "@/src/components/features/Articles/usePagination";
+import { motion } from "framer-motion";
+import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 
 // // copy
 // import { ARTICLES } from "@/src/components/News/static-data";
@@ -65,131 +67,141 @@ const Articles = ({ excludeIds = [] }) => {
     }
   };
 
-  const HOVER_STYLES = "hover:bg-gray-500 hover:text-white";
-
   if (isLoading) {
     return (
-      <Section className="max-w-[80%] mt-12 m-auto">
-        Loading articles...
-      </Section>
+      <div className="bg-white py-12">
+        <div className="container mx-auto px-6">
+          <div className="animate-pulse">
+            <div className="h-8 w-32 bg-surface-200 rounded-xl mb-8"></div>
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="mb-4 p-6 bg-surface-100 rounded-2xl">
+                <div className="h-6 w-3/4 bg-surface-200 rounded mb-3"></div>
+                <div className="h-4 w-1/2 bg-surface-100 rounded"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     );
   }
   if (error) {
     return (
-      <Section className="max-w-[80%] mt-12 m-auto">
-        Error loading articles.
-      </Section>
+      <div className="bg-white py-12">
+        <div className="container mx-auto px-6 text-center">
+          <p className="text-red-500">Error loading articles.</p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Section className="max-w-[80%] mt-12 m-auto">
-      {/* HEADING */}
-      <div className="mx-auto text-left mb-6">
-        <SectionHeading className="!text-xl font-thin sm:!text-2xl text-black">
-          More News
-        </SectionHeading>
-      </div>
-      {/* ARTICLES */}
+    <div className="bg-white py-12 lg:py-16">
+      <div className="container mx-auto px-6">
+        {/* HEADING */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-8"
+        >
+          <h2 className="text-2xl font-bold text-surface-900">More News</h2>
+        </motion.div>
 
-      {articles &&
-        articles
-          .slice(pageSlice - 5, pageSlice)
-          .map(({ company, date, title, link }, idx) => (
-            <Link key={`article-${idx}`} href={link} target="_blank">
-              <div className="mb-5 px-8 py-4 bg-light text-black">
-                <div className="mt-2">
-                  <span className="text-xl font-medium">{title}</span>
-                </div>
-
-                <div className="flex items-center justify-between mt-2">
-                  <span className="text-sm font-light">{company}</span>
-
-                  <span className="text-sm font-light">{date}</span>
-                </div>
-              </div>
-            </Link>
-          ))}
-      {/* PAGINATION */}
-      {totalPageCount > 1 && (
-        <div className="flex justify-end mr-6 mt-4">
-          {/* BACK BUTTON */}
-          {currentPage !== 1 && (
-            <div
-              onClick={onPrevious}
-              className={`flex items-center justify-center px-4 py-2 text-black rounded-l-md border-gray-400 border capitalize cursor-pointer bg-white ${HOVER_STYLES}`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-          )}
-
-          {/* PAGINATION NUMBERS AND DOTS */}
-          {paginationRange?.map((pageNum, idx) => {
-            const defaultStyles =
-              "hidden px-4 py-2 -ml-[1px] text-black transition-colors border-gray-400 border";
-
-            let roundedStyles = "";
-            if (currentPage === 1 && currentPage === pageNum) {
-              roundedStyles = "rounded-l-md";
-            }
-            if (currentPage === totalPageCount && currentPage === pageNum) {
-              roundedStyles = "rounded-r-md";
-            }
-
-            const activePageStyles =
-              pageNum === currentPage ? "!bg-gray-300" : "";
-
-            const dotStyles =
-              pageNum !== DOTS ? "cursor-pointer" : "cursor-default";
-
-            const hoverStyles =
-              pageNum !== DOTS && pageNum !== currentPage ? HOVER_STYLES : "";
-
-            return (
-              <div
-                onClick={() => handlePaginationClick(pageNum)}
-                key={`pagination-num-${pageNum}-${idx}`}
-                className={`${defaultStyles} duration-300 transform bg-white sm:inline ${roundedStyles} ${hoverStyles} ${activePageStyles} ${dotStyles}`}
-              >
-                {pageNum}
-              </div>
-            );
-          })}
-
-          {/* FORWARD BUTTON */}
-          {currentPage !== totalPageCount && (
-            <div
-              onClick={onNext}
-              className={`flex items-center justify-center px-4 py-2 -ml-[1px] text-black transition-colors duration-300 cursor-pointer transform bg-white rounded-r-md border-gray-400 border ${HOVER_STYLES}`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-          )}
+        {/* ARTICLES */}
+        <div className="space-y-4">
+          {articles &&
+            articles
+              .slice(pageSlice - 5, pageSlice)
+              .map(({ company, date, title, link }, idx) => (
+                <motion.div
+                  key={`article-${idx}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: idx * 0.1 }}
+                >
+                  <Link href={link} target="_blank" className="block group">
+                    <div className="p-5 bg-surface-50 hover:bg-surface-100 rounded-2xl border border-surface-200 hover:border-primary/20 transition-all duration-300 hover:shadow-soft">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold text-surface-900 group-hover:text-primary transition-colors mb-2 line-clamp-2">
+                            {title}
+                          </h3>
+                          <div className="flex items-center gap-4 text-sm text-surface-500">
+                            <span className="font-medium">{company}</span>
+                            <span>•</span>
+                            <span>{date}</span>
+                          </div>
+                        </div>
+                        <ExternalLink className="h-5 w-5 text-surface-400 group-hover:text-primary transition-colors flex-shrink-0 mt-1" />
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
         </div>
-      )}
-    </Section>
+
+        {/* PAGINATION */}
+        {totalPageCount > 1 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex justify-center mt-8"
+          >
+            <div className="flex items-center gap-1">
+              {/* BACK BUTTON */}
+              {currentPage !== 1 && (
+                <button
+                  onClick={onPrevious}
+                  className="flex items-center justify-center px-3 py-2 text-surface-600 rounded-xl border border-surface-200 bg-white hover:bg-surface-50 hover:border-primary/20 transition-all"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+              )}
+
+              {/* PAGINATION NUMBERS AND DOTS */}
+              {paginationRange?.map((pageNum, idx) => {
+                const isActive = pageNum === currentPage;
+                const isDot = pageNum === DOTS;
+
+                return (
+                  <button
+                    onClick={() => handlePaginationClick(pageNum)}
+                    key={`pagination-num-${pageNum}-${idx}`}
+                    disabled={isDot}
+                    className={`
+                      px-4 py-2 text-sm font-medium rounded-xl transition-all
+                      ${isDot ? "cursor-default text-surface-400" : "cursor-pointer"}
+                      ${isActive 
+                        ? "bg-primary text-white shadow-soft" 
+                        : isDot 
+                          ? "" 
+                          : "text-surface-600 border border-surface-200 bg-white hover:bg-surface-50 hover:border-primary/20"
+                      }
+                    `}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+
+              {/* FORWARD BUTTON */}
+              {currentPage !== totalPageCount && (
+                <button
+                  onClick={onNext}
+                  className="flex items-center justify-center px-3 py-2 text-surface-600 rounded-xl border border-surface-200 bg-white hover:bg-surface-50 hover:border-primary/20 transition-all"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </div>
   );
 };
 

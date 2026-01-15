@@ -2,7 +2,9 @@
 
 import React from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { getComponentId } from "@/src/lib/sectionId";
+import { Target, CheckCircle2 } from "lucide-react";
 import heroImage from "@/public/images/blueprint.webp";
 
 interface AboutMissionProps {
@@ -32,7 +34,6 @@ export function AboutMission({ section }: AboutMissionProps) {
     image
   } = section;
 
-  // Ensure bullets is always an array
   const safeBullets = bullets || [
     "Interviews with top CEOs, founders, and thought leaders",
     "Actionable strategies for leadership, talent, and growth",
@@ -43,44 +44,63 @@ export function AboutMission({ section }: AboutMissionProps) {
   const imageAlt = image?.alt || "Podcast Blueprint";
 
   return (
-    <section id={componentId} className="w-full py-20 md:py-24 bg-white">
+    <section id={componentId} className="w-full py-20 md:py-28 bg-surface-50">
       <div className="container mx-auto px-6 max-w-6xl">
-        <div className="card-executive p-12 grid md:grid-cols-2 gap-16 items-center">
-          <div className="space-y-8">
+        <div className="bg-white rounded-3xl shadow-medium border border-surface-100 p-8 md:p-12 grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="space-y-8"
+          >
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20 shadow-professional">
-                <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-primary">Our Mission</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
+                <Target className="w-4 h-4 text-primary" />
+                <span className="text-sm font-semibold text-primary">Our Mission</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-main">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-surface-900">
                 {heading}
               </h2>
             </div>
-            <p className="text-xl md:text-2xl text-gray-700 leading-relaxed font-medium">
+            <p className="text-lg text-surface-600 leading-relaxed">
               {text}
             </p>
             <div className="space-y-4">
               {safeBullets.map((item, i) => (
-                <div key={i} className="flex items-start gap-4 group">
-                  <div className="flex-shrink-0 w-2 h-2 bg-primary rounded-full mt-3 group-hover:scale-125 transition-transform duration-200"></div>
-                  <p className="text-gray-700 leading-relaxed text-lg group-hover:text-gray-900 transition-colors duration-200">{item}</p>
-                </div>
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.1 }}
+                  className="flex items-start gap-3 group"
+                >
+                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <p className="text-surface-700 leading-relaxed">{item}</p>
+                </motion.div>
               ))}
             </div>
-          </div>
-          <div className="relative group">
-            <div className="absolute -inset-4 bg-primary/15 rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative"
+          >
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-secondary/10 to-primary/20 rounded-3xl blur-2xl opacity-40"></div>
             <div className="relative">
               <Image
                 src={imageUrl}
                 alt={imageAlt}
-                className="card-executive rounded-2xl shadow-professional border-0 w-full max-w-md group-hover:shadow-executive transition-all duration-300"
-                width={400}
-                height={300}
-                style={{ objectFit: "cover" }}
+                className="rounded-2xl shadow-elevated w-full object-cover"
+                width={500}
+                height={400}
               />
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

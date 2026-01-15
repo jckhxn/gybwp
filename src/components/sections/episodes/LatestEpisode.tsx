@@ -299,17 +299,16 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
   return (
     <section
       id={componentId}
-      className="relative w-full py-16 md:py-24 bg-gradient-to-br from-slate-50 via-white to-slate-50 overflow-hidden"
+      className="relative w-full py-20 md:py-28 bg-surface-50 overflow-hidden"
     >
       {/* Modern background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-accent/10 to-primary/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-secondary/5 to-accent/5 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/5 rounded-full blur-[100px]" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/5 rounded-full blur-[80px]" />
       </div>
 
-      {/* Grid pattern overlay */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9IiNhZGE0YWMiIGZpbGwtb3BhY2l0eT0iMC4xIi8+Cjwvc3ZnPg==')] opacity-30" />
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 opacity-[0.02] pattern-grid" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative">
         <motion.div
@@ -328,15 +327,15 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="flex items-center gap-3"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-light rounded-xl flex items-center justify-center shadow-lg">
-                  <Play className="w-6 h-6 text-white" fill="currentColor" />
+                <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-glow">
+                  <Play className="w-5 h-5 text-white" fill="currentColor" />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-primary font-semibold text-sm tracking-wider uppercase">
                     {title}
                   </span>
                   {getEpisodeNumber(latestEpisode) && (
-                    <span className="text-gray-500 text-xs font-medium">
+                    <span className="text-surface-500 text-xs font-medium">
                       Episode {getEpisodeNumber(latestEpisode)}
                     </span>
                   )}
@@ -347,7 +346,7 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight"
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-surface-900 leading-[1.1]"
               >
                 {formatEpisodeTitle(
                   latestEpisode.title ||
@@ -374,18 +373,18 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="flex flex-wrap gap-4"
+              className="flex flex-wrap gap-3"
             >
-              <div className="flex items-center gap-2 bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full border border-gray-200 shadow-sm">
-                <Calendar className="w-4 h-4 text-gray-600" />
-                <span className="text-sm font-medium text-gray-700">
+              <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-surface-200 shadow-soft">
+                <Calendar className="w-4 h-4 text-surface-500" />
+                <span className="text-sm font-medium text-surface-700">
                   {formatEpisodeDate(latestEpisode.publishedAt)}
                 </span>
               </div>
               {getDuration(latestEpisode) && (
-                <div className="flex items-center gap-2 bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full border border-gray-200 shadow-sm">
-                  <Clock className="w-4 h-4 text-gray-600" />
-                  <span className="text-sm font-medium text-gray-700">
+                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-surface-200 shadow-soft">
+                  <Clock className="w-4 h-4 text-surface-500" />
+                  <span className="text-sm font-medium text-surface-700">
                     {getDuration(latestEpisode)}
                   </span>
                 </div>
@@ -397,7 +396,7 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="text-gray-600 text-lg leading-relaxed"
+              className="text-surface-600 text-lg leading-relaxed"
             >
               {latestEpisode.blurb ||
                 latestEpisode.youtube?.blurb ||
@@ -418,7 +417,7 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
                   .map((tag: any, i: number) => (
                     <span
                       key={i}
-                      className="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full border border-primary/20 hover:bg-primary/20 transition-colors"
+                      className="px-3 py-1.5 bg-primary/5 text-primary text-sm font-medium rounded-lg border border-primary/10 hover:bg-primary/10 transition-colors"
                     >
                       {tag}
                     </span>
@@ -441,12 +440,11 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
                     : getEpisodeLink(latestEpisode),
                   componentLink: primaryButton.componentLink,
                 }}
-                className="group relative h-14 px-8 text-base font-semibold text-white overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-primary-light shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center gap-3 justify-center"
+                className="group inline-flex items-center gap-3 h-14 px-8 text-base font-semibold text-white rounded-xl bg-primary shadow-glow transition-all duration-300 hover:bg-primary-dark hover:shadow-glow-lg hover:-translate-y-0.5"
               >
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out"></span>
-                <Play className="w-5 h-5 relative z-10" fill="currentColor" />
-                <span className="relative z-10">{primaryButton.text}</span>
-                <ArrowRight className="w-4 h-4 relative z-10 transform transition-transform duration-300 group-hover:translate-x-1" />
+                <Play className="w-5 h-5" fill="currentColor" />
+                <span>{primaryButton.text}</span>
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </SmartButton>
 
               {secondaryButton && (
@@ -458,9 +456,9 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
                       : getEpisodeLink(latestEpisode),
                     componentLink: secondaryButton.componentLink,
                   }}
-                  className="group h-14 px-8 text-base font-medium text-gray-700 bg-white/80 backdrop-blur-sm hover:bg-white border-2 border-gray-200 hover:border-gray-300 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 flex items-center gap-3 justify-center"
+                  className="group inline-flex items-center gap-3 h-14 px-8 text-base font-semibold text-surface-700 bg-white hover:bg-surface-50 border-2 border-surface-200 hover:border-surface-300 rounded-xl shadow-soft transition-all duration-300 hover:shadow-medium hover:-translate-y-0.5"
                 >
-                  <Headphones className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  <Headphones className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" />
                   <span>{secondaryButton.text}</span>
                 </SmartButton>
               )}

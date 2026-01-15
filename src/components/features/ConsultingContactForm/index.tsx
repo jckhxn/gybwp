@@ -70,8 +70,8 @@ export default function ConsultingContactForm() {
 
   if (submitted) {
     return (
-      <div className="max-w-md mx-auto p-8 bg-green-50 border border-green-200 rounded-xl text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="max-w-md mx-auto p-8 bg-green-50 border border-green-200 rounded-2xl text-center">
+        <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
           <Mail className="w-8 h-8 text-green-600" />
         </div>
         <h3 className="text-xl font-semibold text-green-800 mb-2">
@@ -83,7 +83,7 @@ export default function ConsultingContactForm() {
         </p>
         <button
           onClick={() => setSubmitted(false)}
-          className="px-4 py-2 text-green-700 border border-green-300 hover:bg-green-50 rounded-md transition-colors"
+          className="px-4 py-2 text-green-700 border-2 border-green-300 hover:bg-green-100 rounded-xl font-medium transition-colors"
         >
           Send Another Message
         </button>
@@ -92,25 +92,15 @@ export default function ConsultingContactForm() {
   }
 
   return (
-    <div className="max-w-md mx-auto">
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold text-white mb-2">
-          Ready to Transform Your Business?
-        </h3>
-        <p className="text-gray-300">
-          Let&apos;s discuss how we can help you achieve your talent and growth
-          objectives.
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="max-w-lg mx-auto">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label
               htmlFor="name"
-              className="text-gray-200 flex items-center gap-2"
+              className="text-surface-700 flex items-center gap-2 font-medium"
             >
-              <User className="w-4 h-4" />
+              <User className="w-4 h-4 text-primary" />
               Name *
             </Label>
             <Input
@@ -120,16 +110,16 @@ export default function ConsultingContactForm() {
               onChange={handleChange}
               required
               placeholder="Your full name"
-              className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-400"
+              className="bg-surface-50 border-surface-200 text-surface-900 placeholder:text-surface-400 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-xl"
             />
           </div>
 
           <div className="space-y-2">
             <Label
               htmlFor="email"
-              className="text-gray-200 flex items-center gap-2"
+              className="text-surface-700 flex items-center gap-2 font-medium"
             >
-              <Mail className="w-4 h-4" />
+              <Mail className="w-4 h-4 text-secondary" />
               Email *
             </Label>
             <Input
@@ -140,7 +130,7 @@ export default function ConsultingContactForm() {
               onChange={handleChange}
               required
               placeholder="your@email.com"
-              className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-400"
+              className="bg-surface-50 border-surface-200 text-surface-900 placeholder:text-surface-400 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-xl"
             />
           </div>
         </div>
@@ -149,9 +139,9 @@ export default function ConsultingContactForm() {
           <div className="space-y-2">
             <Label
               htmlFor="company"
-              className="text-gray-200 flex items-center gap-2"
+              className="text-surface-700 flex items-center gap-2 font-medium"
             >
-              <Building2 className="w-4 h-4" />
+              <Building2 className="w-4 h-4 text-accent" />
               Company
             </Label>
             <Input
@@ -160,16 +150,16 @@ export default function ConsultingContactForm() {
               value={formData.company}
               onChange={handleChange}
               placeholder="Your company"
-              className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-400"
+              className="bg-surface-50 border-surface-200 text-surface-900 placeholder:text-surface-400 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-xl"
             />
           </div>
 
           <div className="space-y-2">
             <Label
               htmlFor="phone"
-              className="text-gray-200 flex items-center gap-2"
+              className="text-surface-700 flex items-center gap-2 font-medium"
             >
-              <Phone className="w-4 h-4" />
+              <Phone className="w-4 h-4 text-surface-500" />
               Phone
             </Label>
             <Input
@@ -179,13 +169,13 @@ export default function ConsultingContactForm() {
               value={formData.phone}
               onChange={handleChange}
               placeholder="(555) 123-4567"
-              className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-400"
+              className="bg-surface-50 border-surface-200 text-surface-900 placeholder:text-surface-400 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-xl"
             />
           </div>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="message" className="text-gray-200">
+          <Label htmlFor="message" className="text-surface-700 font-medium">
             Tell us about your needs *
           </Label>
           <Textarea
@@ -196,12 +186,12 @@ export default function ConsultingContactForm() {
             required
             rows={4}
             placeholder="Describe your business challenges, goals, or specific areas where you need consulting support..."
-            className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-blue-400 resize-none"
+            className="bg-surface-50 border-surface-200 text-surface-900 placeholder:text-surface-400 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-xl resize-none"
           />
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+          <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
             <p className="text-red-700 text-sm">{error}</p>
           </div>
         )}
@@ -209,11 +199,11 @@ export default function ConsultingContactForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 h-auto rounded-md transition-colors disabled:opacity-50"
+          className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3.5 rounded-xl shadow-soft hover:shadow-medium transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2"
         >
           {isSubmitting ? (
             <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" />
               Sending Message...
             </>
           ) : (
@@ -221,7 +211,7 @@ export default function ConsultingContactForm() {
           )}
         </button>
 
-        <p className="text-xs text-gray-400 text-center">
+        <p className="text-xs text-surface-400 text-center">
           * Required fields. We respect your privacy and will never share your
           information.
         </p>

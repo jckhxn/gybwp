@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Badge } from "@/src/components/ui/badge";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Calendar, Sparkles, CheckCircle, Play } from "lucide-react";
 import { getComponentId } from "@/src/lib/sectionId";
 import { SmartButton } from "@/src/components/ui/SmartButton";
 import { urlFor } from "@/src/lib/utils";
@@ -62,113 +61,104 @@ export function ConsultingHero({ section }: ConsultingHeroProps) {
   return (
     <section
       id={componentId}
-      className="relative bg-main py-24 lg:py-32 overflow-hidden"
+      className="relative bg-surface-900 py-24 lg:py-32 overflow-hidden"
     >
-      <div className="absolute inset-0 bg-black/10"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.1),transparent_50%)] opacity-30"></div>
-      <div className="container relative px-6 md:px-8 max-w-7xl mx-auto">
+      {/* Gradient Mesh Background */}
+      <div className="absolute inset-0 gradient-mesh opacity-30" />
+      
+      {/* Floating Orbs */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+      
+      <div className="container relative px-6 md:px-8 max-w-7xl mx-auto z-10">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           <div className="space-y-8">
-            <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/95 backdrop-blur-sm rounded-full border border-white/30 shadow-professional">
-                <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+            <div className="space-y-6">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 bg-primary/20 backdrop-blur-sm px-4 py-2 rounded-full border border-primary/30">
+                <Sparkles className="w-4 h-4 text-primary" />
                 <span className="text-sm font-semibold text-primary">
                   {section.badgeText || "JKL Advisors Consulting"}
                 </span>
               </div>
-              <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-tight tracking-tight">
+              
+              {/* Title */}
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
                 {section.title || (
                   <>
                     Empowering Your Business with
-                    <span className="text-secondary">
-                      {" "}
-                      People
-                    </span>
+                    <span className="text-primary"> People</span>
                   </>
                 )}
               </h1>
-              <p className="text-xl text-gray-200 leading-relaxed">
+              
+              {/* Description */}
+              <p className="text-xl text-surface-300 leading-relaxed max-w-xl">
                 {section.description ||
                   "Transform your organization through strategic talent solutions. With 28+ years of experience and over 1 million successful hires, we help businesses grow through their most important investment: people."}
               </p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {stats.map((stat, index) => (
-                <div key={index} className="glass-card p-6 text-center group hover:shadow-executive transition-all duration-300 hover:-translate-y-1">
-                  <div className="text-3xl md:text-4xl font-bold text-white group-hover:scale-110 transition-transform duration-200">
+                <div 
+                  key={index} 
+                  className="bg-surface-800/50 backdrop-blur-sm p-5 rounded-2xl border border-surface-700/50 text-center group hover:bg-surface-800/70 hover:border-primary/30 transition-all duration-300"
+                >
+                  <div className="text-2xl md:text-3xl font-bold text-white group-hover:text-primary transition-colors duration-300">
                     {stat.number}
                   </div>
-                  <div className="text-sm text-gray-200 font-medium mt-2 group-hover:text-white transition-colors duration-200">{stat.label}</div>
+                  <div className="text-xs text-surface-400 font-medium mt-1 group-hover:text-surface-300 transition-colors duration-300">
+                    {stat.label}
+                  </div>
                 </div>
               ))}
             </div>
 
             {/* Calendar CTA */}
             {section.showCalendarCTA !== false && (
-              <div className="card-executive p-8 border border-white/20">
-                <div className="flex flex-col sm:flex-row gap-6 items-center justify-center">
+              <div className="bg-surface-800/50 backdrop-blur-sm p-6 md:p-8 rounded-3xl border border-surface-700/50">
+                <div className="flex flex-col lg:flex-row gap-6 items-center">
                   <a
                     href={section.calendarUrl || "https://cal.com/jeffrey-lackey-sr/30min"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-executive group relative overflow-hidden px-10 py-4 text-lg font-semibold hover:scale-105 transition-all duration-300"
+                    className="inline-flex items-center gap-3 bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 rounded-xl shadow-glow hover:shadow-glow-lg transition-all duration-300 group"
                   >
-                    <svg
-                      className="mr-3 w-6 h-6"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    {section.calendarButtonText || "Schedule Your 30-Minute Strategy Call"}
+                    <Calendar className="w-5 h-5" />
+                    <span>{section.calendarButtonText || "Schedule Your Strategy Call"}</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </a>
-                  <div className="text-center sm:text-left space-y-2">
-                    {section.calendarFeatures?.map((feature, index) => (
-                      <div key={index} className="flex items-center gap-2 text-sm text-gray-200 font-medium">
-                        <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
-                        {feature}
+                  <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                    {(section.calendarFeatures || ["Free consultation", "Instant booking", "No commitment"]).map((feature, index) => (
+                      <div key={index} className="flex items-center gap-2 text-sm text-surface-300">
+                        <CheckCircle className="w-4 h-4 text-secondary" />
+                        <span>{feature}</span>
                       </div>
-                    )) || (
-                      <>
-                        <div className="flex items-center gap-2 text-sm text-gray-200 font-medium">
-                          <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
-                          Free consultation
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-200 font-medium">
-                          <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
-                          Instant booking
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-200 font-medium">
-                          <div className="w-1.5 h-1.5 bg-secondary rounded-full"></div>
-                          No commitment required
-                        </div>
-                      </>
-                    )}
+                    ))}
                   </div>
                 </div>
               </div>
             )}
 
+            {/* Secondary Buttons */}
             {(secondaryButton || tertiaryButton) && (
-              <div className="flex flex-col sm:flex-row gap-6">
+              <div className="flex flex-col sm:flex-row gap-4">
                 {secondaryButton && (
                   <SmartButton
                     data={secondaryButton}
-                    className="glass-card inline-flex items-center justify-center border border-white/30 text-white hover:bg-white/20 hover:shadow-professional px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
+                    className="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 px-6 py-3 rounded-xl font-semibold transition-all duration-300 group"
                   >
                     {secondaryButton.text}
-                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </SmartButton>
                 )}
                 {tertiaryButton && (
                   <SmartButton
                     data={tertiaryButton}
-                    className="inline-flex items-center justify-center border-2 border-white/40 text-white hover:bg-white/10 hover:border-white/60 px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
+                    className="inline-flex items-center justify-center border-2 border-surface-600 text-surface-300 hover:border-primary hover:text-primary px-6 py-3 rounded-xl font-semibold transition-all duration-300"
                   >
                     {tertiaryButton.text}
                   </SmartButton>
@@ -177,27 +167,31 @@ export function ConsultingHero({ section }: ConsultingHeroProps) {
             )}
           </div>
 
+          {/* Hero Image */}
           <div className="relative group">
-            <div className="absolute -inset-4 bg-white/10 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
-            <div className="relative card-executive rounded-2xl overflow-hidden shadow-executive border border-white/20">
+            <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
+            <div className="relative rounded-3xl overflow-hidden shadow-glow border border-surface-700/50">
               {section.heroImage?.asset ? (
                 <Image
                   src={urlFor(section.heroImage).width(600).height(400).url()}
                   alt={section.heroImage.alt || "Consulting Services"}
                   width={600}
                   height={400}
-                  className="w-full h-auto group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-auto group-hover:scale-105 transition-transform duration-700"
                   priority
                 />
               ) : (
-                <div className="w-full h-96 bg-primary/20 flex items-center justify-center">
-                  <div className="text-white text-center">
-                    <div className="text-6xl mb-4 opacity-80">🤝</div>
+                <div className="w-full aspect-[4/3] bg-gradient-to-br from-surface-800 to-surface-900 flex items-center justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10" />
+                  <div className="text-white text-center relative z-10">
+                    <div className="w-20 h-20 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <Play className="w-10 h-10 text-primary" />
+                    </div>
                     <p className="text-xl font-semibold">Consulting Services</p>
+                    <p className="text-surface-400 mt-1">Transform your business</p>
                   </div>
                 </div>
               )}
-              <div className="absolute inset-0 bg-black/20"></div>
             </div>
           </div>
         </div>
