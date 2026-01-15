@@ -1,11 +1,16 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { X, Maximize2, Play, Pause } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { X, Maximize2, Play, Pause, GripHorizontal } from "lucide-react";
 import {
   PodcastPlayer,
   type PlayerHandle,
 } from "@/src/components/features/episodes";
+
+interface Position {
+  x: number;
+  y: number;
+}
 
 interface StickyVideoPlayerProps {
   videoId?: string;
@@ -29,6 +34,12 @@ export default function StickyVideoPlayer({
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [transitionId, setTransitionId] = useState(0);
   const [isCurrentlyPlaying, setIsCurrentlyPlaying] = useState(false);
+
+  // Drag state
+  const [isDragging, setIsDragging] = useState(false);
+  const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
+  const [dragOffset, setDragOffset] = useState<Position>({ x: 0, y: 0 });
+  const [hasCustomPosition, setHasCustomPosition] = useState(false);
 
   const playerRef = useRef<PlayerHandle>(null);
   const placeholderRef = useRef<HTMLDivElement>(null);
@@ -148,6 +159,110 @@ export default function StickyVideoPlayer({
     onPlayStateChange,
   ]);
 
+  // Drag handlers for PiP-style dragging
+  const handleDragStart = useCallback(
+    (e: React.MouseEvent | React.TouchEvent) => {
+      if (!stickyContainerRef.current) return;
+
+      e.preventDefault();
+      setIsDragging(true);
+
+      const rect = stickyContainerRef.current.getBoundingClientRect();
+      const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+      const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+
+      setDragOffset({
+        x: clientX - rect.left,
+        y: clientY - rect.top,
+      });
+
+      if (!hasCustomPosition) {
+        // Initialize position based on current location
+        setPosition({
+          x: rect.left,
+          y: rect.top,
+        });
+        setHasCustomPosition(true);
+      }
+    },
+    [hasCustomPosition]
+  );
+
+  const handleDragMove = useCallback(
+    (e: MouseEvent | TouchEvent) => {
+      if (!isDragging || !stickyContainerRef.current) return;
+
+      const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+      const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+
+      const playerWidth = stickyContainerRef.current.offsetWidth;
+      const playerHeight = stickyContainerRef.current.offsetHeight;
+
+      // Calculate new position with bounds checking
+      let newX = clientX - dragOffset.x;
+      let newY = clientY - dragOffset.y;
+
+      // Keep within viewport bounds with padding
+      const padding = 12;
+      newX = Math.max(padding, Math.min(window.innerWidth - playerWidth - padding, newX));
+      newY = Math.max(padding, Math.min(window.innerHeight - playerHeight - padding, newY));
+
+      setPosition({ x: newX, y: newY });
+    },
+    [isDragging, dragOffset]
+  );
+
+  const handleDragEnd = useCallback(() => {
+    if (!isDragging || !stickyContainerRef.current) return;
+
+    setIsDragging(false);
+
+    // Optional: Snap to nearest corner
+    const playerWidth = stickyContainerRef.current.offsetWidth;
+    const playerHeight = stickyContainerRef.current.offsetHeight;
+    const padding = 24;
+
+    const centerX = position.x + playerWidth / 2;
+    const centerY = position.y + playerHeight / 2;
+    const screenCenterX = window.innerWidth / 2;
+    const screenCenterY = window.innerHeight / 2;
+
+    // Determine which quadrant to snap to
+    const snapX = centerX < screenCenterX ? padding : window.innerWidth - playerWidth - padding;
+    const snapY = centerY < screenCenterY ? padding : window.innerHeight - playerHeight - padding;
+
+    setPosition({ x: snapX, y: snapY });
+  }, [isDragging, position]);
+
+  // Add/remove global mouse/touch event listeners for dragging
+  useEffect(() => {
+    if (isDragging) {
+      const handleMouseMove = (e: MouseEvent) => handleDragMove(e);
+      const handleTouchMove = (e: TouchEvent) => handleDragMove(e);
+      const handleMouseUp = () => handleDragEnd();
+      const handleTouchEnd = () => handleDragEnd();
+
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("touchmove", handleTouchMove, { passive: false });
+      window.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("touchend", handleTouchEnd);
+
+      return () => {
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("touchmove", handleTouchMove);
+        window.removeEventListener("mouseup", handleMouseUp);
+        window.removeEventListener("touchend", handleTouchEnd);
+      };
+    }
+  }, [isDragging, handleDragMove, handleDragEnd]);
+
+  // Reset position when becoming sticky
+  useEffect(() => {
+    if (!isSticky) {
+      setHasCustomPosition(false);
+    }
+  }, [isSticky]);
+
   const handleClose = () => {
     setIsVisible(false);
     if (playerRef.current) {
@@ -222,13 +337,38 @@ export default function StickyVideoPlayer({
       {/* Sticky mini player */}
       <div
         ref={stickyContainerRef}
-        className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ease-out ${
+        className={`fixed z-50 ${
+          isDragging ? "" : "transition-all duration-300 ease-out"
+        } ${
           isSticky
-            ? "translate-y-0 opacity-100 visible scale-100"
-            : "translate-y-full opacity-0 invisible scale-95"
+            ? "opacity-100 visible scale-100"
+            : "opacity-0 invisible scale-95"
         }`}
+        style={
+          hasCustomPosition
+            ? {
+                left: `${position.x}px`,
+                top: `${position.y}px`,
+              }
+            : {
+                bottom: "24px",
+                right: "24px",
+              }
+        }
       >
-        <div className="bg-black rounded-xl shadow-2xl overflow-hidden border border-gray-700 group hover:shadow-3xl transition-all duration-300 hover:scale-[1.02]">
+        <div className={`bg-black rounded-xl shadow-2xl overflow-hidden border border-gray-700 group transition-all duration-300 ${isDragging ? "cursor-grabbing scale-105 shadow-3xl" : "hover:shadow-3xl"}`}>
+          {/* Drag handle */}
+          <div
+            className="absolute top-0 left-0 right-0 h-8 z-20 cursor-grab active:cursor-grabbing flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            onMouseDown={handleDragStart}
+            onTouchStart={handleDragStart}
+          >
+            <div className="bg-black/70 rounded-full px-3 py-1 flex items-center gap-1">
+              <GripHorizontal className="h-4 w-4 text-white/70" />
+              <span className="text-white/70 text-xs">Drag</span>
+            </div>
+          </div>
+
           <div className="w-80 h-48 relative">
             <div className="w-full h-full">{isSticky && PlayerComponent}</div>
 
