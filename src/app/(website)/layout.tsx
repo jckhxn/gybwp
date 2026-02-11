@@ -1,12 +1,12 @@
 import React from "react";
 
 import { draftMode } from "next/headers";
-import { VisualEditing } from "next-sanity";
 import { revalidatePath, revalidateTag } from "next/cache";
 import Script from "next/script";
 // components
 import Footer from "@/src/components/layout/Footer";
 import Header from "@/src/components/layout/Header";
+import { VisualEditingWrapper } from "@/src/components/VisualEditingWrapper";
 
 // styling
 import "tailwindcss/tailwind.css";
@@ -81,27 +81,7 @@ export default async function RootLayout({
           <main className={openSans.className}>
             <Header />
             {children}
-            {isDraftModeEnabled && (
-              <VisualEditing
-                refresh={async (payload) => {
-                  "use server";
-                  if (!isDraftModeEnabled) {
-                    console.debug(
-                      "Skipped manual refresh because draft mode is not enabled"
-                    );
-                    return;
-                  }
-                  if (payload.source === "mutation") {
-                    if (payload.document.slug?.current) {
-                      const tag = `${payload.document._type}:${payload.document.slug.current}`;
-                      await revalidateTag(tag);
-                    }
-                    return revalidateTag(payload.document._type);
-                  }
-                  await revalidatePath("/", "layout");
-                }}
-              />
-            )}
+            {isDraftModeEnabled && <VisualEditingWrapper />}
             <Footer />
           </main>
         </body>
