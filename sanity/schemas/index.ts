@@ -20,6 +20,9 @@ import transcriptSegment from "./transcriptSegment";
 import componentLink from "./objects/componentLink";
 import seoMetadata from "./objects/seoMetadata";
 
+// Import singleton documents
+import siteSettings from "./documents/siteSettings";
+
 const schemas = [
   // Core document types (migrated from legacy)
   season,
@@ -44,6 +47,9 @@ const schemas = [
   // Object types
   componentLink,
   seoMetadata,
+
+  // Singleton documents
+  siteSettings,
 ];
 
 export default schemas;

@@ -21,24 +21,36 @@ export default async function DynamicPage({
     return;
   }
 
+  let page;
   try {
-    const page = await loadPage(pathname);
-
-    if (!page) {
-      // Sanity not found route, otherwise nextjs route.
-      const notFoundPage = await loadPage("not-found");
-      if (!notFoundPage) {
-        notFound();
-        return;
-      }
-      return <Page data={notFoundPage} />;
-    }
-
-    return <Page data={page} />;
+    page = await loadPage(pathname);
   } catch (error) {
+    // Re-throw Next.js navigation/HTTP errors (notFound, redirect, etc.)
+    if (
+      error != null &&
+      typeof error === "object" &&
+      "digest" in error &&
+      typeof (error as any).digest === "string" &&
+      (error as any).digest.startsWith("NEXT_")
+    ) {
+      throw error;
+    }
     console.error("Error loading page:", error);
     notFound();
+    return;
   }
+
+  if (!page) {
+    // Sanity not found route, otherwise nextjs route.
+    const notFoundPage = await loadPage("not-found");
+    if (!notFoundPage) {
+      notFound();
+      return;
+    }
+    return <Page data={notFoundPage} />;
+  }
+
+  return <Page data={page} />;
 }
 
 export async function generateMetadata({

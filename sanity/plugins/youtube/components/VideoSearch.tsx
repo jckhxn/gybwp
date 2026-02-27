@@ -9,7 +9,7 @@ export function VideoSearch(props: {
   onSubmit: (data: YoutubeVideoData) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const timeout = useRef<NodeJS.Timeout>();
+  const timeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 

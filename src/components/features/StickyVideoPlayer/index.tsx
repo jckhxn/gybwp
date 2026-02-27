@@ -15,7 +15,7 @@ interface Position {
 interface StickyVideoPlayerProps {
   videoId?: string;
   title?: string;
-  onPlayerRef?: (ref: React.RefObject<PlayerHandle>) => void;
+  onPlayerRef?: (ref: React.RefObject<PlayerHandle | null>) => void;
   onPlayStateChange?: (isPlaying: boolean) => void;
 }
 
@@ -185,7 +185,7 @@ export default function StickyVideoPlayer({
         setHasCustomPosition(true);
       }
     },
-    [hasCustomPosition]
+    [hasCustomPosition],
   );
 
   const handleDragMove = useCallback(
@@ -204,12 +204,18 @@ export default function StickyVideoPlayer({
 
       // Keep within viewport bounds with padding
       const padding = 12;
-      newX = Math.max(padding, Math.min(window.innerWidth - playerWidth - padding, newX));
-      newY = Math.max(padding, Math.min(window.innerHeight - playerHeight - padding, newY));
+      newX = Math.max(
+        padding,
+        Math.min(window.innerWidth - playerWidth - padding, newX),
+      );
+      newY = Math.max(
+        padding,
+        Math.min(window.innerHeight - playerHeight - padding, newY),
+      );
 
       setPosition({ x: newX, y: newY });
     },
-    [isDragging, dragOffset]
+    [isDragging, dragOffset],
   );
 
   const handleDragEnd = useCallback(() => {
@@ -228,8 +234,14 @@ export default function StickyVideoPlayer({
     const screenCenterY = window.innerHeight / 2;
 
     // Determine which quadrant to snap to
-    const snapX = centerX < screenCenterX ? padding : window.innerWidth - playerWidth - padding;
-    const snapY = centerY < screenCenterY ? padding : window.innerHeight - playerHeight - padding;
+    const snapX =
+      centerX < screenCenterX
+        ? padding
+        : window.innerWidth - playerWidth - padding;
+    const snapY =
+      centerY < screenCenterY
+        ? padding
+        : window.innerHeight - playerHeight - padding;
 
     setPosition({ x: snapX, y: snapY });
   }, [isDragging, position]);
@@ -356,7 +368,9 @@ export default function StickyVideoPlayer({
               }
         }
       >
-        <div className={`bg-black rounded-xl shadow-2xl overflow-hidden border border-gray-700 group transition-all duration-300 ${isDragging ? "cursor-grabbing scale-105 shadow-3xl" : "hover:shadow-3xl"}`}>
+        <div
+          className={`bg-black rounded-xl shadow-2xl overflow-hidden border border-gray-700 group transition-all duration-300 ${isDragging ? "cursor-grabbing scale-105 shadow-3xl" : "hover:shadow-3xl"}`}
+        >
           {/* Drag handle */}
           <div
             className="absolute top-0 left-0 right-0 h-8 z-20 cursor-grab active:cursor-grabbing flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"

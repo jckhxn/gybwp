@@ -7,6 +7,8 @@ import Script from "next/script";
 import Footer from "@/src/components/layout/Footer";
 import Header from "@/src/components/layout/Header";
 import { VisualEditingWrapper } from "@/src/components/VisualEditingWrapper";
+import MaintenancePage from "@/src/components/features/MaintenancePage";
+import { loadSiteSettings } from "@/data/sanity";
 
 // styling
 import "tailwindcss/tailwind.css";
@@ -68,6 +70,20 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const isDraftModeEnabled = (await draftMode()).isEnabled;
+  const settings = await loadSiteSettings();
+  console.log("Site settings loaded in RootLayout:", settings);
+  if (settings?.maintenanceMode) {
+    return (
+      <html lang="en">
+        <body>
+          <MaintenancePage
+            title={settings.maintenanceTitle}
+            message={settings.maintenanceMessage}
+          />
+        </body>
+      </html>
+    );
+  }
 
   return (
     <>

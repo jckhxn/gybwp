@@ -10,6 +10,8 @@ import schemas from "./sanity/schemas";
 import config from "./config";
 import { locate } from "./src/app/(website)/lib/locate";
 
+const SINGLETON_TYPES = new Set(["siteSettings"]);
+
 const sanityConfig = defineConfig({
   projectId: config.sanity.projectId,
   dataset: config.sanity.dataset,
@@ -26,7 +28,27 @@ const sanityConfig = defineConfig({
       },
       creatablePages: ["page"],
     }),
-    structureTool(),
+    structureTool({
+      structure: (S) =>
+        S.list()
+          .title("Content")
+          .items([
+            S.listItem()
+              .title("Site Settings")
+              .id("siteSettings")
+              .icon(() => "⚙️")
+              .child(
+                S.document()
+                  .schemaType("siteSettings")
+                  .documentId("siteSettings")
+                  .title("Site Settings"),
+              ),
+            S.divider(),
+            ...S.documentTypeListItems().filter(
+              (item) => !SINGLETON_TYPES.has(item.getId() ?? ""),
+            ),
+          ]),
+    }),
     youtubeInput({
       apiKey: config.youtube.apiKey,
       channelId: config.youtube.channelId,

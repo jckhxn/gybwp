@@ -1,3 +1,9 @@
+export type SiteSettings = {
+  maintenanceMode: boolean;
+  maintenanceTitle?: string;
+  maintenanceMessage?: string;
+};
+
 export type PagePayload = {
   _id: string;
   _type: string;

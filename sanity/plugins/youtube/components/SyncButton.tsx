@@ -3,7 +3,7 @@ import { useState, RefObject } from "react";
 import { YoutubeVideoData } from "../utils";
 
 interface YoutubeFetcherProps {
-  inputRef: RefObject<HTMLInputElement>;
+  inputRef: RefObject<HTMLInputElement | null>;
   onVideoFetch?: (videoUrl: string) => void;
   onSubmit: (data: YoutubeVideoData) => void;
 }
@@ -22,7 +22,7 @@ const YoutubeFetcher = ({
 
     try {
       const response = await fetch("/api/youtube/latest");
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to fetch latest video");
@@ -43,7 +43,7 @@ const YoutubeFetcher = ({
       onSubmit(videoData);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "An unknown error occurred"
+        err instanceof Error ? err.message : "An unknown error occurred",
       );
       console.error("Error fetching latest video:", err);
     } finally {
