@@ -4,6 +4,7 @@ import { draftMode } from "next/headers";
 import { SanityDocument } from "next-sanity";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { checkMaintenanceMode } from "@/src/app/(website)/lib/maintenance";
 
 // Components
 import EpisodeDetails from "@/src/components/features/EpisodeDetails";
@@ -28,6 +29,7 @@ function isUUID(identifier: string): boolean {
 }
 
 export default async function Page({ params, searchParams }: PageProps) {
+  await checkMaintenanceMode();
   const resolvedParams = await params;
   const { slug: rawSlug } = resolvedParams;
 

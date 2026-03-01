@@ -1,7 +1,12 @@
 export type SiteSettings = {
   maintenanceMode: boolean;
-  maintenanceTitle?: string;
-  maintenanceMessage?: string;
+};
+
+export type MaintenancePageData = {
+  showLogo?: boolean;
+  badgeText?: string;
+  heading?: string;
+  message?: string;
 };
 
 export type PagePayload = {

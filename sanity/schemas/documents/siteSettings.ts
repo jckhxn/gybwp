@@ -10,24 +10,8 @@ export default defineType({
       title: "Maintenance Mode",
       type: "boolean",
       description:
-        "When enabled, all website pages will display a maintenance message instead of the normal site.",
+        "When enabled, all website pages will display the maintenance page instead of the normal site. Edit the maintenance page content in the Maintenance Page document.",
       initialValue: false,
-    }),
-    defineField({
-      name: "maintenanceTitle",
-      title: "Maintenance Title",
-      type: "string",
-      description: "Heading shown on the maintenance page.",
-      initialValue: "We'll Be Right Back",
-      hidden: ({ document }) => !document?.maintenanceMode,
-    }),
-    defineField({
-      name: "maintenanceMessage",
-      title: "Maintenance Message",
-      type: "text",
-      description: "Message shown beneath the title on the maintenance page.",
-      initialValue: "We're making some improvements. Check back soon!",
-      hidden: ({ document }) => !document?.maintenanceMode,
     }),
   ],
   preview: {

@@ -1,5 +1,14 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
+import { Redis } from "@upstash/redis";
+
+const redis =
+  process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
+    ? new Redis({
+        url: process.env.UPSTASH_REDIS_REST_URL,
+        token: process.env.UPSTASH_REDIS_REST_TOKEN,
+      })
+    : null;
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,6 +33,13 @@ export async function POST(request: NextRequest) {
     } else if (_type === "page" && pathname) {
       await revalidatePath(pathname);
       await revalidateTag("pages");
+    } else if (_type === "siteSettings" || _type === "maintenancePage") {
+      // Clear the edge-cached maintenance mode flag so the middleware picks up
+      // the new value on the very next request rather than waiting 60s.
+      if (redis) {
+        await redis.del("maintenance:mode");
+      }
+      await revalidatePath("/");
     } else if (pathname) {
       // Generic pathname revalidation
       await revalidatePath(pathname);
@@ -42,7 +58,7 @@ export async function POST(request: NextRequest) {
       error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
       { message: "Error revalidating", error: errorMessage },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

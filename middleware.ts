@@ -18,6 +18,60 @@ function isBlockedPath(pathname: string): boolean {
   return blockedPatterns.some((pattern) => pattern.test(pathname));
 }
 
+// Fetch maintenance mode status from Sanity API (no CDN cache), cached in Redis for 30s
+async function getMaintenanceMode(): Promise<boolean> {
+  // Try Redis cache first (fast, works in Edge runtime)
+  if (redis) {
+    try {
+      const cached = await redis.get("maintenance:mode");
+      if (cached !== null) {
+        return cached === "1" || cached === true;
+      }
+    } catch {
+      // fall through to direct fetch
+    }
+  }
+
+  try {
+    const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+    const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
+    const apiVersion =
+      process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2023-06-21";
+    if (!projectId) return false;
+
+    const query = encodeURIComponent(
+      '*[_type == "siteSettings"][0]{maintenanceMode}',
+    );
+    // Use api.sanity.io (not apicdn) so we always get fresh, uncached data
+    const url = `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${query}`;
+
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) return false;
+
+    const data = await res.json();
+    const value = data?.result?.maintenanceMode === true;
+
+    // Cache in Redis for 30 seconds to avoid hammering Sanity on every request
+    if (redis) {
+      await redis.setex("maintenance:mode", 30, value ? "1" : "0");
+    }
+
+    return value;
+  } catch {
+    return false;
+  }
+}
+
+// Routes exempt from the maintenance redirect
+function isMaintenanceExempt(pathname: string): boolean {
+  return (
+    pathname === "/" ||
+    pathname.startsWith("/dash") ||
+    pathname.startsWith("/api/") ||
+    pathname.startsWith("/studio")
+  );
+}
+
 // Initialize Redis (only runs in Edge runtime on Vercel)
 const redis =
   process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
@@ -43,6 +97,16 @@ export async function middleware(request: NextRequest) {
     request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
     request.headers.get("x-real-ip") ||
     "unknown";
+
+  // STEP 0: Maintenance mode – redirect all non-exempt routes to /
+  if (!isMaintenanceExempt(pathname)) {
+    const inMaintenance = await getMaintenanceMode();
+    if (inMaintenance) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      return NextResponse.redirect(url, { status: 307 });
+    }
+  }
 
   // STEP 1: Check if IP is already banned
   if (redis) {

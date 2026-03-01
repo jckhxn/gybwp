@@ -1,5 +1,6 @@
 import React from "react";
 import GuestPage from "@/src/components/pages/GuestPage";
+import { checkMaintenanceMode } from "@/src/app/(website)/lib/maintenance";
 
 // Enable ISR with 1 hour revalidation
 export const revalidate = 3600;
@@ -9,6 +10,7 @@ type PageProps = {
 };
 
 export default async function Page({ params }: PageProps) {
+  await checkMaintenanceMode();
   const { guest: rawGuest } = await params;
 
   // Decode the URL parameter to handle special characters

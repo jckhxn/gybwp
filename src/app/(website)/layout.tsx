@@ -8,7 +8,7 @@ import Footer from "@/src/components/layout/Footer";
 import Header from "@/src/components/layout/Header";
 import { VisualEditingWrapper } from "@/src/components/VisualEditingWrapper";
 import MaintenancePage from "@/src/components/features/MaintenancePage";
-import { loadSiteSettings } from "@/data/sanity";
+import { loadSiteSettings, loadMaintenancePage } from "@/data/sanity";
 
 // styling
 import "tailwindcss/tailwind.css";
@@ -71,15 +71,14 @@ export default async function RootLayout({
 }) {
   const isDraftModeEnabled = (await draftMode()).isEnabled;
   const settings = await loadSiteSettings();
-  console.log("Site settings loaded in RootLayout:", settings);
+
   if (settings?.maintenanceMode) {
+    const maintenanceData = await loadMaintenancePage();
     return (
       <html lang="en">
         <body>
-          <MaintenancePage
-            title={settings.maintenanceTitle}
-            message={settings.maintenanceMessage}
-          />
+          <MaintenancePage data={maintenanceData} />
+          {isDraftModeEnabled && <VisualEditingWrapper />}
         </body>
       </html>
     );

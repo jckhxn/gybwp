@@ -22,6 +22,7 @@ import seoMetadata from "./objects/seoMetadata";
 
 // Import singleton documents
 import siteSettings from "./documents/siteSettings";
+import maintenancePage from "./documents/maintenancePage";
 
 const schemas = [
   // Core document types (migrated from legacy)
@@ -50,6 +51,7 @@ const schemas = [
 
   // Singleton documents
   siteSettings,
+  maintenancePage,
 ];
 
 export default schemas;

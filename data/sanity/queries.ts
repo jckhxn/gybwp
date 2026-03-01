@@ -291,8 +291,15 @@ export const FEATURED_ARTICLES_QUERY = groq`
 
 export const SITE_SETTINGS_QUERY = groq`
   *[_type == "siteSettings"][0] {
-    maintenanceMode,
-    maintenanceTitle,
-    maintenanceMessage
+    maintenanceMode
+  }
+`;
+
+export const MAINTENANCE_PAGE_QUERY = groq`
+  *[_type == "maintenancePage"][0] {
+    showLogo,
+    badgeText,
+    heading,
+    message
   }
 `;

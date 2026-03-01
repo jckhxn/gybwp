@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { loadPage } from "@/data/sanity";
 import { Page } from "@/src/components/Page";
+import { checkMaintenanceMode } from "@/src/app/(website)/lib/maintenance";
 
 // Enable ISR with 1 hour revalidation
 export const revalidate = 3600;
@@ -11,6 +12,7 @@ export default async function DynamicPage({
 }: {
   params: Promise<{ path: string[] }>;
 }) {
+  await checkMaintenanceMode();
   const { path } = await params;
   const pathname = path ? `/${path.join("/")}` : "/";
 

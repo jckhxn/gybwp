@@ -4,6 +4,7 @@ import {
   PersonPayload,
   SponsorPayload,
   SiteSettings,
+  MaintenancePageData,
 } from "@/types";
 import { loadQuery } from "./loadQuery";
 import {
@@ -12,6 +13,7 @@ import {
   ALL_PEOPLE_QUERY,
   EPISODE_BY_IDENTIFIER_QUERY,
   SITE_SETTINGS_QUERY,
+  MAINTENANCE_PAGE_QUERY,
 } from "./queries";
 
 export async function loadPage(pathname: string) {
@@ -54,6 +56,19 @@ export async function loadSiteSettings(): Promise<SiteSettings | null> {
     });
   } catch (e) {
     console.error("[siteSettings] fetch error:", e);
+    return null;
+  }
+}
+
+export async function loadMaintenancePage(): Promise<MaintenancePageData | null> {
+  try {
+    return await loadQuery<MaintenancePageData | null>({
+      query: MAINTENANCE_PAGE_QUERY,
+      params: {},
+      revalidate: 60,
+    });
+  } catch (e) {
+    console.error("[maintenancePage] fetch error:", e);
     return null;
   }
 }

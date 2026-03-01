@@ -1,14 +1,17 @@
 import Image from "next/image";
+import type { MaintenancePageData } from "@/types";
 
 interface MaintenancePageProps {
-  title?: string;
-  message?: string;
+  data?: MaintenancePageData | null;
 }
 
-export default function MaintenancePage({
-  title = "We'll Be Right Back",
-  message = "We're making some improvements to bring you a better experience. Check back soon.",
-}: MaintenancePageProps) {
+export default function MaintenancePage({ data }: MaintenancePageProps) {
+  const showLogo = data?.showLogo ?? true;
+  const badgeText = data?.badgeText ?? "Scheduled Maintenance";
+  const heading = data?.heading ?? "We'll Be Right Back";
+  const message =
+    data?.message ??
+    "We're making some improvements to bring you a better experience. Check back soon.";
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-6 text-center relative overflow-hidden"
@@ -53,38 +56,42 @@ export default function MaintenancePage({
         }}
       >
         {/* Logo */}
-        <div className="mb-8">
-          <Image
-            src="/images/logo.webp"
-            alt="Growing Your Business With People"
-            width={72}
-            height={72}
-            priority
-            className="rounded-full mx-auto"
-            style={{
-              boxShadow: "0 0 32px rgba(245,158,11,0.25)",
-            }}
-          />
-        </div>
+        {showLogo && (
+          <div className="mb-8">
+            <Image
+              src="/images/logo.webp"
+              alt="Growing Your Business With People"
+              width={72}
+              height={72}
+              priority
+              className="rounded-full mx-auto"
+              style={{
+                boxShadow: "0 0 32px rgba(245,158,11,0.25)",
+              }}
+            />
+          </div>
+        )}
 
         {/* Status badge */}
-        <div
-          className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-8 text-xs font-semibold tracking-widest uppercase"
-          style={{
-            background: "rgba(245,158,11,0.12)",
-            border: "1px solid rgba(245,158,11,0.3)",
-            color: "#F59E0B",
-          }}
-        >
-          <span
-            className="w-1.5 h-1.5 rounded-full"
+        {badgeText && (
+          <div
+            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-8 text-xs font-semibold tracking-widest uppercase"
             style={{
-              background: "#F59E0B",
-              boxShadow: "0 0 6px #F59E0B",
+              background: "rgba(245,158,11,0.12)",
+              border: "1px solid rgba(245,158,11,0.3)",
+              color: "#F59E0B",
             }}
-          />
-          Scheduled Maintenance
-        </div>
+          >
+            <span
+              className="w-1.5 h-1.5 rounded-full"
+              style={{
+                background: "#F59E0B",
+                boxShadow: "0 0 6px #F59E0B",
+              }}
+            />
+            {badgeText}
+          </div>
+        )}
 
         {/* Heading */}
         <h1
@@ -94,7 +101,7 @@ export default function MaintenancePage({
             textShadow: "0 1px 2px rgba(0,0,0,0.4)",
           }}
         >
-          {title}
+          {heading}
         </h1>
 
         {/* Divider */}
