@@ -10,7 +10,7 @@ import schemas from "./sanity/schemas";
 import config from "./config";
 import { locate } from "./src/app/(website)/lib/locate";
 
-const SINGLETON_TYPES = new Set(["siteSettings"]);
+const SINGLETON_TYPES = new Set(["siteSettings", "maintenancePage"]);
 
 const sanityConfig = defineConfig({
   projectId: config.sanity.projectId,
@@ -26,7 +26,15 @@ const sanityConfig = defineConfig({
           enable: "/api/draft",
         },
       },
-      creatablePages: ["page"],
+      creatablePages: [
+        { title: "Standard Page", type: "page" },
+        { title: "Maintenance Page", type: "maintenancePage" },
+      ],
+      folders: {
+        "/episodes": { title: "Episodes" },
+        "/guest": { title: "Guests" },
+        "/sponsors": { title: "Sponsors" },
+      },
     }),
     structureTool({
       structure: (S) =>
@@ -42,6 +50,16 @@ const sanityConfig = defineConfig({
                   .schemaType("siteSettings")
                   .documentId("siteSettings")
                   .title("Site Settings"),
+              ),
+            S.listItem()
+              .title("Maintenance Page")
+              .id("maintenancePage")
+              .icon(() => "🚧")
+              .child(
+                S.document()
+                  .schemaType("maintenancePage")
+                  .documentId("maintenancePage")
+                  .title("Maintenance Page"),
               ),
             S.divider(),
             ...S.documentTypeListItems().filter(

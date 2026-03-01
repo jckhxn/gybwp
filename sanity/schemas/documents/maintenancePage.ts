@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { definePathname } from "@tinloof/sanity-studio";
 
 export default defineType({
   name: "maintenancePage",
@@ -14,6 +15,7 @@ export default defineType({
       description: "For internal reference only – not shown on the page.",
       initialValue: "Maintenance Page",
     }),
+    definePathname({ name: "pathname" }),
     defineField({
       name: "showLogo",
       title: "Show Logo",
