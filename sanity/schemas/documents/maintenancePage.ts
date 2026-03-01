@@ -41,7 +41,6 @@ export default defineType({
       name: "message",
       title: "Message",
       type: "text",
-      rows: 4,
       description: "Short message shown beneath the heading.",
       initialValue:
         "We're making some improvements to bring you a better experience. Check back soon.",
