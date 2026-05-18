@@ -1,5 +1,6 @@
 export type SiteSettings = {
   maintenanceMode: boolean;
+  maintenanceModeLocalhost?: boolean;
 };
 
 export type MaintenancePageData = {

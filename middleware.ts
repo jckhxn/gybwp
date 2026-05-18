@@ -19,11 +19,16 @@ function isBlockedPath(pathname: string): boolean {
 }
 
 // Fetch maintenance mode status from Sanity API (no CDN cache), cached in Redis for 30s
-async function getMaintenanceMode(): Promise<boolean> {
+async function getMaintenanceMode(hostname?: string): Promise<boolean> {
   // Try Redis cache first (fast, works in Edge runtime)
+  const isLocalHost =
+    hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1";
+
+  const cacheKey = isLocalHost ? "maintenance:mode:local" : "maintenance:mode:global";
+
   if (redis) {
     try {
-      const cached = await redis.get("maintenance:mode");
+      const cached = await redis.get(cacheKey);
       if (cached !== null) {
         return cached === "1" || cached === true;
       }
@@ -40,7 +45,7 @@ async function getMaintenanceMode(): Promise<boolean> {
     if (!projectId) return false;
 
     const query = encodeURIComponent(
-      '*[_type == "siteSettings"][0]{maintenanceMode}',
+      '*[_type == "siteSettings"][0]{maintenanceMode, maintenanceModeLocalhost}',
     );
     // Use api.sanity.io (not apicdn) so we always get fresh, uncached data
     const url = `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${query}`;
@@ -49,11 +54,14 @@ async function getMaintenanceMode(): Promise<boolean> {
     if (!res.ok) return false;
 
     const data = await res.json();
-    const value = data?.result?.maintenanceMode === true;
+    const global = data?.result?.maintenanceMode === true;
+    const localOnly = data?.result?.maintenanceModeLocalhost === true;
+
+    const value = global || (localOnly && isLocalHost);
 
     // Cache in Redis for 30 seconds to avoid hammering Sanity on every request
     if (redis) {
-      await redis.setex("maintenance:mode", 30, value ? "1" : "0");
+      await redis.setex(cacheKey, 30, value ? "1" : "0");
     }
 
     return value;
@@ -100,7 +108,7 @@ export async function middleware(request: NextRequest) {
 
   // STEP 0: Maintenance mode – redirect all non-exempt routes to /
   if (!isMaintenanceExempt(pathname)) {
-    const inMaintenance = await getMaintenanceMode();
+    const inMaintenance = await getMaintenanceMode(request.nextUrl.hostname);
     if (inMaintenance) {
       const url = request.nextUrl.clone();
       url.pathname = "/";

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { draftMode } from "next/headers";
+import { draftMode, headers } from "next/headers";
 import { revalidatePath, revalidateTag } from "next/cache";
 import Script from "next/script";
 // components
@@ -71,8 +71,10 @@ export default async function RootLayout({
 }) {
   const isDraftModeEnabled = (await draftMode()).isEnabled;
   const settings = await loadSiteSettings();
+  const host = headers().get("host")?.split(":")[0];
+  const isLocalHost = host === "localhost" || host === "127.0.0.1" || host === "::1";
 
-  if (settings?.maintenanceMode) {
+  if (settings?.maintenanceMode || (settings?.maintenanceModeLocalhost && isLocalHost)) {
     const maintenanceData = await loadMaintenancePage();
     return (
       <html lang="en">
