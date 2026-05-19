@@ -177,14 +177,28 @@ export default function EpisodeSlider() {
                   onScroll={handleScroll}
                   style={{ fontFamily: "Open Sans, sans-serif" }}
                 >
-                  {data.map((episode: Episode, idx: number) => (
-                    <div
-                      key={idx}
-                      className="flex-shrink-0 w-[85vw] sm:w-[350px] md:w-[320px] snap-start"
-                    >
-                      {/* <EpisodeCard {...episode} /> */}
-                    </div>
-                  ))}
+                  {data.map((episode: Episode, idx: number) => {
+                    const thumbnail = episode.youtube?.thumbnail || "/images/logo.webp";
+                    return (
+                      <div
+                        key={idx}
+                        className="flex-shrink-0 w-[85vw] sm:w-[350px] md:w-[320px] snap-start"
+                      >
+                        <EpisodeCard
+                          {...episode}
+                          youtube={
+                            episode.youtube
+                              ? {
+                                  ...episode.youtube,
+                                  episodeNumber: episode.youtube.episodeNumber ?? 0,
+                                  thumbnail,
+                                }
+                              : episode.youtube
+                          }
+                        />
+                      </div>
+                    );
+                  })}
                 </div>
                 {/* Right arrow */}
                 {showRightArrow && (

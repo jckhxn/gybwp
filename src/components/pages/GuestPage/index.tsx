@@ -15,10 +15,7 @@ import {
 } from "@/src/components/ui/avatar";
 import { Separator } from "@/src/components/ui/separator";
 import { Badge } from "@/src/components/ui/badge";
-import {
-  PodcastPlayer,
-  type PlayerHandle,
-} from "@/src/components/features/episodes";
+import type { PlayerHandle } from "@/src/components/features/episodes";
 import routes from "@/src/app/(website)/routes";
 import { GUEST_DETAIL_QUERY, HOST_DETAIL_QUERY } from "@/src/lib/queries";
 import { urlFor } from "@/src/lib/utils";
@@ -270,20 +267,14 @@ export default async function GuestPage({
                       </div>
                     </div>
 
-                    {/* Video Player */}
-                    <div className="rounded-2xl overflow-hidden aspect-video shadow-medium border border-surface-200">
-                      {latestEpisode.youtube?.id ? (
-                        <PodcastPlayer videoId={latestEpisode.youtube.id} />
-                      ) : (
-                        <div className="bg-surface-100 h-full flex items-center justify-center">
-                          <div className="text-center">
-                            <Play className="h-12 w-12 text-surface-300 mx-auto mb-2" />
-                            <span className="text-surface-500">
-                              Video not available
-                            </span>
-                          </div>
-                        </div>
-                      )}
+                    {/* Episode Thumbnail */}
+                    <div className="rounded-2xl overflow-hidden aspect-video shadow-medium border border-surface-200 relative">
+                      <Image
+                        src={latestEpisode.image || "/images/logo.webp"}
+                        alt={latestEpisode.title || "Episode thumbnail"}
+                        fill
+                        className="object-cover"
+                      />
                     </div>
 
                     {/* Episode Description */}

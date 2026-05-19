@@ -8,7 +8,7 @@ import MaintenancePage from "@/src/components/features/MaintenancePage";
 export default async function IndexRoute() {
   const settings = await loadSiteSettings();
 
-  const host = headers().get("host")?.split(":")[0];
+  const host = (await headers()).get("host")?.split(":")[0];
   const isLocalHost = host === "localhost" || host === "127.0.0.1" || host === "::1";
 
   if (settings?.maintenanceMode || (settings?.maintenanceModeLocalhost && isLocalHost)) {

@@ -20,15 +20,13 @@ function isBlockedPath(pathname: string): boolean {
 
 // Fetch maintenance mode status from Sanity API (no CDN cache), cached in Redis for 30s
 async function getMaintenanceMode(hostname?: string): Promise<boolean> {
-  // Try Redis cache first (fast, works in Edge runtime)
   const isLocalHost =
     hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1";
 
-  const cacheKey = isLocalHost ? "maintenance:mode:local" : "maintenance:mode:global";
-
-  if (redis) {
+  // Never cache localhost — always fetch fresh so toggling in Sanity takes effect immediately
+  if (!isLocalHost && redis) {
     try {
-      const cached = await redis.get(cacheKey);
+      const cached = await redis.get("maintenance:mode:global");
       if (cached !== null) {
         return cached === "1" || cached === true;
       }
@@ -59,9 +57,9 @@ async function getMaintenanceMode(hostname?: string): Promise<boolean> {
 
     const value = global || (localOnly && isLocalHost);
 
-    // Cache in Redis for 30 seconds to avoid hammering Sanity on every request
-    if (redis) {
-      await redis.setex(cacheKey, 30, value ? "1" : "0");
+    // Cache in Redis for 30 seconds — production only (localhost skipped above)
+    if (!isLocalHost && redis) {
+      await redis.setex("maintenance:mode:global", 30, value ? "1" : "0");
     }
 
     return value;
@@ -107,7 +105,7 @@ export async function middleware(request: NextRequest) {
     "unknown";
 
   // STEP 0: Maintenance mode – redirect all non-exempt routes to /
-  if (!isMaintenanceExempt(pathname)) {
+  if (!isMaintenanceExempt(pathname) && process.env.DISABLE_MAINTENANCE !== "true") {
     const inMaintenance = await getMaintenanceMode(request.nextUrl.hostname);
     if (inMaintenance) {
       const url = request.nextUrl.clone();

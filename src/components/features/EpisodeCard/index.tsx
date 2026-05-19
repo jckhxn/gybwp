@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import Image from "next/image";
+import { ThumbnailImage } from "@/src/components/ui/thumbnail-image";
 import { Play, ArrowRight, Clock, Calendar, Users, Sparkles } from "lucide-react";
 import { formatEpisodeTitle } from "@/src/lib/formatTitle";
 
@@ -88,10 +88,10 @@ const EpisodeCard = ({
           <div className="relative h-full bg-white rounded-2xl overflow-hidden border border-surface-200/80 shadow-soft hover:shadow-elevated transition-all duration-500 hover:border-primary/20 hover:-translate-y-1">
             {/* Thumbnail Container */}
             <div className="relative aspect-video overflow-hidden">
-              <Image
+              <ThumbnailImage
                 alt={`Thumbnail for ${formatEpisodeTitle(youtube.title)}`}
                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                src={`${youtube.thumbnail}`}
+                src={youtube.thumbnail || "/images/logo.webp"}
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 priority={false}
@@ -187,10 +187,10 @@ const EpisodeCard = ({
             {/* Thumbnail */}
             <div className="relative w-56 flex-shrink-0 overflow-hidden">
               <div className="absolute inset-0">
-                <Image
+                <ThumbnailImage
                   alt={`Thumbnail for ${formatEpisodeTitle(youtube.title)}`}
                   className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  src={`${youtube.thumbnail}`}
+                  src={youtube.thumbnail || "/images/logo.webp"}
                   fill
                   sizes="224px"
                 />

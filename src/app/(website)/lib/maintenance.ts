@@ -10,7 +10,7 @@ export async function checkMaintenanceMode() {
   const settings = await loadSiteSettings();
   if (!settings) return;
 
-  const host = headers().get("host")?.split(":")[0];
+  const host = (await headers()).get("host")?.split(":")[0];
   const isLocalHost = host === "localhost" || host === "127.0.0.1" || host === "::1";
 
   if (settings.maintenanceMode) {

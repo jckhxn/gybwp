@@ -2,7 +2,8 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState, useEffect } from "react";
+import { ThumbnailImage } from "@/src/components/ui/thumbnail-image";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import routes from "@/src/app/(website)/routes";
@@ -16,13 +17,10 @@ import {
   ChevronLeft,
   ChevronRight,
   ExternalLink,
-  Pause,
-  X,
-  Check,
-  Copy,
+  Bookmark,
+  ArrowRight,
 } from "lucide-react";
 
-// Fix import paths to use @/src/app/(website)/components instead of full paths
 import { Button } from "@/src/components/ui/button";
 import { Separator } from "@/src/components/ui/separator";
 import { formatEpisodeTitle } from "@/src/lib/formatTitle";
@@ -31,28 +29,14 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/src/components/ui/avatar";
-import { Card, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/src/components/ui/badge";
 import { SponsorsList } from "@/src/components/features/sponsors";
 import { urlForImage } from "@/src/lib/sanity-image";
-import { CTA } from "@/src/components/pages/HomePage/static-data";
 import TranscriptDisplay from "@/src/components/features/TranscriptDisplay";
 import {
-  PodcastPlayer,
   RelatedEpisodes,
   type PlayerHandle,
 } from "@/src/components/features/episodes";
-
-// Lazy load StickyVideoPlayer for better performance
-const StickyVideoPlayer = dynamic(
-  () => import("@/src/components/features/StickyVideoPlayer"),
-  {
-    loading: () => (
-      <div className="w-full h-96 bg-gray-900 animate-pulse rounded-lg" />
-    ),
-    ssr: false,
-  }
-);
 
 import {
   formatDate,
@@ -62,15 +46,13 @@ import {
 } from "@/src/lib/utils";
 import JSONLD from "@/src/components/SEO/jsonld";
 import {
-  generatePodcastEpisodeStructuredData,
   generateSimplifiedPodcastEpisodeStructuredData,
   generateEpisodeArticleStructuredData,
   generateEnhancedVideoObjectStructuredData,
-  generateVideoObjectStructuredData,
-  formatDurationToISO,
 } from "@/src/lib/structured-data";
 
-// Add at the top of the file after existing imports
+import { PodcastAudioPlayer } from "@/src/components/features/episodes/podcast-audio-player";
+
 interface DiscussionTopic {
   title?: string;
   description?: string;
@@ -79,89 +61,72 @@ interface DiscussionTopic {
 interface Highlight {
   title?: string;
   timestamp?: string;
-}
-
-interface Sponsor {
-  name?: string;
-  logo?: any;
-  image?: any;
   description?: string;
-  url?: string;
-  bgColor?: string;
-  uuid?: string;
 }
 
-// Simple SubscribeForm component
-const SubscribeForm = () => (
-  <div className="flex flex-col space-y-4">
-    <div className="flex flex-col items-center gap-2 text-center sm:items-start sm:text-left">
-      <p className="text-lg font-medium text-surface-900">
-        Join our community of purpose-driven entrepreneurs
-      </p>
-      <p className="text-surface-500">
-        Connect with like-minded business owners and get weekly insights
-        directly on LinkedIn.
-      </p>
-    </div>
+const PlatformLinks = () => (
+  <div className="flex flex-wrap gap-2 mt-3">
+    {[
+      { label: "Apple Podcasts", href: "https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511", logo: "/social-logos/apple.png" },
+      { label: "Spotify", href: "https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH", logo: "/social-logos/spotify.png" },
+      { label: "Buzzsprout", href: "https://www.buzzsprout.com/2057493", logo: "/social-logos/buzzsprout.png" },
+    ].map(({ label, href, logo }) => (
+      <Link
+        key={label}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-700 hover:bg-stone-50 hover:border-stone-300 transition-all"
+      >
+        <Image src={logo} alt={label} width={14} height={14} className="object-contain" />
+        {label}
+      </Link>
+    ))}
+  </div>
+);
+
+const SubscribeCTA = () => (
+  <div className="bg-stone-900 rounded-2xl p-8 text-white">
+    <h3 className="text-xl font-bold mb-2">Like this conversation?</h3>
+    <p className="text-stone-300 text-sm mb-4 leading-relaxed">
+      One email a week — the episode plus one operator lesson worth stealing.
+    </p>
     <Link
       href="https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7049506606413213696"
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center justify-center gap-3 rounded-xl bg-primary hover:bg-primary-dark px-8 py-3 text-base font-medium text-white shadow-glow hover:shadow-glow-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+      className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-400 text-stone-900 font-semibold rounded-xl transition-all duration-200"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="white"
-        className="w-5 h-5"
-      >
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-      </svg>
       Subscribe on LinkedIn
+      <ArrowRight className="w-4 h-4" />
     </Link>
-    <p className="text-xs text-surface-500 max-w-[400px] text-center sm:text-left">
-      By subscribing, you&apos;ll receive our weekly newsletter and can easily
-      engage with our content and community on the LinkedIn platform.
-    </p>
+    <p className="text-xs text-stone-500 mt-3">Also available on:</p>
+    <PlatformLinks />
   </div>
 );
 
 export default function EpisodeDetails({ data }: { data: SanityDocument }) {
-  // For redesign just grab the document manually.
   const episode = Array.isArray(data) ? data[0] : data;
 
-  // All hooks must be called before any early returns
   const playerRef = useRef<PlayerHandle>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
-  // Handle cases where episode data is missing or invalid
   if (!episode) {
     return (
-      <div className="min-h-screen bg-surface-900 flex items-center justify-center">
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">
-            Episode Not Found
-          </h1>
-          <p className="text-surface-400">
-            The requested episode could not be loaded.
-          </p>
+          <h1 className="text-2xl font-bold text-stone-900 mb-4">Episode Not Found</h1>
+          <p className="text-stone-500">The requested episode could not be loaded.</p>
         </div>
       </div>
     );
   }
 
-  // Extract data from Sanity document with proper fallbacks
-  const rawTitle =
-    episode?.youtube?.title || episode?.episodeName || "Untitled Episode";
+  const rawTitle = episode?.youtube?.title || episode?.episodeName || "Untitled Episode";
   const title = formatEpisodeTitle(rawTitle);
   const blurb = episode?.youtube?.blurb || episode?.blurb || "";
-  const seasonNumber =
-    episode?.youtube?.seasonNumber || episode?.seasonNumber || "";
-  const episodeNumber =
-    episode?.youtube?.episodeNumber || episode?.episodeNumber || "";
+  const seasonNumber = episode?.youtube?.seasonNumber || episode?.seasonNumber || "";
+  const episodeNumber = episode?.youtube?.episodeNumber || episode?.episodeNumber || "";
   const publishedAt = episode?.youtube?.publishedAt || episode?.publishedAt;
   const description = episode?.youtube?.description || "";
   const takeaways = episode?.details?.keyTakeaways || [];
@@ -169,1083 +134,515 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
   const highlights = episode?.details?.highlights || [];
   const transcript = episode?.transcript || episode?.details?.transcript || "";
   const transcriptSegments = episode?.transcriptSegments || [];
-  const featuredGuests = episode?.details?.featuredGuests || [];
   const uuid = episode?.youtube?.uuid || episode?.uuid;
   const duration = episode?.youtube?.duration || "";
-
-  // Get sponsors from either direct sponsors or from season
   const episodeSponsors = episode?.season?.sponsors || [];
-  const seasonSponsors = episode?.season?.sponsors || [];
-  const sponsors =
-    episodeSponsors.length > 0 ? episodeSponsors : seasonSponsors;
+  const sponsors = episodeSponsors;
+  const guests = episode?.guests || [];
 
-  const relatedEpisodes = episode?.relatedEpisodes;
-
-  // Generate hybrid structured data for maximum rich results compatibility
-
-  // 1. Article schema (Google Rich Results compatible)
   const articleStructuredData = generateEpisodeArticleStructuredData({
-    title,
-    description: description || blurb,
+    title, description: description || blurb,
     url: `https://gybwp.com/episodes/${uuid}`,
-    publishedAt,
-    youtubeId: episode?.youtube?.id,
-    uuid,
-    blurb,
-    guests:
-      episode?.guests?.map((guest: any) => ({
-        name: guest.name,
-        title: guest.title,
-      })) || [],
-    keywords: [
-      ...(takeaways || []),
-      ...(discussionTopics?.map((topic: any) => topic.title).filter(Boolean) ||
-        []),
-    ],
-    wordCount:
-      (transcript && transcript.length > 0) ||
-      (transcriptSegments && transcriptSegments.length > 0)
-        ? transcript?.length
-          ? transcript.length / 5
-          : transcriptSegments.length * 50
-        : 2000, // Estimate word count
+    publishedAt, youtubeId: episode?.youtube?.id, uuid, blurb,
+    guests: guests.map((g: any) => ({ name: g.name, title: g.title })),
+    keywords: [...(takeaways || []), ...(discussionTopics?.map((t: any) => t.title).filter(Boolean) || [])],
+    wordCount: transcript?.length ? transcript.length / 5 : transcriptSegments.length * 50 || 2000,
   });
 
-  // 2. PodcastEpisode schema (semantic correctness)
   const episodeStructuredData = generateSimplifiedPodcastEpisodeStructuredData({
-    title,
-    description: description || blurb,
+    title, description: description || blurb,
     url: `https://gybwp.com/episodes/${uuid}`,
     episodeNumber: episodeNumber ? Number(episodeNumber) : undefined,
     seasonNumber: seasonNumber ? Number(seasonNumber) : undefined,
-    publishedAt,
-    duration,
-    youtubeId: episode?.youtube?.id,
-    uuid,
-    blurb,
-    guests:
-      episode?.guests?.map((guest: any) => ({
-        name: guest.name,
-        title: guest.title,
-        about: guest.about,
-      })) || [],
-    keywords: [
-      ...(takeaways || []),
-      ...(discussionTopics?.map((topic: any) => topic.title).filter(Boolean) ||
-        []),
-    ],
+    publishedAt, duration, youtubeId: episode?.youtube?.id, uuid, blurb,
+    guests: guests.map((g: any) => ({ name: g.name, title: g.title, about: g.about })),
+    keywords: [...(takeaways || []), ...(discussionTopics?.map((t: any) => t.title).filter(Boolean) || [])],
   });
 
-  // 3. VideoObject schema for YouTube episodes (Google Rich Results compatible)
   const videoStructuredData = episode?.youtube?.id
     ? generateEnhancedVideoObjectStructuredData({
-        title,
-        description: description || blurb,
-        youtubeId: episode?.youtube?.id,
-        publishedAt,
-        duration,
-        uuid,
-        blurb,
-        // Add view count if available from your data
-        // viewCount: episode?.youtube?.viewCount,
+        title, description: description || blurb,
+        youtubeId: episode.youtube.id, publishedAt, duration, uuid, blurb,
       })
     : null;
 
-  // Handle play button click
-  const handlePlayClick = () => {
-    if (playerRef.current) {
-      if (isPlaying) {
-        playerRef.current.pause();
-      } else {
-        playerRef.current.play();
-      }
+  const primaryGuest = guests[0];
+  const guestImage = primaryGuest?.guestProfile?.profileImage || primaryGuest?.image;
+  const guestName = primaryGuest?.name || "";
+  const guestTitle = primaryGuest?.guestProfile?.title || primaryGuest?.title || "";
+
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const offset = el.getBoundingClientRect().top + window.pageYOffset - 80;
+      window.scrollTo({ top: offset, behavior: "smooth" });
     }
   };
 
-  // Handle play state changes from the sticky player
-  const handlePlayStateChange = (playing: boolean) => {
-    setIsPlaying(playing);
-  };
-
-  // Share links data
-  const shareLinks = [
-    {
-      name: "Twitter",
-      icon: (
-        <Image
-          src="/social-logos/twitter.png"
-          alt="Twitter"
-          width={20}
-          height={20}
-        />
-      ),
-      color: "bg-blue-500",
-      getShareUrl: (url: string) =>
-        `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`,
-    },
-    {
-      name: "Facebook",
-      icon: (
-        <Image
-          src="/social-logos/facebook.png"
-          alt="Facebook"
-          width={20}
-          height={20}
-        />
-      ),
-      color: "bg-blue-600",
-      getShareUrl: (url: string) =>
-        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-    },
-    {
-      name: "LinkedIn",
-      icon: (
-        <Image
-          src="/social-logos/linkedin.png"
-          alt="LinkedIn"
-          width={20}
-          height={20}
-        />
-      ),
-      color: "bg-blue-700",
-      getShareUrl: (url: string) =>
-        `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}`,
-    },
-  ];
-
   return (
     <>
-      {/* Hybrid structured data approach for maximum rich results */}
-
-      {/* 1. Article schema - Google Rich Results compatible */}
       <JSONLD data={articleStructuredData} id="episode-article-jsonld" />
-
-      {/* 2. PodcastEpisode schema - semantic correctness */}
       <JSONLD data={episodeStructuredData} id="podcast-episode-jsonld" />
+      {videoStructuredData && <JSONLD data={videoStructuredData} id="video-object-jsonld" />}
 
-      {/* 3. VideoObject schema - for YouTube episodes */}
-      {videoStructuredData && (
-        <JSONLD data={videoStructuredData} id="video-object-jsonld" />
-      )}
+      <div className="min-h-screen bg-stone-50">
 
-      <div className="min-h-screen bg-surface-50">
-        {/* Hero Section */}
-        <div className="relative bg-surface-900 overflow-hidden">
-          {/* Gradient mesh background */}
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900"></div>
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]"></div>
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[100px]"></div>
-          </div>
-
-          <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            {/* Episode Navigation */}
-            <div className="flex justify-between items-center mb-8">
+        {/* ── Nav bar ── */}
+        <div className="bg-amber-50 border-b border-stone-200">
+          <div className="max-w-7xl mx-auto px-6 lg:px-12 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-3">
               {episode?.prevEpisode ? (
-                <Link href={`${episode.prevEpisode}`}>
-                  <Button
-                    color="primary"
-                    className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all px-4 py-2 rounded-xl text-sm font-medium text-white"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                    Previous Episode
-                  </Button>
+                <Link href={episode.prevEpisode}>
+                  <button className="flex items-center gap-1.5 text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors">
+                    <ChevronLeft className="w-4 h-4" />
+                    Prev
+                  </button>
                 </Link>
               ) : (
-                <Button
-                  color="white"
-                  className="flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-white/10 opacity-50 px-4 py-2 rounded-xl text-sm font-medium text-white/50"
-                  disabled
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                  Previous Episode
-                </Button>
-              )}
-
-              {episode?.nextEpisode ? (
-                <Link href={`${episode.nextEpisode}`}>
-                  <Button
-                    color="primary"
-                    className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all px-4 py-2 rounded-xl text-sm font-medium text-white"
-                  >
-                    Next Episode
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-              ) : (
-                <Button
-                  color="white"
-                  className="flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-white/10 opacity-50 px-4 py-2 rounded-xl text-sm font-medium text-white/50"
-                  disabled
-                >
-                  Next Episode
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
+                <span className="flex items-center gap-1.5 text-sm font-medium text-stone-300 cursor-default">
+                  <ChevronLeft className="w-4 h-4" /> Prev
+                </span>
               )}
             </div>
 
-            {/* Episode Header */}
-            <div className="text-center max-w-4xl mx-auto">
+            <Link href="/episodes" className="text-sm font-semibold text-stone-500 hover:text-stone-900 transition-colors">
+              ← All episodes
+            </Link>
+
+            <div className="flex items-center gap-3">
               {(seasonNumber || episodeNumber) && (
-                <div className="inline-flex items-center gap-2 rounded-full bg-primary/20 px-4 py-2 text-sm font-semibold text-primary border border-primary/30 mb-6">
-                  {seasonNumber && `Season ${seasonNumber}`}
-                  {seasonNumber && episodeNumber && " • "}
-                  {episodeNumber && `Episode ${episodeNumber}`}
+                <span className="text-xs font-semibold text-stone-400 uppercase tracking-wide">
+                  {seasonNumber ? `S${seasonNumber} · ` : ""}EP {episodeNumber}
+                </span>
+              )}
+              {episode?.nextEpisode ? (
+                <Link href={episode.nextEpisode}>
+                  <button className="flex items-center gap-1.5 text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors">
+                    Next <ChevronRight className="w-4 h-4" />
+                  </button>
+                </Link>
+              ) : (
+                <span className="flex items-center gap-1.5 text-sm font-medium text-stone-300 cursor-default">
+                  Next <ChevronRight className="w-4 h-4" />
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* ── HERO: Listen-First ── */}
+        <div className="bg-amber-50 border-b border-stone-200">
+          <div className="max-w-7xl mx-auto px-6 lg:px-12 py-10 lg:py-14">
+            <div className="grid lg:grid-cols-[400px_1fr] gap-10 lg:gap-14 items-start">
+
+              {/* Left: Cover art + podcast player */}
+              <div className="space-y-4">
+                {/* Album art */}
+                <div className="relative rounded-2xl overflow-hidden shadow-xl border-2 border-stone-200/60 aspect-square bg-stone-100">
+                  <ThumbnailImage
+                    src={episode?.youtube?.thumbnail || episode?.image || "/images/logo.webp"}
+                    alt={title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 80vw, 400px"
+                    priority
+                  />
                 </div>
-              )}
 
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-6 text-white">
-                {title}
-              </h1>
+                {/* Podcast audio player */}
+                <PodcastAudioPlayer
+                  thumbnail={episode?.youtube?.thumbnail || episode?.image || "/images/logo.webp"}
+                  title={title}
+                  guestName={guestName || undefined}
+                  episodeNumber={episodeNumber || undefined}
+                  duration={duration || undefined}
+                />
 
-              {blurb && (
-                <p className="text-lg md:text-xl text-surface-300 leading-relaxed mb-8 max-w-3xl mx-auto">
-                  {blurb}
-                </p>
-              )}
+              </div>
 
-              <div className="flex flex-wrap justify-center gap-6 text-surface-300 mb-8">
-                {publishedAt && (
-                  <div className="flex items-center gap-2">
-                    <div className="p-2 bg-white/10 rounded-full">
-                      <Calendar className="h-4 w-4 text-primary" />
-                    </div>
-                    <span className="font-medium">
+              {/* Right: Episode info */}
+              <div className="flex flex-col gap-5">
+                {/* Date + duration */}
+                <div className="flex items-center gap-4 text-sm text-stone-500">
+                  {publishedAt && (
+                    <span className="flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5" />
                       {formatDate(publishedAt)}
                     </span>
-                  </div>
-                )}
-                {duration && (
-                  <div className="flex items-center gap-2">
-                    <div className="p-2 bg-white/10 rounded-full">
-                      <Clock className="h-4 w-4 text-primary" />
-                    </div>
-                    <span className="font-medium">
+                  )}
+                  {duration && (
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5" />
                       {formatDuration(duration)}
                     </span>
+                  )}
+                </div>
+
+                <h1 className="text-3xl lg:text-4xl font-bold text-stone-900 leading-[1.15] tracking-tight">
+                  {title}
+                </h1>
+
+                {blurb && (
+                  <p className="text-base text-stone-600 leading-relaxed max-w-xl">
+                    {blurb}
+                  </p>
+                )}
+
+                {/* Primary guest */}
+                {primaryGuest && (
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-11 w-11 border border-stone-200">
+                      {guestImage ? (
+                        <AvatarImage
+                          src={urlFor(guestImage).width(88).height(88).url()}
+                          alt={guestName}
+                        />
+                      ) : (
+                        <AvatarFallback className="bg-amber-100 text-amber-700 font-semibold text-sm">
+                          {guestName.substring(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      )}
+                    </Avatar>
+                    <div>
+                      <p className="font-semibold text-stone-900 text-sm leading-tight">{guestName}</p>
+                      {guestTitle && <p className="text-xs text-stone-500">{guestTitle}</p>}
+                    </div>
+                    {guests.length > 1 && (
+                      <span className="text-xs text-stone-400 ml-1">+{guests.length - 1} more</span>
+                    )}
                   </div>
                 )}
+
+                {/* Quick nav pills */}
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {description && (
+                    <button
+                      onClick={() => scrollTo("overview")}
+                      className="px-3.5 py-1.5 text-xs font-semibold bg-white border border-stone-200 rounded-full text-stone-600 hover:bg-stone-50 hover:border-stone-300 transition-all"
+                    >
+                      Overview
+                    </button>
+                  )}
+                  {takeaways?.length > 0 && (
+                    <button
+                      onClick={() => scrollTo("key-takeaways")}
+                      className="px-3.5 py-1.5 text-xs font-semibold bg-white border border-stone-200 rounded-full text-stone-600 hover:bg-stone-50 hover:border-stone-300 transition-all"
+                    >
+                      Takeaways
+                    </button>
+                  )}
+                  {discussionTopics?.length > 0 && (
+                    <button
+                      onClick={() => scrollTo("discussion-topics")}
+                      className="px-3.5 py-1.5 text-xs font-semibold bg-white border border-stone-200 rounded-full text-stone-600 hover:bg-stone-50 hover:border-stone-300 transition-all"
+                    >
+                      Topics
+                    </button>
+                  )}
+                  {highlights?.length > 0 && (
+                    <button
+                      onClick={() => scrollTo("episode-highlights")}
+                      className="px-3.5 py-1.5 text-xs font-semibold bg-white border border-stone-200 rounded-full text-stone-600 hover:bg-stone-50 hover:border-stone-300 transition-all"
+                    >
+                      Highlights
+                    </button>
+                  )}
+                  {((transcript && transcript.length > 0) || transcriptSegments?.length > 0) && (
+                    <button
+                      onClick={() => scrollTo("transcript")}
+                      className="px-3.5 py-1.5 text-xs font-semibold bg-white border border-stone-200 rounded-full text-stone-600 hover:bg-stone-50 hover:border-stone-300 transition-all"
+                    >
+                      Transcript
+                    </button>
+                  )}
+                  {guests.length > 0 && (
+                    <button
+                      onClick={() => scrollTo("featured-guest")}
+                      className="px-3.5 py-1.5 text-xs font-semibold bg-white border border-stone-200 rounded-full text-stone-600 hover:bg-stone-50 hover:border-stone-300 transition-all"
+                    >
+                      Guest{guests.length > 1 ? "s" : ""}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Main Content */}
-            <div className="lg:col-span-2 space-y-10">
-              {/* Video Player - only show if video ID exists */}
-              {episode?.youtube?.id ? (
-                <div className="relative">
-                  <div className="absolute -inset-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-3xl blur-xl opacity-50"></div>
-                  <div className="relative bg-white rounded-2xl border border-surface-200 shadow-medium overflow-hidden">
-                    <StickyVideoPlayer
-                      videoId={episode.youtube.id}
-                      title={title}
-                      onPlayerRef={(ref) => {
-                        if (ref?.current) {
-                          // @ts-expect-error - assigning ref for player controls
-                          playerRef.current = ref.current;
-                        }
-                      }}
-                      onPlayStateChange={handlePlayStateChange}
-                    />
+        {/* ── Three-column info strip ── */}
+        {(blurb || takeaways?.length > 0 || discussionTopics?.length > 0) && (
+          <div className="bg-white border-b border-stone-200">
+            <div className="max-w-7xl mx-auto px-6 lg:px-12 py-8">
+              <div className="grid sm:grid-cols-3 gap-6">
+                {/* About / TL;DR */}
+                {blurb && (
+                  <div className="space-y-2">
+                    <p className="text-xs font-bold uppercase tracking-widest text-stone-400">About this episode</p>
+                    <p className="text-sm text-stone-600 leading-relaxed">{blurb}</p>
                   </div>
-                </div>
-              ) : (
-                <div className="relative bg-white rounded-2xl border border-surface-200 shadow-soft overflow-hidden p-8 text-center">
-                  <div className="text-surface-500">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-surface-100 rounded-full flex items-center justify-center">
-                      <svg
-                        className="w-8 h-8"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm3 2h6v4H7V5zm8 8v2h1v-2h-1zm-2-2H7v4h6v-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="text-lg font-medium text-surface-900 mb-2">
-                      Video Not Available
-                    </h3>
-                    <p className="text-surface-600">
-                      This episode doesn&apos;t have an associated video.
+                )}
+
+                {/* Three takeaways */}
+                {takeaways?.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-xs font-bold uppercase tracking-widest text-stone-400">
+                      {takeaways.length === 1 ? "Key takeaway" : `${Math.min(takeaways.length, 3)} takeaways`}
                     </p>
+                    <ol className="space-y-2">
+                      {takeaways.slice(0, 3).map((t: string, i: number) => (
+                        <li key={i} className="flex items-start gap-2 text-sm text-stone-600">
+                          <span className="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center text-xs font-bold mt-0.5">
+                            {i + 1}
+                          </span>
+                          {t}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                )}
+
+                {/* Topics / mentioned */}
+                {discussionTopics?.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-xs font-bold uppercase tracking-widest text-stone-400">Discussion topics</p>
+                    <ul className="space-y-1.5">
+                      {discussionTopics.slice(0, 4).map((t: DiscussionTopic, i: number) => (
+                        <li key={i} className="flex items-start gap-2 text-sm text-stone-600">
+                          <span className="text-amber-500 mt-0.5 flex-shrink-0">→</span>
+                          {t.title || `Topic ${i + 1}`}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── Main content ── */}
+        <main className="max-w-7xl mx-auto px-6 lg:px-12 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+            {/* Main column */}
+            <div className="lg:col-span-2 space-y-10">
+
+              {/* Episode Overview */}
+              {description && (
+                <div id="overview" className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                  <div className="h-1 bg-gradient-to-r from-amber-400 to-amber-500" />
+                  <div className="p-8">
+                    <h2 className="text-xl font-bold text-stone-900 mb-4">Episode Overview</h2>
+                    <div className="space-y-4 text-stone-700 leading-relaxed">
+                      {formatDescriptionText(description).map((paragraph, i) => (
+                        <p key={i}>{paragraph}</p>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-                {/* Remove the Button that triggers handlePlayClick and displays Play/Pause Episode */}
-              </div>
-
-              {/* Jump to Section */}
-              <div className="bg-white rounded-2xl border border-surface-200 p-6 shadow-soft">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-primary/10 rounded-xl">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-primary"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 6h16M4 12h16M4 18h16"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-semibold text-surface-900">
-                    Quick Navigation
-                  </h3>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  {/* Overview is always shown if there's a description */}
-                  {description && (
-                    <Button
-                      color="primary"
-                      className="py-2 px-4 text-sm font-medium border border-surface-200 text-surface-700 bg-white rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
-                      onClick={() => {
-                        const element = document.getElementById("overview");
-                        if (element) {
-                          const headerOffset = 80;
-                          const elementPosition =
-                            element.getBoundingClientRect().top +
-                            window.pageYOffset;
-                          const offsetPosition = elementPosition - headerOffset;
-
-                          window.scrollTo({
-                            top: offsetPosition,
-                            behavior: "smooth",
-                          });
-                        }
-                      }}
-                    >
-                      Overview
-                    </Button>
-                  )}
-
-                  {/* Key Takeaways section */}
-                  {takeaways && takeaways.length > 0 && (
-                    <Button
-                      color="primary"
-                      className="py-2 px-4 text-sm font-medium border border-surface-200 text-surface-700 bg-white rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
-                      onClick={() => {
-                        const element =
-                          document.getElementById("key-takeaways");
-                        if (element) {
-                          const headerOffset = 80;
-                          const elementPosition =
-                            element.getBoundingClientRect().top +
-                            window.pageYOffset;
-                          const offsetPosition = elementPosition - headerOffset;
-
-                          window.scrollTo({
-                            top: offsetPosition,
-                            behavior: "smooth",
-                          });
-                        }
-                      }}
-                    >
-                      Key Takeaways
-                    </Button>
-                  )}
-
-                  {/* Discussion Topics section */}
-                  {discussionTopics && discussionTopics.length > 0 && (
-                    <Button
-                      color="primary"
-                      className="py-2 px-4 text-sm font-medium border border-surface-200 text-surface-700 bg-white rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
-                      onClick={() => {
-                        const element =
-                          document.getElementById("discussion-topics");
-                        if (element) {
-                          const headerOffset = 80;
-                          const elementPosition =
-                            element.getBoundingClientRect().top +
-                            window.pageYOffset;
-                          const offsetPosition = elementPosition - headerOffset;
-
-                          window.scrollTo({
-                            top: offsetPosition,
-                            behavior: "smooth",
-                          });
-                        }
-                      }}
-                    >
-                      Discussion Topics
-                    </Button>
-                  )}
-
-                  {/* Episode Highlights section */}
-                  {highlights && highlights.length > 0 && (
-                    <Button
-                      color="primary"
-                      className="py-2 px-4 text-sm font-medium border border-surface-200 text-surface-700 bg-white rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
-                      onClick={() => {
-                        const element =
-                          document.getElementById("episode-highlights");
-                        if (element) {
-                          const headerOffset = 80;
-                          const elementPosition =
-                            element.getBoundingClientRect().top +
-                            window.pageYOffset;
-                          const offsetPosition = elementPosition - headerOffset;
-
-                          window.scrollTo({
-                            top: offsetPosition,
-                            behavior: "smooth",
-                          });
-                        }
-                      }}
-                    >
-                      Episode Highlights
-                    </Button>
-                  )}
-
-                  {/* Transcript section */}
-                  {((transcript && transcript.length > 0) ||
-                    (transcriptSegments && transcriptSegments.length > 0)) && (
-                    <Button
-                      color="primary"
-                      className="py-2 px-4 text-sm font-medium border border-surface-200 text-surface-700 bg-white rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
-                      onClick={() => {
-                        const element = document.getElementById("transcript");
-                        if (element) {
-                          const headerOffset = 80;
-                          const elementPosition =
-                            element.getBoundingClientRect().top +
-                            window.pageYOffset;
-                          const offsetPosition = elementPosition - headerOffset;
-
-                          window.scrollTo({
-                            top: offsetPosition,
-                            behavior: "smooth",
-                          });
-                        }
-                      }}
-                    >
-                      Transcript
-                    </Button>
-                  )}
-
-                  {/* Featured Guest section */}
-                  {episode?.guests &&
-                    Array.isArray(episode.guests) &&
-                    episode.guests.length > 0 && (
-                      <Button
-                        color="primary"
-                        className="py-2 px-4 text-sm font-medium border border-surface-200 text-surface-700 bg-white rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
-                        onClick={() => {
-                          const element =
-                            document.getElementById("featured-guest");
-                          if (element) {
-                            const headerOffset = 80;
-                            const elementPosition =
-                              element.getBoundingClientRect().top +
-                              window.pageYOffset;
-                            const offsetPosition =
-                              elementPosition - headerOffset;
-
-                            window.scrollTo({
-                              top: offsetPosition,
-                              behavior: "smooth",
-                            });
-                          }
-                        }}
-                      >
-                        Featured Guests
-                      </Button>
-                    )}
-                </div>
-              </div>
-
-              {/* Decorative Separator */}
-              <div className="flex items-center justify-center py-8">
-                <div className="h-px bg-gradient-to-r from-transparent via-surface-300 to-transparent w-full max-w-md"></div>
-                <div className="mx-4 p-2 bg-white rounded-full border border-surface-200 shadow-soft">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                </div>
-                <div className="h-px bg-gradient-to-r from-transparent via-surface-300 to-transparent w-full max-w-md"></div>
-              </div>
-
-              {/* Episode Content Sections */}
-              <div className="space-y-12">
-                {/* Overview Section - always shown if there's a description */}
-                {description && (
-                  <div
-                    id="overview"
-                    className="relative bg-white rounded-2xl border border-surface-200 shadow-soft overflow-hidden"
-                  >
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary"></div>
-                    <div className="p-8">
-                      <div className="flex items-center gap-3 mb-6">
-                        <div className="p-3 bg-primary/10 rounded-xl">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6 text-primary"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                            />
-                          </svg>
+              {/* Key Takeaways */}
+              {takeaways?.length > 0 && (
+                <div id="key-takeaways" className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                  <div className="h-1 bg-gradient-to-r from-amber-400 to-orange-400" />
+                  <div className="p-8">
+                    <h2 className="text-xl font-bold text-stone-900 mb-5">Key Takeaways</h2>
+                    <div className="space-y-4">
+                      {takeaways.map((takeaway: string, i: number) => (
+                        <div key={i} className="flex items-start gap-4">
+                          <div className="flex-shrink-0 w-7 h-7 bg-amber-100 rounded-full flex items-center justify-center mt-0.5">
+                            <span className="text-xs font-bold text-amber-700">{i + 1}</span>
+                          </div>
+                          <p className="text-stone-700 leading-relaxed">{takeaway}</p>
                         </div>
-                        <h2 className="text-2xl font-bold text-surface-900">
-                          Episode Overview
-                        </h2>
-                      </div>
-                      <div className="space-y-4 text-surface-700 leading-relaxed text-lg">
-                        {formatDescriptionText(description).map(
-                          (paragraph, index) => (
-                            <p key={index}>{paragraph}</p>
-                          )
-                        )}
-                      </div>
+                      ))}
                     </div>
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* Key Takeaways Section */}
-                {takeaways && takeaways.length > 0 && (
-                  <div
-                    id="key-takeaways"
-                    className="relative bg-white rounded-2xl border border-surface-200 shadow-soft overflow-hidden"
-                  >
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500"></div>
-                    <div className="p-8">
-                      <div className="flex items-center gap-3 mb-6">
-                        <div className="p-3 bg-yellow-100 rounded-xl">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6 text-yellow-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                            />
-                          </svg>
+              {/* Discussion Topics */}
+              {discussionTopics?.length > 0 && (
+                <div id="discussion-topics" className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                  <div className="h-1 bg-gradient-to-r from-sky-400 to-blue-500" />
+                  <div className="p-8">
+                    <h2 className="text-xl font-bold text-stone-900 mb-5">Discussion Topics</h2>
+                    <div className="grid gap-5">
+                      {discussionTopics.map((topic: DiscussionTopic, i: number) => (
+                        <div key={i} className="border-l-4 border-sky-300 pl-5">
+                          <h3 className="font-semibold text-stone-900 mb-1">
+                            {topic.title || `Topic ${i + 1}`}
+                          </h3>
+                          {topic.description && (
+                            <p className="text-stone-600 leading-relaxed text-sm">{topic.description}</p>
+                          )}
                         </div>
-                        <h2 className="text-2xl font-bold text-surface-900">
-                          Key Takeaways
-                        </h2>
-                      </div>
-                      <div className="space-y-4">
-                        {takeaways.map((takeaway: string, index: number) => (
-                          <div key={index} className="flex items-start gap-4">
-                            <div className="flex-shrink-0 w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center mt-1">
-                              <span className="text-sm font-bold text-yellow-600">
-                                {index + 1}
-                              </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Highlights */}
+              {highlights?.length > 0 && (
+                <div id="episode-highlights" className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                  <div className="h-1 bg-gradient-to-r from-emerald-400 to-teal-500" />
+                  <div className="p-8">
+                    <h2 className="text-xl font-bold text-stone-900 mb-5">Episode Highlights</h2>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      {highlights.map((h: Highlight, i: number) => (
+                        <div key={i} className="bg-stone-50 rounded-xl p-5 border border-stone-100">
+                          <div className="flex items-start gap-3 mb-2">
+                            <div className="w-7 h-7 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                              <span className="text-xs font-bold text-emerald-700">{i + 1}</span>
                             </div>
-                            <p className="text-surface-700 text-lg leading-relaxed">
-                              {takeaway}
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <h3 className="font-semibold text-stone-900 text-sm">
+                                  {h.title || `Highlight ${i + 1}`}
+                                </h3>
+                                {h.timestamp && (
+                                  <button
+                                    onClick={() => {
+                                      if (playerRef.current && typeof h.timestamp === "string") {
+                                        const parts = h.timestamp.split(":");
+                                        let seconds = 0;
+                                        if (parts.length === 3) seconds = parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]);
+                                        else if (parts.length === 2) seconds = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+                                        else seconds = parseInt(parts[0]);
+                                        playerRef.current.seekTo(seconds, true);
+                                      }
+                                    }}
+                                    className="inline-flex items-center gap-1 bg-emerald-500 text-white text-xs font-medium rounded-md px-2 py-0.5 hover:bg-emerald-600 transition-colors"
+                                  >
+                                    <Play className="w-2.5 h-2.5 fill-current" />
+                                    {h.timestamp}
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          {h.description && (
+                            <p className="text-stone-600 text-sm leading-relaxed ml-10">
+                              {h.description}
                             </p>
-                          </div>
-                        ))}
-                      </div>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* Discussion Topics Section */}
-                {discussionTopics && discussionTopics.length > 0 && (
-                  <div
-                    id="discussion-topics"
-                    className="relative bg-white rounded-2xl border border-surface-200 shadow-soft overflow-hidden"
-                  >
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500"></div>
-                    <div className="p-8">
-                      <div className="flex items-center gap-3 mb-6">
-                        <div className="p-3 bg-blue-100 rounded-xl">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6 text-blue-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                            />
-                          </svg>
-                        </div>
-                        <h2 className="text-2xl font-bold text-surface-900">
-                          Discussion Topics
-                        </h2>
+              {/* Transcript */}
+              {((transcript && transcript.length > 0) || transcriptSegments?.length > 0) && (
+                <div id="transcript" className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                  <div className="h-1 bg-gradient-to-r from-violet-400 to-purple-500" />
+                  <div className="p-8">
+                    <h2 className="text-xl font-bold text-stone-900 mb-5">Episode Transcript</h2>
+                    <div className="bg-stone-50 rounded-xl border border-stone-200 p-6">
+                      <div className="max-h-80 overflow-y-scroll space-y-4 pr-2 transcript-scroll">
+                        <TranscriptDisplay
+                          transcript={transcript}
+                          transcriptSegments={transcriptSegments}
+                          className="transcript-content"
+                          youtubeId={episode?.youtube?.id}
+                          playerRef={playerRef}
+                          allSpeakers={episode?.allSpeakers}
+                        />
                       </div>
-                      <div className="grid gap-6">
-                        {discussionTopics.map(
-                          (topic: DiscussionTopic, index: number) => (
-                            <div
-                              key={index}
-                              className="border-l-4 border-blue-400 pl-6"
-                            >
-                              <h3 className="font-semibold text-xl text-surface-900 mb-2">
-                                {topic.title || `Topic ${index + 1}`}
-                              </h3>
-                              <p className="text-surface-700 text-lg leading-relaxed">
-                                {topic.description || ""}
-                              </p>
-                            </div>
-                          )
-                        )}
-                      </div>
+                      <p className="text-xs text-stone-400 text-center mt-4">
+                        Scroll to read more · Click timestamps to jump to specific moments
+                      </p>
                     </div>
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* Episode Highlights Section */}
-                {highlights && highlights.length > 0 && (
-                  <div
-                    id="episode-highlights"
-                    className="relative bg-white rounded-2xl border border-surface-200 shadow-soft overflow-hidden"
-                  >
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-teal-500"></div>
-                    <div className="p-8">
-                      <div className="flex items-center gap-3 mb-6">
-                        <div className="p-3 bg-green-100 rounded-xl">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6 text-green-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-                            />
-                          </svg>
-                        </div>
-                        <h2 className="text-2xl font-bold text-surface-900">
-                          Episode Highlights
-                        </h2>
-                      </div>
-                      <div className="space-y-6">
-                        {highlights.map(
-                          (highlight: Highlight, index: number) => (
-                            <div key={index} className="flex items-start gap-4">
-                              <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mt-1">
-                                <span className="text-sm font-bold text-green-600">
-                                  {index + 1}
-                                </span>
-                              </div>
-                              <div className="flex-grow flex flex-col">
-                                <div className="flex items-center gap-3 mb-2">
-                                  <h3 className="font-semibold text-xl text-surface-900">
-                                    {highlight.title ||
-                                      `Highlight ${index + 1}`}
-                                  </h3>
-                                  {highlight.timestamp && (
-                                    <button
-                                      onClick={() => {
-                                        if (
-                                          playerRef.current &&
-                                          typeof highlight.timestamp ===
-                                            "string"
-                                        ) {
-                                          // Convert timestamp to seconds
-                                          const parts =
-                                            highlight.timestamp.split(":");
-                                          let seconds = 0;
-                                          if (parts.length === 3) {
-                                            // HH:MM:SS
-                                            seconds =
-                                              parseInt(parts[0]) * 3600 +
-                                              parseInt(parts[1]) * 60 +
-                                              parseInt(parts[2]);
-                                          } else if (parts.length === 2) {
-                                            // MM:SS
-                                            seconds =
-                                              parseInt(parts[0]) * 60 +
-                                              parseInt(parts[1]);
-                                          } else if (parts.length === 1) {
-                                            // SS
-                                            seconds = parseInt(parts[0]);
-                                          }
-                                          playerRef.current.seekTo(
-                                            seconds,
-                                            true
-                                          );
-                                        }
-                                      }}
-                                      className="inline-flex items-center gap-1 bg-gradient-to-r from-green-500 to-teal-500 text-white font-medium rounded-lg px-3 py-1.5 text-sm hover:from-green-600 hover:to-teal-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
-                                    >
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="h-3 w-3"
-                                        fill="currentColor"
-                                        viewBox="0 0 24 24"
-                                      >
-                                        <path d="M8 5v14l11-7z" />
-                                      </svg>
-                                      {highlight.timestamp || "00:00"}
-                                    </button>
-                                  )}
-                                </div>
-                                <p className="text-surface-600 text-lg leading-relaxed">
-                                  {highlight.description ||
-                                    "Click the timestamp to jump to this moment in the episode"}
-                                </p>
-                              </div>
-                            </div>
-                          )
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Transcript Section */}
-                {((transcript && transcript.length > 0) ||
-                  (transcriptSegments && transcriptSegments.length > 0)) && (
-                  <div
-                    id="transcript"
-                    className="relative bg-white rounded-2xl border border-surface-200 shadow-soft overflow-hidden"
-                  >
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 to-indigo-500"></div>
-                    <div className="p-8">
-                      <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-3">
-                          <div className="p-3 bg-purple-100 rounded-xl">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-6 w-6 text-purple-600"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                              />
-                            </svg>
-                          </div>
-                          <h2 className="text-2xl font-bold text-surface-900">
-                            Episode Transcript
-                          </h2>
-                        </div>
-                        <Button
-                          color="primary"
-                          className="bg-white border-purple-300 text-purple-600 hover:bg-purple-50 hover:border-purple-400 hover:text-purple-700 transition-all duration-200"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 mr-2"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                            />
-                          </svg>
-                          View Full Transcript
-                        </Button>
-                      </div>
-
-                      <div className="bg-surface-50 rounded-xl border border-surface-200 p-6">
-                        <div className="max-h-80 overflow-y-scroll space-y-4 pr-2 transcript-scroll">
-                          <TranscriptDisplay
-                            transcript={transcript}
-                            transcriptSegments={transcriptSegments}
-                            className="transcript-content"
-                            youtubeId={episode?.youtube?.id}
-                            playerRef={playerRef}
-                            allSpeakers={episode?.allSpeakers}
-                          />
-                        </div>
-
-                        {/* Scroll indicator */}
-                        <div className="mt-4 text-center">
-                          <p className="text-xs text-surface-500 flex items-center justify-center gap-2">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-3 w-3"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                              />
-                            </svg>
-                            Scroll to read more • Click timestamps to jump to
-                            specific moments
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <Separator />
-
-              {/* Featured Guest */}
-              {episode?.guests &&
-                Array.isArray(episode.guests) &&
-                episode.guests.length > 0 && (
-                  <div
-                    id="featured-guest"
-                    className="bg-surface-100 rounded-2xl p-6"
-                  >
-                    <h2 className="text-xl font-semibold mb-4 text-surface-900">
-                      Featured Guest{episode.guests.length > 1 ? "s" : ""}
+              {/* Featured Guests */}
+              {guests.length > 0 && (
+                <div id="featured-guest" className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                  <div className="h-1 bg-gradient-to-r from-amber-400 to-rose-400" />
+                  <div className="p-8">
+                    <h2 className="text-xl font-bold text-stone-900 mb-5">
+                      Featured Guest{guests.length > 1 ? "s" : ""}
                     </h2>
-                    <div className="space-y-8">
-                      {" "}
-                      {episode.guests.map((guest, index) => {
+                    <div className="space-y-6">
+                      {guests.map((guest: any, index: number) => {
+                        const img = guest.guestProfile?.profileImage || guest.image;
                         return (
-                          <div
-                            key={guest._id || index}
-                            className="flex flex-col sm:flex-row gap-4 items-start sm:items-center"
-                          >
-                            <Avatar className="h-20 w-20">
-                              {guest.guestProfile?.profileImage ? (
+                          <div key={guest._id || index} className="flex gap-5 items-start">
+                            <Avatar className="h-16 w-16 border border-stone-200 flex-shrink-0">
+                              {img ? (
                                 <AvatarImage
-                                  src={urlFor(guest.guestProfile.profileImage)
-                                    .width(160)
-                                    .height(160)
-                                    .url()}
-                                  alt={guest.name || "Guest"}
-                                />
-                              ) : guest.image ? (
-                                <AvatarImage
-                                  src={urlFor(guest.image)
-                                    .width(160)
-                                    .height(160)
-                                    .url()}
+                                  src={urlFor(img).width(128).height(128).url()}
                                   alt={guest.name || "Guest"}
                                 />
                               ) : (
-                                <AvatarImage
-                                  src="/placeholder.svg?height=80&width=80"
-                                  alt={guest.name || "Guest"}
-                                />
+                                <AvatarFallback className="bg-amber-100 text-amber-700 font-semibold">
+                                  {guest.name ? guest.name.substring(0, 2).toUpperCase() : "GU"}
+                                </AvatarFallback>
                               )}
-                              <AvatarFallback>
-                                {guest.name
-                                  ? guest.name.substring(0, 2).toUpperCase()
-                                  : "GU"}
-                              </AvatarFallback>
                             </Avatar>
-                            <div>
-                              <h3 className="text-lg font-semibold text-surface-900">
-                                {guest.name || "Guest Name"}
-                              </h3>
+                            <div className="flex-1">
+                              <h3 className="text-lg font-semibold text-stone-900">{guest.name || "Guest Name"}</h3>
                               {(guest.guestProfile?.title || guest.title) && (
-                                <p className="text-sm text-surface-500 mb-2">
+                                <p className="text-sm text-stone-500 mb-2">
                                   {guest.guestProfile?.title || guest.title}
                                 </p>
                               )}
                               {(guest.guestProfile?.bio || guest.about) && (
-                                <p className="text-sm text-surface-500 mb-4">
+                                <p className="text-sm text-stone-600 leading-relaxed mb-3">
                                   {guest.guestProfile?.bio || guest.about}
                                 </p>
                               )}
-                              <div className="flex gap-2">
-                                {guest.slug && guest.slug.current && (
-                                  <Link
-                                    href={`/guest/${encodeURIComponent(guest.slug.current)}`}
-                                  >
-                                    <Button
-                                      color="primary"
-                                      className="flex items-center gap-1 px-4 py-2 bg-primary text-white hover:bg-primary-dark rounded-xl transition-all text-sm font-medium"
-                                    >
-                                      More Details
-                                    </Button>
-                                  </Link>
-                                )}
-                              </div>
+                              {guest.slug?.current && (
+                                <Link href={`/guest/${encodeURIComponent(guest.slug.current)}`}>
+                                  <button className="text-sm font-semibold text-amber-600 hover:text-amber-700 flex items-center gap-1 transition-colors">
+                                    View profile <ArrowRight className="w-3.5 h-3.5" />
+                                  </button>
+                                </Link>
+                              )}
                             </div>
                           </div>
                         );
                       })}
                     </div>
                   </div>
-                )}
+                </div>
+              )}
+
+              <Separator />
+
+              {/* Related Episodes */}
+              {data.relatedEpisodes && (
+                <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-8">
+                  <h3 className="text-xl font-bold text-stone-900 mb-6">More episodes you&apos;ll enjoy</h3>
+                  <RelatedEpisodes
+                    uuid={uuid}
+                    relatedEpisodes={Array.isArray(data.relatedEpisodes) ? data.relatedEpisodes : []}
+                  />
+                </div>
+              )}
             </div>
 
-            {/* Sidebar */}
-            <div className="space-y-8">
-              {/* Subscribe Card */}
-              <div className="relative bg-white rounded-2xl border border-surface-200 shadow-medium overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary"></div>
-                <div className="p-8">
-                  <div className="text-center mb-6">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-2xl mb-4">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8 text-primary"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15.536 7.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M9.879 9.879a3 3 0 000 4.242M6.343 6.343a7 7 0 000 10.314m8.485 0a7 7 0 000-10.314"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="text-2xl font-bold text-surface-900 mb-2">
-                      Subscribe to our Podcast
-                    </h3>
-                    <p className="text-surface-600">
-                      Never miss an episode and get insights directly from
-                      business leaders
-                    </p>
-                  </div>
+            {/* ── Sidebar ── */}
+            <div className="space-y-6">
 
-                  <SubscribeForm />
+              {/* Subscribe CTA */}
+              <SubscribeCTA />
 
-                  <div className="mt-8 pt-6 border-t border-surface-100">
-                    <p className="text-sm font-semibold text-surface-900 mb-4 text-center">
-                      Also available on:
-                    </p>
-                    <div className="grid grid-cols-1 gap-3">
-                      <Link
-                        href="https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Button
-                          color="primary"
-                          className="flex items-center justify-center gap-3 w-full bg-gray-900 text-white hover:bg-gray-800 font-medium py-3 transition-all"
-                        >
-                          <div className="w-5 h-5 bg-gray-900 rounded flex items-center justify-center">
-                            <Image
-                              src="/social-logos/apple.png"
-                              alt="Apple Podcasts"
-                              width={16}
-                              height={16}
-                              className="brightness-0 invert"
-                            />
-                          </div>
-                          Apple Podcasts
-                        </Button>
-                      </Link>
-                      <Link
-                        href="https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Button
-                          color="primary"
-                          className="flex items-center justify-center gap-3 w-full bg-green-500 text-white hover:bg-green-600 font-medium py-3 transition-all"
-                        >
-                          <div className="w-5 h-5 bg-green-500 rounded flex items-center justify-center">
-                            <Image
-                              src="/social-logos/spotify.png"
-                              alt="Spotify"
-                              width={16}
-                              height={16}
-                              className="brightness-0 invert"
-                            />
-                          </div>
-                          Spotify
-                        </Button>
-                      </Link>
-                      <Link
-                        href={routes.external.listen}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Button
-                          color="primary"
-                          className="flex items-center justify-center gap-3 w-full bg-orange-500 text-white hover:bg-orange-600 font-medium py-3 transition-all"
-                        >
-                          <div className="w-5 h-5 bg-orange-500 rounded flex items-center justify-center">
-                            <Image
-                              src="/social-logos/buzzsprout.png"
-                              alt="Buzzsprout"
-                              width={16}
-                              height={16}
-                              className="brightness-0 invert"
-                            />
-                          </div>
-                          Buzzsprout
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Sponsors Card - only shown if sponsors exist */}
-              {sponsors && sponsors.length > 0 && (
-                <div className="relative bg-white rounded-2xl border border-surface-200 shadow-medium overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-blue-500"></div>
-                  <div className="p-8">
-                    <div className="text-center mb-6">
-                      <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-green-100 to-blue-100 rounded-xl mb-4">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-7 w-7 text-green-600"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                          />
-                        </svg>
-                      </div>
-                      <h3 className="text-2xl font-bold text-surface-900 mb-2">
-                        Our Sponsors
-                      </h3>
-                      <p className="text-surface-600 text-sm">
-                        Supporting great content and community
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
-                      {sponsors.map((sponsor: any, index: number) => (
-                        <div
-                          key={
-                            sponsor._id || sponsor.uuid || sponsor.name || index
-                          }
-                          className="group relative flex-shrink-0"
-                        >
-                          {/* Sponsor Link Wrapper */}
-                          {sponsor.slug?.current ||
-                          sponsor.uuid ||
-                          sponsor.website ? (
+              {/* Sponsors */}
+              {sponsors?.length > 0 && (
+                <div className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                  <div className="h-1 bg-gradient-to-r from-emerald-400 to-sky-500" />
+                  <div className="p-6">
+                    <h3 className="text-sm font-bold text-stone-900 mb-4">Episode Sponsors</h3>
+                    <div className="flex flex-wrap items-center gap-4">
+                      {sponsors.map((sponsor: any, i: number) => (
+                        <div key={sponsor._id || sponsor.uuid || i} className="group relative">
+                          {sponsor.slug?.current || sponsor.uuid || sponsor.website ? (
                             <Link
                               href={
                                 sponsor.slug?.current
@@ -1255,169 +652,72 @@ export default function EpisodeDetails({ data }: { data: SanityDocument }) {
                                     : sponsor.website
                               }
                               target={sponsor.website ? "_blank" : undefined}
-                              rel={
-                                sponsor.website
-                                  ? "noopener noreferrer"
-                                  : undefined
-                              }
-                              className="block transition-all duration-300 hover:scale-105 relative"
+                              rel={sponsor.website ? "noopener noreferrer" : undefined}
+                              className="flex flex-col items-center"
                             >
-                              {/* External Link Indicator */}
-                              {sponsor.website && (
-                                <div className="absolute -top-1 -right-1 z-10 w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                  <ExternalLink
-                                    size={10}
-                                    className="text-white"
-                                  />
-                                </div>
-                              )}
-                              <div className="flex flex-col items-center text-center">
-                                {/* Logo Container */}
-                                <div className="w-28 h-20 sm:w-36 sm:h-24 relative rounded-xl overflow-hidden border border-surface-200 bg-white flex items-center justify-center shadow-soft group-hover:shadow-medium transition-shadow duration-300">
-                                  <Image
-                                    src={
-                                      sponsor.logo
-                                        ? urlForImage(sponsor.logo)
-                                            ?.width(250)
-                                            .height(150)
-                                            .url()
-                                        : sponsor.image ||
-                                          "/placeholder-logo.png"
-                                    }
-                                    alt={`${sponsor.name} logo`}
-                                    width={120}
-                                    height={80}
-                                    className="object-contain p-3 max-w-full max-h-full"
-                                    sizes="(max-width: 640px) 112px, 144px"
-                                  />
-                                </div>
-
-                                {/* Sponsor Name - Always Visible */}
-                                <h4 className="mt-2 sm:mt-3 text-xs sm:text-sm font-medium text-surface-900 transition-colors duration-300 max-w-[112px] sm:max-w-[144px] truncate">
-                                  {sponsor.name}
-                                </h4>
-
-                                {/* Tier Badge */}
-                                {sponsor.tier && (
-                                  <span
-                                    className={`mt-1 inline-block px-1.5 py-0.5 sm:px-2 sm:py-1 text-xs font-medium rounded-full ${
-                                      sponsor.tier === "platinum"
-                                        ? "bg-gray-800 text-white"
-                                        : sponsor.tier === "gold"
-                                          ? "bg-yellow-500 text-white"
-                                          : sponsor.tier === "silver"
-                                            ? "bg-gray-400 text-white"
-                                            : sponsor.tier === "bronze"
-                                              ? "bg-orange-600 text-white"
-                                              : "bg-gray-200 text-gray-700"
-                                    }`}
-                                  >
-                                    {sponsor.tier}
-                                  </span>
-                                )}
-                              </div>
-                            </Link>
-                          ) : (
-                            /* Non-clickable sponsor */
-                            <div className="flex flex-col items-center text-center">
-                              <div className="w-28 h-20 sm:w-36 sm:h-24 relative rounded-xl overflow-hidden border border-surface-200 bg-white flex items-center justify-center shadow-soft">
+                              <div className="w-24 h-16 relative rounded-xl overflow-hidden border border-stone-200 bg-white flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
                                 <Image
-                                  src={
-                                    sponsor.logo
-                                      ? urlForImage(sponsor.logo)
-                                          ?.width(250)
-                                          .height(150)
-                                          .url()
-                                      : sponsor.image || "/placeholder-logo.png"
-                                  }
+                                  src={sponsor.logo ? urlForImage(sponsor.logo)?.width(200).height(120).url() : sponsor.image || "/placeholder-logo.png"}
                                   alt={`${sponsor.name} logo`}
-                                  width={120}
-                                  height={80}
-                                  className="object-contain p-3 max-w-full max-h-full"
-                                  sizes="(max-width: 640px) 112px, 144px"
+                                  width={90}
+                                  height={60}
+                                  className="object-contain p-2 max-w-full max-h-full"
                                 />
                               </div>
-
-                              <h4 className="mt-2 sm:mt-3 text-xs sm:text-sm font-medium text-surface-900 max-w-[112px] sm:max-w-[144px] truncate">
-                                {sponsor.name}
-                              </h4>
-
-                              {sponsor.tier && (
-                                <span
-                                  className={`mt-1 inline-block px-1.5 py-0.5 sm:px-2 sm:py-1 text-xs font-medium rounded-full ${
-                                    sponsor.tier === "platinum"
-                                      ? "bg-gray-800 text-white"
-                                      : sponsor.tier === "gold"
-                                        ? "bg-yellow-500 text-white"
-                                        : sponsor.tier === "silver"
-                                          ? "bg-gray-400 text-white"
-                                          : sponsor.tier === "bronze"
-                                            ? "bg-orange-600 text-white"
-                                            : "bg-gray-200 text-gray-700"
-                                  }`}
-                                >
-                                  {sponsor.tier}
-                                </span>
-                              )}
+                              <span className="mt-1.5 text-xs font-medium text-stone-600 truncate max-w-[96px]">{sponsor.name}</span>
+                            </Link>
+                          ) : (
+                            <div className="flex flex-col items-center">
+                              <div className="w-24 h-16 relative rounded-xl overflow-hidden border border-stone-200 bg-white flex items-center justify-center shadow-sm">
+                                <Image
+                                  src={sponsor.logo ? urlForImage(sponsor.logo)?.width(200).height(120).url() : sponsor.image || "/placeholder-logo.png"}
+                                  alt={`${sponsor.name} logo`}
+                                  width={90}
+                                  height={60}
+                                  className="object-contain p-2 max-w-full max-h-full"
+                                />
+                              </div>
+                              <span className="mt-1.5 text-xs font-medium text-stone-600 truncate max-w-[96px]">{sponsor.name}</span>
                             </div>
                           )}
                         </div>
                       ))}
                     </div>
-
-                    {/* Support Message */}
-                    <div className="mt-8 pt-6 border-t border-surface-100 text-center">
-                      <p className="text-sm text-surface-600 mb-2">
-                        Special thanks to our sponsors who help make this
-                        podcast possible
-                      </p>
-                      {sponsors.some(
-                        (s) => s.website || s.slug?.current || s.uuid
-                      ) && (
-                        <p className="text-xs text-surface-500">
-                          Click on sponsor logos to learn more about them
-                        </p>
-                      )}
-                    </div>
+                    <p className="text-xs text-stone-400 mt-4">
+                      Thanks to our sponsors for supporting this show
+                    </p>
                   </div>
                 </div>
               )}
 
-              {/* Related Episodes */}
-              {data.relatedEpisodes && (
-                <div className="bg-white rounded-2xl border border-surface-200 shadow-medium overflow-hidden p-8 mt-12">
-                  <div className="text-center mb-6">
-                    <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl mb-4">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-7 w-7 text-purple-600"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="text-2xl font-bold text-surface-900 mb-2">
-                      Related Episodes
-                    </h3>
-                    <p className="text-surface-600 text-sm">
-                      More episodes you might enjoy
-                    </p>
+              {/* All guests sidebar card */}
+              {guests.length > 1 && (
+                <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-6">
+                  <h3 className="text-sm font-bold text-stone-900 mb-4">Guests in this episode</h3>
+                  <div className="space-y-3">
+                    {guests.map((guest: any, i: number) => {
+                      const img = guest.guestProfile?.profileImage || guest.image;
+                      return (
+                        <div key={guest._id || i} className="flex items-center gap-3">
+                          <Avatar className="h-9 w-9 border border-stone-200">
+                            {img ? (
+                              <AvatarImage src={urlFor(img).width(72).height(72).url()} alt={guest.name} />
+                            ) : (
+                              <AvatarFallback className="bg-amber-100 text-amber-700 text-xs font-semibold">
+                                {guest.name?.substring(0, 2).toUpperCase() || "GU"}
+                              </AvatarFallback>
+                            )}
+                          </Avatar>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold text-stone-900 truncate">{guest.name}</p>
+                            <p className="text-xs text-stone-500 truncate">
+                              {guest.guestProfile?.title || guest.title || ""}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                  <RelatedEpisodes
-                    uuid={uuid}
-                    relatedEpisodes={
-                      Array.isArray(data.relatedEpisodes)
-                        ? data.relatedEpisodes
-                        : []
-                    }
-                  />
                 </div>
               )}
             </div>

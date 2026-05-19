@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ThumbnailImage } from "@/src/components/ui/thumbnail-image";
 import { Button } from "@/src/components/ui/button";
 import Link from "next/link";
 import { urlFor } from "@/src/lib/utils";
@@ -45,7 +45,7 @@ export default function RelatedEpisodes({
           youtube.episodeNumber || episode.episodeNumber || "?";
 
         // Handle image/thumbnail with special consideration for Sanity image objects
-        let thumbnailUrl = "/placeholder.svg";
+        let thumbnailUrl = "/images/logo.webp";
         if (youtube.thumbnail) {
           thumbnailUrl = youtube.thumbnail;
         } else if (episode.image) {
@@ -64,7 +64,7 @@ export default function RelatedEpisodes({
 
         return (
           <div key={episodeId || index} className="flex gap-3">
-            <Image
+            <ThumbnailImage
               src={thumbnailUrl}
               alt={title}
               width={80}

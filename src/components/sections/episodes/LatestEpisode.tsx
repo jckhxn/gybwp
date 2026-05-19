@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { ThumbnailImage } from "@/src/components/ui/thumbnail-image";
 import Link from "next/link";
 import { ScrollToSection } from "@/src/components/shared/ScrollToSection";
 import { client } from "@/src/lib/sanity-utils";
@@ -65,9 +66,6 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
   const [latestEpisode, setLatestEpisode] = useState<Episode | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const {
     title = "Featured Episode",
@@ -77,43 +75,6 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
     primaryButton = { text: "Listen Now", componentLink: null },
     secondaryButton = { text: "Show Notes", componentLink: null },
   } = section;
-
-  // Helper function to generate YouTube embed URL
-  const getYouTubeEmbedUrl = (
-    videoId: string,
-    muted: boolean = true
-  ): string => {
-    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=${muted ? 1 : 0}&controls=0&modestbranding=1&rel=0&showinfo=0&loop=1&playlist=${videoId}`;
-  };
-
-  // Hover handlers - immediate on enter, delayed on leave
-  const handleMouseEnter = useCallback(() => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
-    }
-    setIsHovered(true);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-    }
-    hoverTimeoutRef.current = setTimeout(() => {
-      setIsHovered(false);
-      setIsMuted(true); // Reset mute state when leaving
-      hoverTimeoutRef.current = null;
-    }, 150);
-  }, []);
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-      }
-    };
-  }, []);
 
   useEffect(() => {
     const fetchLatestEpisode = async () => {
@@ -286,9 +247,7 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
 
   // Helper: get thumbnail
   const getThumbnail = (episode: any) => {
-    return (
-      episode.image || episode.youtube?.thumbnail || "/images/placeholder.svg"
-    );
+    return episode.image || episode.youtube?.thumbnail || "/images/logo.webp";
   };
 
   // Helper: get episode link
@@ -488,8 +447,6 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative group"
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
             >
               {/* Main image container */}
               <div className="relative aspect-square max-w-lg mx-auto">
@@ -499,113 +456,30 @@ export function LatestEpisode({ section }: LatestEpisodeProps) {
 
                 {/* Episode image/video container */}
                 <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl group-hover:shadow-3xl transition-all duration-500">
-                  {/* Static thumbnail */}
-                  <Image
+                  <ThumbnailImage
                     src={getThumbnail(latestEpisode)}
                     alt={latestEpisode.title || "Featured episode thumbnail"}
                     fill
-                    className={`object-cover transition-all duration-500 ${
-                      isHovered && latestEpisode.youtube?.id
-                        ? "opacity-0"
-                        : "opacity-100 group-hover:scale-105"
-                    }`}
+                    className="object-cover transition-all duration-500 opacity-100 group-hover:scale-105"
                     priority
                   />
-
-                  {/* YouTube video iframe - only render when hovered */}
-                  {isHovered && latestEpisode.youtube?.id && (
-                    <>
-                      <iframe
-                        key={`video-${latestEpisode._id}-${isMuted ? "muted" : "unmuted"}`}
-                        src={getYouTubeEmbedUrl(
-                          latestEpisode.youtube.id,
-                          isMuted
-                        )}
-                        className="absolute inset-0 w-full h-full transition-opacity duration-500 opacity-100 pointer-events-none"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        title={`${latestEpisode.title || "Episode"} - Video Preview`}
-                        aria-label={`Auto-playing video preview for ${latestEpisode.title}`}
-                      />
-
-                      {/* Unmute/Mute button */}
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIsMuted(!isMuted);
-                        }}
-                        className="absolute top-4 right-4 z-30 bg-black/70 hover:bg-black/90 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-200 hover:scale-110 shadow-lg"
-                        aria-label={isMuted ? "Unmute video" : "Mute video"}
-                      >
-                        {isMuted ? (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M11 5 6 9H2v6h4l5 4z" />
-                            <line x1="22" x2="16" y1="9" y2="15" />
-                            <line x1="16" x2="22" y1="9" y2="15" />
-                          </svg>
-                        ) : (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M11 5 6 9H2v6h4l5 4z" />
-                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-                          </svg>
-                        )}
-                      </button>
-                    </>
-                  )}
 
                   {/* Overlay gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-                  {/* Play button overlay - only show when not playing video */}
-                  {!(isHovered && latestEpisode.youtube?.id) && (
-                    <Link
-                      href={getEpisodeLink(latestEpisode)}
-                      aria-label="Listen to featured episode"
-                      className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
-                    >
-                      <div className="w-20 h-20 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-2xl border-4 border-white/20 transition-all duration-300 hover:scale-110 hover:bg-white">
-                        <Play
-                          className="w-8 h-8 text-primary ml-1"
-                          fill="currentColor"
-                        />
-                      </div>
-                    </Link>
-                  )}
-
-                  {/* View Details link when video is playing */}
-                  {isHovered && latestEpisode.youtube?.id && (
-                    <Link
-                      href={getEpisodeLink(latestEpisode)}
-                      className="absolute bottom-4 left-4 right-4 z-20 bg-black/60 hover:bg-black/80 backdrop-blur-sm text-white py-3 px-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 font-medium"
-                    >
-                      <Play className="w-4 h-4" fill="currentColor" />
-                      View Full Episode
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  )}
+                  {/* Play button overlay */}
+                  <Link
+                    href={getEpisodeLink(latestEpisode)}
+                    aria-label="Listen to featured episode"
+                    className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
+                  >
+                    <div className="w-20 h-20 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-2xl border-4 border-white/20 transition-all duration-300 hover:scale-110 hover:bg-white">
+                      <Play
+                        className="w-8 h-8 text-primary ml-1"
+                        fill="currentColor"
+                      />
+                    </div>
+                  </Link>
                 </div>
 
                 {/* Episode number badge */}
