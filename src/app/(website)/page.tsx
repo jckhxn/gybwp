@@ -11,7 +11,8 @@ export default async function IndexRoute() {
   const host = (await headers()).get("host")?.split(":")[0];
   const isLocalHost = host === "localhost" || host === "127.0.0.1" || host === "::1";
 
-  if (settings?.maintenanceMode || (settings?.maintenanceModeLocalhost && isLocalHost)) {
+  const bypassMaintenance = process.env.DISABLE_MAINTENANCE === "true";
+  if (!bypassMaintenance && (settings?.maintenanceMode || (settings?.maintenanceModeLocalhost && isLocalHost))) {
     const maintenanceData = await loadMaintenancePage();
     return <MaintenancePage data={maintenanceData} />;
   }
