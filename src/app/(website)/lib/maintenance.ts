@@ -7,6 +7,8 @@ import { headers } from "next/headers";
  * Redirects to / if maintenance mode is enabled.
  */
 export async function checkMaintenanceMode() {
+  if (process.env.DISABLE_MAINTENANCE === "true") return;
+
   const settings = await loadSiteSettings();
   if (!settings) return;
 
