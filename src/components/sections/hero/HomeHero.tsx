@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Play, ArrowRight, Star } from "lucide-react";
+import { Play, ArrowRight, Headphones, Quote } from "lucide-react";
 import heroImage from "@/public/images/main-page-hero.webp";
 import { HomeHeroSection } from "@/types";
 import { SmartButton } from "@/src/components/ui/SmartButton";
@@ -12,6 +12,7 @@ import {
   getHeroImageUrl,
 } from "@/src/lib/imageUrlClient";
 import { getComponentId } from "@/src/lib/sectionId";
+import { FeaturedGuests } from "@/src/components/sections/shared/FeaturedGuests";
 
 interface HomeHeroProps {
   section: HomeHeroSection;
@@ -25,9 +26,9 @@ export function HomeHero({ section }: HomeHeroProps) {
     subtitle = "Growing Your Business With People",
     description = "One conversation, every Tuesday. No script, no slides. Just operators sharing what actually worked — and what didn't.",
     badgeText = "New episode every Tuesday",
-    primaryButton = { text: "Start with Episode 1", link: "/episodes" },
+    primaryButton = { text: "Start Listening", link: "/episodes" },
     secondaryButton = { text: "Browse all episodes", link: "/episodes" },
-    platformsHeading = "Listen on:",
+    platformsHeading = "Listen free on:",
     platforms,
     hostBadge,
     backgroundImage,
@@ -58,161 +59,228 @@ export function HomeHero({ section }: HomeHeroProps) {
   };
 
   return (
+    <>
     <section
       id={componentId}
       className="relative w-full bg-amber-50 overflow-hidden"
     >
-      {/* Subtle warm texture overlay */}
-      <div className="absolute inset-0 opacity-[0.015] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-900 via-transparent to-transparent pointer-events-none" />
+      {/* Warm background texture */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-200/30 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-orange-100/40 rounded-full blur-3xl -translate-x-1/4 translate-y-1/4" />
+      </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16 lg:py-24">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
+
+        {/* ── Top bar: show label + platforms ── */}
+        <div className="flex items-center justify-between py-6 border-b border-amber-200/60">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+            <span className="text-sm font-semibold text-amber-700 tracking-wide">{badgeText}</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-2">
+            <span className="text-xs text-stone-400 font-medium">{platformsHeading}</span>
+            {safePlatforms.map((platform, i) => (
+              <Link
+                key={i}
+                href={platform.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={platform.name}
+                className="w-7 h-7 bg-white rounded-lg border border-stone-200 flex items-center justify-center shadow-sm hover:shadow-md hover:scale-105 transition-all"
+              >
+                <Image
+                  src={platform.logoImage ? getImageUrlClient(platform.logoImage, { width: 48, height: 48, quality: 100 }) : "/social-logos/default.png"}
+                  alt={platform.name}
+                  width={16}
+                  height={16}
+                  className="object-contain"
+                />
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Main hero ── */}
+        <div className="grid lg:grid-cols-[1fr_460px] gap-10 lg:gap-14 items-center py-10 lg:py-14">
 
           {/* Left: Content */}
-          <div className="flex flex-col gap-6 order-2 lg:order-1">
-            {/* Host greeting */}
-            <p className="text-sm font-semibold uppercase tracking-widest text-amber-700">
-              {badgeText}
-            </p>
+          <div className="flex flex-col gap-7 order-2 lg:order-1">
 
-            {/* Main headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[3.25rem] font-bold text-stone-900 leading-[1.1] tracking-tight">
-              {title}
-            </h1>
+            {/* Personal intro */}
+            <div>
+              <p className="text-sm font-semibold text-amber-600 mb-3 tracking-wide uppercase">
+                {subtitle}
+              </p>
+              <h1 className="text-4xl sm:text-5xl lg:text-[3.25rem] font-bold text-stone-900 leading-[1.1] tracking-tight">
+                {title}
+              </h1>
+            </div>
 
-            {/* Description */}
-            <p className="text-lg text-stone-600 leading-relaxed max-w-lg">
-              {description}
-            </p>
+            {/* Personal note from host */}
+            <div className="relative pl-5 border-l-4 border-amber-300">
+              <p className="text-lg text-stone-600 leading-relaxed">
+                {description}
+              </p>
+              <p className="text-sm text-stone-500 mt-2 italic">
+                — {safeHostBadge.name}, {safeHostBadge.title}
+              </p>
+            </div>
+
+            {/* What you'll get */}
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { label: "Real operator stories" },
+                { label: "Lessons you can use Monday" },
+                { label: "New episode every Tuesday" },
+              ].map(({ label }) => (
+                <div key={label} className="bg-white/80 rounded-2xl border border-amber-100 px-3 py-3.5 text-center shadow-sm">
+                  <div className="w-1.5 h-1.5 rounded-full bg-amber-400 mx-auto mb-2" />
+                  <p className="text-xs font-semibold text-stone-700 leading-tight">{label}</p>
+                </div>
+              ))}
+            </div>
 
             {/* CTAs */}
-            <div className="flex flex-wrap gap-3 pt-2">
+            <div className="flex flex-wrap gap-3">
               <SmartButton
                 data={primaryButton}
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-stone-900 text-white font-semibold rounded-xl
-                           transition-all duration-200 hover:bg-stone-800 hover:-translate-y-0.5 shadow-md hover:shadow-lg"
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 bg-stone-900 text-white font-semibold rounded-2xl
+                           transition-all duration-200 hover:bg-stone-800 hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
               >
-                <Play className="w-4 h-4 fill-current" />
+                <div className="w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Play className="w-3 h-3 fill-white text-white" />
+                </div>
                 <span>{primaryButton.text}</span>
               </SmartButton>
 
               {secondaryButton && (
                 <SmartButton
                   data={secondaryButton}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-transparent text-stone-900 font-semibold rounded-xl
-                             border-2 border-stone-300 transition-all duration-200 hover:border-stone-400 hover:bg-stone-100 hover:-translate-y-0.5"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 text-stone-700 font-semibold rounded-2xl
+                             border-2 border-stone-200 bg-white/80 hover:bg-white hover:border-stone-300 transition-all duration-200 hover:-translate-y-0.5 shadow-sm"
                 >
+                  <Headphones className="w-4 h-4 text-stone-500" />
                   <span>{secondaryButton.text}</span>
-                  <ArrowRight className="w-4 h-4" />
                 </SmartButton>
               )}
             </div>
 
-            {/* Social proof */}
-            <div className="flex items-center gap-2 pt-1">
-              <div className="flex items-center gap-0.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                ))}
+            {/* Social proof — listener quote */}
+            <div className="bg-white/70 rounded-2xl border border-amber-100 p-4 flex gap-3 items-start max-w-md shadow-sm">
+              <Quote className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm text-stone-700 leading-relaxed italic">
+                  "This show changed how I think about hiring. Jeff asks the questions I actually want answered."
+                </p>
+                <p className="text-xs text-stone-400 font-semibold mt-1.5">— Apple Podcasts listener · ★★★★★</p>
               </div>
-              <span className="text-sm text-stone-500 font-medium">
-                4.9 · 612 reviews on Apple Podcasts
-              </span>
             </div>
 
-            {/* Platforms */}
-            {safePlatforms.length > 0 && (
-              <div className="pt-2">
-                <p className="text-xs text-stone-400 mb-3 uppercase tracking-wider font-semibold">
-                  {platformsHeading}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {safePlatforms.map((platform, index) => (
-                    <Link
-                      key={index}
-                      href={platform.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center gap-2 px-3.5 py-2 bg-white hover:bg-stone-50
-                                 border border-stone-200 hover:border-stone-300 rounded-xl
-                                 transition-all duration-200 shadow-sm"
-                    >
-                      <Image
-                        src={
-                          platform.logoImage
-                            ? getImageUrlClient(platform.logoImage, {
-                                width: 48,
-                                height: 48,
-                                quality: 100,
-                              })
-                            : "/social-logos/default.png"
-                        }
-                        alt={platform.name}
-                        width={18}
-                        height={18}
-                        className="w-4.5 h-4.5 object-contain"
-                      />
-                      <span className="text-xs font-semibold text-stone-600 group-hover:text-stone-900 transition-colors">
-                        {platform.name}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
+            {/* Platform links (mobile) */}
+            <div className="sm:hidden">
+              <p className="text-xs text-stone-400 mb-2.5 font-medium uppercase tracking-wider">{platformsHeading}</p>
+              <div className="flex flex-wrap gap-2">
+                {safePlatforms.map((platform, i) => (
+                  <Link
+                    key={i}
+                    href={platform.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-2 bg-white border border-stone-200 rounded-xl text-xs font-semibold text-stone-600 hover:bg-stone-50 shadow-sm transition-all"
+                  >
+                    <Image
+                      src={platform.logoImage ? getImageUrlClient(platform.logoImage, { width: 32, height: 32, quality: 100 }) : "/social-logos/default.png"}
+                      alt={platform.name}
+                      width={14}
+                      height={14}
+                      className="object-contain"
+                    />
+                    {platform.name}
+                  </Link>
+                ))}
               </div>
-            )}
+            </div>
           </div>
 
           {/* Right: Host portrait */}
-          <div className="relative order-1 lg:order-2 flex justify-center lg:justify-end">
-            {/* Warm background circle */}
-            <div className="absolute inset-0 -top-8 -bottom-8 flex items-center justify-center">
-              <div className="w-[420px] h-[420px] bg-amber-100 rounded-full opacity-70" />
+          <div className="relative order-1 lg:order-2 flex justify-center">
+            {/* Warm blob behind photo */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-[380px] h-[380px] bg-gradient-to-br from-amber-200 to-orange-100 rounded-full opacity-60 blur-sm" />
             </div>
 
-            {/* Portrait frame */}
-            <div className="relative z-10 rounded-2xl overflow-hidden shadow-xl border-2 border-stone-200/60 max-w-sm w-full aspect-square lg:aspect-auto lg:h-[480px]">
-              <Image
-                alt={safeHostBadge.name ?? "Host"}
-                className="object-cover w-full h-full"
-                fill
-                src={
-                  (backgroundImage
-                    ? getHeroImageUrl(backgroundImage, 900)
-                    : null) ?? heroImage
-                }
-                sizes="(max-width: 1024px) 80vw, 420px"
-                priority
-                quality={95}
-              />
-              {/* Subtle bottom gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/20 via-transparent to-transparent" />
-            </div>
+            {/* Portrait */}
+            <div className="relative z-10 w-full max-w-[400px]">
+              <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white aspect-[4/5] lg:h-[520px] relative">
+                <Image
+                  alt={safeHostBadge.name ?? "Host"}
+                  className="object-cover w-full h-full"
+                  fill
+                  src={(backgroundImage ? getHeroImageUrl(backgroundImage, 900) : null) ?? heroImage}
+                  sizes="(max-width: 1024px) 80vw, 460px"
+                  priority
+                  quality={95}
+                />
+                {/* Warm gradient overlay at bottom */}
+                <div className="absolute inset-0 bg-gradient-to-t from-amber-900/30 via-transparent to-transparent" />
+              </div>
 
-            {/* Host name badge — bottom-left of image */}
-            <div className="absolute bottom-4 -left-4 z-20 bg-white rounded-xl px-4 py-3 shadow-lg border border-stone-100">
-              <p className="text-xs text-stone-400 uppercase tracking-wider font-semibold mb-0.5">
-                {safeHostBadge.label}
-              </p>
-              <p className="text-sm font-bold text-stone-900 leading-tight">
-                {safeHostBadge.name}
-              </p>
-              <p className="text-xs text-stone-500">
-                {safeHostBadge.title}
-              </p>
-            </div>
+              {/* Host name card — overlapping bottom-left */}
+              <div className="absolute -bottom-4 -left-4 z-20 bg-white rounded-2xl px-4 py-3 shadow-xl border border-stone-100">
+                <p className="text-[10px] text-amber-600 uppercase tracking-widest font-bold mb-0.5">{safeHostBadge.label}</p>
+                <p className="text-sm font-bold text-stone-900 leading-tight">{safeHostBadge.name}</p>
+                <p className="text-xs text-stone-500">{safeHostBadge.title}</p>
+              </div>
 
-            {/* "New episode" sticker — top-right */}
-            <div
-              className="absolute -top-4 -right-2 z-20 bg-amber-500 text-white rounded-full w-20 h-20 flex items-center justify-center text-center shadow-lg"
-              style={{ transform: "rotate(-6deg)" }}
-            >
-              <span className="text-[11px] font-bold leading-tight px-2">
-                New ep<br />every Tue!
-              </span>
+              {/* Episode count sticker — top-right */}
+              <div
+                className="absolute -top-3 -right-3 z-20 bg-amber-500 text-white rounded-full w-[72px] h-[72px] flex items-center justify-center text-center shadow-lg border-4 border-amber-50"
+                style={{ transform: "rotate(-8deg)" }}
+              >
+                <span className="text-[10px] font-extrabold leading-tight px-1">
+                  New ep<br />Tuesdays!
+                </span>
+              </div>
+
+              {/* Floating review card — upper left */}
+              <div className="absolute -left-8 top-8 z-20 bg-white rounded-2xl shadow-lg border border-stone-100 px-3.5 py-2.5 max-w-[160px] hidden lg:block">
+                <div className="flex gap-0.5 mb-1">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="w-2.5 h-2.5 bg-amber-400 rounded-sm" />
+                  ))}
+                </div>
+                <p className="text-[11px] font-semibold text-stone-700 leading-tight">4.9 · 612 reviews</p>
+                <p className="text-[10px] text-stone-400 mt-0.5">Apple Podcasts</p>
+              </div>
             </div>
+          </div>
+        </div>
+
+        {/* ── Bottom: "What listeners are learning" strip ── */}
+        <div className="border-t border-amber-200/60 py-6">
+          <p className="text-xs font-bold uppercase tracking-widest text-stone-400 text-center mb-5">
+            Topics covered in recent episodes
+          </p>
+          <div className="flex flex-wrap justify-center gap-2">
+            {[
+              "Hiring for culture", "Scaling remote teams", "Founder-led sales",
+              "Retaining top talent", "Leadership transitions", "Building trust fast",
+              "Performance management", "Team accountability",
+            ].map((tag) => (
+              <Link
+                key={tag}
+                href="/episodes"
+                className="px-3.5 py-1.5 bg-white text-xs font-semibold text-stone-600 rounded-full border border-stone-200 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700 transition-all shadow-sm"
+              >
+                {tag}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
     </section>
+    <FeaturedGuests />
+    </>
   );
 }

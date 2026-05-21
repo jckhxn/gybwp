@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { getComponentId } from "@/src/lib/sectionId";
 import { MailIcon, Podcast, Headphones } from "lucide-react";
 
@@ -23,99 +22,65 @@ interface AboutListenConnectProps {
 
 export function AboutListenConnect({ section }: AboutListenConnectProps) {
   const componentId = getComponentId(section, "about-listen-connect");
-  
-  const {
-    heading = "How to Listen & Connect",
-    text = "Subscribe on your favorite platform, or contact us to get in touch.",
-    platforms
-  } = section;
+
+  const { heading = "How to Listen & Connect", platforms } = section;
 
   const safePlatforms = platforms || [
-    { name: "Apple Podcasts", url: "https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511" },
+    {
+      name: "Apple Podcasts",
+      url: "https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511",
+    },
     { name: "Spotify", url: "https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH" },
     { name: "BuzzSprout", url: "https://www.buzzsprout.com/2057493/share" },
-    { name: "Contact", url: "/consulting" }
+    { name: "Contact", url: "/consulting" },
   ];
 
   return (
-    <section id={componentId} className="w-full py-20 md:py-28 bg-surface-50">
-      <div className="container mx-auto px-6 max-w-5xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="bg-white rounded-3xl shadow-medium border border-surface-100 p-10 md:p-14 text-center space-y-8"
-        >
-          <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
-              <Headphones className="w-4 h-4 text-primary" />
-              <span className="text-sm font-semibold text-primary">Connect With Us</span>
+    <section id={componentId} className="w-full py-16 md:py-24 bg-stone-50 border-t border-stone-100">
+      <div className="max-w-5xl mx-auto px-6 lg:px-12">
+        <div className="bg-white rounded-3xl border border-stone-200 shadow-sm p-10 md:p-14 text-center">
+          <div className="mb-8 space-y-3">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 rounded-full">
+              <Headphones className="w-4 h-4 text-amber-600" />
+              <span className="text-sm font-semibold text-amber-700">Connect With Us</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-surface-900">
-              {heading}
-            </h2>
-          </div>
-          
-          <p className="text-lg text-surface-600 max-w-2xl mx-auto leading-relaxed">
-            Subscribe on your favorite platform, or{" "}
-            <Link
-              href="/consulting"
-              className="text-primary font-semibold hover:text-primary-dark underline decoration-2 underline-offset-4 transition-colors duration-200"
-            >
-              contact us
-            </Link>{" "}
-            to get in touch.
-          </p>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto pt-4">
-            {safePlatforms.map((platform, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
+            <h2 className="text-3xl md:text-4xl font-bold text-stone-900">{heading}</h2>
+            <p className="text-lg text-stone-500 max-w-xl mx-auto">
+              Subscribe on your favorite platform, or{" "}
+              <Link
+                href="/consulting"
+                className="text-amber-600 font-semibold hover:text-amber-700 underline decoration-2 underline-offset-4 transition-colors"
               >
-                <PlatformBadge
-                  href={platform.url}
-                  label={platform.name}
-                  icon={platform.name === "Contact" ? <MailIcon className="h-6 w-6" /> : <Podcast className="h-6 w-6" />}
-                />
-              </motion.div>
+                contact us
+              </Link>{" "}
+              to get in touch.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+            {safePlatforms.map((platform, index) => (
+              <Link
+                key={index}
+                href={platform.url}
+                target={platform.url.startsWith("http") ? "_blank" : undefined}
+                rel={platform.url.startsWith("http") ? "noopener noreferrer" : undefined}
+                className="group flex flex-col items-center justify-center gap-3 p-6 rounded-2xl bg-stone-50 border border-stone-200 hover:bg-amber-50 hover:border-amber-300 transition-all"
+              >
+                <div className="text-stone-400 group-hover:text-amber-600 transition-colors">
+                  {platform.name === "Contact" ? (
+                    <MailIcon className="w-6 h-6" />
+                  ) : (
+                    <Podcast className="w-6 h-6" />
+                  )}
+                </div>
+                <span className="text-sm font-semibold text-stone-600 group-hover:text-amber-700 transition-colors">
+                  {platform.name}
+                </span>
+              </Link>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
-  );
-}
-
-function PlatformBadge({
-  href,
-  label,
-  icon,
-}: {
-  href: string;
-  label: string;
-  icon?: React.ReactNode;
-}) {
-  return (
-    <Link
-      href={href}
-      className="group flex flex-col items-center justify-center p-6 rounded-2xl 
-                 bg-surface-50 border border-surface-200 
-                 hover:bg-primary hover:border-primary hover:shadow-glow
-                 transition-all duration-300 hover:-translate-y-1"
-      target={href.startsWith("http") ? "_blank" : undefined}
-      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-    >
-      <div className="text-primary group-hover:text-white transition-colors duration-300 mb-3">
-        {icon || <Podcast className="h-6 w-6" />}
-      </div>
-      <span className="text-sm font-medium text-surface-700 group-hover:text-white transition-colors duration-300">
-        {label}
-      </span>
-    </Link>
   );
 }

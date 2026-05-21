@@ -40,6 +40,7 @@ export const GUEST_DETAIL_QUERY = groq`*[_type == "person" && role == "guest" &&
       "duration": coalesce(youtube.duration, duration, "45 minutes"),
       "description": coalesce(youtube.blurb, blurb),
       "uuid": coalesce(youtube.uuid, uuid),
+      pathname,
       "audioUrl": coalesce(youtube.url, url),
       "image": coalesce(youtube.thumbnail, image)
     }

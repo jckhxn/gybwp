@@ -2,9 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { getComponentId } from "@/src/lib/sectionId";
-import { MailIcon, Podcast, Sparkles } from "lucide-react";
+import { MailIcon, Podcast, Headphones } from "lucide-react";
 
 interface AboutHeroProps {
   section: {
@@ -24,132 +23,82 @@ interface AboutHeroProps {
 
 export function AboutHero({ section }: AboutHeroProps) {
   const componentId = getComponentId(section, "about-hero");
-  
+
   const {
     badgeText = "About the Podcast",
     title = "Growing Your Business With People",
-    subtitle = "Actionable insights for leaders who believe people are their greatest investment. Join us for fireside chats with Fortune 100 CEOs, startup founders, bestselling authors, and industry pioneers.",
-    platforms
+    subtitle = "Actionable insights for leaders who believe people are their greatest investment. Real conversations with operators, founders, and executives who've built the teams you wish you had.",
+    platforms,
   } = section;
 
   const safePlatforms = platforms || [
     {
       name: "Apple Podcasts",
-      url: "https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511"
+      url: "https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511",
     },
     {
       name: "Spotify",
-      url: "https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH"
+      url: "https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH",
     },
     {
       name: "BuzzSprout",
-      url: "https://www.buzzsprout.com/2057493/share"
+      url: "https://www.buzzsprout.com/2057493/share",
     },
     {
       name: "Contact",
-      url: "/consulting"
-    }
+      url: "/consulting",
+    },
   ];
 
   return (
-    <section id={componentId} className="relative w-full py-24 lg:py-32 bg-surface-900 overflow-hidden">
-      {/* Gradient mesh background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-surface-900 via-surface-800 to-surface-900"></div>
-        <motion.div
-          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.4, 0.3] }}
-          transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-          className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]"
-        />
-        <motion.div
-          animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.3, 0.2] }}
-          transition={{ repeat: Infinity, duration: 10, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[100px]"
-        />
+    <section id={componentId} className="relative w-full bg-amber-50 border-b border-stone-200 overflow-hidden">
+      {/* Warm background accents */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-200/25 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3" />
+        <div className="absolute bottom-0 left-0 w-[350px] h-[350px] bg-orange-100/30 rounded-full blur-3xl -translate-x-1/4 translate-y-1/4" />
       </div>
 
-      <div className="container relative z-10 mx-auto px-6 max-w-5xl flex flex-col items-center text-center gap-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-semibold text-white/90 uppercase tracking-wider">
-              {badgeText}
-            </span>
-          </div>
-        </motion.div>
+      <div className="relative max-w-5xl mx-auto px-6 lg:px-12 py-16 lg:py-24 flex flex-col items-center text-center gap-6">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-amber-200 rounded-full shadow-sm">
+          <Headphones className="w-4 h-4 text-amber-600" />
+          <span className="text-sm font-bold text-amber-700 uppercase tracking-widest">
+            {badgeText}
+          </span>
+        </div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-tight"
-        >
-          {title.split(" ").map((word, i) => (
-            <span key={i}>
-              {word === "People" ? (
-                <span className="text-gradient">{word}</span>
-              ) : (
-                word
-              )}{" "}
-            </span>
-          ))}
-        </motion.h1>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-stone-900 leading-[1.1]">
+          {title.split(" ").map((word, i) =>
+            word === "People" ? (
+              <span key={i} className="text-amber-600">{word} </span>
+            ) : (
+              <span key={i}>{word} </span>
+            )
+          )}
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-lg md:text-xl text-surface-300 max-w-3xl mx-auto leading-relaxed"
-        >
+        <p className="text-lg md:text-xl text-stone-600 max-w-3xl leading-relaxed">
           {subtitle}
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-wrap gap-4 justify-center mt-4"
-        >
+        <div className="flex flex-wrap gap-3 justify-center mt-2">
           {safePlatforms.map((platform, index) => (
-            <PlatformBadge
+            <Link
               key={index}
               href={platform.url}
-              label={platform.name}
-              icon={platform.name === "Contact" ? <MailIcon className="h-5 w-5" /> : <Podcast className="h-5 w-5" />}
-            />
+              target={platform.url.startsWith("http") ? "_blank" : undefined}
+              rel={platform.url.startsWith("http") ? "noopener noreferrer" : undefined}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-stone-200 rounded-xl text-sm font-semibold text-stone-700 shadow-sm hover:border-amber-300 hover:bg-amber-50 hover:text-amber-700 transition-all"
+            >
+              {platform.name === "Contact" ? (
+                <MailIcon className="w-4 h-4" />
+              ) : (
+                <Podcast className="w-4 h-4" />
+              )}
+              {platform.name}
+            </Link>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
-  );
-}
-
-function PlatformBadge({
-  href,
-  label,
-  icon,
-}: {
-  href: string;
-  label: string;
-  icon?: React.ReactNode;
-}) {
-  return (
-    <Link
-      href={href}
-      className="group inline-flex items-center gap-3 px-5 py-3 bg-white/10 hover:bg-white/20 
-                 border border-white/20 hover:border-white/30 rounded-xl
-                 transition-all duration-300 hover:-translate-y-1"
-      target={href.startsWith("http") ? "_blank" : undefined}
-      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-    >
-      <div className="text-primary group-hover:scale-110 transition-transform duration-300">
-        {icon || <Podcast className="h-5 w-5" />}
-      </div>
-      <span className="text-sm font-medium text-white">{label}</span>
-    </Link>
   );
 }

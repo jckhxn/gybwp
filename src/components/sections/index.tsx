@@ -4,6 +4,7 @@ import { LatestEpisode } from "@/src/components/sections/episodes/LatestEpisode"
 import { BrowseEpisodes } from "@/src/components/sections/episodes/BrowseEpisodes";
 import { Newsletter } from "@/src/components/sections/shared/Newsletter";
 import { FeaturedNews } from "@/src/components/sections/shared/FeaturedNews";
+import { FeaturedGuests } from "@/src/components/sections/shared/FeaturedGuests";
 import { getComponentId } from "@/src/lib/sectionId";
 // Import episode-specific sections
 import EpisodeOverview from "@/src/components/sections/episodes/EpisodeOverview";
@@ -35,6 +36,7 @@ const sectionComponents: Record<string, any> = {
   browseEpisodes: BrowseEpisodes,
   newsletter: Newsletter,
   featuredNews: FeaturedNews,
+  featuredGuests: FeaturedGuests,
   episodeOverview: EpisodeOverview,
   episodeTranscript: EpisodeTranscript,
   episodeGuests: EpisodeGuests,
