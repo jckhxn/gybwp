@@ -1,6 +1,6 @@
-import Image from "next/image";
 import type { Metadata } from "next";
-import { CalendarDays, Clock, ArrowRight, Play, ExternalLink, Linkedin, Globe } from "lucide-react";
+import { CalendarDays, Clock, ArrowRight, Play, ExternalLink, Linkedin, Globe, Headphones } from "lucide-react";
+import { ThumbnailImage } from "@/src/components/ui/thumbnail-image";
 import Link from "next/link";
 import { format } from "date-fns";
 import { redirect } from "next/navigation";
@@ -268,17 +268,15 @@ export default async function GuestPage({
                             href={epHref}
                             className="group flex gap-4 items-start p-4 rounded-xl border border-stone-100 hover:border-amber-200 hover:bg-amber-50/50 transition-all"
                           >
-                            {toImageUrl(episode.image) && (
-                              <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border border-stone-200">
-                                <Image
-                                  src={toImageUrl(episode.image)!}
-                                  alt={epTitle}
-                                  width={80}
-                                  height={80}
-                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                />
-                              </div>
-                            )}
+                            <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border border-stone-200 bg-stone-100 relative">
+                              <ThumbnailImage
+                                src={toImageUrl(episode.image) || "/images/logo.webp"}
+                                alt={epTitle}
+                                fill
+                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                sizes="80px"
+                              />
+                            </div>
                             <div className="flex-1 min-w-0">
                               <h3 className="font-semibold text-stone-900 line-clamp-2 group-hover:text-amber-700 transition-colors text-sm leading-snug mb-1.5">
                                 {epTitle}
@@ -324,21 +322,20 @@ export default async function GuestPage({
                   <div className="p-5">
                     <p className="text-xs font-bold uppercase tracking-widest text-amber-600 mb-3">Latest Episode</p>
 
-                    {toImageUrl(latestEpisode.image) && (
-                      <Link href={toEpisodeHref(latestEpisode)} className="block rounded-xl overflow-hidden aspect-video mb-4 relative group">
-                        <Image
-                          src={toImageUrl(latestEpisode.image)!}
-                          alt={latestEpisode.title || "Episode thumbnail"}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-stone-900/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                          <div className="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center shadow-lg">
-                            <Play className="w-5 h-5 fill-white text-white ml-0.5" />
-                          </div>
+                    <Link href={toEpisodeHref(latestEpisode)} className="block rounded-xl overflow-hidden aspect-video mb-4 relative group bg-stone-100">
+                      <ThumbnailImage
+                        src={toImageUrl(latestEpisode.image) || "/images/logo.webp"}
+                        alt={latestEpisode.title || "Episode thumbnail"}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        sizes="360px"
+                      />
+                      <div className="absolute inset-0 bg-stone-900/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center shadow-lg">
+                          <Play className="w-5 h-5 fill-white text-white ml-0.5" />
                         </div>
-                      </Link>
-                    )}
+                      </div>
+                    </Link>
 
                     <h3 className="font-bold text-stone-900 text-sm leading-snug mb-2 line-clamp-2">
                       {formatEpisodeTitle(latestEpisode.title || "Untitled Episode")}
@@ -372,19 +369,42 @@ export default async function GuestPage({
 
               {/* Subscribe nudge */}
               <div className="bg-amber-50 rounded-2xl border border-amber-200 p-5">
-                <p className="text-sm font-bold text-stone-900 mb-1">Enjoy this show?</p>
-                <p className="text-xs text-stone-500 leading-relaxed mb-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <Headphones className="w-4 h-4 text-amber-600" />
+                  <p className="text-sm font-bold text-stone-900">Enjoy this show?</p>
+                </div>
+                <p className="text-xs text-stone-600 leading-relaxed mb-4">
                   New conversations every Tuesday. Subscribe so you never miss an episode.
                 </p>
-                <a
-                  href="https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7049506606413213696"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-stone-900 text-sm font-semibold rounded-xl transition-colors"
-                >
-                  <Linkedin className="w-3.5 h-3.5" />
-                  Follow on LinkedIn
-                </a>
+                <div className="space-y-2">
+                  <a
+                    href="https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 w-full px-4 py-2.5 bg-white border border-stone-200 hover:border-amber-300 hover:bg-amber-50 text-stone-800 text-sm font-semibold rounded-xl transition-colors"
+                  >
+                    <Headphones className="w-4 h-4 text-stone-500" />
+                    Apple Podcasts
+                  </a>
+                  <a
+                    href="https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 w-full px-4 py-2.5 bg-white border border-stone-200 hover:border-amber-300 hover:bg-amber-50 text-stone-800 text-sm font-semibold rounded-xl transition-colors"
+                  >
+                    <Play className="w-4 h-4 text-stone-500" />
+                    Spotify
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7049506606413213696"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 w-full px-4 py-2.5 bg-white border border-stone-200 hover:border-amber-300 hover:bg-amber-50 text-stone-800 text-sm font-semibold rounded-xl transition-colors"
+                  >
+                    <Linkedin className="w-4 h-4 text-blue-600" />
+                    Follow on LinkedIn
+                  </a>
+                </div>
               </div>
 
               {/* Back link */}

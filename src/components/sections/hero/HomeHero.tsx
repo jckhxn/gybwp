@@ -79,7 +79,7 @@ export function HomeHero({ section }: HomeHeroProps) {
             <span className="text-sm font-semibold text-amber-700 tracking-wide">{badgeText}</span>
           </div>
           <div className="hidden sm:flex items-center gap-2">
-            <span className="text-xs text-stone-400 font-medium">{platformsHeading}</span>
+            <span className="text-xs text-stone-600 font-medium">{platformsHeading}</span>
             {safePlatforms.map((platform, i) => (
               <Link
                 key={i}
@@ -109,7 +109,7 @@ export function HomeHero({ section }: HomeHeroProps) {
 
             {/* Personal intro */}
             <div>
-              <p className="text-sm font-semibold text-amber-600 mb-3 tracking-wide uppercase">
+              <p className="text-sm font-semibold text-amber-700 mb-3 tracking-wide uppercase">
                 {subtitle}
               </p>
               <h1 className="text-4xl sm:text-5xl lg:text-[3.25rem] font-bold text-stone-900 leading-[1.1] tracking-tight">
@@ -122,7 +122,7 @@ export function HomeHero({ section }: HomeHeroProps) {
               <p className="text-lg text-stone-600 leading-relaxed">
                 {description}
               </p>
-              <p className="text-sm text-stone-500 mt-2 italic">
+              <p className="text-sm text-stone-600 mt-2 italic">
                 — {safeHostBadge.name}, {safeHostBadge.title}
               </p>
             </div>
@@ -173,13 +173,13 @@ export function HomeHero({ section }: HomeHeroProps) {
                 <p className="text-sm text-stone-700 leading-relaxed italic">
                   &ldquo;This show changed how I think about hiring. Jeff asks the questions I actually want answered.&rdquo;
                 </p>
-                <p className="text-xs text-stone-400 font-semibold mt-1.5">— Apple Podcasts listener · ★★★★★</p>
+                <p className="text-xs text-stone-600 font-semibold mt-1.5">— Apple Podcasts listener · ★★★★★</p>
               </div>
             </div>
 
             {/* Platform links (mobile) */}
             <div className="sm:hidden">
-              <p className="text-xs text-stone-400 mb-2.5 font-medium uppercase tracking-wider">{platformsHeading}</p>
+              <p className="text-xs text-stone-600 mb-2.5 font-medium uppercase tracking-wider">{platformsHeading}</p>
               <div className="flex flex-wrap gap-2">
                 {safePlatforms.map((platform, i) => (
                   <Link
@@ -228,9 +228,9 @@ export function HomeHero({ section }: HomeHeroProps) {
 
               {/* Host name card — overlapping bottom-left */}
               <div className="absolute -bottom-4 -left-4 z-20 bg-white rounded-2xl px-4 py-3 shadow-xl border border-stone-100">
-                <p className="text-[10px] text-amber-600 uppercase tracking-widest font-bold mb-0.5">{safeHostBadge.label}</p>
+                <p className="text-[10px] text-amber-700 uppercase tracking-widest font-bold mb-0.5">{safeHostBadge.label}</p>
                 <p className="text-sm font-bold text-stone-900 leading-tight">{safeHostBadge.name}</p>
-                <p className="text-xs text-stone-500">{safeHostBadge.title}</p>
+                <p className="text-xs text-stone-700">{safeHostBadge.title}</p>
               </div>
 
               {/* Episode count sticker — top-right */}
@@ -251,7 +251,7 @@ export function HomeHero({ section }: HomeHeroProps) {
                   ))}
                 </div>
                 <p className="text-[11px] font-semibold text-stone-700 leading-tight">4.9 · 612 reviews</p>
-                <p className="text-[10px] text-stone-400 mt-0.5">Apple Podcasts</p>
+                <p className="text-[10px] text-stone-600 mt-0.5">Apple Podcasts</p>
               </div>
             </div>
           </div>
@@ -259,7 +259,7 @@ export function HomeHero({ section }: HomeHeroProps) {
 
         {/* ── Bottom: "What listeners are learning" strip ── */}
         <div className="border-t border-amber-200/60 py-6">
-          <p className="text-xs font-bold uppercase tracking-widest text-stone-400 text-center mb-5">
+          <p className="text-xs font-bold uppercase tracking-widest text-stone-600 text-center mb-5">
             Topics covered in recent episodes
           </p>
           <div className="flex flex-wrap justify-center gap-2">
