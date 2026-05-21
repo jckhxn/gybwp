@@ -20,6 +20,7 @@ import {
   MessageSquare,
   Star,
   FileText,
+  Headphones,
 } from "lucide-react";
 
 import { Button } from "@/src/components/ui/button";
@@ -111,18 +112,18 @@ interface Highlight {
 const PlatformLinks = () => (
   <div className="flex flex-wrap gap-2 mt-3">
     {[
-      { label: "Apple Podcasts", href: "https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511", logo: "/social-logos/apple.png" },
-      { label: "Spotify", href: "https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH", logo: "/social-logos/spotify.png" },
-      { label: "Buzzsprout", href: "https://www.buzzsprout.com/2057493", logo: "/social-logos/buzzsprout.png" },
-    ].map(({ label, href, logo }) => (
+      { label: "Apple Podcasts", href: "https://podcasts.apple.com/us/podcast/growing-your-business-with-people/id1659743511" },
+      { label: "Spotify", href: "https://open.spotify.com/show/4RgF6I69FdiDzBgTLzZlWH" },
+      { label: "Buzzsprout", href: "https://www.buzzsprout.com/2057493" },
+    ].map(({ label, href }) => (
       <Link
         key={label}
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-medium text-stone-700 hover:bg-stone-50 hover:border-stone-300 transition-all"
+        className="flex items-center gap-1.5 px-3 py-1.5 bg-stone-800 hover:bg-stone-700 border border-stone-700 rounded-lg text-xs font-medium text-stone-200 transition-all"
       >
-        <Image src={logo} alt={label} width={14} height={14} className="object-contain" />
+        <Headphones className="w-3 h-3 text-amber-400 flex-shrink-0" />
         {label}
       </Link>
     ))}

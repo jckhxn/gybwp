@@ -73,7 +73,7 @@ export function HomeHero({ section }: HomeHeroProps) {
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
 
         {/* ── Top bar: show label + platforms ── */}
-        <div className="flex items-center justify-between py-6 border-b border-amber-200/60">
+        <div className="flex items-center justify-between py-4 border-b border-amber-200/60">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
             <span className="text-sm font-semibold text-amber-700 tracking-wide">{badgeText}</span>
@@ -102,10 +102,10 @@ export function HomeHero({ section }: HomeHeroProps) {
         </div>
 
         {/* ── Main hero ── */}
-        <div className="grid lg:grid-cols-[1fr_460px] gap-10 lg:gap-14 items-center py-10 lg:py-14">
+        <div className="grid lg:grid-cols-[1fr_460px] gap-8 lg:gap-12 items-center py-8 lg:py-12">
 
           {/* Left: Content */}
-          <div className="flex flex-col gap-7 order-2 lg:order-1">
+          <div className="flex flex-col gap-5 order-2 lg:order-1">
 
             {/* Personal intro */}
             <div>
@@ -125,20 +125,6 @@ export function HomeHero({ section }: HomeHeroProps) {
               <p className="text-sm text-stone-600 mt-2 italic">
                 — {safeHostBadge.name}, {safeHostBadge.title}
               </p>
-            </div>
-
-            {/* What you'll get */}
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                { label: "Real operator stories" },
-                { label: "Lessons you can use Monday" },
-                { label: "New episode every Tuesday" },
-              ].map(({ label }) => (
-                <div key={label} className="bg-white/80 rounded-2xl border border-amber-100 px-3 py-3.5 text-center shadow-sm">
-                  <div className="w-1.5 h-1.5 rounded-full bg-amber-400 mx-auto mb-2" />
-                  <p className="text-xs font-semibold text-stone-700 leading-tight">{label}</p>
-                </div>
-              ))}
             </div>
 
             {/* CTAs */}
@@ -258,7 +244,7 @@ export function HomeHero({ section }: HomeHeroProps) {
         </div>
 
         {/* ── Bottom: "What listeners are learning" strip ── */}
-        <div className="border-t border-amber-200/60 py-6">
+        <div className="border-t border-amber-200/60 py-5">
           <p className="text-xs font-bold uppercase tracking-widest text-stone-600 text-center mb-5">
             Topics covered in recent episodes
           </p>

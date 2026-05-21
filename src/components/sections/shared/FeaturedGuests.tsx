@@ -84,11 +84,11 @@ export function FeaturedGuests({ section }: FeaturedGuestsProps) {
   if (!guests.length) return null;
 
   return (
-    <section className="bg-stone-900 py-16 lg:py-20">
+    <section className="bg-stone-900 py-12 lg:py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
 
         {/* Header */}
-        <div className="flex items-end justify-between mb-10">
+        <div className="flex items-end justify-between mb-8">
           <div>
             <p className="text-xs font-bold uppercase tracking-widest text-amber-400 mb-2">
               Past Guests
