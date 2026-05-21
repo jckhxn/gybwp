@@ -171,7 +171,7 @@ export function HomeHero({ section }: HomeHeroProps) {
               <Quote className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="text-sm text-stone-700 leading-relaxed italic">
-                  "This show changed how I think about hiring. Jeff asks the questions I actually want answered."
+                  &ldquo;This show changed how I think about hiring. Jeff asks the questions I actually want answered.&rdquo;
                 </p>
                 <p className="text-xs text-stone-400 font-semibold mt-1.5">— Apple Podcasts listener · ★★★★★</p>
               </div>
